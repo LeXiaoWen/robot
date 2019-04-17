@@ -1,10 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#B5B5B5"
     tools:ignore="MissingDefaultResource">
+
+
+    <LinearLayout
+        android:layout_centerHorizontal="true"
+        android:id="@+id/ll_touch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/touch_show_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+
+        <TextView
+            android:id="@+id/touch_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:weightSum="3"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_alignParentBottom="true">
+        <!--机械臂控制-->
+        <include layout="@layout/arm_controller"/>
+        <include layout="@layout/clamping_controller"/>
+        <include layout="@layout/joint_controller"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

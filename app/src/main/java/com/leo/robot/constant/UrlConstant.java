@@ -1,9 +1,11 @@
 package com.leo.robot.constant;
 
 /**
- * Created by 张俨 on 2018/1/9.
- */
-
+* ip地址常量类
+*
+*@author Leo
+*created at 2019/4/15 8:40 PM
+*/
 public class UrlConstant {
     /**
      * socket 服务器IP地址
