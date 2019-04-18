@@ -16,11 +16,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 
 /**
-* netty客户端
-*
-*@author Leo
-*created at 2019/4/14 6:04 PM
-*/
+ * netty客户端
+ *
+ * @author Leo
+ * created at 2019/4/14 6:04 PM
+ */
 
 public class NettyClient {
 
@@ -129,6 +129,27 @@ public class NettyClient {
         } else {
             channel.writeAndFlush(s).addListener(futureListener);
         }
+    }
+
+    public synchronized void sendMsg(String msg) {
+        if (channel == null) {
+            Log.e(TAG, "send: channel is null");
+            return;
+        }
+
+        if (!channel.isWritable()) {
+            Log.e(TAG, "send: channel is not Writable");
+            return;
+        }
+
+        if (!channel.isActive()) {
+            Log.e(TAG, "send: channel is not active!");
+            return;
+        }
+        if (channel != null) {
+            channel.writeAndFlush(msg);
+        }
+
     }
 
     /**

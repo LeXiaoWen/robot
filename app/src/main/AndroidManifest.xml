@@ -29,6 +29,7 @@
             android:name=".service.NettyService"
             android:enabled="true"
             android:exported="true"/>
+
         <activity
             android:name=".ui.launcher.LauncherActivity"
             android:screenOrientation="landscape"
@@ -40,23 +41,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:screenOrientation="landscape"
-            android:name=".ui.main.MainActivity"/>
+            android:name=".ui.main.MainActivity"
+            android:screenOrientation="landscape"/>
         <activity
-            android:screenOrientation="landscape"
-            android:name=".ui.controller.ControllerActivity"/>
+            android:name=".ui.controller.ControllerActivity"
+            android:screenOrientation="landscape"/>
         <activity
-            android:screenOrientation="landscape"
-            android:name=".ui.cleaning.CleaningActivity"/>
+            android:name=".ui.cleaning.CleaningActivity"
+            android:screenOrientation="landscape"/>
         <activity
-            android:screenOrientation="landscape"
-            android:name=".ui.cut_line.CutLineActivity"/>
+            android:name=".ui.cut_line.CutLineActivity"
+            android:screenOrientation="landscape"/>
         <activity
-            android:screenOrientation="landscape"
-            android:name=".ui.wire_stripping.WireStrippingActivity"/>
+            android:name=".ui.wire_stripping.WireStrippingActivity"
+            android:screenOrientation="landscape"/>
         <activity
-            android:screenOrientation="landscape"
-            android:name=".ui.wiring.WiringActivity"/>
+            android:name=".ui.wiring.WiringActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".ui.setting.SettingActivity"
+            android:screenOrientation="landscape"/>
 
     </application>
 
