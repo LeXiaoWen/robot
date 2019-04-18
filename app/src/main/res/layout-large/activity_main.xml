@@ -1,81 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.main.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="MissingDefaultResource">
+
+    <include layout="@layout/activity_title"/>
+
+    <FrameLayout
+        android:id="@+id/fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <LinearLayout
+        android:id="@+id/ll_choose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/et_content"
-            android:layout_width="0px"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:orientation="horizontal"
+        android:weightSum="4">
+        <!--剥线作业-->
+        <LinearLayout
+            android:id="@+id/ll_wire_stripping"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn"
-            android:layout_width="70dp"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_launcher"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="剥线作业"/>
+        </LinearLayout>
+        <!--接线作业-->
+        <LinearLayout
+            android:id="@+id/ll_wiring"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="发送"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_launcher"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="接线作业"/>
+        </LinearLayout>
+        <!--剪线作业-->
+        <LinearLayout
+            android:id="@+id/ll_cut_line"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_launcher"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="剪线作业"/>
+        </LinearLayout>
+        <!--清洗绝缘子作业-->
+        <LinearLayout
+            android:id="@+id/ll_cleaning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_launcher"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="清洗绝缘子作业"/>
+        </LinearLayout>
+
     </LinearLayout>
 
-    <com.leo.robot.view.RockerView
-        android:visibility="gone"
-        android:id="@+id/my_rocker"
-        android:layout_width="100dp"
-        android:layout_height="100sp"
-        android:layout_gravity="center"
-        app:areaBackground="@drawable/rocker_base"
-        app:rockerBackground="@drawable/rocker"
-        app:rockerCallBackMode="CALL_BACK_MODE_STATE_CHANGE"
-        app:rockerScale="0.5"
-        app:rockerSpeedLevel="10"/>
-
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/tv_now_shake"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="当前方向："/>
-
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/tv_now_angle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="当前角度："/>
-
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/tv_now_level"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="当前偏移级别："/>
-
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/tv_now_model"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="当前设置模式："/>
-
-    <TextView
-        android:id="@+id/terminal"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@android:color/white"
-        android:scrollbars="vertical"
-        android:textColor="@android:color/darker_gray"/>
-</LinearLayout>
+</RelativeLayout>

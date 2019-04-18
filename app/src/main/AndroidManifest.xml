@@ -45,6 +45,19 @@
         <activity
             android:screenOrientation="landscape"
             android:name=".ui.controller.ControllerActivity"/>
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".ui.cleaning.CleaningActivity"/>
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".ui.cut_line.CutLineActivity"/>
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".ui.wire_stripping.WireStrippingActivity"/>
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".ui.wiring.WiringActivity"/>
+
     </application>
 
 </manifest>

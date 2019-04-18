@@ -1,4 +1,4 @@
-package com.leo.robot.ui.main;
+package com.leo.robot.ui.wiring;
 
 import android.widget.TextView;
 
@@ -8,13 +8,13 @@ import com.leo.robot.utils.TimeThread;
 import javax.inject.Inject;
 
 /**
- * created by Leo on 2019/4/14 18 : 11
+ * created by Leo on 2019/4/18 10 : 46
  */
 
 
-public class MainActivityPresenter extends RobotPresenter<MainActivity, MainActivityModel> {
+public class WiringActivityPresenter extends RobotPresenter<WiringActivity,WiringActivityModel> {
     @Inject
-    public MainActivityPresenter() {
+    public WiringActivityPresenter() {
     }
 
     @Override
@@ -22,6 +22,4 @@ public class MainActivityPresenter extends RobotPresenter<MainActivity, MainActi
         TimeThread timeThread = new TimeThread(view);
         timeThread.start();
     }
-
-
 }

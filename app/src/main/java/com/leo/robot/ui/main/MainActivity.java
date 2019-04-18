@@ -1,56 +1,57 @@
 package com.leo.robot.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
-import com.leo.robot.netty.NettyClient;
-import com.leo.robot.netty.bean.ChatInfo;
-import com.leo.robot.netty.bean.NettyBaseFeed;
-import com.leo.robot.view.RockerView;
+import com.leo.robot.ui.cleaning.CleaningActivity;
+import com.leo.robot.ui.cut_line.CutLineActivity;
+import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
+import com.leo.robot.ui.wiring.WiringActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.leo.robot.view.RockerView.DirectionMode.DIRECTION_8;
 
 /**
  * created by Leo on 2019/4/14 18 : 11
  */
 
 
-public class MainActivity extends NettyActivity<MainActivityPresenter> implements RockerView.OnShakeListener {
+public class MainActivity extends NettyActivity<MainActivityPresenter> {
 
-    @BindView(R.id.terminal)
-    TextView mTerminal;
-    @BindView(R.id.et_content)
-    EditText mEtContent;
-    @BindView(R.id.btn)
-    Button mBtn;
-    @BindView(R.id.my_rocker)
-    RockerView mMyRocker;
-    @BindView(R.id.tv_now_shake)
-    TextView mTvNowShake;
-    @BindView(R.id.tv_now_angle)
-    TextView mTvNowAngle;
-    @BindView(R.id.tv_now_level)
-    TextView mTvNowLevel;
-    @BindView(R.id.tv_now_model)
-    TextView mTvNowModel;
 
-    private Gson mGson;
+    @BindView(R.id.tv_date)
+    TextView mTvDate;
+    @BindView(R.id.tv_signal)
+    TextView mTvSignal;
+    @BindView(R.id.tv_own_power)
+    TextView mTvOwnPower;
+    @BindView(R.id.tv_ground_power)
+    TextView mTvGroundPower;
+    @BindView(R.id.ll_wire_stripping)
+    LinearLayout mLlWireStripping;
+    @BindView(R.id.ll_wiring)
+    LinearLayout mLlWiring;
+    @BindView(R.id.ll_cut_line)
+    LinearLayout mLlCutLine;
+    @BindView(R.id.ll_cleaning)
+    LinearLayout mLlCleaning;
+    @BindView(R.id.fragment)
+    FrameLayout mFragment;
+    @BindView(R.id.ll_choose)
+    LinearLayout mLlChoose;
+
 
     @Override
     protected void notifyData(String message) {
-        mTerminal.append("[接收]" + message);
-        mTerminal.append("\n");
+
     }
 
     @Override
@@ -63,88 +64,31 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> implement
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        mGson = new Gson();
-        mMyRocker.setOnShakeListener(DIRECTION_8, this);
-        mMyRocker.setOnAngleChangeListener(new RockerView.OnAngleChangeListener() {
-            @Override
-            public void onShakeStart() {
-
-            }
-
-            @Override
-            public void angle(double angle) {
-                mTvNowAngle.setText("当前角度：" + angle);
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        });
-        mMyRocker.setOnDistanceLevelListener(new RockerView.OnDistanceLevelListener() {
-            @Override
-            public void onDistanceLevel(int level) {
-                mTvNowLevel.setText("当前距离级别："+level);
-            }
-        });
+        //实时更新时间（1秒更新一次）
+        mPresenter.updateTime(mTvDate);
     }
 
-
-    private void sendMessage() {
-        final String message = mEtContent.getText().toString();
-        if (TextUtils.isEmpty(message)) {
-            return;
-        }
-        final NettyBaseFeed<ChatInfo> baseFeed = new NettyBaseFeed<>();
-        baseFeed.setModule(1);
-        baseFeed.setCmd(2);
-        final ChatInfo chatInfo = new ChatInfo();
-        baseFeed.setData(chatInfo);
-        chatInfo.setChatType(2);
-        chatInfo.setFrom(1);
-        chatInfo.setTo(50);
-        chatInfo.setMsgType(1);
-        chatInfo.setMessage(message);
-        NettyClient.getInstance().sendMessage(baseFeed, null);
-//        notifyData(mGson.toJson(baseFeed));
-        mEtContent.setText(null);
-    }
-
-    @OnClick(R.id.btn)
-    public void onViewClicked() {
-        sendMessage();
-    }
-
-    @Override
-    public void onShakeStart() {
-
-    }
-
-    @Override
-    public void direction(RockerView.Direction direction) {
-        if (direction == RockerView.Direction.DIRECTION_CENTER) {
-            mTvNowShake.setText("当前方向：中心");
-        } else if (direction == RockerView.Direction.DIRECTION_DOWN) {
-            mTvNowShake.setText("当前方向：下");
-        } else if (direction == RockerView.Direction.DIRECTION_LEFT) {
-            mTvNowShake.setText("当前方向：左");
-        } else if (direction == RockerView.Direction.DIRECTION_UP) {
-            mTvNowShake.setText("当前方向：上");
-        } else if (direction == RockerView.Direction.DIRECTION_RIGHT) {
-            mTvNowShake.setText("当前方向：右");
-        } else if (direction == RockerView.Direction.DIRECTION_DOWN_LEFT) {
-            mTvNowShake.setText("当前方向：左下");
-        } else if (direction == RockerView.Direction.DIRECTION_DOWN_RIGHT) {
-            mTvNowShake.setText("当前方向：右下");
-        } else if (direction == RockerView.Direction.DIRECTION_UP_LEFT) {
-            mTvNowShake.setText("当前方向：左上");
-        } else if (direction == RockerView.Direction.DIRECTION_UP_RIGHT) {
-            mTvNowShake.setText("当前方向：右上");
+    @OnClick({R.id.ll_wire_stripping, R.id.ll_wiring, R.id.ll_cut_line, R.id.ll_cleaning})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.ll_wire_stripping:
+                startActivity(WireStrippingActivity.class);
+                break;
+            case R.id.ll_wiring:
+                startActivity(WiringActivity.class);
+                break;
+            case R.id.ll_cut_line:
+                startActivity(CutLineActivity.class);
+                break;
+            case R.id.ll_cleaning:
+                startActivity(CleaningActivity.class);
+                break;
         }
     }
 
-    @Override
-    public void onFinish() {
-
+    public void startActivity(Class<?> clazz) {
+        startActivity(new Intent(MainActivity.this, clazz));
     }
+
+
 }

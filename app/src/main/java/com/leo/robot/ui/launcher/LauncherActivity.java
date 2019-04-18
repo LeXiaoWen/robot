@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.leo.robot.R;
 import com.leo.robot.service.NettyService;
-import com.leo.robot.ui.controller.ControllerActivity;
+import com.leo.robot.ui.main.MainActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -95,7 +95,7 @@ public class LauncherActivity extends AppCompatActivity {
                 .subscribe(new Subscriber<Integer>() {
                     @Override
                     public void onCompleted() {
-                        startActivity(new Intent(LauncherActivity.this, ControllerActivity.class));
+                        startActivity(new Intent(LauncherActivity.this, MainActivity.class));
                         finish();
                     }
 

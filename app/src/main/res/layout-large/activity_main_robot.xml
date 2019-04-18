@@ -27,6 +27,7 @@
     </LinearLayout>
 
     <com.leo.robot.view.RockerView
+        android:visibility="gone"
         android:id="@+id/my_rocker"
         android:layout_width="100dp"
         android:layout_height="100sp"
@@ -38,6 +39,7 @@
         app:rockerSpeedLevel="10"/>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tv_now_shake"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,6 +47,7 @@
         android:text="当前方向："/>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tv_now_angle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,6 +55,7 @@
         android:text="当前角度："/>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tv_now_level"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,6 +63,7 @@
         android:text="当前偏移级别："/>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tv_now_model"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,6 +77,5 @@
         android:layout_weight="1"
         android:background="@android:color/white"
         android:scrollbars="vertical"
-        android:textColor="@android:color/darker_gray"
-        android:visibility="gone"/>
+        android:textColor="@android:color/darker_gray"/>
 </LinearLayout>
