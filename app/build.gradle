@@ -12,6 +12,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            //APP的build.gradle设置支持的SO库架构
+            abiFilters 'armeabi', 'armeabi-v7a', 'x86'
+        }
+
     }
     buildTypes {
         release {
@@ -23,6 +28,11 @@ android {
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
     }
 }
 
@@ -62,4 +72,16 @@ dependencies {
     compile 'io.netty:netty-all:4.1.9.Final'
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.google.protobuf:protobuf-java:3.6.1'
+
+    implementation 'com.shuyu:gsyVideoPlayer-java:6.0.1'
+
+    //是否需要ExoPlayer模式
+    implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.1'
+
+    //更多ijk的编码支持
+    implementation 'com.shuyu:gsyVideoPlayer-ex_so:6.0.1'
+
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
 }

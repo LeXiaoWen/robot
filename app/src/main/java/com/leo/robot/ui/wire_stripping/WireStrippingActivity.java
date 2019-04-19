@@ -10,6 +10,11 @@ import android.widget.TextView;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.ui.setting.SettingActivity;
+import com.leo.robot.utils.CustomManager;
+import com.leo.robot.utils.MultiSampleVideo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +64,23 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     Button mBtnGetPic;
     @BindView(R.id.btn_setting)
     Button mBtnSetting;
+    @BindView(R.id.player_main)
+    MultiSampleVideo mPlayerMain;
+    @BindView(R.id.player1)
+    MultiSampleVideo mPlayer1;
+    @BindView(R.id.player2)
+    MultiSampleVideo mPlayer2;
+    @BindView(R.id.player3)
+    MultiSampleVideo mPlayer3;
+    @BindView(R.id.player4)
+    MultiSampleVideo mPlayer4;
+    private List<MultiSampleVideo> mMultiSampleVideos = new ArrayList<>();
+    public static final String TAG = "WireStrippingActivity";
+
+
+
+    private boolean isPause;
+    private String source1 = "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov";
 
 
     @Override
@@ -77,7 +99,24 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         setContentView(R.layout.activity_wire_stripping);
         ButterKnife.bind(this);
         initTile();
+        initVideo();
+    }
 
+    private void initVideo() {
+
+        mMultiSampleVideos.add(mPlayerMain);
+        mMultiSampleVideos.add(mPlayer1);
+        mMultiSampleVideos.add(mPlayer2);
+        mMultiSampleVideos.add(mPlayer3);
+        mMultiSampleVideos.add(mPlayer4);
+
+
+        for (int i = 0; i < mMultiSampleVideos.size(); i++) {
+            mMultiSampleVideos.get(i).setPlayTag(TAG);
+            mMultiSampleVideos.get(i).setPlayPosition(i);
+            mMultiSampleVideos.get(i).setUp(source1,true,"测试");
+            mMultiSampleVideos.get(i).startPlayLogic();
+        }
     }
 
     private void initTile() {
@@ -115,5 +154,33 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     public void updateStartText(String s) {
         mBtnStart.setText(s);
         ToastUtils.showShortToast(s);
+    }
+
+    @Override
+    public void onBackPressed() {
+//        if (CustomManager.backFromWindowFull(this, listMultiNormalAdapter.getFullKey())) {
+//            return;
+//        }
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        CustomManager.onPauseAll();
+        isPause = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CustomManager.onResumeAll();
+        isPause = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CustomManager.clearAllVideo();
     }
 }

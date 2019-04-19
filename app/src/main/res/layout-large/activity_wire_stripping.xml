@@ -160,10 +160,16 @@
             android:layout_weight="2"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
-                android:background="@color/cmvp_gray"/>
+                android:layout_height="280dp">
+                <com.leo.robot.utils.MultiSampleVideo
+                    android:id="@+id/player_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </FrameLayout>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -172,32 +178,82 @@
                 android:orientation="horizontal"
                 android:weightSum="4">
 
-                <RelativeLayout
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/cmvp_gray"/>
+                    android:layout_weight="1">
 
-                <RelativeLayout
+                    <com.leo.robot.utils.MultiSampleVideo
+                        android:id="@+id/player1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+                </FrameLayout>
+
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_weight="1"
-                    android:background="@color/cmvp_gray"/>
+                    android:layout_weight="1">
 
-                <RelativeLayout
+                    <com.leo.robot.utils.MultiSampleVideo
+                        android:id="@+id/player2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        />
+                </FrameLayout>
+
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_weight="1"
-                    android:background="@color/cmvp_gray"/>
+                    android:layout_weight="1">
 
-                <RelativeLayout
+                    <com.leo.robot.utils.MultiSampleVideo
+                        android:id="@+id/player3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        />
+                </FrameLayout>
+
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_weight="1"
-                    android:background="@color/cmvp_gray"/>
+                    android:layout_weight="1">
+
+                    <com.leo.robot.utils.MultiSampleVideo
+                        android:id="@+id/player4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        />
+                </FrameLayout>
+                <!--<RelativeLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@color/cmvp_gray"/>-->
+
+                <!--<RelativeLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginLeft="@dimen/dp_10"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@color/cmvp_gray"/>-->
+
+                <!--<RelativeLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginLeft="@dimen/dp_10"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@color/cmvp_gray"/>-->
+
+                <!--<RelativeLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginLeft="@dimen/dp_10"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@color/cmvp_gray"/>-->
             </LinearLayout>
 
         </LinearLayout>

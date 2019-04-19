@@ -75,7 +75,9 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
                 startActivity(WireStrippingActivity.class);
                 break;
             case R.id.ll_wiring:
+
                 startActivity(WiringActivity.class);
+
                 break;
             case R.id.ll_cut_line:
                 startActivity(CutLineActivity.class);
