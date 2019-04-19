@@ -6,7 +6,7 @@ import java.nio.charset.Charset;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
@@ -39,8 +39,10 @@ public class NettyClientInitializer extends ChannelInitializer<SocketChannel> {
 //        pipeline.addLast(sslCtx.newHandler(ch.alloc()));    // 开启SSL
         pipeline.addLast(new LoggingHandler(LogLevel.INFO));    // 开启日志，可以设置日志等级
         pipeline.addLast("IdleStateHandler", new IdleStateHandler(6, 0, 0));
-        pipeline.addLast("StringDecoder", new StringDecoder(Charset.forName("GBK")));//解码器 这里要与服务器保持一致
+//        pipeline.addLast("StringDecoder", new StringDecoder(Charset.forName("GBK")));//解码器 这里要与服务器保持一致
         pipeline.addLast("StringEncoder", new StringEncoder(Charset.forName("GBK")));//编码器 这里要与服务器保持一致
+        pipeline.addLast("decoder", new MyDecoder());
+        pipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 4, 4, -8, 0));
         pipeline.addLast(new NettyClientHandler(listener));
     }
 }

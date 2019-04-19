@@ -3,6 +3,8 @@ package com.leo.robot.ui.wire_stripping;
 import android.widget.TextView;
 
 import com.leo.robot.base.RobotPresenter;
+import com.leo.robot.netty.NettyClient;
+import com.leo.robot.netty.command.CommandConst;
 import com.leo.robot.utils.TimeThread;
 
 import javax.inject.Inject;
@@ -36,11 +38,11 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      */
     public void scramButton() {
         if (!isScram) { //急停
-//            NettyClient.getInstance().sendMsg("");
+            NettyClient.getInstance().sendMsg(CommandConst.getStop());
             isScram = true;
             mActivity.updateScramText("恢复急停");
         } else {//回复急停
-//            NettyClient.getInstance().sendMsg("");
+            NettyClient.getInstance().sendMsg(CommandConst.getResumeStop());
             mActivity.updateScramText("急停");
             isScram = false;
         }

@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.leo.robot.R;
-import com.leo.robot.base.NettyActivity;
 import com.leo.robot.ui.cleaning.CleaningActivity;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
@@ -18,13 +17,14 @@ import com.leo.robot.ui.wiring.WiringActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cree.mvp.base.activity.BaseActivity;
 
 /**
  * created by Leo on 2019/4/14 18 : 11
  */
 
 
-public class MainActivity extends NettyActivity<MainActivityPresenter> {
+public class MainActivity extends BaseActivity<MainActivityPresenter> {
 
 
     @BindView(R.id.tv_date)
@@ -49,10 +49,6 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     LinearLayout mLlChoose;
 
 
-    @Override
-    protected void notifyData(String message) {
-
-    }
 
     @Override
     protected void bindingDagger2(@Nullable Bundle bundle) {

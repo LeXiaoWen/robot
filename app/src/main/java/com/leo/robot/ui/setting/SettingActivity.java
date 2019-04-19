@@ -13,6 +13,7 @@ import com.leo.robot.ui.setting.fragment.ArmFragment;
 import com.leo.robot.ui.setting.fragment.CutLineFragment;
 import com.leo.robot.ui.setting.fragment.ExtremityFragment;
 import com.leo.robot.ui.setting.fragment.ExtremityMoveFragment;
+import com.leo.robot.utils.CustomManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +35,7 @@ public class SettingActivity extends NettyActivity<SettingActivityPresenter> {
     private CutLineFragment mCutLineFragment = new CutLineFragment();
     private ExtremityFragment mExtremityFragment = new ExtremityFragment();
     private ExtremityMoveFragment mExtremityMoveFragment = new ExtremityMoveFragment();
+
     @Override
     protected void notifyData(String message) {
 
@@ -61,22 +63,22 @@ public class SettingActivity extends NettyActivity<SettingActivityPresenter> {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
-                switch (item.getItemId()) {
-                    case R.id.navigation_cut_line:
-                        switchFragment(mCutLineFragment).commit();
-                        return true;
-                    case R.id.navigation_extremity_move:
-                        switchFragment(mExtremityMoveFragment).commit();
-                        return true;
-                    case R.id.navigation_extremity:
-                        switchFragment(mExtremityFragment).commit();
-                        return true;
-                    case R.id.navigation_arm:
-                        switchFragment(mArmFragment).commit();
-                        return true;
-                }
-                return false;
-            };
+        switch (item.getItemId()) {
+            case R.id.navigation_cut_line:
+                switchFragment(mCutLineFragment).commit();
+                return true;
+            case R.id.navigation_extremity_move:
+                switchFragment(mExtremityMoveFragment).commit();
+                return true;
+            case R.id.navigation_extremity:
+                switchFragment(mExtremityFragment).commit();
+                return true;
+            case R.id.navigation_arm:
+                switchFragment(mArmFragment).commit();
+                return true;
+        }
+        return false;
+    };
 
 
     //Fragment优化
@@ -98,5 +100,17 @@ public class SettingActivity extends NettyActivity<SettingActivityPresenter> {
         }
         mCurrentFragment = targetFragment;
         return transaction;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        CustomManager.clearAllVideo();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

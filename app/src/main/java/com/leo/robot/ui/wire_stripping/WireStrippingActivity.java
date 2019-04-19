@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.ui.setting.SettingActivity;
+import com.leo.robot.utils.ConvertCode;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
 
@@ -19,6 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cree.mvp.util.develop.LogUtils;
 import cree.mvp.util.ui.ToastUtils;
 
 /**
@@ -78,14 +80,15 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     public static final String TAG = "WireStrippingActivity";
 
 
-
     private boolean isPause;
     private String source1 = "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov";
+    private String source2 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
 
 
     @Override
     protected void notifyData(String message) {
-
+        byte[] bytes = ConvertCode.hexString2Bytes(message);
+        LogUtils.e(bytes.toString());
     }
 
     @Override
@@ -114,7 +117,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         for (int i = 0; i < mMultiSampleVideos.size(); i++) {
             mMultiSampleVideos.get(i).setPlayTag(TAG);
             mMultiSampleVideos.get(i).setPlayPosition(i);
-            mMultiSampleVideos.get(i).setUp(source1,true,"测试");
+            mMultiSampleVideos.get(i).setUp(source2, true, "测试");
             mMultiSampleVideos.get(i).startPlayLogic();
         }
     }
@@ -162,6 +165,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 //            return;
 //        }
         super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -169,6 +173,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         super.onPause();
         CustomManager.onPauseAll();
         isPause = true;
+        LogUtils.e("暂停剥线界面");
     }
 
     @Override
@@ -176,6 +181,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         super.onResume();
         CustomManager.onResumeAll();
         isPause = false;
+        LogUtils.e("恢复剥线界面");
     }
 
     @Override
