@@ -283,6 +283,187 @@ public class CommandUtils {
         return ConvertCode.bytes2HexString(msg);
     }
 
+    /**
+     * 末端位移左旋
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getMainArmDisRotateLeft() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x01;
+        msg[2] = (byte) 0x0D;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位移右旋
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getMainArmDisRotateRight() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x01;
+        msg[2] = (byte) 0x0E;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位移向左
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getMainArmDisLeft() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x01;
+        msg[2] = (byte) 0x11;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位移向右
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getMainArmDisRight() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x01;
+        msg[2] = (byte) 0x12;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位移向上
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getMainArmDisUp() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x01;
+        msg[2] = (byte) 0x0F;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位移向下
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getMainArmDisDown() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x01;
+        msg[2] = (byte) 0x10;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+
+    /**
+     * 末端位姿左旋
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getMainArmPosRotateLeft() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x01;
+        msg[2] = (byte) 0x13;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位姿右旋
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getMainArmPosRotateRight() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x01;
+        msg[2] = (byte) 0x14;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位姿向左
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getMainArmPosLeft() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x01;
+        msg[2] = (byte) 0x17;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位姿向右
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getMainArmPosRight() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x01;
+        msg[2] = (byte) 0x18;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位姿向上
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getMainArmPosUp() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x01;
+        msg[2] = (byte) 0x15;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位姿向下
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getMainArmPosDown() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x01;
+        msg[2] = (byte) 0x16;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
 
     //------------------------ 主臂命令 end --------------------------
 
@@ -343,7 +524,7 @@ public class CommandUtils {
      */
     public static String getFlowArmStart() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x20;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -388,7 +569,7 @@ public class CommandUtils {
      */
     public static String getFlowArmWrist1Dec() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x07;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -403,7 +584,7 @@ public class CommandUtils {
      */
     public static String getFlowArmWrist2Add() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x0A;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -418,7 +599,7 @@ public class CommandUtils {
      */
     public static String getFlowArmWrist2Dec() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x09;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -433,7 +614,7 @@ public class CommandUtils {
      */
     public static String getFlowArmWrist3Add() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x0C;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -448,7 +629,7 @@ public class CommandUtils {
      */
     public static String getFlowArmWrist3Dec() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x0B;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -463,7 +644,7 @@ public class CommandUtils {
      */
     public static String getFlowArmElbowDec() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x05;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -478,7 +659,7 @@ public class CommandUtils {
      */
     public static String getFlowArmElbowAdd() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x06;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -493,7 +674,7 @@ public class CommandUtils {
      */
     public static String getFlowArmShoulderDec() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x03;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -508,7 +689,7 @@ public class CommandUtils {
      */
     public static String getFlowArmShoulderAdd() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x04;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -523,7 +704,7 @@ public class CommandUtils {
      */
     public static String getFlowArmPedestalDec() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x01;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -538,7 +719,7 @@ public class CommandUtils {
      */
     public static String getFlowArmPedestalAdd() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x02;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -555,6 +736,187 @@ public class CommandUtils {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x21;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+
+
+    /**
+     * 末端位移左旋
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getFlowArmDisRotateLeft() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x0D;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位移右旋
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getFlowArmDisRotateRight() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x0E;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位移向左
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getFlowArmDisLeft() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x11;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位移向右
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getFlowArmDisRight() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x12;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位移向上
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getFlowArmDisUp() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x0F;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位移向下
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getFlowArmDisDown() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x10;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+    /**
+     * 末端位姿左旋
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getFlowArmPosRotateLeft() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x13;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位姿右旋
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getFlowArmPosRotateRight() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x14;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位姿向左
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getFlowArmPosLeft() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x17;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位姿移向右
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getFlowArmPosRight() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x18;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位姿向上
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getFlowArmPosUp() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x15;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 末端位移向下
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getFlowArmPosDown() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x16;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
@@ -674,6 +1036,7 @@ public class CommandUtils {
     //------------------------ 剥线工具 end --------------------------
 
     //------------------------ 剪线工具 start --------------------------
+
     /**
      * 剪线开始
      *
@@ -687,7 +1050,9 @@ public class CommandUtils {
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
-    }/**
+    }
+
+    /**
      * 钳口复位
      *
      * @author Leo
@@ -700,7 +1065,9 @@ public class CommandUtils {
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
-    }/**
+    }
+
+    /**
      * 剪线结束
      *
      * @author Leo
@@ -715,4 +1082,127 @@ public class CommandUtils {
         return ConvertCode.bytes2HexString(msg);
     }
     //------------------------ 剪线工具 end --------------------------
+
+    //------------------------ 接线工具 start --------------------------
+
+    /**
+     * 拧断开始
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getTwistStart() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x09;
+        msg[2] = (byte) 0x04;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 拧断停止
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getTwistEnd() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x09;
+        msg[2] = (byte) 0x05;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 拧断翻转
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getTwistFlip() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x09;
+        msg[2] = (byte) 0x06;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 拧断初始
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getTwistInit() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x09;
+        msg[2] = (byte) 0x07;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 线夹解锁
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getClipUnlock() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x09;
+        msg[2] = (byte) 0x08;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 线夹锁定
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getClipLock() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x09;
+        msg[2] = (byte) 0x09;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 套筒解锁
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getSleeveUnlock() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x09;
+        msg[2] = (byte) 0x0B;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 套筒锁定
+     *
+     * @author Leo
+     * created at 2019/4/20 6:57 PM
+     */
+    public static String getSleeveLock() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x09;
+        msg[2] = (byte) 0x09;
+        msg[3] = (byte) 0x0A;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+    //------------------------ 接线工具 end --------------------------
 }

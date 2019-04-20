@@ -58,8 +58,10 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
 
     private void initFragment() {
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
-        switchFragment(mWiringStrippingFragment).commit();
         mArmFragment.setTAG(2);
+        mExtremityFragment.setTAG(2);
+        mExtremityMoveFragment.setTAG(2);
+        switchFragment(mWiringStrippingFragment).commit();
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 

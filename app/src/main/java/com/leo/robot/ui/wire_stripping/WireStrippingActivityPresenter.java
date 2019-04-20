@@ -39,11 +39,11 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     public void scramButton() {
         if (!isScram) { //急停
             NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmShutdown());
-            mActivity.updateStartText("恢复急停");
+            mActivity.updateScramText("恢复急停");
             isScram = true;
         } else {//回复急停
             NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmResume());
-            mActivity.updateStartText("急停");
+            mActivity.updateScramText("急停");
             isScram = false;
         }
     }
@@ -67,9 +67,11 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         if (!isStart) { //开始
             NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmStart());
             isStart = true;
+            mActivity.updateStartText("停止");
         } else {//停止
             NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmStop());
             isStart = false;
+            mActivity.updateStartText("开始");
         }
     }
 

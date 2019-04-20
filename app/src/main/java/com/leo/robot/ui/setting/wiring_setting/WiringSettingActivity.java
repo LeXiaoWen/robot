@@ -57,8 +57,10 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
 
     private void initFragment() {
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
-        switchFragment(mWiringFragment).commit();
         mArmFragment.setTAG(1);
+        mExtremityFragment.setTAG(1);
+        mExtremityMoveFragment.setTAG(1);
+        switchFragment(mWiringFragment).commit();
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 

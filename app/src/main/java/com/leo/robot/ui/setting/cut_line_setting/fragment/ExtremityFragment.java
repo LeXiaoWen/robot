@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.leo.robot.R;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.netty.NettyClient;
+import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -19,10 +21,14 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
  */
 
 
-public class ExtremityFragment extends Fragment {
+public class ExtremityFragment extends Fragment implements View.OnClickListener {
     private boolean isPause;
     private MultiSampleVideo mVideoPlayer;
+    private int TAG = 0;
 
+    public void setTAG(int TAG) {
+        this.TAG = TAG;
+    }
 
     @Nullable
     @Override
@@ -34,6 +40,17 @@ public class ExtremityFragment extends Fragment {
 
     private void initView(View view) {
         mVideoPlayer = (MultiSampleVideo) view.findViewById(R.id.player);
+        view.findViewById(R.id.btn_rotate_left).setOnClickListener(this);
+        view.findViewById(R.id.btn_rotate_right).setOnClickListener(this);
+        view.findViewById(R.id.btn_left).setOnClickListener(this);
+        view.findViewById(R.id.btn_right).setOnClickListener(this);
+        view.findViewById(R.id.btn_up).setOnClickListener(this);
+        view.findViewById(R.id.btn_down).setOnClickListener(this);
+        initVideo();
+
+    }
+
+    private void initVideo() {
         mVideoPlayer.setUp(UrlConstant.URL_TEST, true, "测试视频");
         mVideoPlayer.startPlayLogic();
     }
@@ -51,11 +68,6 @@ public class ExtremityFragment extends Fragment {
             GSYVideoManager.onResume();
         }
     }
-
-
-
-
-
 
 
     @Override
@@ -76,5 +88,77 @@ public class ExtremityFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         CustomManager.clearAllVideo();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_rotate_left:
+                rotateLeft();
+                break;
+            case R.id.btn_rotate_right:
+                rotateRight();
+                break;
+            case R.id.btn_left:
+                left();
+                break;
+            case R.id.btn_right:
+                right();
+                break;
+            case R.id.btn_up:
+                up();
+                break;
+            case R.id.btn_down:
+                down();
+                break;
+        }
+    }
+
+    private void down() {
+        if (TAG == 1) {//主臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmPosDown());
+        } else {//从臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmPosDown());
+        }
+    }
+
+    private void up() {
+        if (TAG == 1) {//主臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmPosUp());
+        } else {//从臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmPosUp());
+        }
+    }
+
+    private void right() {
+        if (TAG == 1) {//主臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmPosRight());
+        } else {//从臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmPosRight());
+        }
+    }
+
+    private void left() {
+        if (TAG == 1) {//主臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmPosLeft());
+        } else {//从臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmPosLeft());
+        }
+    }
+
+    private void rotateRight() {
+        if (TAG == 1) {//主臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmPosRotateRight());
+        } else {//从臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmPosRotateRight());
+        }
+    }
+
+    private void rotateLeft() {
+        if (TAG == 1) {//主臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmPosRotateLeft());
+        } else {//从臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmPosRotateLeft());
+        }
     }
 }

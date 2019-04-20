@@ -10,6 +10,8 @@ import android.widget.Button;
 
 import com.leo.robot.R;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.netty.NettyClient;
+import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -17,7 +19,7 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import cree.mvp.util.ui.ToastUtils;
 
 /**
- * 剪线设置
+ * 接线设置
  * created by Leo on 2019/4/18 22 : 05
  */
 
@@ -107,20 +109,28 @@ public class WiringFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_twist_start:
+                NettyClient.getInstance().sendMsg(CommandUtils.getTwistStart());
                 break;
             case R.id.btn_twist_flip:
+                NettyClient.getInstance().sendMsg(CommandUtils.getTwistFlip());
                 break;
             case R.id.btn_clip_unlock:
+                NettyClient.getInstance().sendMsg(CommandUtils.getClipUnlock());
                 break;
             case R.id.btn_sleeve_unlock:
+                NettyClient.getInstance().sendMsg(CommandUtils.getSleeveUnlock());
                 break;
             case R.id.btn_twist_end:
+                NettyClient.getInstance().sendMsg(CommandUtils.getTwistEnd());
                 break;
             case R.id.btn_twist_init:
+                NettyClient.getInstance().sendMsg(CommandUtils.getTwistInit());
                 break;
             case R.id.btn_clip_lock:
+                NettyClient.getInstance().sendMsg(CommandUtils.getClipLock());
                 break;
             case R.id.btn_sleeve_lock:
+                NettyClient.getInstance().sendMsg(CommandUtils.getSleeveLock());
                 break;
         }
     }

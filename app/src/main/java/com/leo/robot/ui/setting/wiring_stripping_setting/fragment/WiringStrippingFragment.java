@@ -19,7 +19,7 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import cree.mvp.util.ui.ToastUtils;
 
 /**
- * 剪线设置
+ * 剥线设置
  * created by Leo on 2019/4/18 22 : 05
  */
 

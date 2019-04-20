@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.leo.robot.R;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.netty.NettyClient;
+import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -19,9 +21,13 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
  */
 
 
-public class ExtremityMoveFragment extends Fragment {
+public class ExtremityMoveFragment extends Fragment implements View.OnClickListener {
     private boolean isPause;
     private MultiSampleVideo mVideoPlayer;
+    private int TAG = 0;
+    public void setTAG(int TAG) {
+        this.TAG = TAG;
+    }
 
 
     @Nullable
@@ -34,6 +40,17 @@ public class ExtremityMoveFragment extends Fragment {
 
     private void initView(View view) {
         mVideoPlayer = (MultiSampleVideo) view.findViewById(R.id.player);
+        view.findViewById(R.id.btn_rotate_left).setOnClickListener(this);
+        view.findViewById(R.id.btn_rotate_right).setOnClickListener(this);
+        view.findViewById(R.id.btn_left).setOnClickListener(this);
+        view.findViewById(R.id.btn_right).setOnClickListener(this);
+        view.findViewById(R.id.btn_up).setOnClickListener(this);
+        view.findViewById(R.id.btn_down).setOnClickListener(this);
+        initVideo();
+
+    }
+
+    private void initVideo() {
         mVideoPlayer.setUp(UrlConstant.URL_TEST, true, "测试视频");
         mVideoPlayer.startPlayLogic();
     }
@@ -76,5 +93,77 @@ public class ExtremityMoveFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         CustomManager.clearAllVideo();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_rotate_left:
+                rotateLeft();
+                break;
+            case R.id.btn_rotate_right:
+                rotateRight();
+                break;
+            case R.id.btn_left:
+                left();
+                break;
+            case R.id.btn_right:
+                right();
+                break;
+            case R.id.btn_up:
+                up();
+                break;
+            case R.id.btn_down:
+                down();
+                break;
+        }
+    }
+
+    private void down() {
+        if (TAG == 1) {//主臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmDisDown());
+        } else {//从臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmDisDown());
+        }
+    }
+
+    private void up() {
+        if (TAG == 1) {//主臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmDisUp());
+        } else {//从臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmDisUp());
+        }
+    }
+
+    private void right() {
+        if (TAG == 1) {//主臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmDisRight());
+        } else {//从臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmDisRight());
+        }
+    }
+
+    private void left() {
+        if (TAG == 1) {//主臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmDisLeft());
+        } else {//从臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmDisLeft());
+        }
+    }
+
+    private void rotateRight() {
+        if (TAG == 1) {//主臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmDisRotateRight());
+        } else {//从臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmDisRotateRight());
+        }
+    }
+
+    private void rotateLeft() {
+        if (TAG == 1) {//主臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmDisRotateLeft());
+        } else {//从臂
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmDisRotateLeft());
+        }
     }
 }

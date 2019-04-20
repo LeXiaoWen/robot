@@ -57,8 +57,10 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
 
     private void initFragment() {
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
-        switchFragment(mCutLineFragment).commit();
+        mExtremityFragment.setTAG(1);
+        mExtremityMoveFragment.setTAG(1);
         mArmFragment.setTAG(1);
+        switchFragment(mCutLineFragment).commit();
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 

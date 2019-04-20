@@ -39,11 +39,11 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity,Wirin
     public void scramButton() {
         if (!isScram) { //急停
             NettyClient.getInstance().sendMsg(CommandUtils.getMainArmShutdown());
-            mActivity.updateStartText("恢复急停");
+            mActivity.updateScramText("恢复急停");
             isScram = true;
         } else {//回复急停
             NettyClient.getInstance().sendMsg(CommandUtils.getMainArmResume());
-            mActivity.updateStartText("急停");
+            mActivity.updateScramText("急停");
             isScram = false;
         }
     }
@@ -67,9 +67,11 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity,Wirin
         if (!isStart) { //开始
             NettyClient.getInstance().sendMsg(CommandUtils.getMainArmStart());
             isStart = true;
+            mActivity.updateStartText("停止");
         } else {//停止
             NettyClient.getInstance().sendMsg(CommandUtils.getMainArmStop());
             isStart = false;
+            mActivity.updateStartText("开始");
         }
     }
 
