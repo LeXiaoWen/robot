@@ -63,10 +63,10 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity,Wirin
      */
     public void startButton() {
         if (!isStart) { //开始
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmStart());
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmStart());
             isStart = true;
         } else {//停止
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmStop());
+            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmStop());
             isStart = false;
         }
     }

@@ -1,4 +1,4 @@
-package com.leo.robot.ui.setting.fragment;
+package com.leo.robot.ui.setting.cut_line_setting.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,21 +13,24 @@ import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
+import cree.mvp.util.ui.ToastUtils;
+
 /**
- * 末端位姿设置
- * created by Leo on 2019/4/18 22 : 06
+ * 剪线设置
+ * created by Leo on 2019/4/18 22 : 05
  */
 
 
-public class ExtremityFragment extends Fragment {
-    private boolean isPause;
+public class CutLineFragment extends Fragment {
+
     private MultiSampleVideo mVideoPlayer;
+    private boolean isPause;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fg_extremity, container, false);
+        View view = inflater.inflate(R.layout.fg_cut_line, container, false);
         initView(view);
         return view;
     }
@@ -43,12 +46,14 @@ public class ExtremityFragment extends Fragment {
         super.onHiddenChanged(hidden);
         if (hidden) {
             //Fragment隐藏时调用
+            ToastUtils.showShortToast("隐藏 剪线设置");
             GSYVideoManager.onPause();
             CustomManager.clearAllVideo();
 
         } else {
             //Fragment显示时调用
             GSYVideoManager.onResume();
+            ToastUtils.showShortToast("显示 剪线设置");
         }
     }
 
@@ -77,4 +82,5 @@ public class ExtremityFragment extends Fragment {
         super.onDestroy();
         CustomManager.clearAllVideo();
     }
+
 }

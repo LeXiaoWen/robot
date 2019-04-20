@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
-import com.leo.robot.ui.setting.SettingActivity;
+import com.leo.robot.ui.setting.cut_line_setting.CutLineSettingActivity;
 import com.leo.robot.utils.MultiSampleVideo;
 
 import butterknife.BindView;
@@ -93,7 +93,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
                 break;
             case R.id.btn_setting:
                 if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(new Intent(CutLineActivity.this, SettingActivity.class));
+                    startActivity(new Intent(CutLineActivity.this, CutLineSettingActivity.class));
                 }
                 break;
         }

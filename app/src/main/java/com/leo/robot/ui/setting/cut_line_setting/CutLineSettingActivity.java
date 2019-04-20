@@ -1,4 +1,4 @@
-package com.leo.robot.ui.setting;
+package com.leo.robot.ui.setting.cut_line_setting;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,10 +9,10 @@ import android.widget.FrameLayout;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
-import com.leo.robot.ui.setting.fragment.ArmFragment;
-import com.leo.robot.ui.setting.fragment.CutLineFragment;
-import com.leo.robot.ui.setting.fragment.ExtremityFragment;
-import com.leo.robot.ui.setting.fragment.ExtremityMoveFragment;
+import com.leo.robot.ui.setting.cut_line_setting.fragment.ArmFragment;
+import com.leo.robot.ui.setting.cut_line_setting.fragment.CutLineFragment;
+import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityFragment;
+import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityMoveFragment;
 import com.leo.robot.utils.CustomManager;
 
 import butterknife.BindView;
@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  */
 
 
-public class SettingActivity extends NettyActivity<SettingActivityPresenter> {
+public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivityPresenter> {
 
     @BindView(R.id.fragment)
     FrameLayout mFragment;
@@ -43,7 +43,7 @@ public class SettingActivity extends NettyActivity<SettingActivityPresenter> {
 
     @Override
     protected void bindingDagger2(@Nullable Bundle bundle) {
-        DaggerSettingActivityComponent.create().inject(this);
+        DaggerCutLineSettingActivityComponent.create().inject(this);
     }
 
     @Override

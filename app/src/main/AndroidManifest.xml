@@ -60,8 +60,8 @@
             android:name=".ui.wiring.WiringActivity"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".ui.setting.SettingActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape"
+            android:name=".ui.setting.cut_line_setting.CutLineSettingActivity"/>
 
     </application>
 

@@ -67,7 +67,7 @@ public class CommandUtils {
 //    0x68,0x02,0x20,0x00,0xFF
 
     /**
-     * 剥线、接线页面从臂开始
+     * 剥线页面从臂开始
      *
      * @author Leo
      * created at 2019/4/20 2:55 PM
@@ -84,7 +84,7 @@ public class CommandUtils {
 //    0x68,0x02,0x21,0x00,0xFF
 
     /**
-     * 剥线、接线页面从臂停止
+     * 剥线页面从臂停止
      *
      * @author Leo
      * created at 2019/4/20 2:55 PM
@@ -101,7 +101,7 @@ public class CommandUtils {
 //    0x68,0x01,0x20,0x00,0xFF
 
     /**
-     * 剪线页面主臂开始
+     * 接线、剪线页面主臂开始
      *
      * @author Leo
      * created at 2019/4/20 2:55 PM
@@ -118,7 +118,7 @@ public class CommandUtils {
 //    0x68,0x01,0x21,0x00,0xFF
 
     /**
-     * 剪线页面主臂停止
+     * 接线、剪线页面主臂停止
      *
      * @author Leo
      * created at 2019/4/20 2:55 PM

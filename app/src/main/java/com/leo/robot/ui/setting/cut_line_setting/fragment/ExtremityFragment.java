@@ -1,4 +1,4 @@
-package com.leo.robot.ui.setting.fragment;
+package com.leo.robot.ui.setting.cut_line_setting.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,12 +14,12 @@ import com.leo.robot.utils.MultiSampleVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 /**
- * 末端位移设置
+ * 末端位姿设置
  * created by Leo on 2019/4/18 22 : 06
  */
 
 
-public class ExtremityMoveFragment extends Fragment {
+public class ExtremityFragment extends Fragment {
     private boolean isPause;
     private MultiSampleVideo mVideoPlayer;
 
@@ -27,7 +27,7 @@ public class ExtremityMoveFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fg_extremity_move, container, false);
+        View view = inflater.inflate(R.layout.fg_extremity, container, false);
         initView(view);
         return view;
     }
