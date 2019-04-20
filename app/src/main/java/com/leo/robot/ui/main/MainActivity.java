@@ -10,7 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.leo.robot.R;
+import com.leo.robot.base.NettyActivity;
 import com.leo.robot.broadcast.BatteryReceiver;
+import com.leo.robot.constant.RobotInit;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
@@ -18,7 +20,7 @@ import com.leo.robot.ui.wiring.WiringActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cree.mvp.base.activity.BaseActivity;
+import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.ui.ToastUtils;
 
 /**
@@ -26,7 +28,7 @@ import cree.mvp.util.ui.ToastUtils;
  */
 
 
-public class MainActivity extends BaseActivity<MainActivityPresenter> {
+public class MainActivity extends NettyActivity<MainActivityPresenter> {
 
 
     @BindView(R.id.tv_date)
@@ -64,6 +66,12 @@ public class MainActivity extends BaseActivity<MainActivityPresenter> {
         //实时更新时间（1秒更新一次）
         mPresenter.updateTime(mTvDate);
         initBroadcast();
+    }
+
+    @Override
+    protected void notifyData(String message) {
+        SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
+        utils.putString(RobotInit.PUSH_MSG,message);
     }
 
     private void initBroadcast() {

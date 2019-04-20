@@ -9,12 +9,16 @@ import android.widget.TextView;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.constant.PushMsg;
+import com.leo.robot.constant.RobotInit;
 import com.leo.robot.ui.setting.cut_line_setting.CutLineSettingActivity;
 import com.leo.robot.utils.MultiSampleVideo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cree.mvp.util.data.SPUtils;
+import cree.mvp.util.develop.LogUtils;
 import cree.mvp.util.ui.ToastUtils;
 
 /**
@@ -57,7 +61,8 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     @Override
     protected void notifyData(String message) {
-
+        SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
+        utils.putString(RobotInit.PUSH_MSG,message);
     }
 
     @Override
@@ -72,6 +77,13 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         ButterKnife.bind(this);
         mPresenter.updateTime(mTvDate);
         initBroadcast(mTvGroundPower);
+        initStatus();
+    }
+
+    private void initStatus() {
+        SPUtils utils = new SPUtils(RobotInit.CUT_LINE_ACTIVITY);
+        boolean isReady = utils.getBoolean(PushMsg.CUT_READY);
+        LogUtils.e("CutLineActivity  剪线 到位" + isReady);
     }
 
     @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting})

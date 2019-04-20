@@ -8,8 +8,10 @@ package com.leo.robot.test;
 public class Test {
     public static void main(String[] args) {
 //        System.out.println(getValue("bffeb60d5110b460"));
-        System.out.println(getValue("60b410510db6febf"));
-        System.out.println();
+//        System.out.println(getValue("60b410510db6febf"));
+        String msg = "6708010101FF";
+        String s = msg.substring(2, 4);
+        System.out.println(s);
     }
 
 

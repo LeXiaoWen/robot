@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
 import com.leo.robot.utils.CustomManager;
@@ -20,6 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.develop.LogUtils;
 import cree.mvp.util.ui.ToastUtils;
 
@@ -85,8 +87,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     @Override
     protected void notifyData(String message) {
-//        byte[] bytes = ConvertCode.hexString2Bytes(message);
-//        LogUtils.e(message);
+        SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
+        utils.putString(RobotInit.PUSH_MSG,message);
     }
 
     @Override
@@ -102,7 +104,21 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         initTile();
         initVideo();
         initBroadcast(mTvGroundPower);
+        initStatus();
+    }
 
+    private void initStatus() {
+        SPUtils utils = new SPUtils(RobotInit.WIRE_STRIPPING_ACTIVITY);
+        boolean isReady = utils.getBoolean(RobotInit.WIRE_STRIPPING_READY);
+        boolean isInit = utils.getBoolean(RobotInit.WIRE_STRIPPING_INIT);
+        boolean isToolReady = utils.getBoolean(RobotInit.WIRE_STRIPPING_TOOL_READY);
+        boolean isClamping = utils.getBoolean(RobotInit.WIRE_STRIPPING_CLAMPING);
+        boolean isClosure = utils.getBoolean(RobotInit.WIRE_STRIPPING_CLOSURE);
+        boolean isPeelting = utils.getBoolean(RobotInit.WIRE_STRIPPING_PEELING);
+        boolean isCutOff = utils.getBoolean(RobotInit.WIRE_STRIPPING_CUT_OFF);
+        boolean isUnlock = utils.getBoolean(RobotInit.WIRE_STRIPPING_UNLOCK);
+        boolean idEnd = utils.getBoolean(RobotInit.WIRE_STRIPPING_END);
+        LogUtils.e("WireStrippingActivity  就绪 " + isReady);
     }
 
     private void initVideo() {

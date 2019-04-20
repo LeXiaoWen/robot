@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
-import com.leo.robot.broadcast.BatteryReceiver;
+import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.utils.CustomManager;
@@ -19,6 +19,8 @@ import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cree.mvp.util.data.SPUtils;
+import cree.mvp.util.develop.LogUtils;
 import cree.mvp.util.ui.ToastUtils;
 
 /**
@@ -75,7 +77,8 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     @Override
     protected void notifyData(String message) {
-
+        SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
+        utils.putString(RobotInit.PUSH_MSG,message);
     }
 
     @Override
@@ -91,6 +94,13 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         mPresenter.updateTime(mTvDate);
         initVideo();
         initBroadcast(mTvGroundPower);
+        initStatus();
+    }
+
+    private void initStatus() {
+        SPUtils utils = new SPUtils(RobotInit.WIRING_ACTIVITY);
+        boolean isToolReady = utils.getBoolean(RobotInit.WIRING_TOOL_READY);
+        LogUtils.e("WiringActivity 剥线工具到位  " +isToolReady);
     }
 
     private void initVideo() {

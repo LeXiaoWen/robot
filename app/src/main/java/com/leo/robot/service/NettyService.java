@@ -1,6 +1,5 @@
 package com.leo.robot.service;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,18 +8,16 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
-import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.leo.robot.base.ActivityManager;
-import com.leo.robot.base.NettyActivity;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.netty.NettyListener;
 import com.leo.robot.netty.bean.NettyBaseFeed;
 import com.leo.robot.netty.bean.Netty_RegisterInfo;
+import com.leo.robot.utils.ResultUtils;
 
-import java.util.Stack;
+import cree.mvp.util.develop.LogUtils;
 
 
 /**
@@ -78,23 +75,25 @@ public class NettyService extends Service implements NettyListener {
 
     @Override
     public void onMessageResponse(String messageHolder) {
-        notifyData(NettyActivity.MSG_FROM_SERVER, messageHolder);
+        LogUtils.e("msg",messageHolder);
 
+        ResultUtils.onResult(messageHolder,ResultUtils.PUSH_MSG);
+//        notifyData(NettyActivity.MSG_FROM_SERVER, messageHolder);
     }
 
     private void notifyData(int type, String messageHolder) {
-        final Stack<Activity> activities = ActivityManager.getInstance().getActivities();
-        for (Activity activity : activities) {
-            if (activity == null || activity.isFinishing()) {
-                continue;
-            }
-            Message message = Message.obtain();
-            message.what = type;
-            message.obj = messageHolder;
-//            if (activity instanceof NettyActivity) {
-//                ((NettyActivity)activity).getHandler().sendMessage(message);
+//        final Stack<Activity> activities = ActivityManager.getInstance().getActivities();
+//        for (Activity activity : activities) {
+//            if (activity == null || activity.isFinishing()) {
+//                continue;
 //            }
-        }
+//            Message message = Message.obtain();
+//            message.what = type;
+//            message.obj = messageHolder;
+////            if (activity instanceof NettyActivity) {
+////                ((NettyActivity)activity).getHandler().sendMessage(message);
+////            }
+//        }
     }
 
     @Override
@@ -104,7 +103,8 @@ public class NettyService extends Service implements NettyListener {
             sendAuthor();
         } else {
             Log.e(TAG, "connect fail statusCode = " + statusCode);
-            notifyData(NettyActivity.MSG_NET_WORK_ERROR, String.valueOf("服务器连接失败"));
+            ResultUtils.onResult(String.valueOf("服务器连接失败"),ResultUtils.ERRO_MSG);
+//            notifyData(NettyActivity.MSG_NET_WORK_ERROR, String.valueOf("服务器连接失败"));
         }
 
     }
