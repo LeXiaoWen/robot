@@ -8,16 +8,22 @@
     android:weightSum="3"
     tools:ignore="MissingDefaultResource">
 
-    <com.leo.robot.utils.MultiSampleVideo
-        android:id="@+id/player"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
+    <RelativeLayout
+        android:layout_marginTop="@dimen/dp_40"
+        android:layout_marginBottom="@dimen/dp_80"
         android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_80"
-        android:layout_marginBottom="@dimen/dp_60"
         android:layout_weight="2"
-        />
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <com.leo.robot.utils.MultiSampleVideo
+            android:layout_centerInParent="true"
+            android:id="@+id/player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            />
+    </RelativeLayout>
+
 
     <RelativeLayout
         android:layout_width="0dp"

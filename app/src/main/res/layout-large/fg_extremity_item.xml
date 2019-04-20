@@ -10,7 +10,7 @@
     android:orientation="horizontal"
     android:layout_marginLeft="@dimen/dp_40"
     android:layout_marginRight="@dimen/dp_40"
-    android:layout_marginTop="@dimen/dp_20"
+    android:layout_marginTop="@dimen/dp_40"
     tools:ignore="MissingDefaultResource">
 
     <Button

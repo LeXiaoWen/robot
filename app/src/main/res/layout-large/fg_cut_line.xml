@@ -7,42 +7,24 @@
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/dp_80"
-        android:layout_marginTop="@dimen/dp_20"
-        android:layout_marginRight="@dimen/dp_80"
-        android:background="@color/cmvp_gray"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="机械臂USB摄像头和云台切换"
-            android:textColor="@color/cmvp_white"
-            android:textSize="@dimen/sp_14"/>
-    </RelativeLayout>
-
     <com.leo.robot.utils.MultiSampleVideo
         android:id="@+id/player"
-        android:layout_height="300dp"
+        android:layout_height="420dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="@dimen/dp_80"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginRight="@dimen/dp_80"
         android:layout_width="wrap_content"
-       />
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_40"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_40"
         android:layout_marginRight="@dimen/dp_40"
-        android:weightSum="3">
+        android:layout_marginBottom="@dimen/dp_40"
+        >
 
         <Button
             android:id="@+id/btn_cut_start"
