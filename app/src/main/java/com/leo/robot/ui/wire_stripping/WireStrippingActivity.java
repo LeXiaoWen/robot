@@ -1,5 +1,6 @@
 package com.leo.robot.ui.wire_stripping;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
 
@@ -147,7 +149,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 break;
             case R.id.btn_setting:
                 if (!mPresenter.isFastDoubleClick()) {
-//                    startActivity(new Intent(WireStrippingActivity.this, SettingActivity.class));
+                    startActivity(new Intent(WireStrippingActivity.this, WiringStrippingSettingActivity.class));
                 }
                 break;
         }

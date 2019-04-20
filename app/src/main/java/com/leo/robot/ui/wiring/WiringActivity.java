@@ -1,5 +1,6 @@
 package com.leo.robot.ui.wiring;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -138,7 +140,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
                 break;
             case R.id.btn_setting:
                 if (!mPresenter.isFastDoubleClick()) {
-//                    startActivity(new Intent(WiringActivity.this, SettingActivity.class));
+                    startActivity(new Intent(WiringActivity.this, WiringSettingActivity.class));
                 }
                 break;
         }
