@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.bean.NettyBaseFeed;
 
+import cree.mvp.util.ui.ToastUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -147,7 +148,11 @@ public class NettyClient {
             return;
         }
         if (channel != null) {
-            channel.writeAndFlush(msg);
+            if (isConnect) {
+                channel.writeAndFlush(msg);
+            }else {
+                ToastUtils.showShortToast("未连接！");
+            }
         }
 
     }

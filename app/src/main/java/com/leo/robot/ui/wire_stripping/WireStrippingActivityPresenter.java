@@ -38,10 +38,12 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      */
     public void scramButton() {
         if (!isScram) { //急停
-            NettyClient.getInstance().sendMsg(CommandUtils.getStop());
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmShutdown());
+            mActivity.updateStartText("恢复急停");
             isScram = true;
         } else {//回复急停
-            NettyClient.getInstance().sendMsg(CommandUtils.getResumeStop());
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmResume());
+            mActivity.updateStartText("急停");
             isScram = false;
         }
     }
@@ -52,7 +54,7 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     *created at 2019/4/18 2:17 PM
     */
     public void revocerButton() {
-        NettyClient.getInstance().sendMsg(CommandUtils.getRecover());
+        NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmRecover());
     }
 
     /**

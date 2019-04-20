@@ -9,8 +9,14 @@ public class CommandUtils {
 
     private static byte[] msg = new byte[5];
 
-    //急停
-    public static String getStop() {
+    //------------------------ 主臂命令 start --------------------------
+    /**
+     * 急停
+     *
+     * @author Leo
+     * created at 2019/4/20 5:00 PM
+     */
+    public static String getMainArmShutdown() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x01;
         msg[2] = (byte) 0x1E;
@@ -20,8 +26,13 @@ public class CommandUtils {
 
     }
 
-    //恢复急停
-    public static String getResumeStop() {
+    /**
+     * 恢复急停
+     *
+     * @author Leo
+     * created at 2019/4/20 5:00 PM
+     */
+    public static String getMainArmResume() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x01;
         msg[2] = (byte) 0x1F;
@@ -30,32 +41,13 @@ public class CommandUtils {
         return ConvertCode.bytes2HexString(msg);
     }
 
-//    0x68,0x02,0x22,0x00,0xFF
-
     /**
-     * 剥线、接线页面从臂回收
+     * 一键收回
      *
      * @author Leo
-     * created at 2019/4/20 2:50 PM
+     * created at 2019/4/20 4:56 PM
      */
-    public static String getRecover() {
-        msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x02;
-        msg[2] = (byte) 0x22;
-        msg[3] = (byte) 0x00;
-        msg[4] = (byte) 0xFF;
-        return ConvertCode.bytes2HexString(msg);
-    }
-
-//    0x68,0x01,0x22,0x00,0xFF
-
-    /**
-     * 剪线界面主臂回收
-     *
-     * @author Leo
-     * created at 2019/4/20 2:51 PM
-     */
-    public static String getCutLineRecover() {
+    public static String getMainArmRecover() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x01;
         msg[2] = (byte) 0x22;
@@ -64,47 +56,11 @@ public class CommandUtils {
         return ConvertCode.bytes2HexString(msg);
     }
 
-//    0x68,0x02,0x20,0x00,0xFF
-
     /**
-     * 剥线页面从臂开始
+     * 开始
      *
-     * @author Leo
-     * created at 2019/4/20 2:55 PM
-     */
-    public static String getFlowArmStart() {
-        msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x02;
-        msg[2] = (byte) 0x20;
-        msg[3] = (byte) 0x00;
-        msg[4] = (byte) 0xFF;
-        return ConvertCode.bytes2HexString(msg);
-    }
-
-//    0x68,0x02,0x21,0x00,0xFF
-
-    /**
-     * 剥线页面从臂停止
-     *
-     * @author Leo
-     * created at 2019/4/20 2:55 PM
-     */
-    public static String getFlowArmStop() {
-        msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x02;
-        msg[2] = (byte) 0x21;
-        msg[3] = (byte) 0x00;
-        msg[4] = (byte) 0xFF;
-        return ConvertCode.bytes2HexString(msg);
-    }
-
-//    0x68,0x01,0x20,0x00,0xFF
-
-    /**
-     * 接线、剪线页面主臂开始
-     *
-     * @author Leo
-     * created at 2019/4/20 2:55 PM
+     *@author Leo
+     *created at 2019/4/20 5:03 PM
      */
     public static String getMainArmStart() {
         msg[0] = (byte) 0x68;
@@ -115,13 +71,11 @@ public class CommandUtils {
         return ConvertCode.bytes2HexString(msg);
     }
 
-//    0x68,0x01,0x21,0x00,0xFF
-
     /**
-     * 接线、剪线页面主臂停止
+     * 停止
      *
-     * @author Leo
-     * created at 2019/4/20 2:55 PM
+     *@author Leo
+     *created at 2019/4/20 5:03 PM
      */
     public static String getMainArmStop() {
         msg[0] = (byte) 0x68;
@@ -131,53 +85,85 @@ public class CommandUtils {
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
     }
+    //------------------------ 主臂命令 end --------------------------
 
-    //------------------------  --------------------------
 
+    //------------------------ 从臂命令 start --------------------------
     /**
-     * 剪线开始
+     * 急停
      *
      * @author Leo
-     * created at 2019/4/20 3:04 PM
+     * created at 2019/4/20 5:00 PM
      */
-    public static String getCutStart() {
+    public static String getFlowArmShutdown() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
-        msg[2] = (byte) 0x21;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x1E;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+
+    }
+
+    /**
+     * 恢复急停
+     *
+     * @author Leo
+     * created at 2019/4/20 5:00 PM
+     */
+    public static String getFlowArmResume() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x1F;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
     }
 
     /**
-     * 剪线停止
+     * 一键收回
      *
      * @author Leo
-     * created at 2019/4/20 3:04 PM
+     * created at 2019/4/20 4:56 PM
      */
-    public static String getCutStopt() {
+    public static String getFlowArmRecover() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
-        msg[2] = (byte) 0x21;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x22;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
     }
 
-      /**
-      * 钳口复位
-      *
-      *@author Leo
-      *created at 2019/4/20 3:05 PM
-      */
-    public static String getJawReset() {
+    /**
+     * 开始
+     *
+     *@author Leo
+     *created at 2019/4/20 5:03 PM
+     */
+    public static String getFlowArmStart() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x01;
-        msg[2] = (byte) 0x21;
+        msg[2] = (byte) 0x20;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
     }
 
+    /**
+     * 停止
+     *
+     *@author Leo
+     *created at 2019/4/20 5:03 PM
+     */
+    public static String getFlowArmStop() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x02;
+        msg[2] = (byte) 0x21;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+    //------------------------ 从臂命令 end --------------------------
 
 }
