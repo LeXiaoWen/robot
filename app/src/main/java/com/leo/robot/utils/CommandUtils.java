@@ -1,13 +1,12 @@
-package com.leo.robot.netty.command;
-
-import com.leo.robot.utils.ConvertCode;
+package com.leo.robot.utils;
 
 /**
- * created by Leo on 2019/4/19 21 : 49
+ * created by Leo on 2019/4/20 10 : 48
  */
 
 
-public class CommandConst {
+public class CommandUtils {
+
     private static byte[] msg = new byte[5];
 
     //急停
@@ -17,7 +16,7 @@ public class CommandConst {
         msg[2] = (byte) 0x1E;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
-       return ConvertCode.bytes2HexString(msg);
+        return ConvertCode.bytes2HexString(msg);
 
     }
     //恢复急停
@@ -29,5 +28,4 @@ public class CommandConst {
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
     }
-
 }

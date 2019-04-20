@@ -1,5 +1,6 @@
 package com.leo.robot.service;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,11 +24,9 @@ import java.util.Stack;
 
 
 /**
-*
-*
-*@author Leo
-*created at 2019/4/14 6:04 PM
-*/
+ * @author Leo
+ * created at 2019/4/14 6:04 PM
+ */
 public class NettyService extends Service implements NettyListener {
 
     private NetworkReceiver receiver;
@@ -84,15 +83,17 @@ public class NettyService extends Service implements NettyListener {
     }
 
     private void notifyData(int type, String messageHolder) {
-        final Stack<NettyActivity> activities = ActivityManager.getInstance().getActivities();
-        for (NettyActivity activity : activities) {
+        final Stack<Activity> activities = ActivityManager.getInstance().getActivities();
+        for (Activity activity : activities) {
             if (activity == null || activity.isFinishing()) {
                 continue;
             }
             Message message = Message.obtain();
             message.what = type;
             message.obj = messageHolder;
-            activity.getHandler().sendMessage(message);
+//            if (activity instanceof NettyActivity) {
+//                ((NettyActivity)activity).getHandler().sendMessage(message);
+//            }
         }
     }
 

@@ -68,7 +68,10 @@ public class MainActivity extends BaseActivity<MainActivityPresenter> {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_wire_stripping:
-                startActivity(WireStrippingActivity.class);
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(WireStrippingActivity.class);
+                }
+
                 break;
             case R.id.ll_wiring:
 
@@ -87,6 +90,9 @@ public class MainActivity extends BaseActivity<MainActivityPresenter> {
     public void startActivity(Class<?> clazz) {
         startActivity(new Intent(MainActivity.this, clazz));
     }
+
+
+
 
 
 }

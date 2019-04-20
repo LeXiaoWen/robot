@@ -1,5 +1,7 @@
 package com.leo.robot.base;
 
+import android.app.Activity;
+
 import java.util.Stack;
 
 
@@ -13,24 +15,24 @@ import java.util.Stack;
 public class ActivityManager {
 
     private static ActivityManager acitivityManager = new ActivityManager();
-    public Stack<NettyActivity> activities = new Stack<>();
+    public Stack<Activity> activities = new Stack<>();
 
     public static ActivityManager getInstance() {
         return acitivityManager;
     }
 
-    public Stack<NettyActivity> getActivities() {
+    public Stack<Activity> getActivities() {
         return activities;
     }
 
-    public void addActivity(NettyActivity activity) {
+    public void addActivity(Activity activity) {
         if (activity == null) {
             return;
         }
         activities.add(activity);
     }
 
-    public void removeActivity(NettyActivity activity) {
+    public void removeActivity(Activity activity) {
         if (activity == null) {
             return;
         }

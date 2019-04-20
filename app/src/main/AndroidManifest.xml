@@ -31,6 +31,7 @@
             android:exported="true"/>
 
         <activity
+            android:launchMode="singleTask"
             android:name=".ui.launcher.LauncherActivity"
             android:screenOrientation="landscape"
             android:theme="@style/CMVP_FullTheme">

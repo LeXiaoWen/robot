@@ -1,18 +1,24 @@
 package com.leo.robot.ui.wiring;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.ui.setting.SettingActivity;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import cree.mvp.util.ui.ToastUtils;
 
 /**
  * 接线作业
@@ -86,11 +92,9 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     }
 
     private void initVideo() {
-        String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-        mPlayer.setUp(source1, true, "测试视频");
+        mPlayer.setUp(UrlConstant.URL_TEST, true, "测试视频");
         mPlayer.startPlayLogic();
     }
-
 
 
     @Override
@@ -116,5 +120,38 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     protected void onDestroy() {
         super.onDestroy();
         CustomManager.clearAllVideo();
+    }
+
+    @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_scram:
+                mPresenter.scramButton();
+                break;
+            case R.id.btn_recover:
+                mPresenter.revocerButton();
+                break;
+            case R.id.btn_start:
+                mPresenter.startButton();
+                break;
+            case R.id.btn_get_pic:
+                mPresenter.getPicButton();
+                break;
+            case R.id.btn_setting:
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(new Intent(WiringActivity.this, SettingActivity.class));
+                }
+                break;
+        }
+    }
+
+    public void updateScramText(String s) {
+        mBtnScram.setText(s);
+        ToastUtils.showShortToast(s);
+    }
+
+    public void updateStartText(String s) {
+        mBtnStart.setText(s);
+        ToastUtils.showShortToast(s);
     }
 }

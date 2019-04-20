@@ -4,7 +4,7 @@ import android.widget.TextView;
 
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.netty.NettyClient;
-import com.leo.robot.netty.command.CommandConst;
+import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.TimeThread;
 
 import javax.inject.Inject;
@@ -38,11 +38,11 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      */
     public void scramButton() {
         if (!isScram) { //急停
-            NettyClient.getInstance().sendMsg(CommandConst.getStop());
+            NettyClient.getInstance().sendMsg(CommandUtils.getStop());
             isScram = true;
             mActivity.updateScramText("恢复急停");
         } else {//回复急停
-            NettyClient.getInstance().sendMsg(CommandConst.getResumeStop());
+            NettyClient.getInstance().sendMsg(CommandUtils.getResumeStop());
             mActivity.updateScramText("急停");
             isScram = false;
         }
