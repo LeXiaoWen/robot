@@ -2,6 +2,7 @@ package com.leo.robot;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import cree.mvp.base.activity.BaseApplication;
 import cree.mvp.util.data.Utils;
@@ -25,7 +26,7 @@ public class App extends BaseApplication {
 //        GSYVideoType.SCREEN_TYPE_16_9 = 1;
         //静音
         GSYVideoManager.instance().setNeedMute(true);
-
+        CrashReport.initCrashReport(getApplicationContext(), "eb991c2317", false);
     }
 
     @Override
