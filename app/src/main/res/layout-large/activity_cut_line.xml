@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,12 +8,159 @@
     tools:ignore="MissingDefaultResource">
     <include layout="@layout/activity_title"/>
 
-    <TextView
-        android:text="剪线作业"
-        android:textColor="@color/cmvp_red"
-        android:textSize="@dimen/sp_14"
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:orientation="horizontal"
+        android:paddingRight="20dp"
+        android:weightSum="5">
+        <!--到位-->
+        <TextView
+            android:id="@+id/tv_ready"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/cmvp_yellow"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:text="到位"
+            android:textColor="@color/cmvp_black"
+            android:textSize="@dimen/sp_8"/>
+        <!--剪线开始-->
+        <TextView
+            android:id="@+id/tv_cut_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@color/cmvp_yellow"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:text="剪线开始"
+            android:textColor="@color/cmvp_black"
+            android:textSize="@dimen/sp_8"/>
+        <!--剪线停止-->
+        <TextView
+            android:id="@+id/tv_cut_stop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@color/cmvp_yellow"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:text="剪线停止"
+            android:textColor="@color/cmvp_black"
+            android:textSize="@dimen/sp_8"/>
+        <!--钳口复位-->
+        <TextView
+            android:id="@+id/tv_reset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@color/cmvp_yellow"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:text="钳口复位"
+            android:textColor="@color/cmvp_black"
+            android:textSize="@dimen/sp_8"/>
 
-</RelativeLayout>
+        <!--结束-->
+        <TextView
+            android:id="@+id/tv_end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@color/cmvp_yellow"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:text="结束"
+            android:textColor="@color/cmvp_black"
+            android:textSize="@dimen/sp_8"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+
+        <com.leo.robot.utils.MultiSampleVideo
+            android:id="@+id/player"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_weight="2"/>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:weightSum="5">
+            <!--急停或解除急停-->
+            <Button
+                android:id="@+id/btn_scram"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:text="急停"/>
+            <!--一键回收-->
+            <Button
+                android:id="@+id/btn_recover"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_weight="1"
+                android:text="一键收回"/>
+            <!--开始-->
+            <Button
+                android:id="@+id/btn_start"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_weight="1"
+                android:text="开始"/>
+            <!--获取当前帧-->
+            <Button
+                android:id="@+id/btn_get_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_weight="1"
+                android:text="获取当前帧"/>
+
+            <!--手动设置-->
+            <Button
+                android:id="@+id/btn_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_weight="1"
+                android:text="手动设置"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

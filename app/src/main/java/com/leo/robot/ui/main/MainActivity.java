@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.leo.robot.R;
-import com.leo.robot.ui.cleaning.CleaningActivity;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
@@ -18,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cree.mvp.base.activity.BaseActivity;
+import cree.mvp.util.ui.ToastUtils;
 
 /**
  * created by Leo on 2019/4/14 18 : 11
@@ -49,7 +49,6 @@ public class MainActivity extends BaseActivity<MainActivityPresenter> {
     LinearLayout mLlChoose;
 
 
-
     @Override
     protected void bindingDagger2(@Nullable Bundle bundle) {
         DaggerMainActivityComponent.create().inject(this);
@@ -74,15 +73,19 @@ public class MainActivity extends BaseActivity<MainActivityPresenter> {
 
                 break;
             case R.id.ll_wiring:
-
-                startActivity(WiringActivity.class);
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(WiringActivity.class);
+                }
 
                 break;
             case R.id.ll_cut_line:
-                startActivity(CutLineActivity.class);
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(CutLineActivity.class);
+                }
                 break;
             case R.id.ll_cleaning:
-                startActivity(CleaningActivity.class);
+                ToastUtils.showShortToast("清洗绝缘子作业！");
+//                startActivity(CleaningActivity.class);
                 break;
         }
     }
@@ -90,9 +93,6 @@ public class MainActivity extends BaseActivity<MainActivityPresenter> {
     public void startActivity(Class<?> clazz) {
         startActivity(new Intent(MainActivity.this, clazz));
     }
-
-
-
 
 
 }
