@@ -25,6 +25,10 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
     public final static int MSG_NET_WORK_ERROR = 0x2;
     protected String TAG;
     protected MHandler handler;
+    private BatteryReceiver mReceiver;
+
+
+    private boolean mReceiverTag = false; //广播接受者标识位
 
     /**
      * 暴露handler给Service
@@ -44,9 +48,13 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
     }
 
     protected void initBroadcast(TextView view) {
-        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        BatteryReceiver receiver = new BatteryReceiver(view);
-        registerReceiver(receiver, filter);
+        if (!mReceiverTag){
+            mReceiverTag = true;
+            IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+            mReceiver = new BatteryReceiver(view);
+            registerReceiver(mReceiver, filter);
+        }
+
     }
 
     @Override
@@ -82,6 +90,23 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
      */
     protected abstract void notifyData(String message);
 
+    public void onUnBindReceiver() {
+        if (mReceiverTag) {
+            if (mReceiver != null) {
+                try {
+                    mReceiverTag = false;//设置广播标识位为false
+                    unregisterReceiver(mReceiver);
+                } catch (IllegalArgumentException e) {
+                    if (e.getMessage().contains("Receiver not registered")) {
+                        // Ignore this exception. This is exactly what is desired
+                    } else {
+                        // unexpected, re-throw
+                        throw e;
+                    }
+                }
+            }
+        }
 
+    }
 
 }

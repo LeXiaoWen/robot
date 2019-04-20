@@ -23,5 +23,6 @@ public class BatteryReceiver extends BroadcastReceiver {
         int total = intent.getExtras().getInt("scale");// 获得总电量
         int percent = current * 100 / total;
         pow.setText(percent + "%");
+//        context.unregisterReceiver(this);
     }
 }

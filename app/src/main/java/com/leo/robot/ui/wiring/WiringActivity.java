@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.broadcast.BatteryReceiver;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.utils.CustomManager;
@@ -154,5 +155,11 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     public void updateStartText(String s) {
         mBtnStart.setText(s);
         ToastUtils.showShortToast(s);
+    }
+
+    @Override
+    protected void onStop() {
+        onUnBindReceiver();
+        super.onStop();
     }
 }

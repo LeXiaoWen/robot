@@ -195,4 +195,10 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         super.onDestroy();
         CustomManager.clearAllVideo();
     }
+
+    @Override
+    protected void onStop() {
+        onUnBindReceiver();
+        super.onStop();
+    }
 }

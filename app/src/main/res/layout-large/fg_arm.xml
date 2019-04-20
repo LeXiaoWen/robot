@@ -4,34 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
+    android:weightSum="3"
     tools:ignore="MissingDefaultResource">
 
     <com.leo.robot.utils.MultiSampleVideo
         android:id="@+id/player"
-        android:layout_height="300dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/dp_80"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_20"
-        android:layout_marginRight="@dimen/dp_80"
-        android:layout_width="wrap_content"
+        android:layout_marginBottom="@dimen/dp_60"
+        android:layout_weight="2"
         />
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_20"
         android:layout_marginRight="@dimen/dp_20"
-        android:layout_marginBottom="@dimen/dp_10"
-        android:weightSum="2">
+        android:layout_marginBottom="@dimen/dp_60"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:layout_centerInParent="true"
             android:orientation="vertical">
 
             <LinearLayout
@@ -39,6 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_20"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
@@ -49,15 +53,23 @@
                     android:textColor="@color/cmvp_black"/>
 
                 <ImageButton
+                    android:id="@+id/ibtn_wrist1_dec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_12"
                     android:src="@drawable/turn_left"/>
 
+                <TextView
+                    android:layout_width="@dimen/dp_80"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:background="@color/cmvp_gray"/>
+
                 <ImageButton
+                    android:id="@+id/ibtn_wrist1_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_80"
                     android:src="@drawable/turn_right"/>
 
             </LinearLayout>
@@ -67,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_20"
                 android:orientation="horizontal">
 
                 <TextView
@@ -77,15 +90,24 @@
                     android:textColor="@color/cmvp_black"/>
 
                 <ImageButton
+                    android:id="@+id/ibtn_wrist2_dec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_12"
                     android:src="@drawable/turn_left"/>
 
+                <TextView
+                    android:layout_width="@dimen/dp_80"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:background="@color/cmvp_gray"/>
+
                 <ImageButton
+                    android:id="@+id/ibtn_wrist2_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_80"
+
                     android:src="@drawable/turn_right"/>
 
             </LinearLayout>
@@ -95,6 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_20"
                 android:orientation="horizontal">
 
                 <TextView
@@ -105,32 +128,34 @@
                     android:textColor="@color/cmvp_black"/>
 
                 <ImageButton
+                    android:id="@+id/ibtn_wrist3_dec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_12"
                     android:src="@drawable/turn_left"/>
 
+                <TextView
+                    android:layout_width="@dimen/dp_80"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:background="@color/cmvp_gray"/>
+
                 <ImageButton
+                    android:id="@+id/ibtn_wrist3_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_80"
+
                     android:src="@drawable/turn_right"/>
 
             </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_20"
                 android:orientation="horizontal">
 
                 <TextView
@@ -141,23 +166,33 @@
                     android:textColor="@color/cmvp_black"/>
 
                 <ImageButton
+                    android:id="@+id/ibtn_elbow_dec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_12"
                     android:src="@drawable/turn_left"/>
 
+                <TextView
+                    android:layout_width="@dimen/dp_80"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:background="@color/cmvp_gray"/>
+
                 <ImageButton
+                    android:id="@+id/ibtn_elbow_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_80"
                     android:src="@drawable/turn_right"/>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_20"
                 android:orientation="horizontal">
 
                 <TextView
@@ -168,23 +203,33 @@
                     android:textColor="@color/cmvp_black"/>
 
                 <ImageButton
+                    android:id="@+id/ibtn_shoulder_dec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_12"
                     android:src="@drawable/turn_left"/>
 
+                <TextView
+                    android:layout_width="@dimen/dp_80"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:background="@color/cmvp_gray"/>
+
                 <ImageButton
+                    android:id="@+id/ibtn_shoulder_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_80"
                     android:src="@drawable/turn_right"/>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_20"
                 android:orientation="horizontal">
 
                 <TextView
@@ -195,24 +240,38 @@
                     android:textColor="@color/cmvp_black"/>
 
                 <ImageButton
+                    android:id="@+id/ibtn_pedestal_dec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_12"
                     android:src="@drawable/turn_left"/>
 
+                <TextView
+                    android:layout_width="@dimen/dp_80"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:background="@color/cmvp_gray"/>
+
                 <ImageButton
+                    android:id="@+id/ibtn_pedestal_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_80"
                     android:src="@drawable/turn_right"/>
 
             </LinearLayout>
-
-
         </LinearLayout>
 
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:text="返回"/>
+    </RelativeLayout>
 
 
 </LinearLayout>

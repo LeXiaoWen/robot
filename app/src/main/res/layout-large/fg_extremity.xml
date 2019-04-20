@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="4"
     tools:ignore="MissingDefaultResource">
 
     <com.leo.robot.utils.MultiSampleVideo
+        android:layout_weight="3"
         android:id="@+id/player"
-        android:layout_height="300dp"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="@dimen/dp_80"
         android:layout_marginTop="@dimen/dp_20"

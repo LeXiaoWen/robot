@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.leo.robot.R;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.netty.NettyClient;
+import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -21,7 +23,7 @@ import cree.mvp.util.ui.ToastUtils;
  */
 
 
-public class CutLineFragment extends Fragment {
+public class CutLineFragment extends Fragment implements View.OnClickListener {
 
     private MultiSampleVideo mVideoPlayer;
     private boolean isPause;
@@ -37,6 +39,14 @@ public class CutLineFragment extends Fragment {
 
     private void initView(View view) {
         mVideoPlayer = (MultiSampleVideo) view.findViewById(R.id.player);
+        view.findViewById(R.id.btn_cut_start).setOnClickListener(this);
+        view.findViewById(R.id.btn_reset).setOnClickListener(this);
+        view.findViewById(R.id.btn_cut_stop).setOnClickListener(this);
+        initVideo();
+
+    }
+
+    private void initVideo() {
         mVideoPlayer.setUp(UrlConstant.URL_TEST, true, "测试视频");
         mVideoPlayer.startPlayLogic();
     }
@@ -56,11 +66,6 @@ public class CutLineFragment extends Fragment {
             ToastUtils.showShortToast("显示 剪线设置");
         }
     }
-
-
-
-
-
 
 
     @Override
@@ -83,4 +88,18 @@ public class CutLineFragment extends Fragment {
         CustomManager.clearAllVideo();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_cut_start:
+                NettyClient.getInstance().sendMsg(CommandUtils.getCutToolStart());
+                break;
+            case R.id.btn_reset:
+                NettyClient.getInstance().sendMsg(CommandUtils.getCutToolReset());
+                break;
+            case R.id.btn_cut_stop:
+                NettyClient.getInstance().sendMsg(CommandUtils.getCutToolStop());
+                break;
+        }
+    }
 }

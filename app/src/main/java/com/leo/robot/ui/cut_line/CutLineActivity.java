@@ -109,4 +109,10 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         ToastUtils.showShortToast(s);
     }
 
+    @Override
+    protected void onStop() {
+        onUnBindReceiver();
+        super.onStop();
+    }
+
 }
