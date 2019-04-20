@@ -52,7 +52,6 @@ public class SettingActivity extends NettyActivity<SettingActivityPresenter> {
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
         initFragment();
-
     }
 
     private void initFragment() {

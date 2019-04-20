@@ -1,9 +1,14 @@
 package com.leo.robot.base;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.widget.TextView;
+
+import com.leo.robot.broadcast.BatteryReceiver;
 
 import java.lang.ref.WeakReference;
 
@@ -38,6 +43,12 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
         TAG = this.getClass().getName();
     }
 
+    protected void initBroadcast(TextView view) {
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        BatteryReceiver receiver = new BatteryReceiver(view);
+        registerReceiver(receiver, filter);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -70,4 +81,7 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
      * @param message
      */
     protected abstract void notifyData(String message);
+
+
+
 }

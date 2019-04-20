@@ -48,7 +48,8 @@ public class TimeThread extends Thread {
                     tvDate.setText(date);
 
                     break;
-
+                case 24:
+                    break;
                 default:
                     break;
             }

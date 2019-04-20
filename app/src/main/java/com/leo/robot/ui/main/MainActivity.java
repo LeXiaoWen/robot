@@ -1,6 +1,7 @@
 package com.leo.robot.ui.main;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.leo.robot.R;
+import com.leo.robot.broadcast.BatteryReceiver;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
@@ -61,6 +63,13 @@ public class MainActivity extends BaseActivity<MainActivityPresenter> {
         ButterKnife.bind(this);
         //实时更新时间（1秒更新一次）
         mPresenter.updateTime(mTvDate);
+        initBroadcast();
+    }
+
+    private void initBroadcast() {
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        BatteryReceiver receiver = new BatteryReceiver(mTvGroundPower);
+        registerReceiver(receiver, filter);
     }
 
     @OnClick({R.id.ll_wire_stripping, R.id.ll_wiring, R.id.ll_cut_line, R.id.ll_cleaning})

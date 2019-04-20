@@ -71,7 +71,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         setContentView(R.layout.activity_cut_line);
         ButterKnife.bind(this);
         mPresenter.updateTime(mTvDate);
-
+        initBroadcast(mTvGroundPower);
     }
 
     @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting})

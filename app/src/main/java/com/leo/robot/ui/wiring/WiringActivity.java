@@ -89,6 +89,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         ButterKnife.bind(this);
         mPresenter.updateTime(mTvDate);
         initVideo();
+        initBroadcast(mTvGroundPower);
     }
 
     private void initVideo() {

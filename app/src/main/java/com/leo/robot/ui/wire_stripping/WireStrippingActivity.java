@@ -101,6 +101,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         ButterKnife.bind(this);
         initTile();
         initVideo();
+        initBroadcast(mTvGroundPower);
+
     }
 
     private void initVideo() {
