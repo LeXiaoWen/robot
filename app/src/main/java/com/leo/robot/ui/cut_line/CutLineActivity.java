@@ -11,7 +11,7 @@ import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.CutLineMsg;
 import com.leo.robot.bean.ErroMsg;
-import com.leo.robot.constant.PushMsg;
+import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.ui.setting.cut_line_setting.CutLineSettingActivity;
 import com.leo.robot.utils.MultiSampleVideo;
@@ -63,6 +63,8 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     Button mBtnGetPic;
     @BindView(R.id.btn_setting)
     Button mBtnSetting;
+    @BindView(R.id.btn_back)
+    Button mBtnBack;
 
     private boolean isShown = false;
 
@@ -90,11 +92,11 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     private void initStatus() {
         SPUtils utils = new SPUtils(RobotInit.CUT_LINE_ACTIVITY);
-        boolean isReady = utils.getBoolean(PushMsg.CUT_READY);
+        boolean isReady = utils.getBoolean(PushMsgCode.CUT_READY);
         LogUtils.e("CutLineActivity  剪线 到位" + isReady);
     }
 
-    @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting})
+    @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting,R.id.btn_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_scram:
@@ -115,6 +117,9 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
                 if (!mPresenter.isFastDoubleClick()) {
                     startActivity(new Intent(CutLineActivity.this, CutLineSettingActivity.class));
                 }
+                break;
+            case R.id.btn_back:
+                finish();
                 break;
         }
     }
@@ -150,14 +155,14 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     //------------------------ EventBus --------------------------
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void acceptErroMsg(ErroMsg msg){
-        if (isShown){
+    public void acceptErroMsg(ErroMsg msg) {
+        if (isShown) {
             ToastUtils.showShortToast(msg.getMsg());
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void acceptCutLineMsg(CutLineMsg msg){
+    public void acceptCutLineMsg(CutLineMsg msg) {
         if (isShown) {
 
         }

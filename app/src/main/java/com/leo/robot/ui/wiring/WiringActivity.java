@@ -77,6 +77,8 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     Button mBtnSetting;
 
     OrientationUtils orientationUtils;
+    @BindView(R.id.btn_back)
+    Button mBtnBack;
 
 
     private boolean isPause;
@@ -118,11 +120,6 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         CustomManager.onPauseAll();
@@ -142,7 +139,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         CustomManager.clearAllVideo();
     }
 
-    @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting})
+    @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting,R.id.btn_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_scram:
@@ -161,6 +158,9 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
                 if (!mPresenter.isFastDoubleClick()) {
                     startActivity(new Intent(WiringActivity.this, WiringSettingActivity.class));
                 }
+                break;
+            case R.id.btn_back:
+                finish();
                 break;
         }
     }
@@ -184,8 +184,8 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     //------------------------ EventBus --------------------------
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void acceptErroMsg(ErroMsg msg){
-        if (isShown){
+    public void acceptErroMsg(ErroMsg msg) {
+        if (isShown) {
             ToastUtils.showShortToast(msg.getMsg());
         }
     }
@@ -193,7 +193,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void acceptWiringMsg(WiringMsg msg) {
-        if (isShown){
+        if (isShown) {
 
         }
     }

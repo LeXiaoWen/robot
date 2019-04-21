@@ -56,14 +56,12 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
         super.onHiddenChanged(hidden);
         if (hidden) {
             //Fragment隐藏时调用
-            ToastUtils.showShortToast("隐藏 剪线设置");
             GSYVideoManager.onPause();
             CustomManager.clearAllVideo();
 
         } else {
             //Fragment显示时调用
             GSYVideoManager.onResume();
-            ToastUtils.showShortToast("显示 剪线设置");
         }
     }
 

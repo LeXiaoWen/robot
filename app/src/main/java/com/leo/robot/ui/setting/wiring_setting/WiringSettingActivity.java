@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.leo.robot.R;
@@ -18,6 +19,7 @@ import com.leo.robot.utils.CustomManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * created by Leo on 2019/4/20 15 : 24
@@ -29,6 +31,8 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
     FrameLayout mFragment;
     @BindView(R.id.navigation)
     BottomNavigationView mNavigation;
+    @BindView(R.id.btn_back)
+    Button mBtnBack;
 
     private Fragment mCurrentFragment = new Fragment();
     private ArmFragment mArmFragment = new ArmFragment();
@@ -115,6 +119,11 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        finish();
+    }
+
+    @OnClick(R.id.btn_back)
+    public void onViewClicked() {
         finish();
     }
 }

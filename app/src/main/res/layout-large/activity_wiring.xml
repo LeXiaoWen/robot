@@ -183,7 +183,7 @@
             android:layout_marginBottom="@dimen/dp_20"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:weightSum="5">
+            android:weightSum="6">
             <!--急停或解除急停-->
             <Button
                 android:id="@+id/btn_scram"
@@ -229,6 +229,15 @@
                 android:layout_marginTop="@dimen/dp_20"
                 android:layout_weight="1"
                 android:text="手动设置"/>
+
+            <Button
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_weight="1"
+                android:text="返回"/>
 
         </LinearLayout>
 

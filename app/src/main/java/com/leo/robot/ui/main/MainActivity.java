@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.bean.AllMsg;
 import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.broadcast.BatteryReceiver;
 import com.leo.robot.constant.RobotInit;
@@ -57,6 +60,8 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     LinearLayout mLlChoose;
     private boolean isShown = false;
 
+    private FragmentManager manager = getSupportFragmentManager();
+
 
     @Override
     protected void bindingDagger2(@Nullable Bundle bundle) {
@@ -76,7 +81,7 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     @Override
     protected void notifyData(String message) {
         SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
-        utils.putString(RobotInit.PUSH_MSG,message);
+        utils.putString(RobotInit.PUSH_MSG, message);
     }
 
     private void initBroadcast() {
@@ -125,8 +130,8 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void acceptErroMsg(ErroMsg msg){
-        if (isShown){
+    public void acceptErroMsg(ErroMsg msg) {
+        if (isShown) {
             ToastUtils.showShortToast(msg.getMsg());
         }
     }
@@ -135,5 +140,51 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         startActivity(new Intent(MainActivity.this, clazz));
     }
 
+    private long firstTime;// 记录点击返回时第一次的时间毫秒值
 
+    /**
+     * 重写该方法，判断用户按下返回按键的时候，执行退出应用方法
+     *
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {// 点击了返回按键
+            if (manager.getBackStackEntryCount() != 0) {
+                manager.popBackStack();
+            } else {
+                exitApp(2000);// 退出应用
+            }
+            return true;// 返回true，防止该事件继续向下传播
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 退出应用
+     *
+     * @param timeInterval 设置第二次点击退出的时间间隔
+     */
+    private void exitApp(long timeInterval) {
+        // 第一次肯定会进入到if判断里面，然后把firstTime重新赋值当前的系统时间
+        // 然后点击第二次的时候，当点击间隔时间小于2s，那么退出应用；反之不退出应用
+        if (System.currentTimeMillis() - firstTime >= timeInterval) {
+            ToastUtils.showShortToast("再按一次退出程序");
+//            Intent intent2 = new Intent(MainActivity.this, NettyService.class);
+//            stopService(intent2);// 关闭服务
+            firstTime = System.currentTimeMillis();
+        } else {
+            finish();// 销毁当前activity
+            System.exit(0);// 完全退出应用
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showMsg(AllMsg msg) {
+        if (isShown) {
+            ToastUtils.showShortToast(msg.getMsg() + "    " + msg.getCode());
+        }
+    }
 }

@@ -149,8 +149,9 @@ public class NettyClient {
         }
         if (channel != null) {
             if (isConnect) {
+                ToastUtils.showShortToast("发送指令为： " + msg);
                 channel.writeAndFlush(msg);
-            }else {
+            } else {
                 ToastUtils.showShortToast("未连接！");
             }
         }

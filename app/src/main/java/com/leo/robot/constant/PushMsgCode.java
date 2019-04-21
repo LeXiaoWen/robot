@@ -5,7 +5,7 @@ package com.leo.robot.constant;
  */
 
 
-public interface PushMsg {
+public interface PushMsgCode {
 
     String WIRING = "09";
     String WIRE_STRIPPING = "08";

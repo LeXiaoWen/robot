@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.leo.robot.broadcast.BatteryReceiver;
@@ -108,6 +109,22 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
         }
 
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                return true;
+
+            case KeyEvent.KEYCODE_MENU:
+                return true;
+
+            default:
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
 
 }

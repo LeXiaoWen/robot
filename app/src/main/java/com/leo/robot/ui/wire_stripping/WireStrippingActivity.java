@@ -82,6 +82,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     MultiSampleVideo mPlayer3;
     @BindView(R.id.player4)
     MultiSampleVideo mPlayer4;
+    @BindView(R.id.btn_back)
+    Button mBtnBack;
     private List<MultiSampleVideo> mMultiSampleVideos = new ArrayList<>();
     public static final String TAG = "WireStrippingActivity";
 
@@ -113,7 +115,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     }
 
 
-
     private void initVideo() {
 
         mMultiSampleVideos.add(mPlayerMain);
@@ -139,7 +140,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mPresenter.updateTime(mTvDate);
     }
 
-    @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting})
+    @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting, R.id.btn_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_scram:
@@ -161,6 +162,9 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                     startActivity(new Intent(WireStrippingActivity.this, WiringStrippingSettingActivity.class));
                 }
                 break;
+            case R.id.btn_back:
+                finish();
+                break;
         }
     }
 
@@ -174,14 +178,14 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         ToastUtils.showShortToast(s);
     }
 
-    @Override
-    public void onBackPressed() {
-//        if (CustomManager.backFromWindowFull(this, listMultiNormalAdapter.getFullKey())) {
-//            return;
-//        }
-        super.onBackPressed();
-        finish();
-    }
+//    @Override
+//    public void onBackPressed() {
+////        if (CustomManager.backFromWindowFull(this, listMultiNormalAdapter.getFullKey())) {
+////            return;
+////        }
+//        super.onBackPressed();
+//        finish();
+//    }
 
     @Override
     protected void onPause() {
@@ -226,6 +230,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     public void acceptWireStrippingMsg(WireStrippingMsg msg) {
         if (isShown) {
             mPresenter.jugType(msg);
+            ToastUtils.showShortToast("接收到剥线推送消息 ： " + msg.getMsg() + "      "  +msg.getCode());
         }
     }
 

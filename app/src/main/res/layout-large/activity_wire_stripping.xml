@@ -170,15 +170,15 @@
                     android:layout_height="match_parent"/>
 
                 <TextView
-                    android:textSize="@dimen/sp_8"
-                    android:background="@color/cmvp_white"
-                    android:padding="@dimen/dp_6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/cmvp_white"
+                    android:padding="@dimen/dp_6"
                     android:text="云台画面"
                     android:textColor="@color/cmvp_black"
+                    android:textSize="@dimen/sp_8"
                     android:textStyle="bold"/>
             </FrameLayout>
 
@@ -202,15 +202,15 @@
                         android:layout_weight="1"/>
 
                     <TextView
-                        android:textSize="@dimen/sp_8"
-                        android:background="@color/cmvp_white"
-                        android:padding="@dimen/dp_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_marginTop="@dimen/dp_10"
+                        android:background="@color/cmvp_white"
+                        android:padding="@dimen/dp_6"
                         android:text="行线画面"
                         android:textColor="@color/cmvp_black"
+                        android:textSize="@dimen/sp_8"
                         android:textStyle="bold"/>
 
                 </FrameLayout>
@@ -228,15 +228,15 @@
                         />
 
                     <TextView
-                        android:textSize="@dimen/sp_8"
-                        android:background="@color/cmvp_white"
-                        android:padding="@dimen/dp_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_marginTop="@dimen/dp_10"
+                        android:background="@color/cmvp_white"
+                        android:padding="@dimen/dp_6"
                         android:text="引流线画面"
                         android:textColor="@color/cmvp_black"
+                        android:textSize="@dimen/sp_8"
                         android:textStyle="bold"/>
 
                 </FrameLayout>
@@ -254,15 +254,15 @@
                         />
 
                     <TextView
-                        android:textSize="@dimen/sp_8"
-                        android:padding="@dimen/dp_6"
-                        android:background="@color/cmvp_white"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_marginTop="@dimen/dp_10"
+                        android:background="@color/cmvp_white"
+                        android:padding="@dimen/dp_6"
                         android:text="机械臂画面"
                         android:textColor="@color/cmvp_black"
+                        android:textSize="@dimen/sp_8"
                         android:textStyle="bold"/>
 
                 </FrameLayout>
@@ -280,7 +280,6 @@
                         />
 
                     <TextView
-                        android:textSize="@dimen/sp_8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_10"
@@ -289,6 +288,7 @@
                         android:padding="@dimen/dp_6"
                         android:text="位姿仿真画面"
                         android:textColor="@color/cmvp_black"
+                        android:textSize="@dimen/sp_8"
                         android:textStyle="bold"/>
                 </FrameLayout>
 
@@ -304,7 +304,7 @@
             android:layout_marginBottom="@dimen/dp_20"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:weightSum="5">
+            android:weightSum="6">
             <!--急停或解除急停-->
             <Button
                 android:id="@+id/btn_scram"
@@ -349,7 +349,15 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dp_20"
                 android:layout_weight="1"
-                android:text="手动设置"/>
+                android:text="手动设置"/><!--手动设置-->
+            <Button
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_weight="1"
+                android:text="返回"/>
 
         </LinearLayout>
 

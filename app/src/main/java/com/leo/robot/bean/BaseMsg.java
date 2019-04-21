@@ -6,7 +6,7 @@ package com.leo.robot.bean;
 
 
 public abstract class BaseMsg {
-    private int code;
+    private String code;
     private String msg;
     private boolean isHighlight;
 
@@ -18,11 +18,11 @@ public abstract class BaseMsg {
         isHighlight = highlight;
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
