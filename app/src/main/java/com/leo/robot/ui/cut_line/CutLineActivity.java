@@ -85,9 +85,15 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cut_line);
         ButterKnife.bind(this);
+        initVideo();
         mPresenter.updateTime(mTvDate);
         initBroadcast(mTvGroundPower);
         initStatus();
+    }
+
+    private void initVideo() {
+        mPlayer.setUp("", true, "测试视频");
+        mPlayer.startPlayLogic();
     }
 
     private void initStatus() {
@@ -96,7 +102,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         LogUtils.e("CutLineActivity  剪线 到位" + isReady);
     }
 
-    @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting,R.id.btn_back})
+    @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting, R.id.btn_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_scram:

@@ -15,8 +15,6 @@ import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
-import cree.mvp.util.ui.ToastUtils;
-
 /**
  * 剪线设置
  * created by Leo on 2019/4/18 22 : 05
@@ -47,7 +45,7 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initVideo() {
-        mVideoPlayer.setUp(UrlConstant.URL_TEST, true, "测试视频");
+        mVideoPlayer.setUp(UrlConstant.ARM_CAMERA_UREL, true, "测试视频");
         mVideoPlayer.startPlayLogic();
     }
 

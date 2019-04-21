@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.leo.robot.R;
@@ -116,24 +117,50 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
 
     private void initVideo() {
-
+        //增加封面
+        ImageView imageView = new ImageView(this);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setImageResource(R.drawable.ic_img);
         mMultiSampleVideos.add(mPlayerMain);
         mMultiSampleVideos.add(mPlayer1);
         mMultiSampleVideos.add(mPlayer2);
         mMultiSampleVideos.add(mPlayer3);
         mMultiSampleVideos.add(mPlayer4);
 
+        //云台画面
+        mPlayerMain.setTag(TAG);
+        mPlayerMain.setPlayPosition(0);
+        mPlayerMain.setUp(UrlConstant.CAMERA_URL, true, "");
+        mPlayerMain.setThumbImageView(imageView);
 
-        for (int i = 0; i < mMultiSampleVideos.size(); i++) {
-            mMultiSampleVideos.get(i).setPlayTag(TAG);
-            mMultiSampleVideos.get(i).setPlayPosition(i);
-            if (i == 0) {
-                mMultiSampleVideos.get(i).setUp(UrlConstant.URL_TEST1, true, "测试");
-            } else {
-                mMultiSampleVideos.get(i).setUp(UrlConstant.URL_TEST, true, "测试");
-            }
-            mMultiSampleVideos.get(i).startPlayLogic();
-        }
+        //行线画面
+        mPlayer1.setTag(TAG);
+        mPlayer1.setPlayPosition(1);
+        mPlayer1.setUp(UrlConstant.LINE_CAMERA_URL, true, "");
+        mPlayer1.setThumbImageView(imageView);
+        //引流线画面
+        mPlayer2.setTag(TAG);
+        mPlayer2.setPlayPosition(2);
+        mPlayer2.setUp(UrlConstant.DRAIN_LINE_CAMERA_URL, true, "");
+        mPlayer2.setThumbImageView(imageView);
+
+        //机械臂画面
+        mPlayer3.setTag(TAG);
+        mPlayer3.setPlayPosition(3);
+        mPlayer3.setUp(UrlConstant.CLUTCH_CAMERA_URL, true, "");
+        mPlayer3.setThumbImageView(imageView);
+
+        //位姿仿真画面
+        mPlayer4.setTag(TAG);
+        mPlayer4.setPlayPosition(4);
+        mPlayer4.setUp("", true, "");
+        mPlayer4.setThumbImageView(imageView);
+
+        mPlayerMain.startPlayLogic();
+        mPlayer1.startPlayLogic();
+        mPlayer2.startPlayLogic();
+        mPlayer3.startPlayLogic();
+
     }
 
     private void initTile() {
@@ -230,7 +257,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     public void acceptWireStrippingMsg(WireStrippingMsg msg) {
         if (isShown) {
             mPresenter.jugType(msg);
-            ToastUtils.showShortToast("接收到剥线推送消息 ： " + msg.getMsg() + "      "  +msg.getCode());
+            ToastUtils.showShortToast("接收到剥线推送消息 ： " + msg.getMsg() + "      " + msg.getCode());
         }
     }
 

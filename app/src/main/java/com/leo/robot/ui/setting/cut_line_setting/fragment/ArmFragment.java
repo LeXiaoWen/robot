@@ -79,7 +79,7 @@ public class ArmFragment extends Fragment {
     }
 
     private void initVideo() {
-        mVideoPlayer.setUp(UrlConstant.URL_TEST, true, "测试视频");
+        mVideoPlayer.setUp(UrlConstant.ARM_CAMERA_UREL, true, "机械臂相机");
         mVideoPlayer.startPlayLogic();
     }
 

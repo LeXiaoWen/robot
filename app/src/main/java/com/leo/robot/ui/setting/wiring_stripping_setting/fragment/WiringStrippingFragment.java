@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.leo.robot.R;
-import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.CustomManager;
@@ -61,7 +60,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
     }
 
     private void initVideo() {
-        mVideoPlayer.setUp(UrlConstant.URL_TEST, true, "测试视频");
+        mVideoPlayer.setUp("", true, "测试视频");
         mVideoPlayer.startPlayLogic();
     }
 

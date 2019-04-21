@@ -12,7 +12,6 @@ import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.bean.WiringMsg;
 import com.leo.robot.constant.RobotInit;
-import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
@@ -114,7 +113,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     }
 
     private void initVideo() {
-        mPlayer.setUp(UrlConstant.URL_TEST, true, "测试视频");
+        mPlayer.setUp("", true, "测试视频");
         mPlayer.startPlayLogic();
     }
 

@@ -51,7 +51,7 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
     }
 
     private void initVideo() {
-        mVideoPlayer.setUp(UrlConstant.URL_TEST, true, "测试视频");
+        mVideoPlayer.setUp(UrlConstant.ARM_CAMERA_UREL, true, "测试视频");
         mVideoPlayer.startPlayLogic();
     }
 
