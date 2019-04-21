@@ -1,6 +1,7 @@
 package com.leo.robot.utils;
 
 import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.PushMsg;
 import com.leo.robot.constant.RobotInit;
 
@@ -74,61 +75,112 @@ public class ResultUtils {
 
     private static void onWiringStripping(String msg) {
         SPUtils utils = new SPUtils(RobotInit.WIRE_STRIPPING_ACTIVITY);
+        WireStrippingMsg strippingMsg = new WireStrippingMsg();
         if (msg.equals(PushMsg.WIRE_STRIPPING_READY)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_READY, true);
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_READY);
+            strippingMsg.setHighlight(true);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_NOT_READY)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_READY, false);
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_NOT_READY);
+            strippingMsg.setHighlight(false);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_INIT)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_INIT, true);
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_INIT);
+            strippingMsg.setHighlight(true);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_NOT_INIT)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_INIT, false);
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_NOT_INIT);
+            strippingMsg.setHighlight(false);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_TOOL_READY)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_TOOL_READY, true);
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_TOOL_READY);
+            strippingMsg.setHighlight(true);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_TOOL_NOT_READY)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_TOOL_READY, false);
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_TOOL_NOT_READY);
+            strippingMsg.setHighlight(false);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_CLAMPING)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_CLAMPING, true);
+
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_CLAMPING);
+            strippingMsg.setHighlight(true);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_NOT_CLAMPING)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_CLAMPING, false);
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_NOT_CLAMPING);
+            strippingMsg.setHighlight(false);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_CLOSURE)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_CLOSURE, true);
+
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_CLOSURE);
+            strippingMsg.setHighlight(true);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_NOT_CLOSURE)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_CLOSURE, false);
+
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_NOT_CLOSURE);
+            strippingMsg.setHighlight(false);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_PEELING)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_PEELING, true);
+
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_PEELING);
+            strippingMsg.setHighlight(true);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_NOT_PEELING)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_PEELING, false);
+
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_NOT_PEELING);
+            strippingMsg.setHighlight(false);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_CUT_OFF)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_CUT_OFF, true);
+
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_CUT_OFF);
+            strippingMsg.setHighlight(true);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_NOT_CUT_OFF)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_CUT_OFF, false);
+
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_NOT_CUT_OFF);
+            strippingMsg.setHighlight(false);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_UNLOCK)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_UNLOCK, true);
+
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_UNLOCK);
+            strippingMsg.setHighlight(true);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_NOT_UNLOCK)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_UNLOCK, false);
+
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_NOT_UNLOCK);
+            strippingMsg.setHighlight(false);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_END)) {
 
             utils.putBoolean(RobotInit.WIRE_STRIPPING_END, true);
+
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_END);
+            strippingMsg.setHighlight(true);
         }
         else if (msg.equals(PushMsg.WIRE_STRIPPING_NOT_END)) {
             utils.putBoolean(RobotInit.WIRE_STRIPPING_END, false);
+
+            strippingMsg.setMsg(RobotInit.WIRE_STRIPPING_NOT_END);
+            strippingMsg.setHighlight(false);
         }
+
+        BusUtils.postMessage(strippingMsg);
+
     }
 
     /**

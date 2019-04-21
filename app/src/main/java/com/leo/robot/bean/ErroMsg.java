@@ -5,23 +5,6 @@ package com.leo.robot.bean;
  */
 
 
-public class ErroMsg {
-    private int code;
-    private String msg;
+public class ErroMsg extends BaseMsg {
 
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
 }

@@ -109,4 +109,5 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
 
     }
 
+
 }

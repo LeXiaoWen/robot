@@ -1,6 +1,7 @@
 package com.leo.robot.ui.wire_stripping;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -9,11 +10,15 @@ import android.widget.TextView;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
-import com.leo.robot.constant.RobotInit;
+import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +26,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.develop.LogUtils;
 import cree.mvp.util.ui.ToastUtils;
 
@@ -83,12 +87,13 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
 
     private boolean isPause;
+    private boolean isShown = false;
 
 
     @Override
     protected void notifyData(String message) {
-        SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
-        utils.putString(RobotInit.PUSH_MSG,message);
+//        SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
+//        utils.putString(RobotInit.PUSH_MSG, message);
     }
 
     @Override
@@ -104,22 +109,10 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         initTile();
         initVideo();
         initBroadcast(mTvGroundPower);
-        initStatus();
+        mPresenter.initStatus();
     }
 
-    private void initStatus() {
-        SPUtils utils = new SPUtils(RobotInit.WIRE_STRIPPING_ACTIVITY);
-        boolean isReady = utils.getBoolean(RobotInit.WIRE_STRIPPING_READY);
-        boolean isInit = utils.getBoolean(RobotInit.WIRE_STRIPPING_INIT);
-        boolean isToolReady = utils.getBoolean(RobotInit.WIRE_STRIPPING_TOOL_READY);
-        boolean isClamping = utils.getBoolean(RobotInit.WIRE_STRIPPING_CLAMPING);
-        boolean isClosure = utils.getBoolean(RobotInit.WIRE_STRIPPING_CLOSURE);
-        boolean isPeelting = utils.getBoolean(RobotInit.WIRE_STRIPPING_PEELING);
-        boolean isCutOff = utils.getBoolean(RobotInit.WIRE_STRIPPING_CUT_OFF);
-        boolean isUnlock = utils.getBoolean(RobotInit.WIRE_STRIPPING_UNLOCK);
-        boolean idEnd = utils.getBoolean(RobotInit.WIRE_STRIPPING_END);
-        LogUtils.e("WireStrippingActivity  就绪 " + isReady);
-    }
+
 
     private void initVideo() {
 
@@ -195,6 +188,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         super.onPause();
         CustomManager.onPauseAll();
         isPause = true;
+        isShown = false;
         LogUtils.e("暂停剥线界面");
     }
 
@@ -203,7 +197,9 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         super.onResume();
         CustomManager.onResumeAll();
         isPause = false;
+        isShown = true;
         LogUtils.e("恢复剥线界面");
+        mPresenter.initStatus();
     }
 
     @Override
@@ -216,5 +212,84 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     protected void onStop() {
         onUnBindReceiver();
         super.onStop();
+    }
+
+    //------------------------ EventBus --------------------------
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void acceptErroMsg(ErroMsg msg) {
+        if (isShown) {
+            ToastUtils.showShortToast(msg.getMsg());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void acceptWireStrippingMsg(WireStrippingMsg msg) {
+        if (isShown) {
+            mPresenter.jugType(msg);
+        }
+    }
+
+    //------------------------ 更新UI --------------------------
+    public void updateReady(boolean b) {
+        mTvReady.setBackgroundColor(Color.RED);
+        if (b) {
+            mTvReady.setBackgroundColor(Color.GREEN);
+        }
+    }
+
+    public void updateInit(boolean b) {
+        mTvInit.setBackgroundColor(Color.RED);
+        if (b) {
+            mTvInit.setBackgroundColor(Color.GREEN);
+        }
+    }
+
+    public void updateInPlace(boolean b) {
+        mTvInPlace.setBackgroundColor(Color.RED);
+        if (b) {
+            mTvInPlace.setBackgroundColor(Color.GREEN);
+        }
+    }
+
+    public void updateClamping(boolean b) {
+        mTvClamping.setBackgroundColor(Color.RED);
+        if (b) {
+            mTvClamping.setBackgroundColor(Color.GREEN);
+        }
+    }
+
+    public void updateClosure(boolean b) {
+        mTvClosure.setBackgroundColor(Color.RED);
+        if (b) {
+            mTvClosure.setBackgroundColor(Color.GREEN);
+        }
+    }
+
+    public void updatePeeling(boolean b) {
+        mTvPeeling.setBackgroundColor(Color.RED);
+        if (b) {
+            mTvPeeling.setBackgroundColor(Color.GREEN);
+        }
+    }
+
+    public void updateCutOff(boolean b) {
+        mTvCutOff.setBackgroundColor(Color.RED);
+        if (b) {
+            mTvCutOff.setBackgroundColor(Color.GREEN);
+        }
+    }
+
+    public void updateUnlock(boolean b) {
+        mTvUnlock.setBackgroundColor(Color.RED);
+        if (b) {
+            mTvUnlock.setBackgroundColor(Color.GREEN);
+        }
+    }
+
+    public void updateEnd(boolean b) {
+        mTvEnd.setBackgroundColor(Color.RED);
+        if (b) {
+            mTvEnd.setBackgroundColor(Color.GREEN);
+        }
     }
 }

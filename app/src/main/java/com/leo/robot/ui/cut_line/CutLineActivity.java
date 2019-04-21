@@ -9,10 +9,15 @@ import android.widget.TextView;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.bean.CutLineMsg;
+import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.constant.PushMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.ui.setting.cut_line_setting.CutLineSettingActivity;
 import com.leo.robot.utils.MultiSampleVideo;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,10 +64,13 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     @BindView(R.id.btn_setting)
     Button mBtnSetting;
 
+    private boolean isShown = false;
+
+
     @Override
     protected void notifyData(String message) {
         SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
-        utils.putString(RobotInit.PUSH_MSG,message);
+        utils.putString(RobotInit.PUSH_MSG, message);
     }
 
     @Override
@@ -125,6 +133,34 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     protected void onStop() {
         onUnBindReceiver();
         super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isShown = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isShown = false;
+    }
+
+
+    //------------------------ EventBus --------------------------
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void acceptErroMsg(ErroMsg msg){
+        if (isShown){
+            ToastUtils.showShortToast(msg.getMsg());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void acceptCutLineMsg(CutLineMsg msg){
+        if (isShown) {
+
+        }
     }
 
 }

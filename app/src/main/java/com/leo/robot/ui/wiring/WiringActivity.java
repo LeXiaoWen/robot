@@ -9,12 +9,17 @@ import android.widget.TextView;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.bean.WiringMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,12 +78,15 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     OrientationUtils orientationUtils;
 
+
     private boolean isPause;
+
+    private boolean isShown = false;
 
     @Override
     protected void notifyData(String message) {
         SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
-        utils.putString(RobotInit.PUSH_MSG,message);
+        utils.putString(RobotInit.PUSH_MSG, message);
     }
 
     @Override
@@ -100,7 +108,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     private void initStatus() {
         SPUtils utils = new SPUtils(RobotInit.WIRING_ACTIVITY);
         boolean isToolReady = utils.getBoolean(RobotInit.WIRING_TOOL_READY);
-        LogUtils.e("WiringActivity 剥线工具到位  " +isToolReady);
+        LogUtils.e("WiringActivity 剥线工具到位  " + isToolReady);
     }
 
     private void initVideo() {
@@ -171,5 +179,22 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     protected void onStop() {
         onUnBindReceiver();
         super.onStop();
+    }
+
+    //------------------------ EventBus --------------------------
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void acceptErroMsg(ErroMsg msg){
+        if (isShown){
+            ToastUtils.showShortToast(msg.getMsg());
+        }
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void acceptWiringMsg(WiringMsg msg) {
+        if (isShown){
+
+        }
     }
 }
