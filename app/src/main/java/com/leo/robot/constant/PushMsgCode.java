@@ -74,53 +74,53 @@ public interface PushMsgCode {
     /**
      * 就绪
      */
-    String WIRING_READY = "";
-    String WIRING_NOT_READY = "";
+    String WIRING_READY = "6709010101FF";
+    String WIRING_NOT_READY = "6709010100FF";
     /**
      * 引流抓取
      */
-    String WIRING_GRAB = "";
-    String WIRING_NOT_GRAB = "";
+    String WIRING_GRAB = "6709020101FF";
+    String WIRING_NOT_GRAB = "6709020100FF";
     /**
      * 引线进入
      */
-    String WIRING_ENTER = "";
-    String WIRING_NOT_ENTER = "";
+    String WIRING_ENTER = "6709030101FF";
+    String WIRING_NOT_ENTER = "6709030100FF";
     /**
      * 引线固定
      */
-    String WIRING_FIXED = "";
-    String WIRING_NOT_FIXED = "";
+    String WIRING_FIXED = "6709040101FF";
+    String WIRING_NOT_FIXED = "6709040100FF";
     /**
      * 接线工具就位
      */
-    String WIRING_TOOL_READY = "6709010101FF";
-    String WIRING_NOT_TOOL_READY = "6709010100FF";
+    String WIRING_TOOL_READY = "6709050101FF";
+    String WIRING_NOT_TOOL_READY = "6709050100FF";
     /**
      * 并勾线夹就位
      */
-    String WIRING_LINE_READY = "";
-    String WIRING_NOT_LINE_READY = "";
+    String WIRING_LINE_READY = "6709060101FF";
+    String WIRING_NOT_LINE_READY = "6709060100FF";
     /**
      * 拧断螺母
      */
-    String WIRING_TWIST = "6709020101FF";
-    String WIRING_NOT_TWIST = "6709020100FF";
+    String WIRING_TWIST = "6709070101FF";
+    String WIRING_NOT_TWIST = "6709070100FF";
     /**
      * 线夹解锁
      */
-    String WIRING_CLIP_UNLOCK = "6709030101FF";
-    String WIRING_NOT_CLIP_UNLOCK = "6709030100FF";
+    String WIRING_CLIP_UNLOCK = "6709080101FF";
+    String WIRING_NOT_CLIP_UNLOCK = "6709080100FF";
     /**
      * 套筒解锁
      */
-    String WIRING_SLEEVE_UNLOCK = "6709040101FF";
-    String WIRINGNOT_SLEEVE_UNLOCK = "6709040100FF";
+    String WIRING_SLEEVE_UNLOCK = "6709090101FF";
+    String WIRINGNOT_SLEEVE_UNLOCK = "6709080100FF";
     /**
      * 结束
      */
-    String WIRING_END = "6709060101FF";
-    String WIRING_NOT_END = "6709060100FF";
+    String WIRING_END = "67090A0101FF";
+    String WIRING_NOT_END = "67090A0100FF";
 
 
     //------------------------ 接线界面 end --------------------------
@@ -131,23 +131,23 @@ public interface PushMsgCode {
     /**
      * 到位
      */
-    String CUT_READY = "670A020101FF";
-    String CUT_NOT_READY = "670A020100FF";
+    String CUT_READY = "670A010101FF";
+    String CUT_NOT_READY = "670A010100FF";
     /**
      * 剪线开始
      */
-    String CUT_START = "";
-    String CUT_NOT_START = "";
+    String CUT_START = "670A020101FF";
+    String CUT_NOT_START = "670A020100FF";
     /**
      * 剪线停止
      */
-    String CUT_STOP = "";
-    String CUT_NOT_STOP = "";
+    String CUT_STOP = "670A030101FF";
+    String CUT_NOT_STOP = "670A030100FF";
     /**
      * 钳口复位
      */
-    String CUT_RESET = "";
-    String CUT_NOT_RESET= "";
+    String CUT_RESET = "670A040101FF";
+    String CUT_NOT_RESET= "670A040101FF";
     /**
      * 结束
      */

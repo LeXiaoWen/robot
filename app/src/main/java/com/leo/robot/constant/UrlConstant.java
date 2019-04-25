@@ -30,7 +30,7 @@ public class UrlConstant {
     /**
      * 手爪相机
      */
-    public static final String CLUTCH_CAMERA_URL = "rtsp://192.168.1.106:9090/back";
+    public static final String CLUTCH_CAMERA_URL = "http://192.168.1.106:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
     /**
      * 云台相机
      */
