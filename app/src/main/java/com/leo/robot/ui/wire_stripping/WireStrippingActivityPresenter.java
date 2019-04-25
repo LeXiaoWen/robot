@@ -13,16 +13,6 @@ import javax.inject.Inject;
 
 import cree.mvp.util.data.SPUtils;
 
-import static com.leo.robot.constant.RobotInit.WIRE_STRIPPING_CLAMPING;
-import static com.leo.robot.constant.RobotInit.WIRE_STRIPPING_CLOSURE;
-import static com.leo.robot.constant.RobotInit.WIRE_STRIPPING_CUT_OFF;
-import static com.leo.robot.constant.RobotInit.WIRE_STRIPPING_END;
-import static com.leo.robot.constant.RobotInit.WIRE_STRIPPING_INIT;
-import static com.leo.robot.constant.RobotInit.WIRE_STRIPPING_PEELING;
-import static com.leo.robot.constant.RobotInit.WIRE_STRIPPING_READY;
-import static com.leo.robot.constant.RobotInit.WIRE_STRIPPING_TOOL_READY;
-import static com.leo.robot.constant.RobotInit.WIRE_STRIPPING_UNLOCK;
-
 /**
  * created by Leo on 2019/4/18 10 : 46
  */
@@ -54,11 +44,14 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     public void scramButton() {
         if (!isScram) { //急停
             NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmShutdown());
-            mActivity.updateScramText("恢复急停");
+            mActivity.refreshRv("发送急停命令");
+//            mActivity.updateScramText("恢复急停");
             isScram = true;
         } else {//回复急停
             NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmResume());
-            mActivity.updateScramText("急停");
+            mActivity.refreshRv("发送恢复急停命令");
+
+//            mActivity.updateScramText("急停");
             isScram = false;
         }
     }
@@ -71,6 +64,8 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      */
     public void revocerButton() {
         NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmRecover());
+        mActivity.refreshRv("发送一键回收命令");
+
     }
 
     /**
@@ -83,70 +78,83 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         if (!isStart) { //开始
             NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmStart());
             isStart = true;
-            mActivity.updateStartText("停止");
+            mActivity.refreshRv("发送开始命令");
+
+//            mActivity.updateStartText("停止");
         } else {//停止
             NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmStop());
             isStart = false;
-            mActivity.updateStartText("开始");
+            mActivity.refreshRv("发送停止命令");
+
+//            mActivity.updateStartText("开始");
         }
     }
 
     public void getPicButton() {
-
+        mActivity.refreshRv("发送识别路线命令");
     }
 
-    public void jugType(WireStrippingMsg msg) {
+    public String jugType(WireStrippingMsg msg) {
         String type = msg.getMsg();
         if (type.equals(RobotInit.WIRE_STRIPPING_READY)) {//就绪
             mActivity.updateReady(true);
+            return "剥线就绪";
         } else if (type.equals(RobotInit.WIRE_STRIPPING_NOT_READY)) {//未就绪
             mActivity.updateReady(false);
         } else if (type.equals(RobotInit.WIRE_STRIPPING_INIT)) { //初始化动作
             mActivity.updateInit(true);
+            return "剥线初始化动作";
         } else if (type.equals(RobotInit.WIRE_STRIPPING_NOT_INIT)) { //未初始化动作
             mActivity.updateInit(false);
         } else if (type.equals(RobotInit.WIRE_STRIPPING_TOOL_READY)) {//剥线工具就位
             mActivity.updateInPlace(true);
+            return "剥线工具就位";
         } else if (type.equals(RobotInit.WIRE_STRIPPING_TOOL_NOT_READY)) {
             mActivity.updateInPlace(false);
         } else if (type.equals(RobotInit.WIRE_STRIPPING_CLAMPING)) {//主线夹紧
             mActivity.updateClamping(true);
+            return "主线夹紧";
         } else if (type.equals(RobotInit.WIRE_STRIPPING_NOT_CLAMPING)) {
             mActivity.updateClamping(false);
         } else if (type.equals(RobotInit.WIRE_STRIPPING_CLOSURE)) {//夹具闭合
             mActivity.updateClosure(true);
+            return "夹具闭合";
         } else if (type.equals(RobotInit.WIRE_STRIPPING_NOT_CLOSURE)) {
             mActivity.updateClosure(false);
         } else if (type.equals(RobotInit.WIRE_STRIPPING_PEELING)) {//旋转剥皮
             mActivity.updatePeeling(true);
+            return "旋转剥皮";
         } else if (type.equals(RobotInit.WIRE_STRIPPING_NOT_PEELING)) {
             mActivity.updatePeeling(false);
         } else if (type.equals(RobotInit.WIRE_STRIPPING_CUT_OFF)) {//切断绝缘皮
             mActivity.updateCutOff(true);
+            return "切断绝缘皮";
         } else if (type.equals(RobotInit.WIRE_STRIPPING_NOT_CUT_OFF)) {
             mActivity.updateCutOff(false);
         } else if (type.equals(RobotInit.WIRE_STRIPPING_UNLOCK)) {//解锁
             mActivity.updateUnlock(true);
+            return "解锁";
         } else if (type.equals(RobotInit.WIRE_STRIPPING_NOT_UNLOCK)) {
             mActivity.updateUnlock(false);
         } else if (type.equals(RobotInit.WIRE_STRIPPING_END)) {//结束
             mActivity.updateEnd(true);
+            return "剥线结束";
         } else if (type.equals(RobotInit.WIRE_STRIPPING_NOT_END)) {
             mActivity.updateEnd(false);
         }
+        return null;
     }
-
     public void initStatus() {
         SPUtils utils = new SPUtils(RobotInit.WIRE_STRIPPING_ACTIVITY);
-        boolean isReady = utils.getBoolean(WIRE_STRIPPING_READY);
-        boolean isInit = utils.getBoolean(WIRE_STRIPPING_INIT);
-        boolean isToolReady = utils.getBoolean(WIRE_STRIPPING_TOOL_READY);
-        boolean isClamping = utils.getBoolean(WIRE_STRIPPING_CLAMPING);
-        boolean isClosure = utils.getBoolean(WIRE_STRIPPING_CLOSURE);
-        boolean isPeeling = utils.getBoolean(WIRE_STRIPPING_PEELING);
-        boolean isCutOff = utils.getBoolean(WIRE_STRIPPING_CUT_OFF);
-        boolean isUnlock = utils.getBoolean(WIRE_STRIPPING_UNLOCK);
-        boolean isEnd = utils.getBoolean(WIRE_STRIPPING_END);
+        boolean isReady = utils.getBoolean(RobotInit.WIRE_STRIPPING_READY);
+        boolean isInit = utils.getBoolean(RobotInit.WIRE_STRIPPING_INIT);
+        boolean isToolReady = utils.getBoolean(RobotInit.WIRE_STRIPPING_TOOL_READY);
+        boolean isClamping = utils.getBoolean(RobotInit.WIRE_STRIPPING_CLAMPING);
+        boolean isClosure = utils.getBoolean(RobotInit.WIRE_STRIPPING_CLOSURE);
+        boolean isPeeling = utils.getBoolean(RobotInit.WIRE_STRIPPING_PEELING);
+        boolean isCutOff = utils.getBoolean(RobotInit.WIRE_STRIPPING_CUT_OFF);
+        boolean isUnlock = utils.getBoolean(RobotInit.WIRE_STRIPPING_UNLOCK);
+        boolean isEnd = utils.getBoolean(RobotInit.WIRE_STRIPPING_END);
 
         mActivity.updateReady(isReady);
         mActivity.updateInit(isInit);

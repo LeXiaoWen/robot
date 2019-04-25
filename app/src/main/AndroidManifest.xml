@@ -27,7 +27,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/CMVP_FullTheme">
-        <activity android:name=".ui.wire_stripping.WireStrippingActivity">
+        <activity android:name=".test.TestActivity">
         </activity>
 
         <service
@@ -36,7 +36,7 @@
             android:exported="true"/>
 
         <activity
-            android:name=".test.TestActivity"
+            android:name=".ui.launcher.LauncherActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@style/CMVP_FullTheme">
@@ -59,7 +59,7 @@
             android:name=".ui.cut_line.CutLineActivity"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".ui.launcher.LauncherActivity"
+            android:name=".ui.wire_stripping.WireStrippingActivity"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".ui.wiring.WiringActivity"

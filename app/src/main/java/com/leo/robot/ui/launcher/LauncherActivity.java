@@ -34,10 +34,10 @@ public class LauncherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wire_stripping1);
+        setContentView(R.layout.activity_launcher);
         ButterKnife.bind(this);
-//        initService();
-//        initPermisson();
+        initService();
+        initPermisson();
     }
 
     /**

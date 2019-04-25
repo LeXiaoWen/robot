@@ -1,11 +1,12 @@
 package com.leo.robot.ui.wire_stripping;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +16,9 @@ import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
+import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.utils.CustomManager;
+import com.leo.robot.utils.DateUtils;
 import com.leo.robot.utils.MultiSampleVideo;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -27,6 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.develop.LogUtils;
 import cree.mvp.util.ui.ToastUtils;
 
@@ -37,8 +41,9 @@ import cree.mvp.util.ui.ToastUtils;
 
 
 public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPresenter> {
-    @BindView(R.id.tv_date)
-    TextView mTvDate;
+
+    private List<MultiSampleVideo> mMultiSampleVideos = new ArrayList<>();
+    public static final String TAG = "WireStrippingActivity";
     @BindView(R.id.tv_signal)
     TextView mTvSignal;
     @BindView(R.id.tv_own_power)
@@ -47,50 +52,80 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     TextView mTvGroundPower;
     @BindView(R.id.tv_ready)
     TextView mTvReady;
+    @BindView(R.id.iv_ready)
+    ImageView mIvReady;
     @BindView(R.id.tv_init)
     TextView mTvInit;
+    @BindView(R.id.iv_init)
+    ImageView mIvInit;
     @BindView(R.id.tv_in_place)
     TextView mTvInPlace;
+    @BindView(R.id.iv_in_place)
+    ImageView mIvInPlace;
     @BindView(R.id.tv_clamping)
     TextView mTvClamping;
+    @BindView(R.id.iv_clamping)
+    ImageView mIvClamping;
     @BindView(R.id.tv_closure)
     TextView mTvClosure;
+    @BindView(R.id.iv_closure)
+    ImageView mIvClosure;
     @BindView(R.id.tv_peeling)
     TextView mTvPeeling;
+    @BindView(R.id.iv_peeling)
+    ImageView mIvPeeling;
     @BindView(R.id.tv_cut_off)
     TextView mTvCutOff;
+    @BindView(R.id.iv_cut_off)
+    ImageView mIvCutOff;
     @BindView(R.id.tv_unlock)
     TextView mTvUnlock;
+    @BindView(R.id.iv_unlock)
+    ImageView mIvUnlock;
     @BindView(R.id.tv_end)
     TextView mTvEnd;
-    @BindView(R.id.btn_scram)
-    Button mBtnScram;
-    @BindView(R.id.btn_recover)
-    Button mBtnRecover;
-    @BindView(R.id.btn_start)
-    Button mBtnStart;
-    @BindView(R.id.btn_get_pic)
-    Button mBtnGetPic;
-    @BindView(R.id.btn_setting)
-    Button mBtnSetting;
+    @BindView(R.id.iv_end)
+    ImageView mIvEnd;
     @BindView(R.id.player_main)
     MultiSampleVideo mPlayerMain;
+    @BindView(R.id.fl_main)
+    FrameLayout mFlMain;
+    @BindView(R.id.rl_action)
+    RecyclerView mRlAction;
     @BindView(R.id.player1)
     MultiSampleVideo mPlayer1;
+    @BindView(R.id.fl_1)
+    FrameLayout mFl1;
     @BindView(R.id.player2)
     MultiSampleVideo mPlayer2;
+    @BindView(R.id.fl_2)
+    FrameLayout mFl2;
     @BindView(R.id.player3)
     MultiSampleVideo mPlayer3;
+    @BindView(R.id.fl_3)
+    FrameLayout mFl3;
     @BindView(R.id.player4)
     MultiSampleVideo mPlayer4;
-    @BindView(R.id.btn_back)
-    Button mBtnBack;
-    private List<MultiSampleVideo> mMultiSampleVideos = new ArrayList<>();
-    public static final String TAG = "WireStrippingActivity";
+    @BindView(R.id.fl_4)
+    FrameLayout mFl4;
+    @BindView(R.id.iv_scram)
+    ImageView mIvScram;
+    @BindView(R.id.iv_take_back)
+    ImageView mIvTakeBack;
+    @BindView(R.id.iv_start)
+    ImageView mIvStart;
+    @BindView(R.id.iv_identification)
+    ImageView mIvIdentification;
+    @BindView(R.id.iv_setting)
+    ImageView mIvSetting;
+    @BindView(R.id.tv_date)
+    TextView mTvDate;
 
 
     private boolean isPause;
     private boolean isShown = false;
+    private List<String> mData;
+    private ActionAdapter mActionAdapter;
 
 
     @Override
@@ -110,9 +145,17 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         setContentView(R.layout.activity_wire_stripping);
         ButterKnife.bind(this);
         initTile();
+        initAdapter();
         initVideo();
         initBroadcast(mTvGroundPower);
         mPresenter.initStatus();
+    }
+
+    private void initAdapter() {
+        mData = new ArrayList<>();
+        mActionAdapter = new ActionAdapter(this, mData);
+        mRlAction.setLayoutManager(new LinearLayoutManager(this));
+        mRlAction.setAdapter(mActionAdapter);
     }
 
 
@@ -167,52 +210,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mPresenter.updateTime(mTvDate);
     }
 
-    @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting, R.id.btn_back})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btn_scram:
-                mPresenter.scramButton();
-                break;
-            case R.id.btn_recover:
-                mPresenter.revocerButton();
-                ToastUtils.showShortToast("一键回收");
-                break;
-            case R.id.btn_start:
-                mPresenter.startButton();
-                break;
-            case R.id.btn_get_pic:
-                mPresenter.getPicButton();
-                ToastUtils.showShortToast("获取当前帧");
-                break;
-            case R.id.btn_setting:
-                if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(new Intent(WireStrippingActivity.this, WiringStrippingSettingActivity.class));
-                }
-                break;
-            case R.id.btn_back:
-                finish();
-                break;
-        }
-    }
-
-    public void updateScramText(String s) {
-        mBtnScram.setText(s);
-        ToastUtils.showShortToast(s);
-    }
-
-    public void updateStartText(String s) {
-        mBtnStart.setText(s);
-        ToastUtils.showShortToast(s);
-    }
-
-//    @Override
-//    public void onBackPressed() {
-////        if (CustomManager.backFromWindowFull(this, listMultiNormalAdapter.getFullKey())) {
-////            return;
-////        }
-//        super.onBackPressed();
-//        finish();
-//    }
 
     @Override
     protected void onPause() {
@@ -256,72 +253,130 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void acceptWireStrippingMsg(WireStrippingMsg msg) {
         if (isShown) {
-            mPresenter.jugType(msg);
-            ToastUtils.showShortToast("接收到剥线推送消息 ： " + msg.getMsg() + "      " + msg.getCode());
+            String s = mPresenter.jugType(msg);
+            if (!StringUtils.isEmpty(s)) {
+                refreshRv(s);
+            }
+//            ToastUtils.showShortToast("接收到剥线推送消息 ： " + msg.getMsg() + "      " + msg.getCode());
         }
     }
 
     //------------------------ 更新UI --------------------------
     public void updateReady(boolean b) {
-        mTvReady.setBackgroundColor(Color.RED);
+        mTvReady.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIvReady.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
         if (b) {
-            mTvReady.setBackgroundColor(Color.GREEN);
+            mTvReady.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIvReady.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
         }
     }
 
     public void updateInit(boolean b) {
-        mTvInit.setBackgroundColor(Color.RED);
+        mTvInit.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIvInit.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
         if (b) {
-            mTvInit.setBackgroundColor(Color.GREEN);
+            mTvInit.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIvInit.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
         }
     }
 
     public void updateInPlace(boolean b) {
-        mTvInPlace.setBackgroundColor(Color.RED);
+        mTvInPlace.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIvInPlace.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
         if (b) {
-            mTvInPlace.setBackgroundColor(Color.GREEN);
+            mTvInPlace.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIvInPlace.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
         }
     }
 
     public void updateClamping(boolean b) {
-        mTvClamping.setBackgroundColor(Color.RED);
+        mTvClamping.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIvClamping.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
         if (b) {
-            mTvClamping.setBackgroundColor(Color.GREEN);
+            mTvClamping.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIvClamping.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
         }
     }
 
     public void updateClosure(boolean b) {
-        mTvClosure.setBackgroundColor(Color.RED);
+        mTvClosure.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIvClosure.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
         if (b) {
-            mTvClosure.setBackgroundColor(Color.GREEN);
+            mTvClosure.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIvClosure.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
         }
     }
 
     public void updatePeeling(boolean b) {
-        mTvPeeling.setBackgroundColor(Color.RED);
+        mTvPeeling.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIvPeeling.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
         if (b) {
-            mTvPeeling.setBackgroundColor(Color.GREEN);
+            mTvPeeling.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIvPeeling.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
         }
     }
 
     public void updateCutOff(boolean b) {
-        mTvCutOff.setBackgroundColor(Color.RED);
+        mTvCutOff.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIvCutOff.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
         if (b) {
-            mTvCutOff.setBackgroundColor(Color.GREEN);
+            mTvCutOff.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIvCutOff.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
         }
     }
 
     public void updateUnlock(boolean b) {
-        mTvUnlock.setBackgroundColor(Color.RED);
+        mTvUnlock.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIvUnlock.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
         if (b) {
-            mTvUnlock.setBackgroundColor(Color.GREEN);
+            mTvUnlock.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIvUnlock.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
         }
     }
 
     public void updateEnd(boolean b) {
-        mTvEnd.setBackgroundColor(Color.RED);
+        mTvEnd.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIvEnd.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
         if (b) {
-            mTvEnd.setBackgroundColor(Color.GREEN);
+            mTvEnd.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIvEnd.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
         }
+    }
+
+    @OnClick({R.id.iv_scram, R.id.iv_take_back, R.id.iv_start, R.id.iv_identification, R.id.iv_setting})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_scram:
+                mPresenter.scramButton();
+//                refreshRv("按下急停键");
+
+                break;
+            case R.id.iv_take_back:
+                mPresenter.revocerButton();
+//                refreshRv("按下一键收回");
+
+                break;
+            case R.id.iv_start:
+                mPresenter.startButton();
+//                refreshRv("按下开始键");
+
+                break;
+            case R.id.iv_identification:
+//                refreshRv("按下识别路线");
+                mPresenter.getPicButton();
+                break;
+            case R.id.iv_setting:
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(new Intent(WireStrippingActivity.this, WiringStrippingSettingActivity.class));
+                }
+                break;
+        }
+    }
+
+    public void refreshRv(String msg) {
+        String currentDate = DateUtils.getCurrentDate();
+        mData.add(currentDate + " " + msg);
+        mActionAdapter.notifyDataSetChanged();
+        mRlAction.scrollToPosition(mActionAdapter.getItemCount() - 1);
     }
 }

@@ -7,4 +7,7 @@
     <color name="push_status_normal_color">#BFBFBF</color>
     <color name="push_status_wake_up_color">#F6AB00</color>
     <color name="color_title_text">#333333</color>
+    <color name="color_status_normal">#BFBFBF</color>
+    <color name="color_status_wake_up">#ECAD3C</color>
+
 </resources>

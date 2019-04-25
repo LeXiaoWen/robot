@@ -9,358 +9,467 @@
 
     <include layout="@layout/activity_title"/>
 
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_53"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_height="@dimen/dp_60"
+        android:background="@color/title_background_color"
+        android:baselineAligned="false"
         android:orientation="horizontal"
-        android:paddingRight="20dp"
         android:weightSum="9">
         <!--就绪-->
-        <TextView
-            android:id="@+id/tv_ready"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:background="@color/cmvp_red"
-            android:gravity="center"
-            android:padding="@dimen/dp_10"
-            android:text="就绪"
-            android:textColor="@color/cmvp_black"
-            android:textSize="@dimen/sp_8"/>
-        <!--初始化东西-->
-        <TextView
-            android:id="@+id/tv_init"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_weight="1"
-            android:background="@color/cmvp_red"
-            android:gravity="center"
-            android:padding="@dimen/dp_10"
-            android:text="初始化动作"
-            android:textColor="@color/cmvp_black"
-            android:textSize="@dimen/sp_8"/>
-        <!--就位-->
-        <TextView
-            android:id="@+id/tv_in_place"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_weight="1"
-            android:background="@color/cmvp_red"
-            android:gravity="center"
-            android:padding="@dimen/dp_10"
-            android:text="剥线工具就位"
-            android:textColor="@color/cmvp_black"
-            android:textSize="@dimen/sp_8"/>
-        <!--主线夹紧-->
-        <TextView
-            android:id="@+id/tv_clamping"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_weight="1"
-            android:background="@color/cmvp_red"
-            android:gravity="center"
-            android:padding="@dimen/dp_10"
-            android:text="主线夹紧"
-            android:textColor="@color/cmvp_black"
-            android:textSize="@dimen/sp_8"/>
-        <!--夹具闭合-->
-        <TextView
-            android:id="@+id/tv_closure"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_weight="1"
-            android:background="@color/cmvp_red"
-            android:gravity="center"
-            android:padding="@dimen/dp_10"
-            android:text="夹具闭合"
-            android:textColor="@color/cmvp_black"
-            android:textSize="@dimen/sp_8"/>
-        <!--旋转剥皮-->
-        <TextView
-            android:id="@+id/tv_peeling"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_weight="1"
-            android:background="@color/cmvp_red"
-            android:gravity="center"
-            android:padding="@dimen/dp_10"
-            android:text="旋转剥皮"
-            android:textColor="@color/cmvp_black"
-            android:textSize="@dimen/sp_8"/>
-        <!--切断绝缘皮-->
-        <TextView
-            android:id="@+id/tv_cut_off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_weight="1"
-            android:background="@color/cmvp_red"
-            android:gravity="center"
-            android:padding="@dimen/dp_10"
-            android:text="切断绝缘皮"
-            android:textColor="@color/cmvp_black"
-            android:textSize="@dimen/sp_8"/>
-        <!--解锁-->
-        <TextView
-            android:id="@+id/tv_unlock"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_weight="1"
-            android:background="@color/cmvp_red"
-            android:gravity="center"
-            android:padding="@dimen/dp_10"
-            android:text="解锁"
-            android:textColor="@color/cmvp_black"
-            android:textSize="@dimen/sp_8"/>
-        <!--结束-->
-        <TextView
-            android:id="@+id/tv_end"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_weight="1"
-            android:background="@color/cmvp_red"
-            android:gravity="center"
-            android:padding="@dimen/dp_10"
-            android:text="结束"
-            android:textColor="@color/cmvp_black"
-            android:textSize="@dimen/sp_8"/>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="3">
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginBottom="@dimen/dp_10"
-            android:layout_weight="2"
+            android:layout_gravity="center"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <FrameLayout
+            <TextView
+                android:id="@+id/tv_ready"
                 android:layout_width="match_parent"
-                android:layout_height="280dp">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="就绪"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
 
-                <com.leo.robot.utils.MultiSampleVideo
-                    android:id="@+id/player_main"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:background="@color/cmvp_white"
-                    android:padding="@dimen/dp_6"
-                    android:text="云台画面"
-                    android:textColor="@color/cmvp_black"
-                    android:textSize="@dimen/sp_8"
-                    android:textStyle="bold"/>
-            </FrameLayout>
-
-
-            <LinearLayout
+            <ImageView
+                android:id="@+id/iv_ready"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dp_10"
-                android:orientation="horizontal"
-                android:weightSum="4">
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <com.leo.robot.utils.MultiSampleVideo
-                        android:id="@+id/player1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:background="@color/cmvp_white"
-                        android:padding="@dimen/dp_6"
-                        android:text="行线画面"
-                        android:textColor="@color/cmvp_black"
-                        android:textSize="@dimen/sp_8"
-                        android:textStyle="bold"/>
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_weight="1">
-
-                    <com.leo.robot.utils.MultiSampleVideo
-                        android:id="@+id/player2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:background="@color/cmvp_white"
-                        android:padding="@dimen/dp_6"
-                        android:text="引流线画面"
-                        android:textColor="@color/cmvp_black"
-                        android:textSize="@dimen/sp_8"
-                        android:textStyle="bold"/>
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_weight="1">
-
-                    <com.leo.robot.utils.MultiSampleVideo
-                        android:id="@+id/player3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:background="@color/cmvp_white"
-                        android:padding="@dimen/dp_6"
-                        android:text="机械臂画面"
-                        android:textColor="@color/cmvp_black"
-                        android:textSize="@dimen/sp_8"
-                        android:textStyle="bold"/>
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_weight="1">
-
-                    <com.leo.robot.utils.MultiSampleVideo
-                        android:id="@+id/player4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:background="@color/cmvp_white"
-                        android:padding="@dimen/dp_6"
-                        android:text="位姿仿真画面"
-                        android:textColor="@color/cmvp_black"
-                        android:textSize="@dimen/sp_8"
-                        android:textStyle="bold"/>
-                </FrameLayout>
-
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
 
         </LinearLayout>
-
-
+        <!--初始化动作-->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp_20"
-            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:weightSum="6">
-            <!--急停或解除急停-->
-            <Button
-                android:id="@+id/btn_scram"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:text="急停"/>
-            <!--一键回收-->
-            <Button
-                android:id="@+id/btn_recover"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_20"
-                android:layout_weight="1"
-                android:text="一键收回"/>
-            <!--开始-->
-            <Button
-                android:id="@+id/btn_start"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_20"
-                android:layout_weight="1"
-                android:text="开始"/>
-            <!--获取当前帧-->
-            <Button
-                android:id="@+id/btn_get_pic"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_20"
-                android:layout_weight="1"
-                android:text="获取当前帧"/>
+            android:orientation="vertical">
 
-            <!--手动设置-->
-            <Button
-                android:id="@+id/btn_setting"
+            <TextView
+                android:id="@+id/tv_init"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="初始化动作"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_init"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_20"
-                android:layout_weight="1"
-                android:text="手动设置"/><!--手动设置-->
-            <Button
-                android:id="@+id/btn_back"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_20"
-                android:layout_weight="1"
-                android:text="返回"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--就位-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_in_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="剥线工具就位"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_in_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--主线夹紧-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_clamping"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="主线夹紧"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_clamping"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--夹具闭合-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_closure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="夹具闭合"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_closure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--旋转剥皮-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_peeling"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="旋转剥皮"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_peeling"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--切断绝缘皮-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_cut_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="切断绝缘皮"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_cut_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--解锁-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_unlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="解锁"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_unlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--结束-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="结束"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
 
         </LinearLayout>
 
+
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_15">
+
+        <FrameLayout
+            android:id="@+id/fl_main"
+            android:layout_width="456dp"
+            android:layout_height="332dp">
+
+            <com.leo.robot.utils.MultiSampleVideo
+                android:id="@+id/player_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/cmvp_white"
+                android:padding="@dimen/dp_6"
+                android:text="云台画面"
+                android:textColor="@color/cmvp_black"
+                android:textSize="@dimen/sp_8"
+                android:textStyle="bold"/>
+        </FrameLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:scrollbarSize="5dp"
+            android:scrollbarThumbVertical="@color/cmvp_gray"
+            android:scrollbars="vertical"
+            android:id="@+id/rl_action"
+            android:layout_width="218dp"
+            android:layout_height="171dp"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_toRightOf="@id/fl_main"/>
+
+        <FrameLayout
+            android:id="@+id/fl_1"
+            android:layout_width="218dp"
+            android:layout_height="146dp"
+            android:layout_below="@id/rl_action"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_17"
+            android:layout_toRightOf="@id/fl_main">
+
+            <com.leo.robot.utils.MultiSampleVideo
+                android:id="@+id/player1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/cmvp_white"
+                android:padding="@dimen/dp_6"
+                android:text="行线画面"
+                android:textColor="@color/cmvp_black"
+                android:textSize="@dimen/sp_8"
+                android:textStyle="bold"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_2"
+            android:layout_width="218dp"
+            android:layout_height="146dp"
+            android:layout_below="@id/fl_main"
+            android:layout_marginTop="@dimen/dp_13">
+
+            <com.leo.robot.utils.MultiSampleVideo
+                android:id="@+id/player2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/cmvp_white"
+                android:padding="@dimen/dp_6"
+                android:text="引流线画面"
+                android:textColor="@color/cmvp_black"
+                android:textSize="@dimen/sp_8"
+                android:textStyle="bold"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_3"
+            android:layout_width="218dp"
+            android:layout_height="146dp"
+            android:layout_below="@id/fl_main"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_13"
+            android:layout_toRightOf="@id/fl_2">
+
+            <com.leo.robot.utils.MultiSampleVideo
+                android:id="@+id/player3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/cmvp_white"
+                android:padding="@dimen/dp_6"
+                android:text="机械臂画面"
+                android:textColor="@color/cmvp_black"
+                android:textSize="@dimen/sp_8"
+                android:textStyle="bold"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+
+            android:id="@+id/fl_4"
+            android:layout_width="218dp"
+            android:layout_height="146dp"
+            android:layout_below="@id/fl_main"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_toRightOf="@id/fl_3">
+
+            <com.leo.robot.utils.MultiSampleVideo
+                android:id="@+id/player4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/cmvp_white"
+                android:padding="@dimen/dp_6"
+                android:text="位姿仿真画面"
+                android:textColor="@color/cmvp_black"
+                android:textSize="@dimen/sp_8"
+                android:textStyle="bold"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="剥线工具就位，请按下开始键。"
+                android:textColor="#EA3340"
+                android:textSize="@dimen/sp_12"/>
+
+            <ImageView
+                android:clickable="true"
+                android:id="@+id/iv_scram"
+                android:layout_width="225dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="@dimen/dp_29"
+                android:src="@drawable/emergency_stop_normal"/>
+
+            <ImageView
+                android:id="@+id/iv_take_back"
+                android:layout_width="225dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="@dimen/dp_27"
+                android:src="@drawable/take_back_normal"
+                android:clickable="true"/>
+
+            <ImageView
+                android:id="@+id/iv_start"
+                android:layout_width="225dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="@dimen/dp_27"
+                android:src="@drawable/start_normal"
+                android:clickable="true"/>
+
+            <ImageView
+                android:id="@+id/iv_identification"
+                android:layout_width="225dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="@dimen/dp_27"
+                android:src="@drawable/identification_normal"
+                android:clickable="true"/>
+
+            <ImageView
+                android:id="@+id/iv_setting"
+                android:layout_width="225dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="@dimen/dp_27"
+                android:src="@drawable/setting_normal"
+                android:clickable="true"/>
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
 
 </LinearLayout>
