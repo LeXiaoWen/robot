@@ -27,7 +27,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         NettyClient.getInstance().setConnectStatus(false);
         listener.onServiceStatusConnectChanged(NettyListener.STATUS_CONNECT_CLOSED);
-        NettyClient.getInstance().reconnect();
+//        NettyClient.getInstance().reconnect();
     }
 
     @Override

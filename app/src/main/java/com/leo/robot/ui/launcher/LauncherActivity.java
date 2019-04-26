@@ -36,7 +36,7 @@ public class LauncherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
         ButterKnife.bind(this);
-//        initService();
+        initService();
         initPermisson();
     }
 

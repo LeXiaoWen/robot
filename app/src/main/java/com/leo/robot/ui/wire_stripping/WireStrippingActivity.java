@@ -30,7 +30,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.develop.LogUtils;
-import cree.mvp.util.ui.ToastUtils;
 
 /**
  * 剥线作业
@@ -244,7 +243,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void acceptErroMsg(ErroMsg msg) {
         if (isShown) {
-            ToastUtils.showShortToast(msg.getMsg());
+            showNormalDialog(this);
+//            ToastUtils.showShortToast(msg.getMsg());
         }
     }
 
