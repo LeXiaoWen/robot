@@ -272,6 +272,7 @@
                 android:layout_height="match_parent"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_10"
@@ -311,6 +312,7 @@
 
             <TextView
                 android:layout_width="wrap_content"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_10"
@@ -338,6 +340,7 @@
 
             <TextView
                 android:layout_width="wrap_content"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_10"
@@ -369,6 +372,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_10"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/cmvp_white"
                 android:padding="@dimen/dp_6"
@@ -398,6 +402,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/cmvp_white"
@@ -458,6 +463,7 @@
                 android:clickable="true"/>
 
             <ImageView
+
                 android:id="@+id/iv_setting"
                 android:layout_width="225dp"
                 android:layout_height="64dp"

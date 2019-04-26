@@ -7,8 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.leo.robot.R;
@@ -46,18 +45,14 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     TextView mTvOwnPower;
     @BindView(R.id.tv_ground_power)
     TextView mTvGroundPower;
-    @BindView(R.id.ll_wire_stripping)
-    LinearLayout mLlWireStripping;
-    @BindView(R.id.ll_wiring)
-    LinearLayout mLlWiring;
-    @BindView(R.id.ll_cut_line)
-    LinearLayout mLlCutLine;
-    @BindView(R.id.ll_cleaning)
-    LinearLayout mLlCleaning;
-    @BindView(R.id.fragment)
-    FrameLayout mFragment;
-    @BindView(R.id.ll_choose)
-    LinearLayout mLlChoose;
+    @BindView(R.id.ibtn_wire_stripping)
+    ImageButton mIbtnWireStripping;
+    @BindView(R.id.ibtn_wirin)
+    ImageButton mIbtnWirin;
+    @BindView(R.id.ibtn_cut_line)
+    ImageButton mIbtnCutLine;
+    @BindView(R.id.ibtn_cleaning)
+    ImageButton mIbtnCleaning;
     private boolean isShown = false;
 
     private FragmentManager manager = getSupportFragmentManager();
@@ -90,32 +85,6 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         registerReceiver(receiver, filter);
     }
 
-    @OnClick({R.id.ll_wire_stripping, R.id.ll_wiring, R.id.ll_cut_line, R.id.ll_cleaning})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.ll_wire_stripping:
-                if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(WireStrippingActivity.class);
-                }
-
-                break;
-            case R.id.ll_wiring:
-                if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(WiringActivity.class);
-                }
-
-                break;
-            case R.id.ll_cut_line:
-                if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(CutLineActivity.class);
-                }
-                break;
-            case R.id.ll_cleaning:
-                ToastUtils.showShortToast("清洗绝缘子作业！");
-//                startActivity(CleaningActivity.class);
-                break;
-        }
-    }
 
     @Override
     protected void onPause() {
@@ -185,6 +154,31 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     public void showMsg(AllMsg msg) {
         if (isShown) {
             ToastUtils.showShortToast(msg.getMsg() + "    " + msg.getCode());
+        }
+    }
+
+    @OnClick({R.id.ibtn_wire_stripping, R.id.ibtn_wirin, R.id.ibtn_cut_line, R.id.ibtn_cleaning})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.ibtn_wire_stripping:
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(WireStrippingActivity.class);
+                }
+                break;
+            case R.id.ibtn_wirin:
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(WiringActivity.class);
+                }
+                break;
+            case R.id.ibtn_cut_line:
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(CutLineActivity.class);
+                }
+                break;
+            case R.id.ibtn_cleaning:
+                ToastUtils.showShortToast("清洗绝缘子作业！");
+
+                break;
         }
     }
 }

@@ -21,9 +21,10 @@
         tools:ignore="ProtectedPermissions"/>
 
     <application
+        android:roundIcon="@mipmap/robot1"
         android:name=".App"
         android:allowBackup="true"
-        android:icon="@drawable/robot"
+        android:icon="@mipmap/robot"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/CMVP_FullTheme">

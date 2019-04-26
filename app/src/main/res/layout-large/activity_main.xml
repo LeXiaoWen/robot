@@ -1,113 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="MissingDefaultResource">
 
-    <include layout="@layout/activity_title"/>
 
-    <FrameLayout
-        android:id="@+id/fragment"
+
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="455dp"
+        android:src="@mipmap/bg"/>
 
     <LinearLayout
-        android:id="@+id/ll_choose"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginRight="@dimen/dp_20"
+        android:layout_height="145dp"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:weightSum="4">
-        <!--剥线作业-->
-        <LinearLayout
-            android:id="@+id/ll_wire_stripping"
+
+        <ImageButton
+            android:id="@+id/ibtn_wire_stripping"
+            android:src="@mipmap/wire_stripping"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_launcher"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_10"
-                android:text="剥线作业"/>
-        </LinearLayout>
-        <!--接线作业-->
-        <LinearLayout
-            android:id="@+id/ll_wiring"
+        <ImageButton
+            android:id="@+id/ibtn_wirin"
+            android:src="@mipmap/wiring"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_launcher"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_10"
-                android:text="接线作业"/>
-        </LinearLayout>
-        <!--剪线作业-->
-        <LinearLayout
-            android:id="@+id/ll_cut_line"
+        <ImageButton
+            android:id="@+id/ibtn_cut_line"
+            android:src="@mipmap/cut_line"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_launcher"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_10"
-                android:text="剪线作业"/>
-        </LinearLayout>
-        <!--清洗绝缘子作业-->
-        <LinearLayout
-            android:id="@+id/ll_cleaning"
+        <ImageButton
+            android:id="@+id/ibtn_cleaning"
+            android:src="@mipmap/cleaning"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_launcher"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_10"
-                android:text="清洗绝缘子作业"/>
-        </LinearLayout>
-
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
     </LinearLayout>
+
+
+
+    <include layout="@layout/activity_title"/>
 
 </RelativeLayout>

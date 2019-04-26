@@ -34,7 +34,7 @@ public class UrlConstant {
     /**
      * 云台相机
      */
-    public static final String CAMERA_URL = "http://192.168.1.199:8004";
+    public static final String CAMERA_URL = "http://192.168.1.100/static/test.avi";
 
     /**
      * 机械臂相机
