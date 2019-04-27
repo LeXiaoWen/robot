@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.leo.robot.broadcast.BatteryReceiver;
 import com.leo.robot.netty.NettyClient;
-import com.leo.robot.service.NettyService;
 
 import java.lang.ref.WeakReference;
 
@@ -146,9 +145,10 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
                 });
         normalDialog.setNegativeButton("否",
                 (dialog, which) -> {
+                    NettyClient.getInstance().setReconnectNum(0);
                     NettyClient.getInstance().disconnect();
-                    final Intent intent = new Intent(getApplication(), NettyService.class);
-                    stopService(intent);
+//                    final Intent intent = new Intent(getApplication(), NettyService.class);
+//                    stopService(intent);
                     dialog.dismiss();
                 });
         // 显示

@@ -1,5 +1,6 @@
 package com.leo.robot.ui.wire_stripping;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.DateUtils;
 import com.leo.robot.utils.MultiSampleVideo;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -30,6 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.develop.LogUtils;
+import cree.mvp.util.ui.ToastUtils;
 
 /**
  * 剥线作业
@@ -39,6 +42,12 @@ import cree.mvp.util.develop.LogUtils;
 
 public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPresenter> {
 
+    @BindView(R.id.tv_remind)
+    TextView mTvRemind;
+    @BindView(R.id.iv_back)
+    ImageView mIvBack;
+    @BindView(R.id.iv_test)
+    ImageView mIvTest;
     private List<MultiSampleVideo> mMultiSampleVideos = new ArrayList<>();
     public static final String TAG = "WireStrippingActivity";
     @BindView(R.id.tv_signal)
@@ -186,6 +195,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
         //机械臂画面
         mPlayer3.setTag(TAG);
+        //软解码：1、打开，0、关闭
+//        mPlayer3.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "videotoolbox", 0);
         mPlayer3.setPlayPosition(3);
         mPlayer3.setUp(UrlConstant.CLUTCH_CAMERA_URL, true, "");
         mPlayer3.setThumbImageView(imageView);
@@ -275,6 +286,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         if (b) {
             mTvInit.setTextColor(getResources().getColor(R.color.color_status_wake_up));
             mIvInit.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+
         }
     }
 
@@ -341,32 +353,36 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         }
     }
 
-    @OnClick({R.id.iv_scram, R.id.iv_take_back, R.id.iv_start, R.id.iv_identification, R.id.iv_setting})
+    @OnClick({R.id.iv_scram, R.id.iv_take_back, R.id.iv_start, R.id.iv_identification, R.id.iv_setting, R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_scram:
                 mPresenter.scramButton();
-//                refreshRv("按下急停键");
-
                 break;
             case R.id.iv_take_back:
-                mPresenter.revocerButton();
-//                refreshRv("按下一键收回");
+//                shotImage();
+                mPlayerMain.taskShotPic(new GSYVideoShotListener() {
+                    @Override
+                    public void getBitmap(Bitmap bitmap) {
+                        if (bitmap!=null){
+                        mIvTest.setImageBitmap(bitmap);
 
+                        }
+                    }
+                },true);
+//                mPresenter.revocerButton();
                 break;
             case R.id.iv_start:
                 mPresenter.startButton();
-//                refreshRv("按下开始键");
-
                 break;
             case R.id.iv_identification:
-//                refreshRv("按下识别路线");
                 mPresenter.getPicButton();
                 break;
             case R.id.iv_setting:
-//                if (!mPresenter.isFastDoubleClick()) {
-//                    startActivity(new Intent(WireStrippingActivity.this, WiringStrippingSettingActivity.class));
-//                }
+                mPresenter.settingButton();
+//                DetailControlActivityPermissionsDispatcher.shotImageWithPermissionCheck(DetailControlActivity.this, v);
+                break;
+            case R.id.iv_back:
                 finish();
                 break;
         }
@@ -377,5 +393,51 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mData.add(currentDate + " " + msg);
         mActionAdapter.notifyDataSetChanged();
         mRlAction.scrollToPosition(mActionAdapter.getItemCount() - 1);
+    }
+
+
+    /**
+     * 更新一键收回、开始、识别路线、手动设置是否可点击
+     *
+     * @author Leo
+     * created at 2019/4/27 2:10 AM
+     */
+    public void updateClickStatus(boolean b) {
+        if (b) {
+            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.take_back_normal));
+            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.start_normal));
+            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.identification_normal));
+            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.setting_normal));
+            mTvRemind.setText("请开始选取剥线位置");
+        } else {
+            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.take_back_unclick));
+            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.start_unclick));
+            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.identification_unclicked));
+            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.setting_unclick));
+        }
+    }
+
+    /**
+     * 视频截图
+     * 这里没有做读写本地sd卡的权限处理，记得实际使用要加上
+     */
+    void shotImage() {
+        //获取截图
+        mPlayerMain.taskShotPic(bitmap -> {
+            if (bitmap != null) {
+                mIvTest.setImageBitmap(bitmap);
+//                try {
+//                    SaveUtils.saveBitmap(bitmap);
+//                } catch (FileNotFoundException e) {
+//                    ToastUtils.showShortToast("save fail ");
+//                    e.printStackTrace();
+//                    return;
+//                }
+                ToastUtils.showShortToast("save success ");
+            } else {
+                ToastUtils.showShortToast("get bitmap fail ");
+            }
+        });
+
     }
 }

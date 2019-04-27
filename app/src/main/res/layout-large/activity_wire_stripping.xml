@@ -272,7 +272,6 @@
                 android:layout_height="match_parent"/>
 
             <TextView
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_10"
@@ -282,18 +281,19 @@
                 android:text="云台画面"
                 android:textColor="@color/cmvp_black"
                 android:textSize="@dimen/sp_8"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:visibility="gone"/>
         </FrameLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:scrollbarSize="5dp"
-            android:scrollbarThumbVertical="@color/cmvp_gray"
-            android:scrollbars="vertical"
             android:id="@+id/rl_action"
             android:layout_width="218dp"
             android:layout_height="171dp"
             android:layout_marginLeft="@dimen/dp_16"
-            android:layout_toRightOf="@id/fl_main"/>
+            android:layout_toRightOf="@id/fl_main"
+            android:scrollbarSize="5dp"
+            android:scrollbarThumbVertical="@color/cmvp_gray"
+            android:scrollbars="vertical"/>
 
         <FrameLayout
             android:id="@+id/fl_1"
@@ -312,7 +312,6 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_10"
@@ -321,7 +320,8 @@
                 android:text="行线画面"
                 android:textColor="@color/cmvp_black"
                 android:textSize="@dimen/sp_8"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
         </FrameLayout>
 
@@ -340,7 +340,6 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_10"
@@ -349,7 +348,8 @@
                 android:text="引流线画面"
                 android:textColor="@color/cmvp_black"
                 android:textSize="@dimen/sp_8"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
         </FrameLayout>
 
@@ -372,14 +372,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_10"
-                android:visibility="gone"
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/cmvp_white"
                 android:padding="@dimen/dp_6"
                 android:text="机械臂画面"
                 android:textColor="@color/cmvp_black"
                 android:textSize="@dimen/sp_8"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
         </FrameLayout>
 
@@ -402,7 +402,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/cmvp_white"
@@ -410,7 +409,8 @@
                 android:text="位姿仿真画面"
                 android:textColor="@color/cmvp_black"
                 android:textSize="@dimen/sp_8"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
         </FrameLayout>
 
@@ -423,59 +423,64 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_remind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_20"
-                android:text="剥线工具就位，请按下开始键。"
                 android:textColor="#EA3340"
-                android:textSize="@dimen/sp_12"/>
+                android:textSize="@dimen/sp_12"
+                tools:text="剥线工具就位，请按下开始键。"/>
 
             <ImageView
-                android:clickable="true"
                 android:id="@+id/iv_scram"
                 android:layout_width="225dp"
-                android:layout_height="64dp"
-                android:layout_marginTop="@dimen/dp_29"
+                android:layout_height="59dp"
+                android:layout_marginTop="26dp"
                 android:src="@drawable/emergency_stop_normal"/>
 
             <ImageView
                 android:id="@+id/iv_take_back"
                 android:layout_width="225dp"
-                android:layout_height="64dp"
-                android:layout_marginTop="@dimen/dp_27"
-                android:src="@drawable/take_back_normal"
-                android:clickable="true"/>
+                android:layout_height="59dp"
+                android:layout_marginTop="@dimen/dp_16"
+                android:src="@drawable/take_back_unclick"/>
 
             <ImageView
                 android:id="@+id/iv_start"
                 android:layout_width="225dp"
-                android:layout_height="64dp"
-                android:layout_marginTop="@dimen/dp_27"
-                android:src="@drawable/start_normal"
-                android:clickable="true"/>
+                android:layout_height="59dp"
+                android:layout_marginTop="@dimen/dp_16"
+                android:src="@drawable/start_unclick"/>
 
             <ImageView
                 android:id="@+id/iv_identification"
                 android:layout_width="225dp"
-                android:layout_height="64dp"
-                android:layout_marginTop="@dimen/dp_27"
-                android:src="@drawable/identification_normal"
-                android:clickable="true"/>
+                android:layout_height="59dp"
+                android:layout_marginTop="@dimen/dp_16"
+                android:src="@drawable/identification_unclicked"/>
 
             <ImageView
-
                 android:id="@+id/iv_setting"
                 android:layout_width="225dp"
-                android:layout_height="64dp"
-                android:layout_marginTop="@dimen/dp_27"
-                android:src="@drawable/setting_normal"
-                android:clickable="true"/>
+                android:layout_height="59dp"
+                android:layout_marginTop="@dimen/dp_16"
+                android:src="@drawable/setting_unclick"/>
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="225dp"
+                android:layout_height="59dp"
+                android:layout_marginTop="@dimen/dp_16"
+                android:src="@drawable/back_normal"/>
 
 
         </LinearLayout>
 
 
     </RelativeLayout>
-
+    <ImageView
+        android:id="@+id/iv_test"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

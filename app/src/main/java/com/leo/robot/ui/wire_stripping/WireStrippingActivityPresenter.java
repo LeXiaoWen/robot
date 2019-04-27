@@ -1,11 +1,13 @@
 package com.leo.robot.ui.wire_stripping;
 
+import android.content.Intent;
 import android.widget.TextView;
 
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
+import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.TimeThread;
 
@@ -23,6 +25,8 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     private boolean isScram = false;
     //是否开始
     private boolean isStart = false;
+
+    private boolean isClickble = false;
 
 
     @Inject
@@ -42,18 +46,23 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      * created at 2019/4/18 2:11 PM
      */
     public void scramButton() {
-        if (!isScram) { //急停
+//        if (!isScram) { //急停
+//            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmShutdown());
+//            mActivity.refreshRv("发送急停命令");
+////            mActivity.updateScramText("恢复急停");
+//            isScram = true;
+//        } else {//回复急停
+//            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmResume());
+//            mActivity.refreshRv("发送恢复急停命令");
+//
+////            mActivity.updateScramText("急停");
+//            isScram = false;
+//        }
+        if (isClickble) {
             NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmShutdown());
             mActivity.refreshRv("发送急停命令");
-//            mActivity.updateScramText("恢复急停");
-            isScram = true;
-        } else {//回复急停
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmResume());
-            mActivity.refreshRv("发送恢复急停命令");
-
-//            mActivity.updateScramText("急停");
-            isScram = false;
         }
+
     }
 
     /**
@@ -63,8 +72,10 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      * created at 2019/4/18 2:17 PM
      */
     public void revocerButton() {
-        NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmRecover());
-        mActivity.refreshRv("发送一键回收命令");
+        if (isClickble) {
+            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmRecover());
+            mActivity.refreshRv("发送一键回收命令");
+        }
 
     }
 
@@ -75,32 +86,52 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      * created at 2019/4/18 2:18 PM
      */
     public void startButton() {
-        if (!isStart) { //开始
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmStart());
-            isStart = true;
-            mActivity.refreshRv("发送开始命令");
 
-//            mActivity.updateStartText("停止");
-        } else {//停止
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmStop());
-            isStart = false;
-            mActivity.refreshRv("发送停止命令");
-
-//            mActivity.updateStartText("开始");
+        if (isClickble) {
+            if (!isStart) { //开始
+                NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmStart());
+                isStart = true;
+                mActivity.refreshRv("发送开始命令");
+            } else {//停止
+                NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmStop());
+                isStart = false;
+                mActivity.refreshRv("发送停止命令");
+            }
         }
     }
 
     public void getPicButton() {
-        mActivity.refreshRv("发送识别路线命令");
+        if (isClickble) {
+            mActivity.refreshRv("发送识别路线命令");
+        }
+
+    }
+
+    /**
+    * 手动设置
+    *
+    *@author Leo
+    *created at 2019/4/27 2:22 AM
+    */
+    public void settingButton() {
+        if (isClickble){
+            if (!isFastDoubleClick()) {
+                mActivity.startActivity(new Intent(mActivity, WiringStrippingSettingActivity.class));
+            }
+        }
     }
 
     public String jugType(WireStrippingMsg msg) {
         String type = msg.getMsg();
         if (type.equals(RobotInit.WIRE_STRIPPING_READY)) {//就绪
             mActivity.updateReady(true);
+            isClickble = true;
+            mActivity.updateClickStatus(true);
             return "剥线就绪";
         } else if (type.equals(RobotInit.WIRE_STRIPPING_NOT_READY)) {//未就绪
             mActivity.updateReady(false);
+            isClickble = false;
+            mActivity.updateClickStatus(false);
         } else if (type.equals(RobotInit.WIRE_STRIPPING_INIT)) { //初始化动作
             mActivity.updateInit(true);
             return "剥线初始化动作";
@@ -144,6 +175,7 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         }
         return null;
     }
+
     public void initStatus() {
         SPUtils utils = new SPUtils(RobotInit.WIRE_STRIPPING_ACTIVITY);
         boolean isReady = utils.getBoolean(RobotInit.WIRE_STRIPPING_READY);
@@ -155,7 +187,7 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         boolean isCutOff = utils.getBoolean(RobotInit.WIRE_STRIPPING_CUT_OFF);
         boolean isUnlock = utils.getBoolean(RobotInit.WIRE_STRIPPING_UNLOCK);
         boolean isEnd = utils.getBoolean(RobotInit.WIRE_STRIPPING_END);
-
+        isClickble = isReady;
         mActivity.updateReady(isReady);
         mActivity.updateInit(isInit);
         mActivity.updateInPlace(isToolReady);
@@ -166,4 +198,6 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         mActivity.updateUnlock(isUnlock);
         mActivity.updateEnd(isEnd);
     }
+
+
 }
