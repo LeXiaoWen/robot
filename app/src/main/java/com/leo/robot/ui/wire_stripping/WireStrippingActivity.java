@@ -1,20 +1,18 @@
 package com.leo.robot.ui.wire_stripping;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.webkit.WebView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.just.agentweb.AgentWeb;
-import com.just.agentweb.AgentWebView;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.ErroMsg;
@@ -22,10 +20,7 @@ import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.ui.wire_stripping.choose.ChooseLocationActivity;
-import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.DateUtils;
-import com.leo.robot.utils.MultiSampleVideo;
-import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -38,7 +33,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.develop.LogUtils;
-import cree.mvp.util.ui.ToastUtils;
 
 /**
  * 剥线作业
@@ -54,9 +48,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     ImageView mIvBack;
     @BindView(R.id.iv_test)
     ImageView mIvTest;
-    @BindView(R.id.agentWeb)
-    AgentWebView mAgentWeb;
-    private List<MultiSampleVideo> mMultiSampleVideos = new ArrayList<>();
+
     public static final String TAG = "WireStrippingActivity";
     @BindView(R.id.tv_signal)
     TextView mTvSignal;
@@ -100,28 +92,18 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     TextView mTvEnd;
     @BindView(R.id.iv_end)
     ImageView mIvEnd;
-    @BindView(R.id.player_main)
-    MultiSampleVideo mPlayerMain;
-    @BindView(R.id.fl_main)
-    FrameLayout mFlMain;
+    @BindView(R.id.rl_main)
+    RelativeLayout mRlMain;
     @BindView(R.id.rl_action)
     RecyclerView mRlAction;
-    @BindView(R.id.player1)
-    MultiSampleVideo mPlayer1;
-    @BindView(R.id.fl_1)
-    FrameLayout mFl1;
-    @BindView(R.id.player2)
-    MultiSampleVideo mPlayer2;
-    @BindView(R.id.fl_2)
-    FrameLayout mFl2;
-    @BindView(R.id.player3)
-    MultiSampleVideo mPlayer3;
-    @BindView(R.id.fl_3)
-    FrameLayout mFl3;
-    @BindView(R.id.player4)
-    MultiSampleVideo mPlayer4;
-    @BindView(R.id.fl_4)
-    FrameLayout mFl4;
+    @BindView(R.id.rl_1)
+    RelativeLayout mRl1;
+    @BindView(R.id.rl_2)
+    RelativeLayout mRl2;
+    @BindView(R.id.rl_3)
+    RelativeLayout mRl3;
+    @BindView(R.id.rl_4)
+    RelativeLayout mRl4;
     @BindView(R.id.iv_scram)
     ImageView mIvScram;
     @BindView(R.id.iv_take_back)
@@ -140,6 +122,11 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     private boolean isShown = false;
     private List<String> mData;
     private ActionAdapter mActionAdapter;
+    private AgentWeb mAgentWebMain;
+    private AgentWeb mAgentWeb1;
+    private AgentWeb mAgentWeb4;
+    private AgentWeb mAgentWeb3;
+    private AgentWeb mAgentWeb2;
 
 
     @Override
@@ -160,24 +147,120 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         ButterKnife.bind(this);
         initTile();
         initAdapter();
-//        initVideo();
+        initMainVideo();
+        initVideo1();
+        initVideo2();
+        initVideo3();
+        initVideo4();
         initBroadcast(mTvGroundPower);
         mPresenter.initStatus();
 
-        AgentWeb agentWeb = AgentWeb.with(this)
-                .setAgentWebParent((FrameLayout) mFlMain, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+
+    }
+
+    /**
+     * 位姿仿真画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:27 PM
+     */
+    private void initVideo4() {
+        mAgentWeb4 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go("");
+
+        initWebSetting(mAgentWeb4.getWebCreator().getWebView());
+    }
+
+    /**
+     * 机械臂画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initVideo3() {
+        mAgentWeb3 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go("");
+
+        initWebSetting(mAgentWeb3.getWebCreator().getWebView());
+    }
+
+    /**
+     * 引流线画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initVideo2() {
+        mAgentWeb2 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go("");
+
+        initWebSetting(mAgentWeb2.getWebCreator().getWebView());
+    }
+
+    /**
+     * 行线画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initVideo1() {
+        mAgentWeb1 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go("");
+
+        initWebSetting(mAgentWeb1.getWebCreator().getWebView());
+    }
+
+
+    /**
+     * 云台画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initMainVideo() {
+        mAgentWebMain = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
 
+        initWebSetting(mAgentWebMain.getWebCreator().getWebView());
 
-        agentWeb.getWebCreator().getWebView().setHorizontalScrollBarEnabled(false);
-        agentWeb.getWebCreator().getWebView().setVerticalScrollBarEnabled(false);
-        agentWeb.getAgentWebSettings().getWebSettings().setUseWideViewPort(true);
-//        agentWeb.getAgentWebSettings().getWebSettings().setSupportZoom(true);
-        agentWeb.getAgentWebSettings().getWebSettings().setLoadWithOverviewMode(true);
-        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
+
+        //缩放
+//        agentWeb.getAgentWebSettings().getWebSettings().setUseWideViewPort(true);
+//        agentWeb.getAgentWebSettings().getWebSettings().setLoadWithOverviewMode(true);
+//        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
+
+    }
+
+    /**
+     * 设置webView自适应屏幕，取消滚动条
+     *
+     * @author Leo
+     * created at 2019/4/27 5:19 PM
+     */
+    private void initWebSetting(WebView view) {
+        //取消滚动条
+        view.setHorizontalScrollBarEnabled(false);
+        view.setVerticalScrollBarEnabled(false);
     }
 
     private void initAdapter() {
@@ -187,56 +270,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mRlAction.setAdapter(mActionAdapter);
     }
 
-
-    private void initVideo() {
-        //增加封面
-        ImageView imageView = new ImageView(this);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageResource(R.drawable.ic_img);
-        mMultiSampleVideos.add(mPlayerMain);
-        mMultiSampleVideos.add(mPlayer1);
-        mMultiSampleVideos.add(mPlayer2);
-        mMultiSampleVideos.add(mPlayer3);
-        mMultiSampleVideos.add(mPlayer4);
-
-        //云台画面
-        mPlayerMain.setTag(TAG);
-        mPlayerMain.setPlayPosition(0);
-        mPlayerMain.setUp(UrlConstant.CAMERA_URL, true, "");
-        mPlayerMain.setThumbImageView(imageView);
-
-        //行线画面
-        mPlayer1.setTag(TAG);
-        mPlayer1.setPlayPosition(1);
-        mPlayer1.setUp(UrlConstant.LINE_CAMERA_URL, true, "");
-        mPlayer1.setThumbImageView(imageView);
-        //引流线画面
-        mPlayer2.setTag(TAG);
-        mPlayer2.setPlayPosition(2);
-        mPlayer2.setUp(UrlConstant.DRAIN_LINE_CAMERA_URL, true, "");
-        mPlayer2.setThumbImageView(imageView);
-
-        //机械臂画面
-        mPlayer3.setTag(TAG);
-        //软解码：1、打开，0、关闭
-//        mPlayer3.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "videotoolbox", 0);
-        mPlayer3.setPlayPosition(3);
-        mPlayer3.setUp(UrlConstant.CLUTCH_CAMERA_URL, true, "");
-        mPlayer3.setThumbImageView(imageView);
-
-        //位姿仿真画面
-        mPlayer4.setTag(TAG);
-        mPlayer4.setPlayPosition(4);
-        mPlayer4.setUp("", true, "");
-        mPlayer4.setThumbImageView(imageView);
-
-        mPlayerMain.startPlayLogic();
-//        mPlayer1.startPlayLogic();
-//        mPlayer2.startPlayLogic();
-//        mPlayer3.startPlayLogic();
-
-    }
-
     private void initTile() {
         mPresenter.updateTime(mTvDate);
     }
@@ -244,27 +277,51 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     @Override
     protected void onPause() {
+        webViewOnPause();
         super.onPause();
-        CustomManager.onPauseAll();
-        isPause = true;
-        isShown = false;
+
         LogUtils.e("暂停剥线界面");
+    }
+
+    private void webViewOnPause() {
+        mAgentWebMain.getWebLifeCycle().onPause();
+        mAgentWeb1.getWebLifeCycle().onPause();
+        mAgentWeb2.getWebLifeCycle().onPause();
+        mAgentWeb3.getWebLifeCycle().onPause();
+        mAgentWeb4.getWebLifeCycle().onPause();
+
     }
 
     @Override
     protected void onResume() {
+        webViewOnResume();
         super.onResume();
-        CustomManager.onResumeAll();
-        isPause = false;
-        isShown = true;
+
         LogUtils.e("恢复剥线界面");
         mPresenter.initStatus();
     }
 
+    private void webViewOnResume() {
+        mAgentWebMain.getWebLifeCycle().onResume();
+        mAgentWeb1.getWebLifeCycle().onResume();
+        mAgentWeb2.getWebLifeCycle().onResume();
+        mAgentWeb3.getWebLifeCycle().onResume();
+        mAgentWeb4.getWebLifeCycle().onResume();
+    }
+
+
     @Override
     protected void onDestroy() {
+        webViewOnDestroy();
         super.onDestroy();
-        CustomManager.clearAllVideo();
+    }
+
+    private void webViewOnDestroy() {
+        mAgentWebMain.getWebLifeCycle().onDestroy();
+        mAgentWeb1.getWebLifeCycle().onDestroy();
+        mAgentWeb2.getWebLifeCycle().onDestroy();
+        mAgentWeb3.getWebLifeCycle().onDestroy();
+        mAgentWeb4.getWebLifeCycle().onDestroy();
     }
 
     @Override
@@ -383,16 +440,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 mPresenter.scramButton();
                 break;
             case R.id.iv_take_back:
-//                shotImage();
-                mPlayerMain.taskShotPic(new GSYVideoShotListener() {
-                    @Override
-                    public void getBitmap(Bitmap bitmap) {
-                        if (bitmap != null) {
-                            mIvTest.setImageBitmap(bitmap);
 
-                        }
-                    }
-                }, true);
 //                mPresenter.revocerButton();
                 break;
             case R.id.iv_start:
@@ -443,27 +491,5 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         }
     }
 
-    /**
-     * 视频截图
-     * 这里没有做读写本地sd卡的权限处理，记得实际使用要加上
-     */
-    void shotImage() {
-        //获取截图
-        mPlayerMain.taskShotPic(bitmap -> {
-            if (bitmap != null) {
-                mIvTest.setImageBitmap(bitmap);
-//                try {
-//                    SaveUtils.saveBitmap(bitmap);
-//                } catch (FileNotFoundException e) {
-//                    ToastUtils.showShortToast("save fail ");
-//                    e.printStackTrace();
-//                    return;
-//                }
-                ToastUtils.showShortToast("save success ");
-            } else {
-                ToastUtils.showShortToast("get bitmap fail ");
-            }
-        });
 
-    }
 }

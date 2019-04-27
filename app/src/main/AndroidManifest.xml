@@ -32,7 +32,7 @@
         android:roundIcon="@mipmap/robot1"
         android:supportsRtl="true"
         android:theme="@style/CMVP_FullTheme">
-        <activity android:name=".ui.launcher.LauncherActivity">
+        <activity android:name=".ui.wire_stripping.WireStrippingActivity">
         </activity>
 
         <service
@@ -41,7 +41,7 @@
             android:exported="true"/>
 
         <activity
-            android:name=".ui.wire_stripping.WireStrippingActivity"
+            android:name=".ui.launcher.LauncherActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@style/CMVP_FullTheme">
