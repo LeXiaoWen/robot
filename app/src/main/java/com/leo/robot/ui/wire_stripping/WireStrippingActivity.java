@@ -170,7 +170,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
-                .go("");
+                .go(UrlConstant.CAMERA_URL);
 
         initWebSetting(mAgentWeb4.getWebCreator().getWebView());
     }
@@ -187,7 +187,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
-                .go("");
+                .go(UrlConstant.CAMERA_URL);
 
         initWebSetting(mAgentWeb3.getWebCreator().getWebView());
     }
@@ -204,7 +204,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
-                .go("");
+                .go(UrlConstant.CAMERA_URL);
 
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
     }
@@ -221,7 +221,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
-                .go("");
+                .go(UrlConstant.CAMERA_URL);
 
         initWebSetting(mAgentWeb1.getWebCreator().getWebView());
     }
@@ -261,6 +261,10 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         //取消滚动条
         view.setHorizontalScrollBarEnabled(false);
         view.setVerticalScrollBarEnabled(false);
+        view.getSettings().setUseWideViewPort(true);
+        view.getSettings().setLoadWithOverviewMode(true);
+        //缩放
+//        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
     }
 
     private void initAdapter() {

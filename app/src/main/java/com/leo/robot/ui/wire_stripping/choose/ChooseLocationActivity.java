@@ -15,6 +15,7 @@ import com.leo.robot.utils.MultiSampleVideo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * created by Leo on 2019/4/27 11 : 27
@@ -242,5 +243,18 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
          *  false：view不再响应Touch操作，故此处若为false，只能显示起始位置，不能显示实时位置和结束位置
          */
         return true;
+    }
+
+    @OnClick({R.id.iv_get_pic, R.id.iv_confirm_location, R.id.iv_back})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_get_pic:
+                break;
+            case R.id.iv_confirm_location:
+                break;
+            case R.id.iv_back:
+                finish();
+                break;
+        }
     }
 }
