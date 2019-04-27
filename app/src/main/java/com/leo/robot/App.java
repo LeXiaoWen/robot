@@ -89,8 +89,8 @@ public class App extends BaseApplication {
         videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "packet-buffering", 0);
         list.add(videoOptionModel);
         //软解码：1、打开，0、关闭
-        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "videotoolbox", 1);
-        list.add(videoOptionModel);
+//        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "videotoolbox", 1);
+//        list.add(videoOptionModel);
         //硬解码：1、打开，0、关闭
         videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0);
         list.add(videoOptionModel);

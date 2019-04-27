@@ -4,6 +4,8 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -12,6 +14,8 @@ import com.leo.robot.R;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoViewBridge;
+
+import cree.mvp.util.ui.ToastUtils;
 
 
 /**
@@ -154,11 +158,40 @@ public class MultiSampleVideo extends StandardGSYVideoPlayer {
 
         //不给触摸亮度，如果需要，屏蔽下方代码即可
         mBrightness = false;
+
+//        ToastUtils.showShortToast("X，Y坐标 " + absDeltaX+ " , " + absDeltaY);
     }
 
     @Override
     protected void touchDoubleUp() {
         //super.touchDoubleUp();
         //不需要双击暂停
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            /**
+             * 点击的开始位置
+             */
+            case MotionEvent.ACTION_DOWN:
+//                mTouchShowStart.setText("起始位置：(" + event.getX() + "," + event.getY());
+                break;
+            /**
+             * 触屏实时位置
+             */
+            case MotionEvent.ACTION_MOVE:
+                ToastUtils.showShortToast("实时位置：(" + event.getX() + "," + event.getY());
+                break;
+            /**
+             * 离开屏幕的位置
+             */
+            case MotionEvent.ACTION_UP:
+//                mTouchShow.setText("结束位置：(" + event.getX() + "," + event.getY());
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }

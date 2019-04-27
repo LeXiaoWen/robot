@@ -1,5 +1,6 @@
 package com.leo.robot.ui.wire_stripping;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
+import com.leo.robot.ui.wire_stripping.choose.ChooseLocationActivity;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.DateUtils;
 import com.leo.robot.utils.MultiSampleVideo;
@@ -208,9 +210,9 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mPlayer4.setThumbImageView(imageView);
 
         mPlayerMain.startPlayLogic();
-        mPlayer1.startPlayLogic();
-        mPlayer2.startPlayLogic();
-        mPlayer3.startPlayLogic();
+//        mPlayer1.startPlayLogic();
+//        mPlayer2.startPlayLogic();
+//        mPlayer3.startPlayLogic();
 
     }
 
@@ -376,7 +378,10 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 mPresenter.startButton();
                 break;
             case R.id.iv_identification:
-                mPresenter.getPicButton();
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(new Intent(WireStrippingActivity.this, ChooseLocationActivity.class));
+                }
+//                mPresenter.getPicButton();
                 break;
             case R.id.iv_setting:
                 mPresenter.settingButton();
