@@ -1,13 +1,17 @@
 package com.leo.robot.utils;
 
+import com.google.gson.Gson;
 import com.leo.robot.bean.AllMsg;
 import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.netty.NettyClient;
 
 import cree.mvp.util.bus.BusUtils;
 import cree.mvp.util.data.SPUtils;
+import cree.mvp.util.ui.ToastUtils;
 
 /**
  * 处理服务器推送消息
@@ -17,7 +21,7 @@ import cree.mvp.util.data.SPUtils;
 
 public class ResultUtils {
     public static final int PUSH_MSG = 1, ERRO_MSG = 0;
-
+    private static Gson mGson = new Gson();
     /**
      * 消息的统一分发
      *
@@ -25,15 +29,25 @@ public class ResultUtils {
      * @param type
      */
     public static void onResult(String msg, int type) {
-        switch (type) {
-            case PUSH_MSG:
-                pushMsg(msg);
-                break;
-            case ERRO_MSG:
-                erroMsg(msg);
-                break;
-        }
+//        switch (type) {
+//            case PUSH_MSG:
+//                pushMsg(msg);
+//                break;
+//            case ERRO_MSG:
+//                erroMsg(msg);
+//                break;
+//        }
     }
+
+//    public static void onResultByType(String tag){
+//        if ("client1".equals(tag)){
+//            final String s = mGson.toJson(CommandUtils.getPicBean1());
+//            NettyManager.getInstance().getClientByTag(tag).sendMsgTest(s);
+//        }else if ("client2".equals(tag)){
+//            final String s = mGson.toJson(CommandUtils.getPicBean2());
+//            NettyManager.getInstance().getClientByTag(tag).sendMsgTest(s);
+//        }
+//    }
 
     /**
      * 处理连接失败消息
@@ -48,14 +62,14 @@ public class ResultUtils {
     }
 
     /**
-     * 推送消息信息
+     * 主控服务器推送消息信息
      *
      * @param msg
      * @author Leo
      * created at 2019/4/20 11:25 PM
      */
 
-    private static void pushMsg(String msg) {
+    private static void masterControlpushMsg(String msg) {
         AllMsg allMsg = new AllMsg();
         String s = msg.substring(2, 4);
         if (PushMsgCode.WIRE_STRIPPING.equals(s)) {//剥线
@@ -233,4 +247,68 @@ public class ResultUtils {
     private static void onMain(String msg) {
 
     }
+
+
+    /**
+    * 连接成功
+    *
+    *@author Leo
+    *created at 2019/4/27 10:08 PM
+    */
+    public static void onConnectSuccess(String type) {
+        if (RobotInit.MASTER_CONTROL_NETTY.equals(type)){//主控服务器连接成功
+            String s = mGson.toJson(CommandUtils.getMasterControlBean());
+            NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
+            client.sendMsgTest(s);
+            ToastUtils.showShortToast("主控服务器连接成功");
+        }else if (RobotInit.VISION_NETTY.equals(type)){//视觉服务器连接成功
+            String s = mGson.toJson(CommandUtils.getVisionBean());
+            NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.VISION_NETTY);
+            client.sendMsgTest(s);
+            ToastUtils.showShortToast("视觉服务器连接成功");
+        }
+    }
+
+    /**
+    * 连接失败
+    *
+    *@author Leo
+    *created at 2019/4/27 10:08 PM
+    */
+    public static void onConnectErro(String type) {
+        if (RobotInit.MASTER_CONTROL_NETTY.equals(type)){//主控服务器连接失败
+            ToastUtils.showShortToast("主控服务器连接失败");
+        }else if (RobotInit.VISION_NETTY.equals(type)){//视觉服务器连接失败
+            ToastUtils.showShortToast("视觉服务器连接失败");
+        }
+    }
+
+    /**
+    * 接收服务器发送的消息
+    *
+    *@author Leo
+    *created at 2019/4/27 10:14 PM
+    */
+    public static void onResultByType(String msg, String type) {
+        if (RobotInit.MASTER_CONTROL_NETTY.equals(type)){//主控服务器消息
+            masterControlpushMsg(msg);
+        }else if (RobotInit.VISION_NETTY.equals(type)){//视觉服务器消息
+            onVisionMsg(msg);
+        }
+    }
+
+    /**
+    * 视觉服务器消息接收
+    *
+    *@author Leo
+    *created at 2019/4/27 10:18 PM
+    */
+    private static void onVisionMsg(String msg) {
+        VisionMsg visionMsg = new VisionMsg();
+        visionMsg.setMsg(msg);
+        BusUtils.postMessage(visionMsg);
+//        ToastUtils.showShortToast("视觉服务器消息： " + msg);
+    }
+
+
 }

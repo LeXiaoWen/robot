@@ -6,9 +6,9 @@ import android.widget.TextView;
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.RobotInit;
-import com.leo.robot.netty.NettyClient;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
 import com.leo.robot.utils.CommandUtils;
+import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
 
 import javax.inject.Inject;
@@ -59,7 +59,7 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 //            isScram = false;
 //        }
         if (isClickble) {
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmShutdown());
+            NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmShutdown());
             mActivity.refreshRv("发送急停命令");
         }
 
@@ -73,7 +73,7 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      */
     public void revocerButton() {
         if (isClickble) {
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmRecover());
+            NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmRecover());
             mActivity.refreshRv("发送一键回收命令");
         }
 
@@ -89,11 +89,11 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 
         if (isClickble) {
             if (!isStart) { //开始
-                NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmStart());
+                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmStart());
                 isStart = true;
                 mActivity.refreshRv("发送开始命令");
             } else {//停止
-                NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmStop());
+                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmStop());
                 isStart = false;
                 mActivity.refreshRv("发送停止命令");
             }

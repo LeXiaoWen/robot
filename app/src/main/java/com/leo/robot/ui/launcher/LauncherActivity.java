@@ -5,9 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.gson.Gson;
 import com.leo.robot.R;
+import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.netty.NettyClient;
+import com.leo.robot.netty.NettyListener;
 import com.leo.robot.service.NettyService;
 import com.leo.robot.ui.main.MainActivity;
+import com.leo.robot.utils.NettyManager;
+import com.leo.robot.utils.ResultUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,32 +27,99 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 
 /**
-* 启动页
-*
-*@author Leo
-*created at 2019/4/14 6:09 PM
-*/
+ * 启动页
+ *
+ * @author Leo
+ * created at 2019/4/14 6:09 PM
+ */
 
 public class LauncherActivity extends AppCompatActivity {
 
     private int count = 0;
     private int sumCount = 3;
+    private Gson mGson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
         ButterKnife.bind(this);
+        //主控服务器
+        initMasterNetty();
+        //视觉服务器
+        initVisionNetty();
 //        initService();
         initPermisson();
     }
 
     /**
-    * 申请权限
-    *
-    *@author Leo
-    *created at 2019/4/14 6:08 PM
-    */
+     * 视觉服务器
+     */
+    private void initVisionNetty() {
+        NettyClient client = new NettyClient();
+        NettyManager.getInstance().addNettyClient(RobotInit.VISION_NETTY, client);
+        client.setListener(new NettyListener() {
+            @Override
+            public void onMessageResponse(String msg) {
+                ResultUtils.onResultByType(msg,RobotInit.VISION_NETTY);
+            }
+
+            @Override
+            public void onServiceStatusConnectChanged(int statusCode) {
+                if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
+                    ResultUtils.onConnectSuccess(RobotInit.VISION_NETTY);
+                } else {
+                    ResultUtils.onConnectErro(RobotInit.VISION_NETTY);
+                }
+            }
+        });
+
+        if (!client.getConnectStatus()) {
+            new Thread(() -> {
+                client.connect(UrlConstant.SOCKET_HOST1, UrlConstant.SOCKET_PORT);//连接服务器
+            }).start();
+        }
+    }
+
+    /**
+     * 主控服务器
+     *
+     * @author Leo
+     * created at 2019/4/27 10:06 PM
+     */
+    private void initMasterNetty() {
+        NettyClient client = new NettyClient();
+        NettyManager.getInstance().addNettyClient(RobotInit.MASTER_CONTROL_NETTY, client);
+
+        client.setListener(new NettyListener() {
+            @Override
+            public void onMessageResponse(String msg) {
+                ResultUtils.onResultByType(msg,RobotInit.MASTER_CONTROL_NETTY);
+            }
+
+            @Override
+            public void onServiceStatusConnectChanged(int statusCode) {
+                if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
+                    ResultUtils.onConnectSuccess(RobotInit.MASTER_CONTROL_NETTY);
+                } else {
+                    ResultUtils.onConnectErro(RobotInit.MASTER_CONTROL_NETTY);
+                }
+            }
+        });
+
+        if (!client.getConnectStatus()) {
+            new Thread(() -> {
+                client.connect(UrlConstant.SOCKET_HOST2, UrlConstant.SOCKET_PORT);//连接服务器
+            }).start();
+        }
+    }
+
+    /**
+     * 申请权限
+     *
+     * @author Leo
+     * created at 2019/4/14 6:08 PM
+     */
 
     private void initPermisson() {
         applyPermisson(Manifest.permission.CAMERA);
@@ -54,11 +128,11 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     /**
-    * 启动service
-    *
-    *@author Leo
-    *created at 2019/4/14 6:08 PM
-    */
+     * 启动service
+     *
+     * @author Leo
+     * created at 2019/4/14 6:08 PM
+     */
     private void initService() {
         final Intent intent = new Intent(getApplication(), NettyService.class);
         startService(intent);
@@ -128,5 +202,4 @@ public class LauncherActivity extends AppCompatActivity {
                 .take(countTime + 1);
 
     }
-
 }

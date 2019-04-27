@@ -3,7 +3,6 @@ package com.leo.robot.netty;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.bean.NettyBaseFeed;
 
 import cree.mvp.util.ui.ToastUtils;
@@ -35,7 +34,8 @@ public class NettyClient {
 
     private boolean isConnect = false;
 
-    private int reconnectNum = Integer.MAX_VALUE;
+//    private int reconnectNum = Integer.MAX_VALUE;
+    private int reconnectNum = 2;
 
     private long reconnectIntervalTime = 5000;
     public final static String TAG = NettyClient.class.getName();
@@ -50,7 +50,7 @@ public class NettyClient {
         return nettyClient;
     }
 
-    public synchronized NettyClient connect() {
+    public synchronized NettyClient connect(String ip,int port) {
         if (!isConnect) {
             group = new NioEventLoopGroup();
             bootstrap = new Bootstrap().group(group)
@@ -60,7 +60,7 @@ public class NettyClient {
                     .channel(NioSocketChannel.class)
                     .handler(new NettyClientInitializer(listener));
             try {
-                ChannelFuture future = bootstrap.connect(UrlConstant.SOCKET_HOST, UrlConstant.SOCKET_PORT).sync();
+                ChannelFuture future = bootstrap.connect(ip, port).sync();
                 if (future != null && future.isSuccess()) {
                     channel = future.channel();
                     isConnect = true;
@@ -72,7 +72,7 @@ public class NettyClient {
             } catch (Exception e) {
                 e.printStackTrace();
                 listener.onServiceStatusConnectChanged(NettyListener.STATUS_CONNECT_ERROR);
-                reconnect();
+                reconnect(ip,port);
             }
         }
         return this;
@@ -82,7 +82,7 @@ public class NettyClient {
         group.shutdownGracefully();
     }
 
-    public void reconnect() {
+    public void reconnect(String ip,int port) {
         if (reconnectNum > 0 && !isConnect) {
             reconnectNum--;
             try {
@@ -91,7 +91,7 @@ public class NettyClient {
                 e.printStackTrace();
             }
             disconnect();
-            connect();
+            connect(ip,port);
         } else {
             disconnect();
         }
@@ -156,6 +156,27 @@ public class NettyClient {
             }
         }
 
+    }
+
+    public void sendMsgTest(String s){
+        boolean flag = channel != null && isConnect;
+        if (!flag) {
+            Log.e(TAG, "------尚未连接");
+            return;
+        }
+//        final String s = gson.toJson(bean);
+        channel.writeAndFlush(s).addListener(new FutureListener() {
+
+            @Override
+            public void success() {
+                Log.e(TAG, "发送成功--->" + s);
+            }
+
+            @Override
+            public void error() {
+                Log.e(TAG, "发送失败--->" + s);
+            }
+        });
     }
 
     /**

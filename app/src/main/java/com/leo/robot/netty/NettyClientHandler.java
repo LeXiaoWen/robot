@@ -2,6 +2,8 @@ package com.leo.robot.netty;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -12,6 +14,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
     private static final String TAG = NettyClientHandler.class.getName();
     private NettyListener listener;
+    private Gson mGson = new Gson();
 
     public NettyClientHandler(NettyListener listener) {
         this.listener = listener;

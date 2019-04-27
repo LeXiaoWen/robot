@@ -67,7 +67,7 @@ public class NettyService extends Service implements NettyListener {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    NettyClient.getInstance().connect();//连接服务器
+//                    NettyClient.getInstance().connect();//连接服务器
                 }
             }).start();
         }

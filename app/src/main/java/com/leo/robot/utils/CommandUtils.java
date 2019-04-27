@@ -1,5 +1,8 @@
 package com.leo.robot.utils;
 
+import com.leo.robot.bean.AuthorBean;
+import com.leo.robot.bean.GetPicBean;
+
 /**
  * created by Leo on 2019/4/20 10 : 48
  */
@@ -742,7 +745,6 @@ public class CommandUtils {
     }
 
 
-
     /**
      * 末端位移左旋
      *
@@ -832,6 +834,7 @@ public class CommandUtils {
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
     }
+
     /**
      * 末端位姿左旋
      *
@@ -1204,5 +1207,51 @@ public class CommandUtils {
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
     }
+
+
+    public static GetPicBean getPicBean1() {
+        GetPicBean getPicBean = new GetPicBean();
+        GetPicBean.ParamsBean paramsBean = new GetPicBean.ParamsBean();
+        paramsBean.setHeight("640");
+        paramsBean.setHeight("480");
+        paramsBean.setCoordinates("100.0,210.0");
+        getPicBean.setMsgType("CmdUploadPic1");
+        getPicBean.setVersion("1.0");
+        getPicBean.setParams(paramsBean);
+        return getPicBean;
+    }
+
+    public static GetPicBean getPicBean2() {
+        GetPicBean getPicBean = new GetPicBean();
+        GetPicBean.ParamsBean paramsBean = new GetPicBean.ParamsBean();
+        paramsBean.setHeight("640");
+        paramsBean.setHeight("480");
+        paramsBean.setCoordinates("100.0,210.0");
+        getPicBean.setMsgType("CmdUploadPic1");
+        getPicBean.setVersion("2.0");
+        getPicBean.setParams(paramsBean);
+        return getPicBean;
+    }
+
+    public static AuthorBean getMasterControlBean() {
+        AuthorBean authorBean = new AuthorBean();
+        AuthorBean.ParamsBean paramsBean = new AuthorBean.ParamsBean();
+        authorBean.setMsgType("clientInfo");
+        authorBean.setVersion("1.0");
+        paramsBean.setMsg("Hello,主控服务器！");
+        authorBean.setParams(paramsBean);
+        return authorBean;
+    }
+
+    public static AuthorBean getVisionBean() {
+        AuthorBean authorBean = new AuthorBean();
+        AuthorBean.ParamsBean paramsBean = new AuthorBean.ParamsBean();
+        authorBean.setMsgType("clientInfo");
+        authorBean.setVersion("1.0");
+        paramsBean.setMsg("Hello,视觉服务器！");
+        authorBean.setParams(paramsBean);
+        return authorBean;
+    }
+
     //------------------------ 接线工具 end --------------------------
 }

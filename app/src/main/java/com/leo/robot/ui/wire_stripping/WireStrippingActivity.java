@@ -16,6 +16,7 @@ import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
@@ -33,6 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.develop.LogUtils;
+import cree.mvp.util.ui.ToastUtils;
 
 /**
  * 剥线作业
@@ -283,6 +285,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     protected void onPause() {
         webViewOnPause();
         super.onPause();
+        isShown = false;
 
         LogUtils.e("暂停剥线界面");
     }
@@ -300,7 +303,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     protected void onResume() {
         webViewOnResume();
         super.onResume();
-
+        isShown = true;
         LogUtils.e("恢复剥线界面");
         mPresenter.initStatus();
     }
@@ -351,6 +354,13 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 refreshRv(s);
             }
 //            ToastUtils.showShortToast("接收到剥线推送消息 ： " + msg.getMsg() + "      " + msg.getCode());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void acceptVisionMsg(VisionMsg msg) {
+        if (isShown) {
+            ToastUtils.showShortToast("接收到视觉服务器推送消息 ： " + msg.getMsg());
         }
     }
 

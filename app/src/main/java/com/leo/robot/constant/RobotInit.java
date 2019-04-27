@@ -11,8 +11,8 @@ public interface RobotInit {
     String WIRE_STRIPPING_ACTIVITY = "wireStripping";
     String WIRING_ACTIVITY = "wiring";
     String CUT_LINE_ACTIVITY = "cutLine";
-    int CLICK_TAG = 1;
-    int UNCLICK_TAG = 2;
+    String MASTER_CONTROL_NETTY = "MASTER_CONTROL_NETTY";
+    String VISION_NETTY = "VISION";
 
     //------------------------ 剥线 start --------------------------
     /**

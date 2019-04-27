@@ -10,8 +10,9 @@ public class UrlConstant {
     /**
      * socket 服务器IP地址
      */
-//    public static final String SOCKET_HOST = "192.168.1.5";
-    public static final String SOCKET_HOST = "192.168.1.202";
+    public static final String SOCKET_HOST2 = "192.168.1.5";
+    public static final String SOCKET_HOST1 = "192.168.1.100";
+//    public static final String SOCKET_HOST = "192.168.1.202";
     /**
      * socket 服务器端口号
      */
