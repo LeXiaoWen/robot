@@ -290,14 +290,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         LogUtils.e("暂停剥线界面");
     }
 
-    private void webViewOnPause() {
-        mAgentWebMain.getWebLifeCycle().onPause();
-        mAgentWeb1.getWebLifeCycle().onPause();
-        mAgentWeb2.getWebLifeCycle().onPause();
-        mAgentWeb3.getWebLifeCycle().onPause();
-        mAgentWeb4.getWebLifeCycle().onPause();
 
-    }
 
     @Override
     protected void onResume() {
@@ -308,6 +301,14 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mPresenter.initStatus();
     }
 
+    private void webViewOnPause() {
+        mAgentWebMain.getWebLifeCycle().onPause();
+        mAgentWeb1.getWebLifeCycle().onPause();
+        mAgentWeb2.getWebLifeCycle().onPause();
+        mAgentWeb3.getWebLifeCycle().onPause();
+        mAgentWeb4.getWebLifeCycle().onPause();
+
+    }
     private void webViewOnResume() {
         mAgentWebMain.getWebLifeCycle().onResume();
         mAgentWeb1.getWebLifeCycle().onResume();
@@ -315,14 +316,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb3.getWebLifeCycle().onResume();
         mAgentWeb4.getWebLifeCycle().onResume();
     }
-
-
-    @Override
-    protected void onDestroy() {
-        webViewOnDestroy();
-        super.onDestroy();
-    }
-
     private void webViewOnDestroy() {
         mAgentWebMain.getWebLifeCycle().onDestroy();
         mAgentWeb1.getWebLifeCycle().onDestroy();
@@ -330,6 +323,14 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb3.getWebLifeCycle().onDestroy();
         mAgentWeb4.getWebLifeCycle().onDestroy();
     }
+
+    @Override
+    protected void onDestroy() {
+        webViewOnDestroy();
+        super.onDestroy();
+    }
+
+
 
     @Override
     protected void onStop() {
@@ -371,6 +372,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         if (b) {
             mTvReady.setTextColor(getResources().getColor(R.color.color_status_wake_up));
             mIvReady.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+            updateClickStatus(b);
         }
     }
 

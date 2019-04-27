@@ -2,10 +2,10 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/ll_main"
     tools:ignore="MissingDefaultResource">
 
     <include layout="@layout/activity_title"/>
@@ -261,17 +261,15 @@
         android:layout_height="match_parent">
 
 
-        <FrameLayout
-            android:id="@+id/fl_main"
+        <RelativeLayout
+
+            android:id="@+id/rl_main"
             android:layout_width="672dp"
             android:layout_height="377dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="15dp"
+            android:background="@color/black">
 
-            <com.leo.robot.utils.MultiSampleVideo
-                android:id="@+id/player_main"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -283,119 +281,104 @@
                 android:textColor="@color/cmvp_white"
                 android:textSize="15sp"
                 android:textStyle="bold"/>
-        </FrameLayout>
+        </RelativeLayout>
 
-        <LinearLayout
-            android:layout_marginTop="@dimen/dp_2"
-            android:layout_below="@id/fl_main"
-            android:layout_width="672dp"
+        <RelativeLayout
+            android:background="@color/black"
+            android:id="@+id/rl_1"
+            android:layout_width="167dp"
             android:layout_height="111dp"
+            android:layout_below="@id/rl_main"
             android:layout_marginLeft="16dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="2dp">
 
-            <FrameLayout
-                android:id="@+id/fl_1"
-                android:layout_width="167dp"
-                android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:padding="@dimen/dp_6"
+                android:text="USB2画面"
+                android:textColor="@color/cmvp_white"
+                android:textSize="@dimen/sp_10"
+                android:textStyle="bold"
+                />
 
-                <com.leo.robot.utils.MultiSampleVideo
-                    android:id="@+id/player1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
+        </RelativeLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:padding="@dimen/dp_6"
-                    android:text="USB2画面"
-                    android:textColor="@color/cmvp_white"
-                    android:textSize="@dimen/sp_10"
-                    android:textStyle="bold"
-                    />
+        <RelativeLayout
+            android:background="@color/black"
+            android:id="@+id/rl_2"
+            android:layout_width="167dp"
+            android:layout_height="111dp"
+            android:layout_below="@id/rl_main"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/rl_1">
 
-            </FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:padding="@dimen/dp_6"
+                android:text="USB2画面"
+                android:textColor="@color/cmvp_white"
+                android:textSize="@dimen/sp_10"
+                android:textStyle="bold"
+                />
 
-            <FrameLayout
-                android:layout_marginLeft="2dp"
-                android:id="@+id/fl_2"
-                android:layout_width="167dp"
-                android:layout_height="match_parent">
+        </RelativeLayout>
 
-                <com.leo.robot.utils.MultiSampleVideo
-                    android:id="@+id/player2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
+        <RelativeLayout
+            android:background="@color/black"
+            android:id="@+id/rl_3"
+            android:layout_width="167dp"
+            android:layout_height="111dp"
+            android:layout_below="@id/rl_main"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/rl_2">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:padding="@dimen/dp_6"
-                    android:text="引流线画面"
-                    android:textColor="@color/cmvp_white"
-                    android:textSize="@dimen/sp_10"
-                    android:textStyle="bold"
-                    />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:padding="@dimen/dp_6"
+                android:text="USB2画面"
+                android:textColor="@color/cmvp_white"
+                android:textSize="@dimen/sp_10"
+                android:textStyle="bold"
+                />
 
-            </FrameLayout>
+        </RelativeLayout>
 
-            <FrameLayout
-                android:layout_marginLeft="2dp"
-                android:id="@+id/fl_3"
-                android:layout_width="167dp"
-                android:layout_height="match_parent">
+        <RelativeLayout
+            android:background="@color/black"
+            android:id="@+id/rl_4"
+            android:layout_width="167dp"
+            android:layout_height="111dp"
+            android:layout_below="@id/rl_main"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/rl_3">
 
-                <com.leo.robot.utils.MultiSampleVideo
-                    android:id="@+id/player3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:padding="@dimen/dp_6"
+                android:text="三维仿真画面"
+                android:textColor="@color/cmvp_white"
+                android:textSize="@dimen/sp_10"
+                android:textStyle="bold"
+                />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:padding="@dimen/dp_6"
-                    android:text="云台画面"
-                    android:textColor="@color/cmvp_white"
-                    android:textSize="@dimen/sp_10"
-                    android:textStyle="bold"
-                    />
+        </RelativeLayout>
 
-            </FrameLayout>
 
-            <FrameLayout
-                android:layout_marginLeft="2dp"
-                android:id="@+id/fl_4"
-                android:layout_width="167dp"
-                android:layout_height="match_parent">
-
-                <com.leo.robot.utils.MultiSampleVideo
-                    android:id="@+id/player4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:padding="@dimen/dp_6"
-                    android:text="三维仿真画面"
-                    android:textColor="@color/cmvp_white"
-                    android:textSize="@dimen/sp_10"
-                    android:textStyle="bold"
-                    />
-
-            </FrameLayout>
-        </LinearLayout>
 
 
         <LinearLayout
@@ -437,13 +420,14 @@
                 android:src="@mipmap/back"/>
 
             <TextView
-                android:textColor="#000000"
-                android:textSize="15sp"
-                android:layout_marginTop="@dimen/dp_40"
                 android:id="@+id/touch_show"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_40"
+                android:textColor="#000000"
+                android:textSize="15sp"
                 />
+
             <TextView
                 android:layout_width="239dp"
                 android:layout_height="39dp"
