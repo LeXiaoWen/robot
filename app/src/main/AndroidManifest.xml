@@ -16,6 +16,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
+
+
     <uses-permission
         android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions"/>
@@ -29,7 +32,7 @@
         android:roundIcon="@mipmap/robot1"
         android:supportsRtl="true"
         android:theme="@style/CMVP_FullTheme">
-        <activity android:name=".test.TestActivity">
+        <activity android:name=".ui.launcher.LauncherActivity">
         </activity>
 
         <service
@@ -38,7 +41,7 @@
             android:exported="true"/>
 
         <activity
-            android:name=".ui.launcher.LauncherActivity"
+            android:name=".ui.wire_stripping.WireStrippingActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@style/CMVP_FullTheme">
@@ -61,7 +64,7 @@
             android:name=".ui.cut_line.CutLineActivity"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".ui.wire_stripping.WireStrippingActivity"
+            android:name=".test.TestActivity"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".ui.wiring.WiringActivity"

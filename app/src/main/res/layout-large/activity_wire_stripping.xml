@@ -262,12 +262,17 @@
         android:layout_marginTop="@dimen/dp_15">
 
         <FrameLayout
-            android:visibility=""
             android:id="@+id/fl_main"
             android:layout_width="456dp"
             android:layout_height="332dp">
 
+            <com.just.agentweb.AgentWebView
+                android:id="@+id/agentWeb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
             <com.leo.robot.utils.MultiSampleVideo
+                android:visibility="gone"
                 android:id="@+id/player_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -282,8 +287,7 @@
                 android:text="云台画面"
                 android:textColor="@color/cmvp_black"
                 android:textSize="@dimen/sp_8"
-                android:textStyle="bold"
-                android:visibility="gone"/>
+                android:textStyle="bold"/>
         </FrameLayout>
 
         <android.support.v7.widget.RecyclerView

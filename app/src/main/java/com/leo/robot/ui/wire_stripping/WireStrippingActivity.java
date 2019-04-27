@@ -7,10 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebView;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.ErroMsg;
@@ -50,6 +54,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     ImageView mIvBack;
     @BindView(R.id.iv_test)
     ImageView mIvTest;
+    @BindView(R.id.agentWeb)
+    AgentWebView mAgentWeb;
     private List<MultiSampleVideo> mMultiSampleVideos = new ArrayList<>();
     public static final String TAG = "WireStrippingActivity";
     @BindView(R.id.tv_signal)
@@ -154,9 +160,24 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         ButterKnife.bind(this);
         initTile();
         initAdapter();
-        initVideo();
+//        initVideo();
         initBroadcast(mTvGroundPower);
         mPresenter.initStatus();
+
+        AgentWeb agentWeb = AgentWeb.with(this)
+                .setAgentWebParent((FrameLayout) mFlMain, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+
+        agentWeb.getWebCreator().getWebView().setHorizontalScrollBarEnabled(false);
+        agentWeb.getWebCreator().getWebView().setVerticalScrollBarEnabled(false);
+        agentWeb.getAgentWebSettings().getWebSettings().setUseWideViewPort(true);
+//        agentWeb.getAgentWebSettings().getWebSettings().setSupportZoom(true);
+        agentWeb.getAgentWebSettings().getWebSettings().setLoadWithOverviewMode(true);
+        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
     }
 
     private void initAdapter() {
@@ -366,12 +387,12 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 mPlayerMain.taskShotPic(new GSYVideoShotListener() {
                     @Override
                     public void getBitmap(Bitmap bitmap) {
-                        if (bitmap!=null){
-                        mIvTest.setImageBitmap(bitmap);
+                        if (bitmap != null) {
+                            mIvTest.setImageBitmap(bitmap);
 
                         }
                     }
-                },true);
+                }, true);
 //                mPresenter.revocerButton();
                 break;
             case R.id.iv_start:
