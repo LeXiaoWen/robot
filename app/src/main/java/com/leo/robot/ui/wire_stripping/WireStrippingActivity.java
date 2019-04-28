@@ -1,6 +1,5 @@
 package com.leo.robot.ui.wire_stripping;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,11 +15,11 @@ import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.bean.TestBean;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
-import com.leo.robot.ui.wire_stripping.choose.ChooseLocationActivity;
 import com.leo.robot.utils.DateUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -463,9 +462,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 mPresenter.startButton();
                 break;
             case R.id.iv_identification:
-                if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(new Intent(WireStrippingActivity.this, ChooseLocationActivity.class));
-                }
+                mPresenter.identificationButton();
+
 //                mPresenter.getPicButton();
                 break;
             case R.id.iv_setting:
@@ -507,5 +505,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         }
     }
 
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void toastMsg(TestBean bean){
+        ToastUtils.showShortToast(bean.getMsg());
+    }
 }

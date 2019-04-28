@@ -1,5 +1,6 @@
 package com.leo.robot.ui.wire_stripping.choose;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
@@ -14,11 +15,16 @@ import android.widget.TextView;
 import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.constant.UrlConstant;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cree.mvp.util.develop.LogUtils;
 
 /**
  * created by Leo on 2019/4/27 11 : 27
@@ -97,6 +103,7 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
     TextView mTouchShow;
     @BindView(R.id.ll_main)
     LinearLayout mLlMain;
+
     private AgentWeb mAgentWebMain;
     private AgentWeb mAgentWeb1;
     private AgentWeb mAgentWeb4;
@@ -125,7 +132,7 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
         initVideo3();
         initVideo4();
         mPresenter.initStatus();
-        mRlMain.setOnTouchListener(this);
+
     }
 
     /**
@@ -393,6 +400,7 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
         mAgentWeb4.getWebLifeCycle().onPause();
 
     }
+
     private void webViewOnResume() {
         mAgentWebMain.getWebLifeCycle().onResume();
         mAgentWeb1.getWebLifeCycle().onResume();
@@ -400,6 +408,7 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
         mAgentWeb3.getWebLifeCycle().onResume();
         mAgentWeb4.getWebLifeCycle().onResume();
     }
+
     private void webViewOnDestroy() {
         mAgentWebMain.getWebLifeCycle().onDestroy();
         mAgentWeb1.getWebLifeCycle().onDestroy();
@@ -407,4 +416,20 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
         mAgentWeb3.getWebLifeCycle().onDestroy();
         mAgentWeb4.getWebLifeCycle().onDestroy();
     }
+
+
+    /**
+    * 接收视觉服务器base64数据
+    *
+    *@author Leo
+    *created at 2019/4/28 7:57 PM
+    */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onVisionMsg(VisionMsg msg) {
+        LogUtils.e("图片数据 ： "  +msg.getMsg());
+
+    }
+
+
+
 }

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.leo.robot.R;
+import com.leo.robot.bean.TestBean;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
@@ -16,12 +17,16 @@ import com.leo.robot.ui.main.MainActivity;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.ResultUtils;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import cree.mvp.util.permissions.PermissionsUtils;
 import cree.mvp.util.permissions.rx.PerAction1;
 import cree.mvp.util.permissions.rx.PerActionError;
+import cree.mvp.util.ui.ToastUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -76,7 +81,7 @@ public class LauncherActivity extends AppCompatActivity {
 
         if (!client.getConnectStatus()) {
             new Thread(() -> {
-                client.connect(UrlConstant.SOCKET_HOST1, UrlConstant.SOCKET_PORT);//连接服务器
+                client.connect(UrlConstant.VISION_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
             }).start();
         }
     }
@@ -109,7 +114,7 @@ public class LauncherActivity extends AppCompatActivity {
 
         if (!client.getConnectStatus()) {
             new Thread(() -> {
-                client.connect(UrlConstant.SOCKET_HOST2, UrlConstant.SOCKET_PORT);//连接服务器
+                client.connect(UrlConstant.MASTER_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
             }).start();
         }
     }
@@ -201,5 +206,11 @@ public class LauncherActivity extends AppCompatActivity {
                 .map(increaseTime -> countTime - increaseTime.intValue())
                 .take(countTime + 1);
 
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void toastMsg(TestBean bean){
+        ToastUtils.showShortToast(bean.getMsg());
     }
 }

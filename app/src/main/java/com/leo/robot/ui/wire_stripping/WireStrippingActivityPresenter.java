@@ -7,6 +7,7 @@ import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
+import com.leo.robot.ui.wire_stripping.choose.ChooseLocationActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
@@ -108,13 +109,13 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     }
 
     /**
-    * 手动设置
-    *
-    *@author Leo
-    *created at 2019/4/27 2:22 AM
-    */
+     * 手动设置
+     *
+     * @author Leo
+     * created at 2019/4/27 2:22 AM
+     */
     public void settingButton() {
-        if (isClickble){
+        if (isClickble) {
             if (!isFastDoubleClick()) {
                 mActivity.startActivity(new Intent(mActivity, WiringStrippingSettingActivity.class));
             }
@@ -200,4 +201,11 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     }
 
 
+    public void identificationButton() {
+        if (isClickble) {
+            if (!isFastDoubleClick()) {
+                mActivity.startActivity(new Intent(mActivity, ChooseLocationActivity.class));
+            }
+        }
+    }
 }

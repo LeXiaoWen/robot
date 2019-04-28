@@ -25,7 +25,6 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
         NettyClient.getInstance().setConnectStatus(true);
         listener.onServiceStatusConnectChanged(NettyListener.STATUS_CONNECT_SUCCESS);
     }
-
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         NettyClient.getInstance().setConnectStatus(false);

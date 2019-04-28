@@ -1,5 +1,7 @@
 package com.leo.robot.netty;
 
+import android.util.Log;
+
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -12,6 +14,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 
 
 public class MyDecoder extends ByteToMessageDecoder {
+    private static final String TAG = "MyDecoder";
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
 //创建字节数组,buffer.readableBytes可读字节长度
@@ -22,7 +25,7 @@ public class MyDecoder extends ByteToMessageDecoder {
 
 //        String s = ConvertCode.receiveHexToString(b);
         String str = new String(b);
-//
+        Log.e(TAG, "decode: " + str);
         System.out.println(str);
 
         out.add(str);

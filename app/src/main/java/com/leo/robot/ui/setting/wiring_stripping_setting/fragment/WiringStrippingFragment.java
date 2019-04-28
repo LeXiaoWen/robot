@@ -9,10 +9,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.leo.robot.R;
-import com.leo.robot.netty.NettyClient;
+import com.leo.robot.constant.RobotInit;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
+import com.leo.robot.utils.NettyManager;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 import cree.mvp.util.ui.ToastUtils;
@@ -105,25 +106,25 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_init:
-                NettyClient.getInstance().sendMsg(CommandUtils.getStrippingInit());
+                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingInit());
                 break;
             case R.id.btn_ready:
-                NettyClient.getInstance().sendMsg(CommandUtils.getStrippingToolReady());
+                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingToolReady());
                 break;
             case R.id.btn_clamping:
-                NettyClient.getInstance().sendMsg(CommandUtils.getStrippingMainLineClamping());
+                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingMainLineClamping());
                 break;
             case R.id.btn_fixture_close:
-                NettyClient.getInstance().sendMsg(CommandUtils.getStrippingClampClosure());
+                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingClampClosure());
                 break;
             case R.id.btn_peeling:
-                NettyClient.getInstance().sendMsg(CommandUtils.getStrippingRotaryPeeling());
+                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingRotaryPeeling());
                 break;
             case R.id.btn_cut_off:
-                NettyClient.getInstance().sendMsg(CommandUtils.getStrippingCutOff());
+                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingCutOff());
                 break;
             case R.id.btn_unlock:
-                NettyClient.getInstance().sendMsg(CommandUtils.getStrippingUnlock());
+                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingUnlock());
                 break;
         }
     }

@@ -3,6 +3,7 @@ package com.leo.robot.utils;
 import com.google.gson.Gson;
 import com.leo.robot.bean.AllMsg;
 import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.bean.TestBean;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.PushMsgCode;
@@ -11,7 +12,6 @@ import com.leo.robot.netty.NettyClient;
 
 import cree.mvp.util.bus.BusUtils;
 import cree.mvp.util.data.SPUtils;
-import cree.mvp.util.ui.ToastUtils;
 
 /**
  * 处理服务器推送消息
@@ -70,6 +70,10 @@ public class ResultUtils {
      */
 
     private static void masterControlpushMsg(String msg) {
+        TestBean testBean = new TestBean();
+        testBean.setMsg("接收到主控服务器发送的消息       ："+msg);
+        BusUtils.postMessage(testBean);
+
         AllMsg allMsg = new AllMsg();
         String s = msg.substring(2, 4);
         if (PushMsgCode.WIRE_STRIPPING.equals(s)) {//剥线
@@ -260,12 +264,12 @@ public class ResultUtils {
             String s = mGson.toJson(CommandUtils.getMasterControlBean());
             NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
             client.sendMsgTest(s);
-            ToastUtils.showShortToast("主控服务器连接成功");
+//            ToastUtils.showShortToast("主控服务器连接成功");
         }else if (RobotInit.VISION_NETTY.equals(type)){//视觉服务器连接成功
             String s = mGson.toJson(CommandUtils.getVisionBean());
             NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.VISION_NETTY);
             client.sendMsgTest(s);
-            ToastUtils.showShortToast("视觉服务器连接成功");
+//            ToastUtils.showShortToast("视觉服务器连接成功");
         }
     }
 
@@ -277,9 +281,17 @@ public class ResultUtils {
     */
     public static void onConnectErro(String type) {
         if (RobotInit.MASTER_CONTROL_NETTY.equals(type)){//主控服务器连接失败
-            ToastUtils.showShortToast("主控服务器连接失败");
+            TestBean testBean = new TestBean();
+            testBean.setMsg("主控服务器连接失败  ");
+            BusUtils.postMessage(testBean);
+
+//            ToastUtils.showShortToast("主控服务器连接失败");
         }else if (RobotInit.VISION_NETTY.equals(type)){//视觉服务器连接失败
-            ToastUtils.showShortToast("视觉服务器连接失败");
+//            ToastUtils.showShortToast("视觉服务器连接失败");
+
+            TestBean testBean = new TestBean();
+            testBean.setMsg("视觉服务器连接失败  ");
+            BusUtils.postMessage(testBean);
         }
     }
 
@@ -304,11 +316,17 @@ public class ResultUtils {
     *created at 2019/4/27 10:18 PM
     */
     private static void onVisionMsg(String msg) {
+        TestBean testBean = new TestBean();
+        testBean.setMsg("接收到视觉服务器发送的消息       ："+msg);
+        BusUtils.postMessage(testBean);
+
         VisionMsg visionMsg = new VisionMsg();
         visionMsg.setMsg(msg);
         BusUtils.postMessage(visionMsg);
 //        ToastUtils.showShortToast("视觉服务器消息： " + msg);
     }
+
+
 
 
 }
