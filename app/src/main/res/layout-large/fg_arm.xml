@@ -1,294 +1,529 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:weightSum="3"
+    android:layout_marginTop="@dimen/dp_32"
+    android:layout_marginBottom="14dp"
     tools:ignore="MissingDefaultResource">
 
-    <RelativeLayout
-        android:layout_marginTop="@dimen/dp_40"
-        android:layout_marginBottom="@dimen/dp_80"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_weight="2"
-        android:layout_width="0dp"
-        android:layout_height="match_parent">
-        <com.leo.robot.utils.MultiSampleVideo
-            android:layout_centerInParent="true"
-            android:id="@+id/player"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginTop="@dimen/dp_10"
-            android:background="@color/cmvp_white"
-            android:padding="@dimen/dp_6"
-            android:text="机械臂三维仿真"
-            android:textColor="@color/cmvp_black"
-            android:textSize="@dimen/sp_8"
-            android:textStyle="bold"/>
-    </RelativeLayout>
+
+    <include layout="@layout/fg_video_item"/>
 
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_20"
-        android:layout_marginRight="@dimen/dp_20"
-        android:layout_marginBottom="@dimen/dp_60"
-        android:layout_weight="1"
+
+    <!--关节温度-->
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:layout_width="243dp"
+        android:layout_height="138dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="@dimen/dp_15"
         android:orientation="vertical">
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="128dp"
+            android:background="@drawable/shap_bg"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_15"
+                android:text="关节温度"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_12"
+                android:textStyle="bold"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="@dimen/dp_20"
-                android:gravity="center_vertical"
+                android:layout_marginRight="56dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="手腕1:"
+                                android:textColor="#493E39"
+                                android:textSize="@dimen/sp_10"/>
+
+                            <TextView
+                                android:id="@+id/tv1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_2"
+                                android:text="35.2℃"
+                                android:textColor="#493E39"
+                                android:textSize="@dimen/sp_10"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="肘部"
+                                android:textColor="#493E39"
+                                android:textSize="@dimen/sp_10"/>
+
+                            <TextView
+                                android:id="@+id/tv2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_2"
+                                android:text="35.2℃"
+                                android:textColor="#493E39"
+                                android:textSize="@dimen/sp_10"/>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="手腕2:"
+                                android:textColor="#493E39"
+                                android:textSize="@dimen/sp_10"/>
+
+                            <TextView
+                                android:id="@+id/tv3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_2"
+                                android:text="35.2℃"
+                                android:textColor="#493E39"
+                                android:textSize="@dimen/sp_10"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="肩部:"
+                                android:textColor="#493E39"
+                                android:textSize="@dimen/sp_10"/>
+
+                            <TextView
+                                android:id="@+id/tv4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_2"
+                                android:text="35.2℃"
+                                android:textColor="#493E39"
+                                android:textSize="@dimen/sp_10"/>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="手腕3:"
+                                android:textColor="#493E39"
+                                android:textSize="@dimen/sp_10"/>
+
+                            <TextView
+                                android:id="@+id/tv5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_2"
+                                android:text="35.2℃"
+                                android:textColor="#493E39"
+                                android:textSize="@dimen/sp_10"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="基座:"
+                                android:textColor="#493E39"
+                                android:textSize="@dimen/sp_10"/>
+
+                            <TextView
+                                android:id="@+id/tv6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_2"
+                                android:text="35.2℃"
+                                android:textColor="#493E39"
+                                android:textSize="@dimen/sp_10"/>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--关节姿态-->
+
+    <LinearLayout
+        android:layout_width="243dp"
+        android:layout_height="278dp"
+        android:layout_below="@id/ll1"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="@dimen/dp_15"
+        android:background="@drawable/shap_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="15dp"
+            android:text="关节姿态"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_12"
+            android:textStyle="bold"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="7dp"
+            android:orientation="vertical">
+
+            <!--手腕1-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="@dimen/dp_60"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:text="手腕1:"
-                    android:textColor="@color/cmvp_black"/>
+                    android:textColor="#493E39"
+                    android:textSize="@dimen/sp_10"/>
 
                 <ImageButton
-                    android:id="@+id/ibtn_wrist1_dec"
+                    android:id="@+id/iv1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_12"
-                    android:src="@drawable/turn_left"/>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="14dp"
+                    android:src="@drawable/arm_left"/>
 
                 <TextView
-                    android:layout_width="@dimen/dp_80"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_20"
-                    android:layout_marginRight="@dimen/dp_20"
-                    android:background="@color/cmvp_gray"/>
+                    android:layout_gravity="center"
+                    android:id="@+id/tv_arm1"
+                    android:layout_width="55dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="@drawable/shap_arm"
+                    android:gravity="center"
+                    android:text="40°"/>
 
                 <ImageButton
-                    android:id="@+id/ibtn_wrist1_add"
+                    android:id="@+id/iv2"
                     android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/turn_right"/>
-
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/arm_right"/>
             </LinearLayout>
 
+            <!--手腕2-->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_20"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="@dimen/dp_60"
-                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="手腕2:"
-                    android:textColor="@color/cmvp_black"/>
+                    android:textColor="#493E39"
+                    android:textSize="@dimen/sp_10"/>
 
                 <ImageButton
-                    android:id="@+id/ibtn_wrist2_dec"
+                    android:id="@+id/iv3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_12"
-                    android:src="@drawable/turn_left"/>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="14dp"
+                    android:src="@drawable/arm_left"/>
 
                 <TextView
-                    android:layout_width="@dimen/dp_80"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_20"
-                    android:layout_marginRight="@dimen/dp_20"
-                    android:background="@color/cmvp_gray"/>
+                    android:layout_gravity="center"
+                    android:id="@+id/tv_arm2"
+                    android:layout_width="55dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="@drawable/shap_arm"
+                    android:gravity="center"
+                    android:text="40°"/>
 
                 <ImageButton
-                    android:id="@+id/ibtn_wrist2_add"
+                    android:id="@+id/iv4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-                    android:src="@drawable/turn_right"/>
-
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/arm_right"/>
             </LinearLayout>
 
+            <!--手腕3-->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_20"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="@dimen/dp_60"
-                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="手腕3:"
-                    android:textColor="@color/cmvp_black"/>
+                    android:textColor="#493E39"
+                    android:textSize="@dimen/sp_10"/>
 
                 <ImageButton
-                    android:id="@+id/ibtn_wrist3_dec"
+                    android:id="@+id/iv5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_12"
-                    android:src="@drawable/turn_left"/>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="14dp"
+                    android:src="@drawable/arm_left"/>
 
                 <TextView
-                    android:layout_width="@dimen/dp_80"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_20"
-                    android:layout_marginRight="@dimen/dp_20"
-                    android:background="@color/cmvp_gray"/>
+                    android:layout_gravity="center"
+                    android:id="@+id/tv_arm3"
+                    android:layout_width="55dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="@drawable/shap_arm"
+                    android:gravity="center"
+                    android:text="40°"/>
 
                 <ImageButton
-                    android:id="@+id/ibtn_wrist3_add"
+                    android:id="@+id/iv6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-                    android:src="@drawable/turn_right"/>
-
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/arm_right"/>
             </LinearLayout>
 
+            <!--肘部-->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_20"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="@dimen/dp_60"
-                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="肘部:"
-                    android:textColor="@color/cmvp_black"/>
+                    android:textColor="#493E39"
+                    android:textSize="@dimen/sp_10"/>
 
                 <ImageButton
-                    android:id="@+id/ibtn_elbow_dec"
+                    android:id="@+id/iv7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_12"
-                    android:src="@drawable/turn_left"/>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="14dp"
+                    android:src="@drawable/arm_left"/>
 
                 <TextView
-                    android:layout_width="@dimen/dp_80"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_20"
-                    android:layout_marginRight="@dimen/dp_20"
-                    android:background="@color/cmvp_gray"/>
+                    android:layout_gravity="center"
+                    android:id="@+id/tv_arm4"
+                    android:layout_width="55dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="@drawable/shap_arm"
+                    android:gravity="center"
+                    android:text="40°"/>
 
                 <ImageButton
-                    android:id="@+id/ibtn_elbow_add"
+                    android:id="@+id/iv8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/turn_right"/>
-
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/arm_right"/>
             </LinearLayout>
 
+            <!--肩部-->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_20"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="@dimen/dp_60"
-                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="肩部:"
-                    android:textColor="@color/cmvp_black"/>
+                    android:textColor="#493E39"
+                    android:textSize="@dimen/sp_10"/>
 
                 <ImageButton
-                    android:id="@+id/ibtn_shoulder_dec"
+
+                    android:id="@+id/iv9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_12"
-                    android:src="@drawable/turn_left"/>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="14dp"
+                    android:src="@drawable/arm_left"/>
 
                 <TextView
-                    android:layout_width="@dimen/dp_80"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_20"
-                    android:layout_marginRight="@dimen/dp_20"
-                    android:background="@color/cmvp_gray"/>
+                    android:layout_gravity="center"
+                    android:id="@+id/tv_arm5"
+                    android:layout_width="55dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="@drawable/shap_arm"
+                    android:gravity="center"
+                    android:text="40°"/>
 
                 <ImageButton
-                    android:id="@+id/ibtn_shoulder_add"
+                    android:id="@+id/iv10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/turn_right"/>
-
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/arm_right"/>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_20"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="@dimen/dp_60"
-                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="基座:"
-                    android:textColor="@color/cmvp_black"/>
-
-                <ImageButton
-                    android:id="@+id/ibtn_pedestal_dec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_12"
-                    android:src="@drawable/turn_left"/>
+                    android:text="基座:"
+                    android:textColor="#493E39"
+                    android:textSize="@dimen/sp_10"/>
+
+                <ImageButton
+
+                    android:id="@+id/iv11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="14dp"
+                    android:src="@drawable/arm_left"/>
 
                 <TextView
-                    android:layout_width="@dimen/dp_80"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_20"
-                    android:layout_marginRight="@dimen/dp_20"
-                    android:background="@color/cmvp_gray"/>
+                    android:layout_gravity="center"
+                    android:id="@+id/tv_arm6"
+                    android:layout_width="55dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="@drawable/shap_arm"
+                    android:gravity="center"
+                    android:text="40°"/>
 
                 <ImageButton
-                    android:id="@+id/ibtn_pedestal_add"
+                    android:id="@+id/iv12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/turn_right"/>
-
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/arm_right"/>
             </LinearLayout>
+
         </LinearLayout>
 
 
-        <Button
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:text="返回"/>
-    </RelativeLayout>
+    </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

@@ -6,14 +6,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
+import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.utils.CommandUtils;
-import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.leo.robot.utils.NettyManager;
 
 /**
  * 末端位姿设置
@@ -30,135 +34,324 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
         this.TAG = TAG;
     }
 
+    private AgentWeb mAgentWebMain;
+    private AgentWeb mAgentWeb1;
+    private AgentWeb mAgentWeb4;
+    private AgentWeb mAgentWeb3;
+    private AgentWeb mAgentWeb2;
+    private RelativeLayout mRlMain;
+    private RelativeLayout mRl1;
+    private RelativeLayout mRl2;
+    private RelativeLayout mRl3;
+    private RelativeLayout mRl4;
+
+    private NettyClient mClient;
+    private ImageView mIv1;
+    private ImageView mIv2;
+    private ImageView mIv3;
+    private ImageView mIv4;
+    private ImageView mIv5;
+    private ImageView mIv6;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fg_extremity, container, false);
+        return inflater.inflate(R.layout.fg_extremity, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         initView(view);
-        return view;
+
+        initMainVideo();
+        initVideo1();
+        initVideo2();
+        initVideo3();
+        initVideo4();
     }
 
     private void initView(View view) {
-        mVideoPlayer = (MultiSampleVideo) view.findViewById(R.id.player);
-        view.findViewById(R.id.btn_rotate_left).setOnClickListener(this);
-        view.findViewById(R.id.btn_rotate_right).setOnClickListener(this);
-        view.findViewById(R.id.btn_left).setOnClickListener(this);
-        view.findViewById(R.id.btn_right).setOnClickListener(this);
-        view.findViewById(R.id.btn_up).setOnClickListener(this);
-        view.findViewById(R.id.btn_down).setOnClickListener(this);
-        initVideo();
+        mRlMain = (RelativeLayout) view.findViewById(R.id.rl_main);
+        mRl1 = (RelativeLayout) view.findViewById(R.id.rl1);
+        mRl2 = (RelativeLayout) view.findViewById(R.id.rl2);
+        mRl3 = (RelativeLayout) view.findViewById(R.id.rl3);
+        mRl4 = (RelativeLayout) view.findViewById(R.id.rl4);
+
+        mIv1 = (ImageView) view.findViewById(R.id.iv1);
+        mIv2 = (ImageView) view.findViewById(R.id.iv2);
+        mIv3 = (ImageView) view.findViewById(R.id.iv3);
+        mIv4 = (ImageView) view.findViewById(R.id.iv4);
+        mIv5 = (ImageView) view.findViewById(R.id.iv5);
+        mIv6 = (ImageView) view.findViewById(R.id.iv6);
+        mIv1.setOnClickListener(this);
+        mIv2.setOnClickListener(this);
+        mIv3.setOnClickListener(this);
+        mIv4.setOnClickListener(this);
+        mIv5.setOnClickListener(this);
+        mIv6.setOnClickListener(this);
+        mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
+
 
     }
 
-    private void initVideo() {
-        mVideoPlayer.setUp(UrlConstant.ARM_CAMERA_UREL, true, "测试视频");
-        mVideoPlayer.startPlayLogic();
+    /**
+     * 位姿仿真画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:27 PM
+     */
+    private void initVideo4() {
+        mAgentWeb4 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl4, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWeb4.getWebCreator().getWebView());
     }
+
+    /**
+     * 机械臂画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initVideo3() {
+        mAgentWeb3 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl3, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWeb3.getWebCreator().getWebView());
+    }
+
+    /**
+     * 引流线画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initVideo2() {
+        mAgentWeb2 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl2, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWeb2.getWebCreator().getWebView());
+    }
+
+    /**
+     * 行线画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initVideo1() {
+        mAgentWeb1 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl1, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWeb1.getWebCreator().getWebView());
+    }
+
+
+    /**
+     * 云台画面
+     *
+     * @param
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initMainVideo() {
+        mAgentWebMain = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRlMain, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWebMain.getWebCreator().getWebView());
+
+
+        //缩放
+//        agentWeb.getAgentWebSettings().getWebSettings().setUseWideViewPort(true);
+//        agentWeb.getAgentWebSettings().getWebSettings().setLoadWithOverviewMode(true);
+//        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
+
+    }
+
+    /**
+     * 设置webView自适应屏幕，取消滚动条
+     *
+     * @author Leo
+     * created at 2019/4/27 5:19 PM
+     */
+    private void initWebSetting(WebView view) {
+        //取消滚动条
+        view.setHorizontalScrollBarEnabled(false);
+        view.setVerticalScrollBarEnabled(false);
+        view.getSettings().setUseWideViewPort(true);
+        view.getSettings().setLoadWithOverviewMode(true);
+        //缩放
+//        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
+    }
+
+    private void webViewOnPause() {
+        mAgentWebMain.getWebLifeCycle().onPause();
+        mAgentWeb1.getWebLifeCycle().onPause();
+        mAgentWeb2.getWebLifeCycle().onPause();
+        mAgentWeb3.getWebLifeCycle().onPause();
+        mAgentWeb4.getWebLifeCycle().onPause();
+
+    }
+
+    private void webViewOnResume() {
+        mAgentWebMain.getWebLifeCycle().onResume();
+        mAgentWeb1.getWebLifeCycle().onResume();
+        mAgentWeb2.getWebLifeCycle().onResume();
+        mAgentWeb3.getWebLifeCycle().onResume();
+        mAgentWeb4.getWebLifeCycle().onResume();
+    }
+
+    private void webViewOnDestroy() {
+        mAgentWebMain.getWebLifeCycle().onDestroy();
+        mAgentWeb1.getWebLifeCycle().onDestroy();
+        mAgentWeb2.getWebLifeCycle().onDestroy();
+        mAgentWeb3.getWebLifeCycle().onDestroy();
+        mAgentWeb4.getWebLifeCycle().onDestroy();
+    }
+
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) {
-            //Fragment隐藏时调用
-            GSYVideoManager.onPause();
-            CustomManager.clearAllVideo();
 
         } else {
-            //Fragment显示时调用
-            GSYVideoManager.onResume();
         }
     }
 
 
     @Override
     public void onPause() {
+        webViewOnPause();
         super.onPause();
-        CustomManager.onPauseAll();
         isPause = true;
     }
 
     @Override
     public void onResume() {
+        webViewOnResume();
         super.onResume();
-        CustomManager.onResumeAll();
         isPause = false;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        CustomManager.clearAllVideo();
+    }
+
+    @Override
+    public void onDestroyView() {
+        webViewOnDestroy();
+        super.onDestroyView();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_rotate_left:
-                rotateLeft();
-                break;
-            case R.id.btn_rotate_right:
-                rotateRight();
-                break;
-            case R.id.btn_left:
-                left();
-                break;
-            case R.id.btn_right:
-                right();
-                break;
-            case R.id.btn_up:
+            case R.id.iv1:
                 up();
                 break;
-            case R.id.btn_down:
+            case R.id.iv2:
                 down();
+                break;
+            case R.id.iv3:
+                left();
+                break;
+            case R.id.iv4:
+                right();
+                break;
+            case R.id.iv5:
+                forward();
+                break;
+            case R.id.iv6:
+                backward();
                 break;
         }
     }
 
     private void down() {
-        if (TAG == 1) {//主臂
-            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmPosDown());
-        } else {//从臂
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmPosDown());
+        if (mClient != null) {
+            if (TAG == 1) {//主臂
+                mClient.sendMsgTest(CommandUtils.getMainArmDisDown());
+            } else {//从臂
+                mClient.sendMsgTest(CommandUtils.getFlowArmDisDown());
+            }
         }
     }
 
     private void up() {
-        if (TAG == 1) {//主臂
-            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmPosUp());
-        } else {//从臂
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmPosUp());
+        if (mClient != null) {
+            if (TAG == 1) {//主臂
+                mClient.sendMsgTest(CommandUtils.getMainArmDisUp());
+            } else {//从臂
+                mClient.sendMsgTest(CommandUtils.getFlowArmDisUp());
+            }
         }
+
     }
 
     private void right() {
-        if (TAG == 1) {//主臂
-            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmPosRight());
-        } else {//从臂
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmPosRight());
+        if (mClient != null) {
+            if (TAG == 1) {//主臂
+                mClient.sendMsgTest(CommandUtils.getMainArmDisRight());
+            } else {//从臂
+                mClient.sendMsgTest(CommandUtils.getFlowArmDisRight());
+            }
         }
+
     }
 
     private void left() {
-        if (TAG == 1) {//主臂
-            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmPosLeft());
-        } else {//从臂
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmPosLeft());
+        if (mClient != null) {
+            if (TAG == 1) {//主臂
+                mClient.sendMsgTest(CommandUtils.getMainArmDisLeft());
+            } else {//从臂
+                mClient.sendMsgTest(CommandUtils.getFlowArmDisLeft());
+            }
         }
+
     }
 
-    private void rotateRight() {
-        if (TAG == 1) {//主臂
-            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmPosRotateRight());
-        } else {//从臂
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmPosRotateRight());
+    private void backward() {
+        if (mClient != null) {
+            if (TAG == 1) {//主臂
+                mClient.sendMsgTest(CommandUtils.getMainArmDisRotateRight());
+            } else {//从臂
+                mClient.sendMsgTest(CommandUtils.getFlowArmDisRotateRight());
+            }
         }
+
     }
 
-    private void rotateLeft() {
-        if (TAG == 1) {//主臂
-            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmPosRotateLeft());
-        } else {//从臂
-            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmPosRotateLeft());
+    private void forward() {
+        if (mClient != null) {
+            if (TAG == 1) {//主臂
+                mClient.sendMsgTest(CommandUtils.getMainArmDisRotateLeft());
+            } else {//从臂
+                mClient.sendMsgTest(CommandUtils.getFlowArmDisRotateLeft());
+            }
         }
+
     }
 }

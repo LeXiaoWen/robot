@@ -1,7 +1,6 @@
 package com.leo.robot.ui.main;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +13,6 @@ import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.AllMsg;
 import com.leo.robot.bean.ErroMsg;
-import com.leo.robot.broadcast.BatteryReceiver;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 
@@ -68,7 +66,7 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         ButterKnife.bind(this);
         //实时更新时间（1秒更新一次）
         mPresenter.updateTime(mTvDate);
-        initBroadcast();
+        initBroadcast(mTvGroundPower);
     }
 
     @Override
@@ -77,11 +75,6 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         utils.putString(RobotInit.PUSH_MSG, message);
     }
 
-    private void initBroadcast() {
-        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        BatteryReceiver receiver = new BatteryReceiver(mTvGroundPower);
-        registerReceiver(receiver, filter);
-    }
 
 
     @Override

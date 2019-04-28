@@ -1,5 +1,9 @@
 package com.leo.robot.ui.setting.wiring_stripping_setting;
 
+import android.widget.TextView;
+
+import com.leo.robot.utils.TimeThread;
+
 import javax.inject.Inject;
 
 import cree.mvp.base.presenter.BasePresenter;
@@ -12,5 +16,12 @@ import cree.mvp.base.presenter.BasePresenter;
 public class WiringStrippingSettingActivityPresenter extends BasePresenter<WiringStrippingSettingActivity,WiringStrippingSettingActivityModel> {
     @Inject
     public WiringStrippingSettingActivityPresenter() {
+    }
+
+
+
+    public void updateTime(TextView view) {
+        TimeThread timeThread = new TimeThread(view);
+        timeThread.start();
     }
 }

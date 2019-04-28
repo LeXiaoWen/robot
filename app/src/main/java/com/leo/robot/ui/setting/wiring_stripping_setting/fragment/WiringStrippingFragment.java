@@ -6,17 +6,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.netty.NettyClient;
 import com.leo.robot.utils.CommandUtils;
-import com.leo.robot.utils.CustomManager;
 import com.leo.robot.utils.MultiSampleVideo;
 import com.leo.robot.utils.NettyManager;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
-
-import cree.mvp.util.ui.ToastUtils;
 
 /**
  * 剥线设置
@@ -26,105 +27,323 @@ import cree.mvp.util.ui.ToastUtils;
 
 public class WiringStrippingFragment extends Fragment implements View.OnClickListener {
 
+
     private MultiSampleVideo mVideoPlayer;
     private boolean isPause;
 
+    private AgentWeb mAgentWebMain;
+    private AgentWeb mAgentWeb1;
+    private AgentWeb mAgentWeb4;
+    private AgentWeb mAgentWeb3;
+    private AgentWeb mAgentWeb2;
+    private RelativeLayout mRlMain;
+    private RelativeLayout mRl1;
+    private RelativeLayout mRl2;
+    private RelativeLayout mRl3;
+    private RelativeLayout mRl4;
+    private ImageView mIv1;
+    private ImageView mIv2;
+    private ImageView mIv3;
+    private ImageView mIv4;
+    private ImageView mIv5;
+    private ImageView mIv6;
+    private ImageView mIv7;
+    private ImageView mIv8;
+    private NettyClient mClient;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fg_wiring_stripping, container, false);
+        return inflater.inflate(R.layout.fg_wiring_stripping, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         initView(view);
-        return view;
+
+        initMainVideo();
+        initVideo1();
+        initVideo2();
+        initVideo3();
+        initVideo4();
+        mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
     }
 
     private void initView(View view) {
-        mVideoPlayer = (MultiSampleVideo) view.findViewById(R.id.player);
-        Button btnInit = (Button) view.findViewById(R.id.btn_init);
-        Button btnReady = (Button) view.findViewById(R.id.btn_ready);
-        Button btnClamping = (Button) view.findViewById(R.id.btn_clamping);
-        Button btnFixtureClose = (Button) view.findViewById(R.id.btn_fixture_close);
-        Button btnPeeling = (Button) view.findViewById(R.id.btn_peeling);
-        Button btnCutOff = (Button) view.findViewById(R.id.btn_cut_off);
-        Button btnUnlock = (Button) view.findViewById(R.id.btn_unlock);
 
-        btnInit.setOnClickListener(this);
-        btnReady.setOnClickListener(this);
-        btnClamping.setOnClickListener(this);
-        btnFixtureClose.setOnClickListener(this);
-        btnPeeling.setOnClickListener(this);
-        btnCutOff.setOnClickListener(this);
-        btnUnlock.setOnClickListener(this);
+        mRlMain = (RelativeLayout) view.findViewById(R.id.rl_main);
+        mRl1 = (RelativeLayout) view.findViewById(R.id.rl1);
+        mRl2 = (RelativeLayout) view.findViewById(R.id.rl2);
+        mRl3 = (RelativeLayout) view.findViewById(R.id.rl3);
+        mRl4 = (RelativeLayout) view.findViewById(R.id.rl4);
 
-        initVideo();
+        mIv1 = (ImageView) view.findViewById(R.id.iv1);
+        mIv2 = (ImageView) view.findViewById(R.id.iv2);
+        mIv3 = (ImageView) view.findViewById(R.id.iv3);
+        mIv4 = (ImageView) view.findViewById(R.id.iv4);
+        mIv5 = (ImageView) view.findViewById(R.id.iv5);
+        mIv6 = (ImageView) view.findViewById(R.id.iv6);
+        mIv7 = (ImageView) view.findViewById(R.id.iv7);
+        mIv8 = (ImageView) view.findViewById(R.id.iv8);
+
+        mIv1.setOnClickListener(this);
+        mIv2.setOnClickListener(this);
+        mIv3.setOnClickListener(this);
+        mIv4.setOnClickListener(this);
+        mIv5.setOnClickListener(this);
+        mIv6.setOnClickListener(this);
+        mIv7.setOnClickListener(this);
+        mIv8.setOnClickListener(this);
+
 
     }
 
-    private void initVideo() {
-        mVideoPlayer.setUp("", true, "测试视频");
-        mVideoPlayer.startPlayLogic();
-    }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) {
             //Fragment隐藏时调用
-            ToastUtils.showShortToast("隐藏 剪线设置");
-            GSYVideoManager.onPause();
-            CustomManager.clearAllVideo();
+
 
         } else {
             //Fragment显示时调用
-            GSYVideoManager.onResume();
-            ToastUtils.showShortToast("显示 剪线设置");
+
         }
     }
 
 
     @Override
     public void onPause() {
+        webViewOnPause();
         super.onPause();
-        CustomManager.onPauseAll();
         isPause = true;
     }
 
     @Override
     public void onResume() {
+        webViewOnResume();
         super.onResume();
-        CustomManager.onResumeAll();
         isPause = false;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        CustomManager.clearAllVideo();
+    }
+
+    @Override
+    public void onDestroyView() {
+        webViewOnDestroy();
+        super.onDestroyView();
+    }
+
+
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+//            case R.id.btn_init:
+//                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingInit());
+//                break;
+//            case R.id.btn_ready:
+//                break;
+//            case R.id.btn_clamping:
+//                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingMainLineClamping());
+//                break;
+//            case R.id.btn_fixture_close:
+//                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingClampClosure());
+//                break;
+//            case R.id.btn_peeling:
+//                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingRotaryPeeling());
+//                break;
+//            case R.id.btn_cut_off:
+//                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingCutOff());
+//                break;
+//            case R.id.btn_unlock:
+//                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingUnlock());
+//                break;
+//        }
+//    }
+
+
+    /**
+     * 位姿仿真画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:27 PM
+     */
+    private void initVideo4() {
+        mAgentWeb4 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl4, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWeb4.getWebCreator().getWebView());
+    }
+
+    /**
+     * 机械臂画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initVideo3() {
+        mAgentWeb3 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl3, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWeb3.getWebCreator().getWebView());
+    }
+
+    /**
+     * 引流线画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initVideo2() {
+        mAgentWeb2 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl2, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWeb2.getWebCreator().getWebView());
+    }
+
+    /**
+     * 行线画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initVideo1() {
+        mAgentWeb1 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl1, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWeb1.getWebCreator().getWebView());
+    }
+
+
+    /**
+     * 云台画面
+     *
+     * @param
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initMainVideo() {
+        mAgentWebMain = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRlMain, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWebMain.getWebCreator().getWebView());
+
+
+        //缩放
+//        agentWeb.getAgentWebSettings().getWebSettings().setUseWideViewPort(true);
+//        agentWeb.getAgentWebSettings().getWebSettings().setLoadWithOverviewMode(true);
+//        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
+
+    }
+
+    /**
+     * 设置webView自适应屏幕，取消滚动条
+     *
+     * @author Leo
+     * created at 2019/4/27 5:19 PM
+     */
+    private void initWebSetting(WebView view) {
+        //取消滚动条
+        view.setHorizontalScrollBarEnabled(false);
+        view.setVerticalScrollBarEnabled(false);
+        view.getSettings().setUseWideViewPort(true);
+        view.getSettings().setLoadWithOverviewMode(true);
+        //缩放
+//        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
+    }
+
+    private void webViewOnPause() {
+        mAgentWebMain.getWebLifeCycle().onPause();
+        mAgentWeb1.getWebLifeCycle().onPause();
+        mAgentWeb2.getWebLifeCycle().onPause();
+        mAgentWeb3.getWebLifeCycle().onPause();
+        mAgentWeb4.getWebLifeCycle().onPause();
+
+    }
+
+    private void webViewOnResume() {
+        mAgentWebMain.getWebLifeCycle().onResume();
+        mAgentWeb1.getWebLifeCycle().onResume();
+        mAgentWeb2.getWebLifeCycle().onResume();
+        mAgentWeb3.getWebLifeCycle().onResume();
+        mAgentWeb4.getWebLifeCycle().onResume();
+    }
+
+    private void webViewOnDestroy() {
+        mAgentWebMain.getWebLifeCycle().onDestroy();
+        mAgentWeb1.getWebLifeCycle().onDestroy();
+        mAgentWeb2.getWebLifeCycle().onDestroy();
+        mAgentWeb3.getWebLifeCycle().onDestroy();
+        mAgentWeb4.getWebLifeCycle().onDestroy();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_init:
-                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingInit());
+            case R.id.iv1:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getStrippingInit());
+                }
                 break;
-            case R.id.btn_ready:
-                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingToolReady());
+            case R.id.iv2:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getStrippingMainLineClamping());
+                }
                 break;
-            case R.id.btn_clamping:
-                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingMainLineClamping());
+            case R.id.iv3:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getStrippingClampClosure());
+                }
                 break;
-            case R.id.btn_fixture_close:
-                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingClampClosure());
+            case R.id.iv4:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getStrippingRotaryPeeling());
+                }
                 break;
-            case R.id.btn_peeling:
-                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingRotaryPeeling());
+            case R.id.iv5:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getStrippingCutOff());
+                }
                 break;
-            case R.id.btn_cut_off:
-                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingCutOff());
+            case R.id.iv6:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getStrippingUnlock());
+                }
                 break;
-            case R.id.btn_unlock:
-                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingUnlock());
+            case R.id.iv7:
+                if (mClient != null) {
+
+                }
+                break;
+            case R.id.iv8:
+                if (mClient != null) {
+
+                }
                 break;
         }
     }

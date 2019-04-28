@@ -1,136 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/dp_32"
+    android:layout_marginBottom="14dp"
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
 
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="420dp"
-        android:layout_marginLeft="@dimen/dp_80"
-        android:layout_marginTop="@dimen/dp_20"
-        android:layout_marginRight="@dimen/dp_80">
-
-        <com.leo.robot.utils.MultiSampleVideo
-            android:id="@+id/player"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginTop="@dimen/dp_10"
-            android:background="@color/cmvp_white"
-            android:padding="@dimen/dp_6"
-            android:text="机械臂USB摄像头和云台切换"
-            android:textColor="@color/cmvp_black"
-            android:textSize="@dimen/sp_8"
-            android:textStyle="bold"/>
-    </RelativeLayout>
-
+    <include layout="@layout/fg_video_item"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="251dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_40"
-        android:layout_marginTop="@dimen/dp_40"
-        android:layout_marginRight="@dimen/dp_40"
-        android:layout_marginBottom="@dimen/dp_40"
-        android:orientation="vertical"
-        >
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/iv1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="4">
+            android:layout_height="54dp"
+            android:src="@drawable/sel_stri_init"/>
 
-            <Button
-                android:id="@+id/btn_init"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="初始化动作"/>
-
-            <Button
-                android:id="@+id/btn_ready"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="剥线工具就绪"/>
-
-            <Button
-                android:id="@+id/btn_clamping"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="主线夹紧"/>
-
-            <Button
-                android:id="@+id/btn_fixture_close"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="夹具闭合"/>
-        </LinearLayout>
-
-        <LinearLayout
+        <ImageView
+            android:id="@+id/iv2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20"
-            android:weightSum="3"
-            >
+            android:layout_height="54dp"
+            android:layout_marginTop="@dimen/dp_1"
+            android:src="@drawable/sel_stri_clamping"/>
 
-            <Button
-                android:id="@+id/btn_peeling"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="旋转剥皮"/>
+        <ImageView
+            android:id="@+id/iv3"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="@dimen/dp_1"
+            android:src="@drawable/sel_stri_clamp_closed"/>
 
-            <Button
-                android:id="@+id/btn_cut_off"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="切断绝缘皮"/>
+        <ImageView
+            android:id="@+id/iv4"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="@dimen/dp_1"
+            android:src="@drawable/sel_stri_peel"/>
 
-            <Button
-                android:id="@+id/btn_unlock"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="解锁"/>
+        <ImageView
+            android:id="@+id/iv5"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="@dimen/dp_1"
+            android:src="@drawable/sel_stri_cut_off"/>
 
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/iv6"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="@dimen/dp_1"
+            android:src="@drawable/sel_stri_unclock"/>
+
+        <ImageView
+            android:id="@+id/iv7"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="@dimen/dp_1"
+            android:src="@drawable/sel_stri_state_reset"/>
+
+        <ImageView
+            android:id="@+id/iv8"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="@dimen/dp_1"
+            android:src="@drawable/sel_stri_stop"/>
+
+
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>
