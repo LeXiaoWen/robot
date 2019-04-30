@@ -14,7 +14,9 @@ import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.AllMsg;
 import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
+import com.leo.robot.ui.wiring.WiringActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -158,15 +160,15 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
                 break;
             case R.id.ibtn_wirin:
                 if (!mPresenter.isFastDoubleClick()) {
-//                    startActivity(WiringActivity.class);
-                    ToastUtils.showShortToast("接线作业！");
+                    startActivity(WiringActivity.class);
+//                    ToastUtils.showShortToast("接线作业！");
 
                 }
                 break;
             case R.id.ibtn_cut_line:
                 if (!mPresenter.isFastDoubleClick()) {
-//                    startActivity(CutLineActivity.class);
-                    ToastUtils.showShortToast("剪线作业作业！");
+                    startActivity(CutLineActivity.class);
+//                    ToastUtils.showShortToast("剪线作业作业！");
 
                 }
                 break;
