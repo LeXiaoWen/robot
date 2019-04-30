@@ -279,7 +279,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     @Override
     protected void onPause() {
-        webViewOnPause();gi
+        webViewOnPause();
         super.onPause();
         isPause = true;
     }
