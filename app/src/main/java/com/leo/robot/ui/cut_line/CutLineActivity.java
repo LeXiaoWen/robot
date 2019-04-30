@@ -79,8 +79,8 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     ImageView mIvEnd;
     @BindView(R.id.rl_main)
     RelativeLayout mRlMain;
-    @BindView(R.id.rl_action)
-    RecyclerView mRlAction;
+    @BindView(R.id.rl_status)
+    RecyclerView mRlStatus;
     @BindView(R.id.rl_1)
     RelativeLayout mRl1;
     @BindView(R.id.rl_2)
@@ -103,15 +103,28 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     ImageView mIvSetting;
     @BindView(R.id.iv_back)
     ImageView mIvBack;
+    @BindView(R.id.tv_robot_status)
+    TextView mTvRobotStatus;
+    @BindView(R.id.tv_log)
+    TextView mTvLog;
+    @BindView(R.id.rl_log)
+    RecyclerView mRlLog;
     private boolean isShown = false;
 
-    private List<String> mData;
-    private ActionAdapter mActionAdapter;
+
     private AgentWeb mAgentWebMain;
     private AgentWeb mAgentWeb1;
     private AgentWeb mAgentWeb4;
     private AgentWeb mAgentWeb3;
     private AgentWeb mAgentWeb2;
+
+    private List<String> mLogData;
+    //操作日志
+    private ActionAdapter mLogAdapter;
+    private List<String> mStatusData;
+    //机器人状态
+    private ActionAdapter mStatusAdapter;
+
     @Override
     protected void notifyData(String message) {
         SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
@@ -250,12 +263,18 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     }
 
     private void initAdapter() {
-        mData = new ArrayList<>();
-        mActionAdapter = new ActionAdapter(this, mData);
-        mRlAction.setLayoutManager(new LinearLayoutManager(this));
-        mRlAction.setAdapter(mActionAdapter);
-    }
+        //机器人状态
+        mStatusData = new ArrayList<>();
+        mStatusAdapter = new ActionAdapter(this, mStatusData);
+        mRlStatus.setLayoutManager(new LinearLayoutManager(this));
+        mRlStatus.setAdapter(mStatusAdapter);
 
+        //操作日志
+        mLogData = new ArrayList<>();
+        mLogAdapter = new ActionAdapter(this, mLogData);
+        mRlLog.setLayoutManager(new LinearLayoutManager(this));
+        mRlLog.setAdapter(mLogAdapter);
+    }
 
 
     private void initStatus() {
@@ -330,14 +349,14 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
                 }
                 break;
             case R.id.iv_start:
-                if (!mPresenter.isFastDoubleClick()){
+                if (!mPresenter.isFastDoubleClick()) {
                     mPresenter.startButton();
                 }
                 break;
             case R.id.iv_identification:
                 break;
             case R.id.iv_setting:
-                if (!mPresenter.isFastDoubleClick()){
+                if (!mPresenter.isFastDoubleClick()) {
                     startActivity(new Intent(CutLineActivity.this, CutLineSettingActivity.class));
                 }
                 break;
@@ -355,6 +374,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         mAgentWeb4.getWebLifeCycle().onPause();
 
     }
+
     private void webViewOnResume() {
         mAgentWebMain.getWebLifeCycle().onResume();
         mAgentWeb1.getWebLifeCycle().onResume();
@@ -362,6 +382,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         mAgentWeb3.getWebLifeCycle().onResume();
         mAgentWeb4.getWebLifeCycle().onResume();
     }
+
     private void webViewOnDestroy() {
         mAgentWebMain.getWebLifeCycle().onDestroy();
         mAgentWeb1.getWebLifeCycle().onDestroy();

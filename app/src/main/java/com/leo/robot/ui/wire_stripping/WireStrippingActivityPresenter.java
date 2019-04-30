@@ -49,19 +49,19 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     public void scramButton() {
 //        if (!isScram) { //急停
 //            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmShutdown());
-//            mActivity.refreshRv("发送急停命令");
+//            mActivity.refreshStatusRv("发送急停命令");
 ////            mActivity.updateScramText("恢复急停");
 //            isScram = true;
 //        } else {//回复急停
 //            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmResume());
-//            mActivity.refreshRv("发送恢复急停命令");
+//            mActivity.refreshStatusRv("发送恢复急停命令");
 //
 ////            mActivity.updateScramText("急停");
 //            isScram = false;
 //        }
         if (isClickble) {
             NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmShutdown());
-            mActivity.refreshRv("发送急停命令");
+            mActivity.refreshLogRv("发送急停命令");
         }
 
     }
@@ -75,7 +75,7 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     public void revocerButton() {
         if (isClickble) {
             NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmRecover());
-            mActivity.refreshRv("发送一键回收命令");
+            mActivity.refreshLogRv("发送一键回收命令");
         }
 
     }
@@ -92,18 +92,18 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
             if (!isStart) { //开始
                 NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmStart());
                 isStart = true;
-                mActivity.refreshRv("发送开始命令");
+                mActivity.refreshLogRv("发送开始命令");
             } else {//停止
                 NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmStop());
                 isStart = false;
-                mActivity.refreshRv("发送停止命令");
+                mActivity.refreshLogRv("发送停止命令");
             }
         }
     }
 
     public void getPicButton() {
         if (isClickble) {
-            mActivity.refreshRv("发送识别路线命令");
+            mActivity.refreshStatusRv("发送识别路线命令");
         }
 
     }

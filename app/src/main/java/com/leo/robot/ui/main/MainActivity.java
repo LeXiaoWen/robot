@@ -91,6 +91,12 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         isShown = true;
     }
 
+    @Override
+    protected void onDestroy() {
+        onUnBindReceiver();
+        super.onDestroy();
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void acceptErroMsg(ErroMsg msg) {
         if (isShown) {

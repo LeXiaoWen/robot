@@ -52,8 +52,8 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     TextView mTvGroundPower;
     @BindView(R.id.rl_main)
     RelativeLayout mRlMain;
-    @BindView(R.id.rl_action)
-    RecyclerView mRlAction;
+    @BindView(R.id.rl_status)
+    RecyclerView mRlStatus;
     @BindView(R.id.rl_1)
     RelativeLayout mRl1;
     @BindView(R.id.rl_2)
@@ -112,10 +112,20 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     TextView mTv9;
     @BindView(R.id.iv_end)
     ImageView mIvEnd;
+    @BindView(R.id.tv_robot_status)
+    TextView mTvRobotStatus;
+    @BindView(R.id.tv_log)
+    TextView mTvLog;
+    @BindView(R.id.rl_log)
+    RecyclerView mRlLog;
     private boolean isPause;
 
-    private List<String> mData;
-    private ActionAdapter mActionAdapter;
+    private List<String> mLogData;
+    //操作日志
+    private ActionAdapter mLogAdapter;
+    private List<String> mStatusData;
+    //机器人状态
+    private ActionAdapter mStatusAdapter;
 
     private AgentWeb mAgentWebMain;
     private AgentWeb mAgentWeb1;
@@ -152,6 +162,20 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         initVideo2();
         initVideo3();
         initVideo4();
+    }
+
+    private void initAdapter() {
+        //机器人状态
+        mStatusData = new ArrayList<>();
+        mStatusAdapter = new ActionAdapter(this, mStatusData);
+        mRlStatus.setLayoutManager(new LinearLayoutManager(this));
+        mRlStatus.setAdapter(mStatusAdapter);
+
+        //操作日志
+        mLogData = new ArrayList<>();
+        mLogAdapter = new ActionAdapter(this, mLogData);
+        mRlLog.setLayoutManager(new LinearLayoutManager(this));
+        mRlLog.setAdapter(mLogAdapter);
     }
 
     /**
@@ -263,12 +287,6 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 //        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
     }
 
-    private void initAdapter() {
-        mData = new ArrayList<>();
-        mActionAdapter = new ActionAdapter(this, mData);
-        mRlAction.setLayoutManager(new LinearLayoutManager(this));
-        mRlAction.setAdapter(mActionAdapter);
-    }
 
     private void initStatus() {
         SPUtils utils = new SPUtils(RobotInit.WIRING_ACTIVITY);
@@ -358,6 +376,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         mAgentWeb4.getWebLifeCycle().onPause();
 
     }
+
     private void webViewOnResume() {
         mAgentWebMain.getWebLifeCycle().onResume();
         mAgentWeb1.getWebLifeCycle().onResume();
@@ -365,6 +384,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         mAgentWeb3.getWebLifeCycle().onResume();
         mAgentWeb4.getWebLifeCycle().onResume();
     }
+
     private void webViewOnDestroy() {
         mAgentWebMain.getWebLifeCycle().onDestroy();
         mAgentWeb1.getWebLifeCycle().onDestroy();

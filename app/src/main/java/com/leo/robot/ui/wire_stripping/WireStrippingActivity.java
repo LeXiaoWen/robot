@@ -49,8 +49,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     TextView mTvRemind;
     @BindView(R.id.iv_back)
     ImageView mIvBack;
-    @BindView(R.id.iv_test)
-    ImageView mIvTest;
+
 
     public static final String TAG = "WireStrippingActivity";
     @BindView(R.id.tv_signal)
@@ -97,8 +96,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     ImageView mIvEnd;
     @BindView(R.id.rl_main)
     RelativeLayout mRlMain;
-    @BindView(R.id.rl_action)
-    RecyclerView mRlAction;
+    @BindView(R.id.rl_status)
+    RecyclerView mRlStatus;
     @BindView(R.id.rl_1)
     RelativeLayout mRl1;
     @BindView(R.id.rl_2)
@@ -119,17 +118,23 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     ImageView mIvSetting;
     @BindView(R.id.tv_date)
     TextView mTvDate;
+    @BindView(R.id.rl_log)
+    RecyclerView mRlLog;
 
 
     private boolean isPause;
     private boolean isShown = false;
-    private List<String> mData;
-    private ActionAdapter mActionAdapter;
+    private List<String> mStatusData;
+    //机器人状态
+    private ActionAdapter mStatusAdapter;
     private AgentWeb mAgentWebMain;
     private AgentWeb mAgentWeb1;
     private AgentWeb mAgentWeb4;
     private AgentWeb mAgentWeb3;
     private AgentWeb mAgentWeb2;
+    private List<String> mLogData;
+    //操作日志
+    private ActionAdapter mLogAdapter;
 
 
     @Override
@@ -271,10 +276,17 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     }
 
     private void initAdapter() {
-        mData = new ArrayList<>();
-        mActionAdapter = new ActionAdapter(this, mData);
-        mRlAction.setLayoutManager(new LinearLayoutManager(this));
-        mRlAction.setAdapter(mActionAdapter);
+        //机器人状态
+        mStatusData = new ArrayList<>();
+        mStatusAdapter = new ActionAdapter(this, mStatusData);
+        mRlStatus.setLayoutManager(new LinearLayoutManager(this));
+        mRlStatus.setAdapter(mStatusAdapter);
+
+        //操作日志
+        mLogData = new ArrayList<>();
+        mLogAdapter = new ActionAdapter(this, mLogData);
+        mRlLog.setLayoutManager(new LinearLayoutManager(this));
+        mRlLog.setAdapter(mLogAdapter);
     }
 
     private void initTile() {
@@ -290,7 +302,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
         LogUtils.e("暂停剥线界面");
     }
-
 
 
     @Override
@@ -310,6 +321,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb4.getWebLifeCycle().onPause();
 
     }
+
     private void webViewOnResume() {
         mAgentWebMain.getWebLifeCycle().onResume();
         mAgentWeb1.getWebLifeCycle().onResume();
@@ -317,6 +329,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb3.getWebLifeCycle().onResume();
         mAgentWeb4.getWebLifeCycle().onResume();
     }
+
     private void webViewOnDestroy() {
         mAgentWebMain.getWebLifeCycle().onDestroy();
         mAgentWeb1.getWebLifeCycle().onDestroy();
@@ -330,7 +343,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         webViewOnDestroy();
         super.onDestroy();
     }
-
 
 
     @Override
@@ -353,7 +365,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         if (isShown) {
             String s = mPresenter.jugType(msg);
             if (!StringUtils.isEmpty(s)) {
-                refreshRv(s);
+                refreshStatusRv(s);
             }
 //            ToastUtils.showShortToast("接收到剥线推送消息 ： " + msg.getMsg() + "      " + msg.getCode());
         }
@@ -454,17 +466,24 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_scram:
-                mPresenter.scramButton();
+                if (!mPresenter.isFastDoubleClick()) {
+                    mPresenter.scramButton();
+                }
                 break;
             case R.id.iv_take_back:
-
-//                mPresenter.revocerButton();
+                if (!mPresenter.isFastDoubleClick()) {
+                    mPresenter.revocerButton();
+                }
                 break;
             case R.id.iv_start:
-                mPresenter.startButton();
+                if (!mPresenter.isFastDoubleClick()) {
+                    mPresenter.startButton();
+                }
                 break;
             case R.id.iv_identification:
-                mPresenter.identificationButton();
+                if (!mPresenter.isFastDoubleClick()) {
+                    mPresenter.identificationButton();
+                }
 
 //                mPresenter.getPicButton();
                 break;
@@ -473,16 +492,27 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 startActivity(new Intent(WireStrippingActivity.this, WiringStrippingSettingActivity.class));
                 break;
             case R.id.iv_back:
-                finish();
+                if (!mPresenter.isFastDoubleClick()) {
+                    refreshLogRv("按下返回键");
+                    finish();
+                }
                 break;
         }
     }
 
-    public void refreshRv(String msg) {
+    public void refreshStatusRv(String msg) {
         String currentDate = DateUtils.getCurrentDate();
-        mData.add(currentDate + " " + msg);
-        mActionAdapter.notifyDataSetChanged();
-        mRlAction.scrollToPosition(mActionAdapter.getItemCount() - 1);
+        mStatusData.add(currentDate + " " + msg);
+        mStatusAdapter.notifyDataSetChanged();
+        mRlStatus.scrollToPosition(mStatusAdapter.getItemCount() - 1);
+    }
+
+    public void refreshLogRv(String msg) {
+        String currentDate = DateUtils.getCurrentDate();
+        mLogData.add(currentDate + " " + msg);
+        mLogAdapter.notifyDataSetChanged();
+        mRlLog.scrollToPosition(mLogAdapter.getItemCount() - 1);
+
     }
 
 
@@ -508,7 +538,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void toastMsg(TestBean bean){
+    public void toastMsg(TestBean bean) {
         ToastUtils.showShortToast(bean.getMsg());
     }
 }
