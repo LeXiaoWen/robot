@@ -50,7 +50,7 @@ public class LauncherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_launcher);
         ButterKnife.bind(this);
         //主控服务器
-        initMasterNetty();
+//        initMasterNetty();
         //视觉服务器
 //        initVisionNetty();
 //        initService();

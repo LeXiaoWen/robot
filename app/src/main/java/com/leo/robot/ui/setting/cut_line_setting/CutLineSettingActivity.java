@@ -15,7 +15,6 @@ import com.leo.robot.ui.setting.cut_line_setting.fragment.CutLineFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityMoveFragment;
 import com.leo.robot.utils.BottomNavigationViewHelper;
-import com.leo.robot.utils.CustomManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -113,7 +112,6 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
     @Override
     public void onDestroy() {
         super.onDestroy();
-        CustomManager.clearAllVideo();
     }
 
     @Override

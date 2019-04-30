@@ -15,7 +15,6 @@ import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityMoveFragment;
 import com.leo.robot.ui.setting.wiring_setting.fragment.WiringFragment;
 import com.leo.robot.utils.BottomNavigationViewHelper;
-import com.leo.robot.utils.CustomManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -113,14 +112,9 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
     @Override
     public void onDestroy() {
         super.onDestroy();
-        CustomManager.clearAllVideo();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
+
 
     @OnClick(R.id.btn_back)
     public void onViewClicked() {

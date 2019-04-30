@@ -16,7 +16,6 @@ import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.utils.CommandUtils;
-import com.leo.robot.utils.MultiSampleVideo;
 import com.leo.robot.utils.NettyManager;
 
 /**
@@ -27,7 +26,6 @@ import com.leo.robot.utils.NettyManager;
 
 public class ExtremityFragment extends Fragment implements View.OnClickListener {
     private boolean isPause;
-    private MultiSampleVideo mVideoPlayer;
     private int TAG = 0;
 
     public void setTAG(int TAG) {

@@ -167,13 +167,13 @@
         android:weightSum="3">
 
 
-        <com.leo.robot.utils.MultiSampleVideo
-            android:id="@+id/player"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginBottom="@dimen/dp_10"
-            android:layout_weight="2"/>
+        <!--<com.leo.robot.utils.MultiSampleVideo-->
+            <!--android:id="@+id/player"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginLeft="@dimen/dp_10"-->
+            <!--android:layout_marginBottom="@dimen/dp_10"-->
+            <!--android:layout_weight="2"/>-->
 
 
         <LinearLayout

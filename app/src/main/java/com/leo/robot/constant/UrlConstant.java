@@ -10,12 +10,12 @@ public class UrlConstant {
     /**
      * socket 服务器IP地址
      */
-//    public static final String MASTER_NETTY_HOST = "192.168.1.202";
-//    public static final String VISION_NETTY_HOST = "192.168.1.203";
+    public static final String MASTER_NETTY_HOST = "192.168.1.202";
+    public static final String VISION_NETTY_HOST = "192.168.1.203";
 
     //测试
-    public static final String MASTER_NETTY_HOST = "192.168.1.5";
-    public static final String VISION_NETTY_HOST = "192.168.1.9";
+//    public static final String MASTER_NETTY_HOST = "192.168.1.5";
+//    public static final String VISION_NETTY_HOST = "192.168.1.9";
 
     /**
      * socket 服务器端口号
@@ -40,8 +40,8 @@ public class UrlConstant {
     /**
      * 云台相机
      */
-    public static final String CAMERA_URL = "http://192.168.1.203:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
-//    public static final String CAMERA_URL = "http://192.168.1.10:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
+//    public static final String CAMERA_URL = "http://192.168.1.203:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
+    public static final String CAMERA_URL = "http://192.168.1.10:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
 
     /**
      * 机械臂相机

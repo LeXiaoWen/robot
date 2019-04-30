@@ -11,9 +11,6 @@ import android.widget.Button;
 import com.leo.robot.R;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.utils.CommandUtils;
-import com.leo.robot.utils.CustomManager;
-import com.leo.robot.utils.MultiSampleVideo;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 import cree.mvp.util.ui.ToastUtils;
 
@@ -25,7 +22,6 @@ import cree.mvp.util.ui.ToastUtils;
 
 public class WiringFragment extends Fragment implements View.OnClickListener {
 
-    private MultiSampleVideo mVideoPlayer;
     private boolean isPause;
 
 
@@ -38,7 +34,6 @@ public class WiringFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
-        mVideoPlayer = (MultiSampleVideo) view.findViewById(R.id.player);
         Button btnTwistStart = (Button) view.findViewById(R.id.btn_twist_start);
         Button btnTwistFlip = (Button) view.findViewById(R.id.btn_twist_flip);
         Button btnClipUnlock = (Button) view.findViewById(R.id.btn_clip_unlock);
@@ -63,8 +58,7 @@ public class WiringFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initVideo() {
-        mVideoPlayer.setUp("", true, "测试视频");
-        mVideoPlayer.startPlayLogic();
+
     }
 
     @Override
@@ -73,12 +67,9 @@ public class WiringFragment extends Fragment implements View.OnClickListener {
         if (hidden) {
             //Fragment隐藏时调用
             ToastUtils.showShortToast("隐藏 剪线设置");
-            GSYVideoManager.onPause();
-            CustomManager.clearAllVideo();
 
         } else {
             //Fragment显示时调用
-            GSYVideoManager.onResume();
             ToastUtils.showShortToast("显示 剪线设置");
         }
     }
@@ -87,21 +78,18 @@ public class WiringFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
-        CustomManager.onPauseAll();
         isPause = true;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        CustomManager.onResumeAll();
         isPause = false;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        CustomManager.clearAllVideo();
     }
 
     @Override

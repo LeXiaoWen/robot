@@ -14,7 +14,6 @@ import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.ui.setting.cut_line_setting.CutLineSettingActivity;
-import com.leo.robot.utils.MultiSampleVideo;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -51,8 +50,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     TextView mTvReset;
     @BindView(R.id.tv_end)
     TextView mTvEnd;
-    @BindView(R.id.player)
-    MultiSampleVideo mPlayer;
+
     @BindView(R.id.btn_scram)
     Button mBtnScram;
     @BindView(R.id.btn_recover)
@@ -92,8 +90,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     }
 
     private void initVideo() {
-        mPlayer.setUp("", true, "测试视频");
-        mPlayer.startPlayLogic();
+
     }
 
     private void initStatus() {

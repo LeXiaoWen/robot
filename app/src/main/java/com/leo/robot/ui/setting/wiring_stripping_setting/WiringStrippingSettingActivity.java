@@ -113,6 +113,13 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
     }
 
 
+    @Override
+    protected void onStop() {
+        onUnBindReceiver();
+        super.onStop();
+
+    }
+
     @OnClick({R.id.tv1, R.id.tv2, R.id.tv3, R.id.tv4, R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {

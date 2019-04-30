@@ -6,17 +6,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebConfig;
+import com.just.agentweb.MiddlewareWebClientBase;
 import com.leo.robot.R;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.utils.CommandUtils;
-import com.leo.robot.utils.MultiSampleVideo;
+import com.leo.robot.utils.MiddlewareWebViewClient;
 import com.leo.robot.utils.NettyManager;
 
 /**
@@ -28,7 +31,6 @@ import com.leo.robot.utils.NettyManager;
 public class WiringStrippingFragment extends Fragment implements View.OnClickListener {
 
 
-    private MultiSampleVideo mVideoPlayer;
     private boolean isPause;
 
     private AgentWeb mAgentWebMain;
@@ -50,6 +52,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
     private ImageView mIv7;
     private ImageView mIv8;
     private NettyClient mClient;
+    private MiddlewareWebClientBase mMiddleWareWebClient;
 
     @Nullable
     @Override
@@ -67,6 +70,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         initVideo2();
         initVideo3();
         initVideo4();
+        AgentWebConfig.debug();
         mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
     }
 
@@ -105,11 +109,11 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         super.onHiddenChanged(hidden);
         if (hidden) {
             //Fragment隐藏时调用
-
+//            webViewOnResume();
 
         } else {
             //Fragment显示时调用
-
+//            webViewOnPause();
         }
     }
 
@@ -127,6 +131,8 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         super.onResume();
         isPause = false;
     }
+
+
 
     @Override
     public void onDestroy() {
@@ -175,8 +181,9 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
      */
     private void initVideo4() {
         mAgentWeb4 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl4, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(-1, -1))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -192,8 +199,9 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
      */
     private void initVideo3() {
         mAgentWeb3 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl3, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(-1, -1))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -209,8 +217,9 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
      */
     private void initVideo2() {
         mAgentWeb2 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl2, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(-1, -1))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -226,9 +235,9 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
      */
     private void initVideo1() {
         mAgentWeb1 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl1, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .setAgentWebParent((RelativeLayout) mRl1, new RelativeLayout.LayoutParams(-1, -1))
                 .closeIndicator()
-                .createAgentWeb()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1).createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
 
@@ -245,7 +254,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
      */
     private void initMainVideo() {
         mAgentWebMain = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRlMain, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(-1, -1))
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
@@ -346,5 +355,43 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
                 }
                 break;
         }
+    }
+
+    /**
+     * MiddlewareWebClientBase 是 AgentWeb 3.0.0 提供一个强大的功能，
+     * 如果用户需要使用 AgentWeb 提供的功能， 不想重写 WebClientView方
+     * 法覆盖AgentWeb提供的功能，那么 MiddlewareWebClientBase 是一个
+     * 不错的选择 。
+     *
+     * @return
+     */
+    protected MiddlewareWebClientBase getMiddlewareWebClient() {
+        return this.mMiddleWareWebClient = new MiddlewareWebViewClient() {
+            /**
+             *
+             * @param view
+             * @param url
+             * @return
+             */
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
+                if (url.startsWith("agentweb")) { // 拦截 url，不执行 DefaultWebClient#shouldOverrideUrlLoading
+//                    Log.i(TAG, "agentweb scheme ~");
+                    return true;
+                }
+
+                if (super.shouldOverrideUrlLoading(view, url)) { // 执行 DefaultWebClient#shouldOverrideUrlLoading
+                    return true;
+                }
+                // do you work
+                return false;
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return super.shouldOverrideUrlLoading(view, request);
+            }
+        };
     }
 }

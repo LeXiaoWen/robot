@@ -13,9 +13,6 @@ import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.bean.WiringMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
-import com.leo.robot.utils.CustomManager;
-import com.leo.robot.utils.MultiSampleVideo;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -62,8 +59,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     TextView mTvSleeveUnlock;
     @BindView(R.id.tv_end)
     TextView mTvEnd;
-    @BindView(R.id.player)
-    MultiSampleVideo mPlayer;
+
     @BindView(R.id.btn_scram)
     Button mBtnScram;
     @BindView(R.id.btn_recover)
@@ -75,7 +71,6 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     @BindView(R.id.btn_setting)
     Button mBtnSetting;
 
-    OrientationUtils orientationUtils;
     @BindView(R.id.btn_back)
     Button mBtnBack;
 
@@ -101,7 +96,6 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         setContentView(R.layout.activity_wiring);
         ButterKnife.bind(this);
         mPresenter.updateTime(mTvDate);
-        initVideo();
         initBroadcast(mTvGroundPower);
         initStatus();
     }
@@ -112,30 +106,24 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         LogUtils.e("WiringActivity 剥线工具到位  " + isToolReady);
     }
 
-    private void initVideo() {
-        mPlayer.setUp("", true, "测试视频");
-        mPlayer.startPlayLogic();
-    }
+
 
 
     @Override
     protected void onPause() {
         super.onPause();
-        CustomManager.onPauseAll();
         isPause = true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        CustomManager.onResumeAll();
         isPause = false;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        CustomManager.clearAllVideo();
     }
 
     @OnClick({R.id.btn_scram, R.id.btn_recover, R.id.btn_start, R.id.btn_get_pic, R.id.btn_setting,R.id.btn_back})
@@ -176,7 +164,6 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     @Override
     protected void onStop() {
-        onUnBindReceiver();
         super.onStop();
     }
 
