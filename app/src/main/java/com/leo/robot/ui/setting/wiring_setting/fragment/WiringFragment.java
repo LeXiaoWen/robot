@@ -6,13 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
-import com.leo.robot.netty.NettyClient;
-import com.leo.robot.utils.CommandUtils;
-
-import cree.mvp.util.ui.ToastUtils;
 
 /**
  * 接线设置
@@ -23,7 +21,26 @@ import cree.mvp.util.ui.ToastUtils;
 public class WiringFragment extends Fragment implements View.OnClickListener {
 
     private boolean isPause;
-
+    private AgentWeb mAgentWebMain;
+    private AgentWeb mAgentWeb1;
+    private AgentWeb mAgentWeb4;
+    private AgentWeb mAgentWeb3;
+    private AgentWeb mAgentWeb2;
+    private RelativeLayout mRlMain;
+    private RelativeLayout mRl1;
+    private RelativeLayout mRl2;
+    private RelativeLayout mRl3;
+    private RelativeLayout mRl4;
+    private ImageView mIv1;
+    private ImageView mIv2;
+    private ImageView mIv3;
+    private ImageView mIv4;
+    private ImageView mIv5;
+    private ImageView mIv6;
+    private ImageView mIv7;
+    private ImageView mIv8;
+    private ImageView mIv9;
+    private ImageView mIv10;
 
     @Nullable
     @Override
@@ -34,24 +51,33 @@ public class WiringFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
-        Button btnTwistStart = (Button) view.findViewById(R.id.btn_twist_start);
-        Button btnTwistFlip = (Button) view.findViewById(R.id.btn_twist_flip);
-        Button btnClipUnlock = (Button) view.findViewById(R.id.btn_clip_unlock);
-        Button btnSleeveUnlock = (Button) view.findViewById(R.id.btn_sleeve_unlock);
-        Button btnTwistEnd = (Button) view.findViewById(R.id.btn_twist_end);
-        Button btnTwistInit = (Button) view.findViewById(R.id.btn_twist_init);
-        Button btnClipLock = (Button) view.findViewById(R.id.btn_clip_lock);
-        Button btnSleeveLock = (Button) view.findViewById(R.id.btn_sleeve_lock);
+        mRlMain = (RelativeLayout) view.findViewById(R.id.rl_main);
+        mRl1 = (RelativeLayout) view.findViewById(R.id.rl1);
+        mRl2 = (RelativeLayout) view.findViewById(R.id.rl2);
+        mRl3 = (RelativeLayout) view.findViewById(R.id.rl3);
+        mRl4 = (RelativeLayout) view.findViewById(R.id.rl4);
 
+        mIv1 = (ImageView) view.findViewById(R.id.iv1);
+        mIv2 = (ImageView) view.findViewById(R.id.iv2);
+        mIv3 = (ImageView) view.findViewById(R.id.iv3);
+        mIv4 = (ImageView) view.findViewById(R.id.iv4);
+        mIv5 = (ImageView) view.findViewById(R.id.iv5);
+        mIv6 = (ImageView) view.findViewById(R.id.iv6);
+        mIv7 = (ImageView) view.findViewById(R.id.iv7);
+        mIv8 = (ImageView) view.findViewById(R.id.iv8);
+        mIv9 = (ImageView) view.findViewById(R.id.iv9);
+        mIv10 = (ImageView) view.findViewById(R.id.iv10);
 
-        btnTwistStart.setOnClickListener(this);
-        btnTwistFlip.setOnClickListener(this);
-        btnClipUnlock.setOnClickListener(this);
-        btnSleeveUnlock.setOnClickListener(this);
-        btnTwistEnd.setOnClickListener(this);
-        btnTwistInit.setOnClickListener(this);
-        btnClipLock.setOnClickListener(this);
-        btnSleeveLock.setOnClickListener(this);
+        mIv1.setOnClickListener(this);
+        mIv2.setOnClickListener(this);
+        mIv3.setOnClickListener(this);
+        mIv4.setOnClickListener(this);
+        mIv5.setOnClickListener(this);
+        mIv6.setOnClickListener(this);
+        mIv7.setOnClickListener(this);
+        mIv8.setOnClickListener(this);
+        mIv9.setOnClickListener(this);
+        mIv10.setOnClickListener(this);
 
         initVideo();
 
@@ -66,11 +92,9 @@ public class WiringFragment extends Fragment implements View.OnClickListener {
         super.onHiddenChanged(hidden);
         if (hidden) {
             //Fragment隐藏时调用
-            ToastUtils.showShortToast("隐藏 剪线设置");
 
         } else {
             //Fragment显示时调用
-            ToastUtils.showShortToast("显示 剪线设置");
         }
     }
 
@@ -94,31 +118,36 @@ public class WiringFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_twist_start:
-                NettyClient.getInstance().sendMsg(CommandUtils.getTwistStart());
-                break;
-            case R.id.btn_twist_flip:
-                NettyClient.getInstance().sendMsg(CommandUtils.getTwistFlip());
-                break;
-            case R.id.btn_clip_unlock:
-                NettyClient.getInstance().sendMsg(CommandUtils.getClipUnlock());
-                break;
-            case R.id.btn_sleeve_unlock:
-                NettyClient.getInstance().sendMsg(CommandUtils.getSleeveUnlock());
-                break;
-            case R.id.btn_twist_end:
-                NettyClient.getInstance().sendMsg(CommandUtils.getTwistEnd());
-                break;
-            case R.id.btn_twist_init:
-                NettyClient.getInstance().sendMsg(CommandUtils.getTwistInit());
-                break;
-            case R.id.btn_clip_lock:
-                NettyClient.getInstance().sendMsg(CommandUtils.getClipLock());
-                break;
-            case R.id.btn_sleeve_lock:
-                NettyClient.getInstance().sendMsg(CommandUtils.getSleeveLock());
-                break;
-        }
+
     }
+
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+//            case R.id.btn_twist_start:
+//                NettyClient.getInstance().sendMsg(CommandUtils.getTwistStart());
+//                break;
+//            case R.id.btn_twist_flip:
+//                NettyClient.getInstance().sendMsg(CommandUtils.getTwistFlip());
+//                break;
+//            case R.id.btn_clip_unlock:
+//                NettyClient.getInstance().sendMsg(CommandUtils.getClipUnlock());
+//                break;
+//            case R.id.btn_sleeve_unlock:
+//                NettyClient.getInstance().sendMsg(CommandUtils.getSleeveUnlock());
+//                break;
+//            case R.id.btn_twist_end:
+//                NettyClient.getInstance().sendMsg(CommandUtils.getTwistEnd());
+//                break;
+//            case R.id.btn_twist_init:
+//                NettyClient.getInstance().sendMsg(CommandUtils.getTwistInit());
+//                break;
+//            case R.id.btn_clip_lock:
+//                NettyClient.getInstance().sendMsg(CommandUtils.getClipLock());
+//                break;
+//            case R.id.btn_sleeve_lock:
+//                NettyClient.getInstance().sendMsg(CommandUtils.getSleeveLock());
+//                break;
+//        }
+//    }
 }

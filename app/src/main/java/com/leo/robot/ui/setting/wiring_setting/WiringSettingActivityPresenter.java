@@ -1,5 +1,9 @@
 package com.leo.robot.ui.setting.wiring_setting;
 
+import android.widget.TextView;
+
+import com.leo.robot.utils.TimeThread;
+
 import javax.inject.Inject;
 
 import cree.mvp.base.presenter.BasePresenter;
@@ -12,5 +16,10 @@ import cree.mvp.base.presenter.BasePresenter;
 public class WiringSettingActivityPresenter extends BasePresenter<WiringSettingActivity,WiringSettingActivityModel> {
     @Inject
     public WiringSettingActivityPresenter() {
+    }
+
+    public void updateTime(TextView view) {
+        TimeThread timeThread = new TimeThread(view);
+        timeThread.start();
     }
 }

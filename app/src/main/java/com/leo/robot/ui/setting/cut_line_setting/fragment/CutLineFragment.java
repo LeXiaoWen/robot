@@ -6,10 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
-import com.leo.robot.netty.NettyClient;
-import com.leo.robot.utils.CommandUtils;
 
 /**
  * 剪线设置
@@ -20,7 +21,18 @@ import com.leo.robot.utils.CommandUtils;
 public class CutLineFragment extends Fragment implements View.OnClickListener {
 
     private boolean isPause;
-
+    private AgentWeb mAgentWebMain;
+    private AgentWeb mAgentWeb1;
+    private AgentWeb mAgentWeb4;
+    private AgentWeb mAgentWeb3;
+    private AgentWeb mAgentWeb2;
+    private RelativeLayout mRlMain;
+    private RelativeLayout mRl1;
+    private RelativeLayout mRl2;
+    private RelativeLayout mRl3;
+    private RelativeLayout mRl4;
+    private ImageView mIv1;
+    private ImageView mIv2;
 
     @Nullable
     @Override
@@ -31,9 +43,19 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
-        view.findViewById(R.id.btn_cut_start).setOnClickListener(this);
-        view.findViewById(R.id.btn_reset).setOnClickListener(this);
-        view.findViewById(R.id.btn_cut_stop).setOnClickListener(this);
+        mRlMain = (RelativeLayout) view.findViewById(R.id.rl_main);
+        mRl1 = (RelativeLayout) view.findViewById(R.id.rl1);
+        mRl2 = (RelativeLayout) view.findViewById(R.id.rl2);
+        mRl3 = (RelativeLayout) view.findViewById(R.id.rl3);
+        mRl4 = (RelativeLayout) view.findViewById(R.id.rl4);
+
+        mIv1 = (ImageView) view.findViewById(R.id.iv1);
+        mIv2 = (ImageView) view.findViewById(R.id.iv2);
+
+
+        mIv1.setOnClickListener(this);
+        mIv2.setOnClickListener(this);
+
         initVideo();
 
     }
@@ -75,15 +97,7 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_cut_start:
-                NettyClient.getInstance().sendMsg(CommandUtils.getCutToolStart());
-                break;
-            case R.id.btn_reset:
-                NettyClient.getInstance().sendMsg(CommandUtils.getCutToolReset());
-                break;
-            case R.id.btn_cut_stop:
-                NettyClient.getInstance().sendMsg(CommandUtils.getCutToolStop());
-                break;
+
         }
     }
 }
