@@ -2,10 +2,12 @@ package com.leo.robot.utils;
 
 import com.google.gson.Gson;
 import com.leo.robot.bean.AllMsg;
+import com.leo.robot.bean.CutLineMsg;
 import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.bean.TestBean;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.bean.WireStrippingMsg;
+import com.leo.robot.bean.WiringMsg;
 import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
@@ -22,6 +24,7 @@ import cree.mvp.util.data.SPUtils;
 public class ResultUtils {
     public static final int PUSH_MSG = 1, ERRO_MSG = 0;
     private static Gson mGson = new Gson();
+
     /**
      * 消息的统一分发
      *
@@ -71,7 +74,7 @@ public class ResultUtils {
 
     private static void masterControlpushMsg(String msg) {
         TestBean testBean = new TestBean();
-        testBean.setMsg("接收到主控服务器发送的消息       ："+msg);
+        testBean.setMsg("接收到主控服务器发送的消息       ：" + msg);
         BusUtils.postMessage(testBean);
 
         AllMsg allMsg = new AllMsg();
@@ -220,11 +223,151 @@ public class ResultUtils {
      */
     private static void onWiring(String msg) {
         SPUtils utils = new SPUtils(RobotInit.WIRING_ACTIVITY);
-        if (msg.equals(PushMsgCode.WIRING_TOOL_READY)) {
+        WiringMsg wiringMsg = new WiringMsg();
+
+        if (msg.equals(PushMsgCode.WIRING_READY)) {
+
+            utils.putBoolean(RobotInit.WIRING_READY, true);
+            wiringMsg.setMsg(RobotInit.WIRING_READY);
+            wiringMsg.setCode(PushMsgCode.WIRING_READY);
+            wiringMsg.setHighlight(true);
+
+        } else if (msg.equals(PushMsgCode.WIRING_NOT_READY)) {
+
+            utils.putBoolean(RobotInit.WIRING_READY, false);
+            wiringMsg.setMsg(RobotInit.WIRING_NOT_READY);
+            wiringMsg.setCode(PushMsgCode.WIRING_NOT_READY);
+            wiringMsg.setHighlight(false);
+
+        } else if (msg.equals(PushMsgCode.WIRING_GRAB)) {
+
+            utils.putBoolean(RobotInit.WIRING_GRAB, true);
+            wiringMsg.setMsg(RobotInit.WIRING_GRAB);
+            wiringMsg.setCode(PushMsgCode.WIRING_GRAB);
+            wiringMsg.setHighlight(true);
+
+        } else if (msg.equals(PushMsgCode.WIRING_NOT_GRAB)) {
+
+            utils.putBoolean(RobotInit.WIRING_GRAB, false);
+            wiringMsg.setMsg(RobotInit.WIRING_NOT_GRAB);
+            wiringMsg.setCode(PushMsgCode.WIRING_NOT_GRAB);
+            wiringMsg.setHighlight(false);
+
+        } else if (msg.equals(PushMsgCode.WIRING_ENTER)) {
+
+            utils.putBoolean(RobotInit.WIRING_ENTER, true);
+            wiringMsg.setMsg(RobotInit.WIRING_ENTER);
+            wiringMsg.setCode(PushMsgCode.WIRING_ENTER);
+            wiringMsg.setHighlight(true);
+
+        } else if (msg.equals(PushMsgCode.WIRING_NOT_ENTER)) {
+
+            utils.putBoolean(RobotInit.WIRING_ENTER, false);
+            wiringMsg.setMsg(RobotInit.WIRING_NOT_ENTER);
+            wiringMsg.setCode(PushMsgCode.WIRING_NOT_ENTER);
+            wiringMsg.setHighlight(false);
+
+        } else if (msg.equals(PushMsgCode.WIRING_FIXED)) {
+
+            utils.putBoolean(RobotInit.WIRING_FIXED, true);
+            wiringMsg.setMsg(RobotInit.WIRING_FIXED);
+            wiringMsg.setCode(PushMsgCode.WIRING_FIXED);
+            wiringMsg.setHighlight(true);
+
+        } else if (msg.equals(PushMsgCode.WIRING_NOT_FIXED)) {
+
+            utils.putBoolean(RobotInit.WIRING_FIXED, false);
+            wiringMsg.setMsg(RobotInit.WIRING_NOT_FIXED);
+            wiringMsg.setCode(PushMsgCode.WIRING_NOT_FIXED);
+            wiringMsg.setHighlight(false);
+
+        } else if (msg.equals(PushMsgCode.WIRING_TOOL_READY)) {
+
             utils.putBoolean(RobotInit.WIRING_TOOL_READY, true);
+            wiringMsg.setMsg(RobotInit.WIRING_TOOL_READY);
+            wiringMsg.setCode(PushMsgCode.WIRING_TOOL_READY);
+            wiringMsg.setHighlight(true);
+
         } else if (msg.equals(PushMsgCode.WIRING_NOT_TOOL_READY)) {
+
             utils.putBoolean(RobotInit.WIRING_TOOL_READY, false);
+            wiringMsg.setMsg(RobotInit.WIRING_NOT_TOOL_READY);
+            wiringMsg.setCode(PushMsgCode.WIRING_NOT_TOOL_READY);
+            wiringMsg.setHighlight(false);
+
+        } else if (msg.equals(PushMsgCode.WIRING_LINE_READY)) {
+
+            utils.putBoolean(RobotInit.WIRING_LINE_READY, true);
+            wiringMsg.setMsg(RobotInit.WIRING_LINE_READY);
+            wiringMsg.setCode(PushMsgCode.WIRING_LINE_READY);
+            wiringMsg.setHighlight(true);
+
+        } else if (msg.equals(PushMsgCode.WIRING_NOT_LINE_READY)) {
+
+            utils.putBoolean(RobotInit.WIRING_LINE_READY, false);
+            wiringMsg.setMsg(RobotInit.WIRING_NOT_LINE_READY);
+            wiringMsg.setCode(PushMsgCode.WIRING_NOT_LINE_READY);
+            wiringMsg.setHighlight(false);
+
+        } else if (msg.equals(PushMsgCode.WIRING_TWIST)) {
+
+            utils.putBoolean(RobotInit.WIRING_TWIST, true);
+            wiringMsg.setMsg(RobotInit.WIRING_TWIST);
+            wiringMsg.setCode(PushMsgCode.WIRING_TWIST);
+            wiringMsg.setHighlight(true);
+
+        } else if (msg.equals(PushMsgCode.WIRING_NOT_TWIST)) {
+
+            utils.putBoolean(RobotInit.WIRING_TWIST, false);
+            wiringMsg.setMsg(RobotInit.WIRING_NOT_TWIST);
+            wiringMsg.setCode(PushMsgCode.WIRING_NOT_TWIST);
+            wiringMsg.setHighlight(false);
+
+        } else if (msg.equals(PushMsgCode.WIRING_CLIP_UNLOCK)) {
+
+            utils.putBoolean(RobotInit.WIRING_CLIP_UNLOCK, true);
+            wiringMsg.setMsg(RobotInit.WIRING_CLIP_UNLOCK);
+            wiringMsg.setCode(PushMsgCode.WIRING_CLIP_UNLOCK);
+            wiringMsg.setHighlight(true);
+
+        } else if (msg.equals(PushMsgCode.WIRING_NOT_CLIP_UNLOCK)) {
+
+            utils.putBoolean(RobotInit.WIRING_CLIP_UNLOCK, false);
+            wiringMsg.setMsg(RobotInit.WIRING_NOT_CLIP_UNLOCK);
+            wiringMsg.setCode(PushMsgCode.WIRING_NOT_CLIP_UNLOCK);
+            wiringMsg.setHighlight(false);
+
+        } else if (msg.equals(PushMsgCode.WIRING_SLEEVE_UNLOCK)) {
+
+            utils.putBoolean(RobotInit.WIRING_SLEEVE_UNLOCK, true);
+            wiringMsg.setMsg(RobotInit.WIRING_SLEEVE_UNLOCK);
+            wiringMsg.setCode(PushMsgCode.WIRING_SLEEVE_UNLOCK);
+            wiringMsg.setHighlight(true);
+
+        } else if (msg.equals(PushMsgCode.WIRINGNOT_SLEEVE_UNLOCK)) {
+
+            utils.putBoolean(RobotInit.WIRING_SLEEVE_UNLOCK, false);
+            wiringMsg.setMsg(RobotInit.WIRINGNOT_SLEEVE_UNLOCK);
+            wiringMsg.setCode(PushMsgCode.WIRINGNOT_SLEEVE_UNLOCK);
+            wiringMsg.setHighlight(false);
+
+        } else if (msg.equals(PushMsgCode.WIRING_END)) {
+
+            utils.putBoolean(RobotInit.WIRING_END, true);
+            wiringMsg.setMsg(RobotInit.WIRING_END);
+            wiringMsg.setCode(PushMsgCode.WIRING_END);
+            wiringMsg.setHighlight(true);
+
+        } else if (msg.equals(PushMsgCode.WIRING_NOT_END)) {
+
+            utils.putBoolean(RobotInit.WIRING_END, false);
+            wiringMsg.setMsg(RobotInit.WIRING_NOT_END);
+            wiringMsg.setCode(PushMsgCode.WIRING_NOT_END);
+            wiringMsg.setHighlight(false);
+
         }
+
+        BusUtils.postMessage(wiringMsg);
     }
 
     /**
@@ -235,11 +378,71 @@ public class ResultUtils {
      */
     private static void onCutLine(String msg) {
         SPUtils utils = new SPUtils(RobotInit.CUT_LINE_ACTIVITY);
-        if (msg.equals(PushMsgCode.CUT_READY)) {
+        CutLineMsg cutLineMsg = new CutLineMsg();
+
+        if (msg.equals(PushMsgCode.CUT_READY)) {//到位
             utils.putBoolean(RobotInit.CUT_READY, true);
-        } else {
+            cutLineMsg.setCode(PushMsgCode.CUT_READY);
+
+            cutLineMsg.setMsg(RobotInit.CUT_READY);
+            cutLineMsg.setHighlight(true);
+        } else if (msg.equals(PushMsgCode.CUT_NOT_READY)) {//未到位
             utils.putBoolean(RobotInit.CUT_READY, false);
+            cutLineMsg.setCode(PushMsgCode.CUT_NOT_READY);
+
+            cutLineMsg.setMsg(RobotInit.CUT_NOT_READY);
+            cutLineMsg.setHighlight(false);
+        } else if (msg.equals(PushMsgCode.CUT_START)) {//剪线开始
+            utils.putBoolean(RobotInit.CUT_START, true);
+            cutLineMsg.setCode(PushMsgCode.CUT_START);
+
+            cutLineMsg.setMsg(RobotInit.CUT_START);
+            cutLineMsg.setHighlight(true);
+        } else if (msg.equals(PushMsgCode.CUT_NOT_START)) {//剪线未开始
+            utils.putBoolean(RobotInit.CUT_START, false);
+            cutLineMsg.setCode(PushMsgCode.CUT_NOT_START);
+
+            cutLineMsg.setMsg(RobotInit.CUT_NOT_START);
+            cutLineMsg.setHighlight(false);
+        } else if (msg.equals(PushMsgCode.CUT_STOP)) {//剪线停止
+            utils.putBoolean(RobotInit.CUT_STOP, true);
+            cutLineMsg.setCode(PushMsgCode.CUT_STOP);
+
+            cutLineMsg.setMsg(RobotInit.CUT_STOP);
+            cutLineMsg.setHighlight(true);
+        } else if (msg.equals(PushMsgCode.CUT_NOT_STOP)) {//剪线未停止
+            utils.putBoolean(RobotInit.CUT_STOP, false);
+            cutLineMsg.setCode(PushMsgCode.CUT_NOT_STOP);
+
+            cutLineMsg.setMsg(RobotInit.CUT_NOT_STOP);
+            cutLineMsg.setHighlight(false);
+        } else if (msg.equals(PushMsgCode.CUT_RESET)) {//钳口复位
+            utils.putBoolean(RobotInit.CUT_RESET, true);
+            cutLineMsg.setCode(PushMsgCode.CUT_RESET);
+
+            cutLineMsg.setMsg(RobotInit.CUT_RESET);
+            cutLineMsg.setHighlight(true);
+        } else if (msg.equals(PushMsgCode.CUT_NOT_RESET)) {//钳口未复位
+            utils.putBoolean(RobotInit.CUT_RESET, false);
+            cutLineMsg.setCode(PushMsgCode.CUT_NOT_RESET);
+
+            cutLineMsg.setMsg(RobotInit.CUT_NOT_RESET);
+            cutLineMsg.setHighlight(false);
+        } else if (msg.equals(PushMsgCode.CUT_END)) {//结束
+            utils.putBoolean(RobotInit.CUT_END, true);
+            cutLineMsg.setCode(PushMsgCode.CUT_END);
+
+            cutLineMsg.setMsg(RobotInit.CUT_END);
+            cutLineMsg.setHighlight(true);
+        } else if (msg.equals(PushMsgCode.CUT_NOT_END)) {//未结束
+            utils.putBoolean(RobotInit.CUT_END, false);
+            cutLineMsg.setCode(PushMsgCode.CUT_NOT_END);
+
+            cutLineMsg.setMsg(RobotInit.CUT_NOT_END);
+            cutLineMsg.setHighlight(false);
         }
+
+        BusUtils.postMessage(cutLineMsg);
     }
 
     /**
@@ -254,70 +457,70 @@ public class ResultUtils {
 
 
     /**
-    * 连接成功
-    *
-    *@author Leo
-    *created at 2019/4/27 10:08 PM
-    */
+     * 连接成功
+     *
+     * @author Leo
+     * created at 2019/4/27 10:08 PM
+     */
     public static void onConnectSuccess(String type) {
-        if (RobotInit.MASTER_CONTROL_NETTY.equals(type)){//主控服务器连接成功
+        TestBean testBean = new TestBean();
+        if (RobotInit.MASTER_CONTROL_NETTY.equals(type)) {//主控服务器连接成功
+            testBean.setMsg("主控服务器连接成功  ");
             String s = mGson.toJson(CommandUtils.getMasterControlBean());
             NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
-            client.sendMsgTest(s);
-//            ToastUtils.showShortToast("主控服务器连接成功");
-        }else if (RobotInit.VISION_NETTY.equals(type)){//视觉服务器连接成功
+            if (client != null) {
+                client.sendMsgTest(s);
+            }
+        } else if (RobotInit.VISION_NETTY.equals(type)) {//视觉服务器连接成功
+            testBean.setMsg("视觉服务器连接成功  ");
             String s = mGson.toJson(CommandUtils.getVisionBean());
             NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.VISION_NETTY);
-            client.sendMsgTest(s);
-//            ToastUtils.showShortToast("视觉服务器连接成功");
+            if (client != null) {
+                client.sendMsgTest(s);
+            }
         }
+        BusUtils.postMessage(testBean);
     }
 
     /**
-    * 连接失败
-    *
-    *@author Leo
-    *created at 2019/4/27 10:08 PM
-    */
+     * 连接失败
+     *
+     * @author Leo
+     * created at 2019/4/27 10:08 PM
+     */
     public static void onConnectErro(String type) {
-        if (RobotInit.MASTER_CONTROL_NETTY.equals(type)){//主控服务器连接失败
-            TestBean testBean = new TestBean();
+        TestBean testBean = new TestBean();
+        if (RobotInit.MASTER_CONTROL_NETTY.equals(type)) {//主控服务器连接失败
             testBean.setMsg("主控服务器连接失败  ");
-            BusUtils.postMessage(testBean);
-
-//            ToastUtils.showShortToast("主控服务器连接失败");
-        }else if (RobotInit.VISION_NETTY.equals(type)){//视觉服务器连接失败
-//            ToastUtils.showShortToast("视觉服务器连接失败");
-
-            TestBean testBean = new TestBean();
+        } else if (RobotInit.VISION_NETTY.equals(type)) {//视觉服务器连接失败
             testBean.setMsg("视觉服务器连接失败  ");
-            BusUtils.postMessage(testBean);
         }
+        BusUtils.postMessage(testBean);
     }
 
     /**
-    * 接收服务器发送的消息
-    *
-    *@author Leo
-    *created at 2019/4/27 10:14 PM
-    */
+     * 接收服务器发送的消息
+     *
+     * @author Leo
+     * created at 2019/4/27 10:14 PM
+     */
     public static void onResultByType(String msg, String type) {
-        if (RobotInit.MASTER_CONTROL_NETTY.equals(type)){//主控服务器消息
+        if (RobotInit.MASTER_CONTROL_NETTY.equals(type)) {//主控服务器消息
             masterControlpushMsg(msg);
-        }else if (RobotInit.VISION_NETTY.equals(type)){//视觉服务器消息
+        } else if (RobotInit.VISION_NETTY.equals(type)) {//视觉服务器消息
             onVisionMsg(msg);
         }
     }
 
     /**
-    * 视觉服务器消息接收
-    *
-    *@author Leo
-    *created at 2019/4/27 10:18 PM
-    */
+     * 视觉服务器消息接收
+     *
+     * @author Leo
+     * created at 2019/4/27 10:18 PM
+     */
     private static void onVisionMsg(String msg) {
         TestBean testBean = new TestBean();
-        testBean.setMsg("接收到视觉服务器发送的消息       ："+msg);
+        testBean.setMsg("接收到视觉服务器发送的消息       ：" + msg);
         BusUtils.postMessage(testBean);
 
         VisionMsg visionMsg = new VisionMsg();
@@ -325,8 +528,6 @@ public class ResultUtils {
         BusUtils.postMessage(visionMsg);
 //        ToastUtils.showShortToast("视觉服务器消息： " + msg);
     }
-
-
 
 
 }

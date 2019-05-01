@@ -2,6 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!--<item  android:drawable="@drawable/emergency_stop_clicked" android:state_checked="true"/>-->
     <!--<item  android:drawable="@drawable/emergency_stop_clicked" android:state_selected="true"/>-->
-    <item  android:drawable="@drawable/left_clicked" android:state_pressed="true"/>
-    <item android:drawable="@drawable/left_normal"/>
+    <item  android:drawable="@drawable/xiangzuo_clicked" android:state_pressed="true"/>
+    <item android:drawable="@drawable/xiangzuo_normal"/>
 </selector>

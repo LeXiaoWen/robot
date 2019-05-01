@@ -176,6 +176,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb4 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -193,6 +194,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb3 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -210,6 +212,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb2 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -227,6 +230,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb1 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -245,6 +249,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWebMain = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -485,7 +490,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                     mPresenter.identificationButton();
                 }
 
-//                mPresenter.getPicButton();
                 break;
             case R.id.iv_setting:
 //                mPresenter.settingButton();
@@ -524,21 +528,49 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
      */
     public void updateClickStatus(boolean b) {
         if (b) {
-            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.take_back_normal));
-            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.start_normal));
-            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.identification_normal));
-            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.setting_normal));
+            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianshouhui_normal));
+            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
+            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_normal));
+            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongshezhi_normal));
             mTvRemind.setText("请开始选取剥线位置");
         } else {
-            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.take_back_unclick));
-            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.start_unclick));
-            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.identification_unclicked));
-            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.setting_unclick));
+            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianhuishou_unclick));
+            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_unclick));
+            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_unclick));
+            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongshezhi_unclick));
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void toastMsg(TestBean bean) {
         ToastUtils.showShortToast(bean.getMsg());
+    }
+
+    /**
+    * 切换急停、恢复急停图标
+    *
+    *@author Leo
+    *created at 2019/5/1 1:19 AM
+    */
+    public void updateScram(boolean b) {
+        if (!b){
+            mIvScram.setImageDrawable(getResources().getDrawable(R.drawable.jiting_normal));
+        }else {
+            mIvScram.setImageDrawable(getResources().getDrawable(R.drawable.jiechujiting_normal));
+        }
+    }
+
+    /**
+    * 切换开始、停止图标
+    *
+    *@author Leo
+    *created at 2019/5/1 1:20 AM
+    */
+    public void updateStart(boolean b) {
+        if (!b){
+            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
+        }else {
+            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.tingzhi_normal));
+        }
     }
 }

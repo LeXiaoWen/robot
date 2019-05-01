@@ -6,6 +6,7 @@ import android.widget.TextView;
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.netty.NettyClient;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
 import com.leo.robot.ui.wire_stripping.choose.ChooseLocationActivity;
 import com.leo.robot.utils.CommandUtils;
@@ -28,10 +29,12 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     private boolean isStart = false;
 
     private boolean isClickble = false;
+    private final NettyClient mClient;
 
 
     @Inject
     public WireStrippingActivityPresenter() {
+        mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
     }
 
     @Override
@@ -47,18 +50,19 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      * created at 2019/4/18 2:11 PM
      */
     public void scramButton() {
-//        if (!isScram) { //急停
-//            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmShutdown());
-//            mActivity.refreshStatusRv("发送急停命令");
-////            mActivity.updateScramText("恢复急停");
-//            isScram = true;
-//        } else {//回复急停
-//            NettyClient.getInstance().sendMsg(CommandUtils.getFlowArmResume());
-//            mActivity.refreshStatusRv("发送恢复急停命令");
-//
-////            mActivity.updateScramText("急停");
-//            isScram = false;
-//        }
+        if (!isScram) { //急停
+            if (mClient != null) {
+                mClient.sendMsgTest(CommandUtils.getFlowArmShutdown());
+            }
+            mActivity.updateScram(true);
+            isScram = true;
+        } else {//回复急停
+            if (mClient != null) {
+                mClient.sendMsgTest(CommandUtils.getFlowArmResume());
+            }
+            mActivity.updateScram(false);
+            isScram = false;
+        }
         if (isClickble) {
             NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmShutdown());
             mActivity.refreshLogRv("发送急停命令");
@@ -92,10 +96,13 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
             if (!isStart) { //开始
                 NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmStart());
                 isStart = true;
+                mActivity.updateStart(true);
                 mActivity.refreshLogRv("发送开始命令");
             } else {//停止
                 NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmStop());
                 isStart = false;
+                mActivity.updateStart(false);
+
                 mActivity.refreshLogRv("发送停止命令");
             }
         }

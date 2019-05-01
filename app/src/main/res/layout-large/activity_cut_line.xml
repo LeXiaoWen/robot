@@ -35,7 +35,7 @@
                 android:textSize="@dimen/sp_16"/>
 
             <ImageView
-                android:id="@+id/iv_ready"
+                android:id="@+id/iv_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_8"
@@ -61,7 +61,7 @@
                 android:textSize="@dimen/sp_16"/>
 
             <ImageView
-                android:id="@+id/iv_init"
+                android:id="@+id/iv_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_8"
@@ -87,7 +87,7 @@
                 android:textSize="@dimen/sp_16"/>
 
             <ImageView
-                android:id="@+id/iv_in_place"
+                android:id="@+id/iv_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_8"
@@ -113,7 +113,7 @@
                 android:textSize="@dimen/sp_16"/>
 
             <ImageView
-                android:id="@+id/iv_clamping"
+                android:id="@+id/iv_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_8"
@@ -139,7 +139,7 @@
                 android:textSize="@dimen/sp_16"/>
 
             <ImageView
-                android:id="@+id/iv_closure"
+                android:id="@+id/iv_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_8"
@@ -166,7 +166,7 @@
                 android:textSize="@dimen/sp_16"/>
 
             <ImageView
-                android:id="@+id/iv_end"
+                android:id="@+id/iv_6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_8"

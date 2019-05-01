@@ -199,42 +199,42 @@
             android:layout_width="225dp"
             android:layout_height="59dp"
             android:layout_marginTop="26dp"
-            android:src="@drawable/emergency_stop_normal"/>
+            android:src="@drawable/jiting_normal"/>
 
         <ImageView
             android:id="@+id/iv_take_back"
             android:layout_width="225dp"
             android:layout_height="59dp"
             android:layout_marginTop="@dimen/dp_16"
-            android:src="@drawable/take_back_unclick"/>
+            android:src="@drawable/yijianhuishou_unclick"/>
 
         <ImageView
             android:id="@+id/iv_start"
             android:layout_width="225dp"
             android:layout_height="59dp"
             android:layout_marginTop="@dimen/dp_16"
-            android:src="@drawable/start_unclick"/>
+            android:src="@drawable/kaishi_unclick"/>
 
         <ImageView
             android:id="@+id/iv_identification"
             android:layout_width="225dp"
             android:layout_height="59dp"
             android:layout_marginTop="@dimen/dp_16"
-            android:src="@drawable/identification_unclicked"/>
+            android:src="@drawable/shibieluxian_unclick"/>
 
         <ImageView
             android:id="@+id/iv_setting"
             android:layout_width="225dp"
             android:layout_height="59dp"
             android:layout_marginTop="@dimen/dp_16"
-            android:src="@drawable/setting_unclick"/>
+            android:src="@drawable/shoudongshezhi_normal"/>
 
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="225dp"
             android:layout_height="59dp"
             android:layout_marginTop="@dimen/dp_16"
-            android:src="@drawable/back_normal"/>
+            android:src="@drawable/activity_fanhui_normal"/>
 
 
     </LinearLayout>

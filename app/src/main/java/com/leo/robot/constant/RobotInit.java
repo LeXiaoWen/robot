@@ -79,50 +79,46 @@ public interface RobotInit {
      */
     String WIRING_READY = "WIRING_READY";
     String WIRING_NOT_READY = "WIRING_NOT_READY";
-
     /**
-     * 初始化动作
+     * 引流抓取
      */
-    String WIRING_INIT = "WIRING_INIT";
-    String WIRING_NOT_INIT = "WIRING_NOT_INIT";
-
+    String WIRING_GRAB = "WIRING_GRAB";
+    String WIRING_NOT_GRAB = "WIRING_NOT_GRAB";
     /**
-     * 剥线工具
+     * 引线进入
+     */
+    String WIRING_ENTER = "WIRING_ENTER";
+    String WIRING_NOT_ENTER = "WIRING_NOT_ENTER";
+    /**
+     * 引线固定
+     */
+    String WIRING_FIXED = "WIRING_FIXED";
+    String WIRING_NOT_FIXED = "WIRING_NOT_FIXED";
+    /**
+     * 接线工具就位
      */
     String WIRING_TOOL_READY = "WIRING_TOOL_READY";
-    String WIRING_NOT_TOOL_READY = "WIRING_TOOL_NOT_READY";
-
+    String WIRING_NOT_TOOL_READY = "WIRING_NOT_TOOL_READY";
     /**
-     * 主线夹紧
+     * 并勾线夹就位
      */
-    String WIRING_CLAMPING = "WIRING_CLAMPING";
-    String WIRING_NOT_CLAMPING = "WIRING_NOT_CLAMPING";
-
+    String WIRING_LINE_READY = "WIRING_LINE_READY";
+    String WIRING_NOT_LINE_READY = "WIRING_NOT_LINE_READY";
     /**
-     * 夹具闭合
+     * 拧断螺母
      */
-
-    String WIRING_CLOSURE = "WIRING_CLOSURE";
-    String WIRING_NOT_CLOSURE = "WIRING_NOT_CLOSURE";
-
+    String WIRING_TWIST = "WIRING_TWIST";
+    String WIRING_NOT_TWIST = "WIRING_NOT_TWIST";
     /**
-     * 旋转剥皮
+     * 线夹解锁
      */
-
-    String WIRING_PEELING = "WIRING_PEELING";
-    String WIRING_NOT_PEELING = "WIRING_NOT_PEELING";
-
+    String WIRING_CLIP_UNLOCK = "WIRING_CLIP_UNLOCK";
+    String WIRING_NOT_CLIP_UNLOCK = "WIRING_NOT_CLIP_UNLOCK";
     /**
-     * 切断绝缘皮
+     * 套筒解锁
      */
-    String WIRING_CUT_OFF = "WIRING_CUT_OFF";
-    String WIRING_NOT_CUT_OFF = "WIRING_NOT_CUT_OFF";
-
-    /**
-     * 解锁
-     */
-    String WIRING_UNLOCK = "WIRING_UNLOCK";
-    String WIRING_NOT_UNLOCK = "WIRING_NOT_UNLOCK";
+    String WIRING_SLEEVE_UNLOCK = "WIRING_SLEEVE_UNLOCK";
+    String WIRINGNOT_SLEEVE_UNLOCK = "WIRINGNOT_SLEEVE_UNLOCK";
     /**
      * 结束
      */
@@ -155,8 +151,8 @@ public interface RobotInit {
     /**
      * 结束
      */
-    String CUT_END = "670A050101FF";
-    String CUT_NOT_END = "670A050100FF";
+    String CUT_END = "CUT_END";
+    String CUT_NOT_END = "CUT_NOT_END";
 
 
     //------------------------ 剪线界面 end --------------------------
