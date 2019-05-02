@@ -103,6 +103,7 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
+        webViewOnDestroy();
         super.onDestroy();
     }
 
