@@ -35,7 +35,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         NettyClient.getInstance().setConnectStatus(true);
         listener.onServiceStatusConnectChanged(NettyListener.STATUS_CONNECT_SUCCESS);
-        ping(ctx.channel());
+//        ping(ctx.channel());
     }
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {

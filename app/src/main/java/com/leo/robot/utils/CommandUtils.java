@@ -1036,6 +1036,36 @@ public class CommandUtils {
         return ConvertCode.bytes2HexString(msg);
     }
 
+    /**
+     * 状态复位
+     *
+     * @author Leo
+     * created at 2019/5/2 2:32 PM
+     */
+    public static String getStrippingStatusReset() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x08;
+        msg[2] = (byte) 0x07;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+    * 剥线停止
+    *
+    *@author Leo
+    *created at 2019/5/2 2:37 PM
+    */
+    public static String getStrippingStop() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x08;
+        msg[2] = (byte) 0x08;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
     //------------------------ 剥线工具 end --------------------------
 
     //------------------------ 剪线工具 start --------------------------
@@ -1119,11 +1149,11 @@ public class CommandUtils {
     }
 
     /**
-    * 支线夹紧复位
-    *
-    *@author Leo
-    *created at 2019/5/2 1:56 PM
-    */
+     * 支线夹紧复位
+     *
+     * @author Leo
+     * created at 2019/5/2 1:56 PM
+     */
     public static String getTwistFeederClampReset() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x09;
@@ -1254,11 +1284,11 @@ public class CommandUtils {
     }
 
     /**
-    * 套筒停止
-    *
-    *@author Leo
-    *created at 2019/5/2 1:54 PM
-    */
+     * 套筒停止
+     *
+     * @author Leo
+     * created at 2019/5/2 1:54 PM
+     */
     public static String getSleeveStop() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x09;

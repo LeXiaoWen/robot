@@ -303,9 +303,9 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
     private void down() {
         if (mClient != null) {
             if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmDisDown());
+                mClient.sendMsgTest(CommandUtils.getMainArmPosDown());
             } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmDisDown());
+                mClient.sendMsgTest(CommandUtils.getFlowArmPosDown());
             }
         }
     }
@@ -313,9 +313,9 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
     private void up() {
         if (mClient != null) {
             if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmDisUp());
+                mClient.sendMsgTest(CommandUtils.getMainArmPosUp());
             } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmDisUp());
+                mClient.sendMsgTest(CommandUtils.getFlowArmPosUp());
             }
         }
 
@@ -324,9 +324,9 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
     private void right() {
         if (mClient != null) {
             if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmDisRight());
+                mClient.sendMsgTest(CommandUtils.getMainArmPosRight());
             } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmDisRight());
+                mClient.sendMsgTest(CommandUtils.getFlowArmPosRight());
             }
         }
 
@@ -335,9 +335,9 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
     private void left() {
         if (mClient != null) {
             if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmDisLeft());
+                mClient.sendMsgTest(CommandUtils.getMainArmPosLeft());
             } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmDisLeft());
+                mClient.sendMsgTest(CommandUtils.getFlowArmPosLeft());
             }
         }
 
@@ -346,9 +346,9 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
     private void backward() {
         if (mClient != null) {
             if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmDisRotateRight());
+                mClient.sendMsgTest(CommandUtils.getMainArmPosRotateRight());
             } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmDisRotateRight());
+                mClient.sendMsgTest(CommandUtils.getFlowArmPosRotateRight());
             }
         }
 
@@ -357,9 +357,9 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
     private void forward() {
         if (mClient != null) {
             if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmDisRotateLeft());
+                mClient.sendMsgTest(CommandUtils.getMainArmPosRotateLeft());
             } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmDisRotateLeft());
+                mClient.sendMsgTest(CommandUtils.getFlowArmPosRotateLeft());
             }
         }
 

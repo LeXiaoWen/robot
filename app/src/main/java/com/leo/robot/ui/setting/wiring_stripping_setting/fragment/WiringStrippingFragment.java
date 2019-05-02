@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -19,7 +18,6 @@ import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.utils.CommandUtils;
-import com.leo.robot.utils.MiddlewareWebViewClient;
 import com.leo.robot.utils.NettyManager;
 
 /**
@@ -353,52 +351,16 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
                 break;
             case R.id.iv7:
                 if (mClient != null) {
-//                    mClient.sendMsgTest();
+                    mClient.sendMsgTest(CommandUtils.getStrippingStatusReset());
                 }
                 break;
             case R.id.iv8:
                 if (mClient != null) {
-                    mClient.sendMsgTest(CommandUtils.getFlowArmActionStop());
+                    mClient.sendMsgTest(CommandUtils.getStrippingStop());
                 }
                 break;
         }
     }
 
-    /**
-     * MiddlewareWebClientBase 是 AgentWeb 3.0.0 提供一个强大的功能，
-     * 如果用户需要使用 AgentWeb 提供的功能， 不想重写 WebClientView方
-     * 法覆盖AgentWeb提供的功能，那么 MiddlewareWebClientBase 是一个
-     * 不错的选择 。
-     *
-     * @return
-     */
-    protected MiddlewareWebClientBase getMiddlewareWebClient() {
-        return this.mMiddleWareWebClient = new MiddlewareWebViewClient() {
-            /**
-             *
-             * @param view
-             * @param url
-             * @return
-             */
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-                if (url.startsWith("agentweb")) { // 拦截 url，不执行 DefaultWebClient#shouldOverrideUrlLoading
-//                    Log.i(TAG, "agentweb scheme ~");
-                    return true;
-                }
-
-                if (super.shouldOverrideUrlLoading(view, url)) { // 执行 DefaultWebClient#shouldOverrideUrlLoading
-                    return true;
-                }
-                // do you work
-                return false;
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return super.shouldOverrideUrlLoading(view, request);
-            }
-        };
-    }
 }
