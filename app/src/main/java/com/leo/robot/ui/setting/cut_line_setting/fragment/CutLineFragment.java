@@ -6,11 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
+import com.leo.robot.constant.UrlConstant;
 
 /**
  * 剪线设置
@@ -61,7 +64,11 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initVideo() {
-
+        initMainVideo();
+        initVideo1();
+        initVideo2();
+        initVideo3();
+        initVideo4();
     }
 
     @Override
@@ -69,10 +76,15 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
         super.onHiddenChanged(hidden);
         if (hidden) {
             //Fragment隐藏时调用
-
-
+            webViewOnDestroy();
+            AgentWebConfig.clearDiskCache(this.getContext());
         } else {
             //Fragment显示时调用
+            initMainVideo();
+            initVideo1();
+            initVideo2();
+            initVideo3();
+            initVideo4();
         }
     }
 
@@ -99,5 +111,140 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
 
         }
+    }
+
+    /**
+     * 位姿仿真画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:27 PM
+     */
+    private void initVideo4() {
+        mAgentWeb4 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl4, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWeb4.getWebCreator().getWebView());
+    }
+
+    /**
+     * 机械臂画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initVideo3() {
+        mAgentWeb3 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl3, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWeb3.getWebCreator().getWebView());
+    }
+
+    /**
+     * 引流线画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initVideo2() {
+        mAgentWeb2 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl2, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWeb2.getWebCreator().getWebView());
+    }
+
+    /**
+     * 行线画面
+     *
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initVideo1() {
+        mAgentWeb1 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl1, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWeb1.getWebCreator().getWebView());
+    }
+
+
+    /**
+     * 云台画面
+     *
+     * @param
+     * @author Leo
+     * created at 2019/4/27 5:26 PM
+     */
+    private void initMainVideo() {
+        mAgentWebMain = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRlMain, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+
+        initWebSetting(mAgentWebMain.getWebCreator().getWebView());
+
+
+        //缩放
+//        agentWeb.getAgentWebSettings().getWebSettings().setUseWideViewPort(true);
+//        agentWeb.getAgentWebSettings().getWebSettings().setLoadWithOverviewMode(true);
+//        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
+
+    }
+
+    /**
+     * 设置webView自适应屏幕，取消滚动条
+     *
+     * @author Leo
+     * created at 2019/4/27 5:19 PM
+     */
+    private void initWebSetting(WebView view) {
+        //取消滚动条
+        view.setHorizontalScrollBarEnabled(false);
+        view.setVerticalScrollBarEnabled(false);
+        view.getSettings().setUseWideViewPort(true);
+        view.getSettings().setLoadWithOverviewMode(true);
+        //缩放
+//        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
+    }
+
+    private void webViewOnPause() {
+        mAgentWebMain.getWebLifeCycle().onPause();
+        mAgentWeb1.getWebLifeCycle().onPause();
+        mAgentWeb2.getWebLifeCycle().onPause();
+        mAgentWeb3.getWebLifeCycle().onPause();
+        mAgentWeb4.getWebLifeCycle().onPause();
+
+    }
+
+    private void webViewOnResume() {
+        mAgentWebMain.getWebLifeCycle().onResume();
+        mAgentWeb1.getWebLifeCycle().onResume();
+        mAgentWeb2.getWebLifeCycle().onResume();
+        mAgentWeb3.getWebLifeCycle().onResume();
+        mAgentWeb4.getWebLifeCycle().onResume();
+    }
+
+    private void webViewOnDestroy() {
+        mAgentWebMain.getWebLifeCycle().onDestroy();
+        mAgentWeb1.getWebLifeCycle().onDestroy();
+        mAgentWeb2.getWebLifeCycle().onDestroy();
+        mAgentWeb3.getWebLifeCycle().onDestroy();
+        mAgentWeb4.getWebLifeCycle().onDestroy();
     }
 }

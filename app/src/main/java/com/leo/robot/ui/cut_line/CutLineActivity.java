@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.CutLineMsg;
@@ -292,7 +293,9 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     @Override
     protected void onResume() {
-        webViewOnResume();
+        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+            webViewOnResume();
+        };
         super.onResume();
         isShown = true;
         mPresenter.initStatus();
@@ -300,14 +303,20 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     @Override
     protected void onPause() {
-        webViewOnPause();
+        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+            webViewOnPause();
+            webViewOnDestroy();
+            AgentWebConfig.clearDiskCache(this);
+        }
         super.onPause();
         isShown = false;
     }
 
     @Override
     protected void onDestroy() {
-        webViewOnDestroy();
+        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+            webViewOnDestroy();
+        }
         super.onDestroy();
     }
 
@@ -359,6 +368,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
             case R.id.iv_setting:
                 if (!mPresenter.isFastDoubleClick()) {
                     startActivity(new Intent(CutLineActivity.this, CutLineSettingActivity.class));
+                    finish();
                 }
                 break;
             case R.id.iv_back:

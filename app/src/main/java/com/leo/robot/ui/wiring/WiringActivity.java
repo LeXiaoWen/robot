@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.ErroMsg;
@@ -310,25 +311,34 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     @Override
     protected void onPause() {
-        webViewOnPause();
+        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+            webViewOnPause();
+            webViewOnDestroy();
+            AgentWebConfig.clearDiskCache(this);
+        }
         super.onPause();
-        isPause = true;
+        isShown = false;
     }
 
     @Override
     protected void onResume() {
-        webViewOnResume();
+        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+            webViewOnResume();
+        }
         super.onResume();
         mPresenter.initStatus();
-        isPause = false;
+        isShown = true;
     }
 
     @Override
     protected void onDestroy() {
-        webViewOnDestroy();
-        onUnBindReceiver();
+        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+            webViewOnDestroy();
+        }
         super.onDestroy();
     }
+
+
 
 
     public void updateScramText(String s) {
@@ -343,6 +353,8 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     @Override
     protected void onStop() {
+        onUnBindReceiver();
+
         super.onStop();
     }
 
@@ -393,10 +405,11 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
             case R.id.iv_setting:
                 if (!mPresenter.isFastDoubleClick()){
                     startActivity(new Intent(WiringActivity.this, WiringSettingActivity.class));
+                    finish();
                 }
                 break;
             case R.id.iv_back:
-                finish();
+                    finish();
                 break;
         }
     }

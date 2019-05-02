@@ -1,5 +1,6 @@
 package com.leo.robot.ui.setting.cut_line_setting;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ArmFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.CutLineFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityFragment;
@@ -147,7 +149,11 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
                 switchFragment(mArmFragment).commit();
                 break;
             case R.id.iv_back:
-                finish();
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(new Intent(CutLineSettingActivity.this,CutLineActivity.class));
+                    finish();
+                }
+
                 break;
         }
     }

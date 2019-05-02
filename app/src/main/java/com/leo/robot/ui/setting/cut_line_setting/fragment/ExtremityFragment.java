@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
@@ -233,22 +234,33 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) {
-
+            //Fragment隐藏时调用
+//            webViewOnResume();
+            webViewOnPause();
+            webViewOnDestroy();
+            AgentWebConfig.clearDiskCache(this.getContext());
         } else {
+            //Fragment显示时调用
+//            webViewOnPause();
+            initMainVideo();
+            initVideo1();
+            initVideo2();
+            initVideo3();
+            initVideo4();
         }
     }
 
 
     @Override
     public void onPause() {
-        webViewOnPause();
+//        webViewOnPause();
         super.onPause();
         isPause = true;
     }
 
     @Override
     public void onResume() {
-        webViewOnResume();
+//        webViewOnResume();
         super.onResume();
         isPause = false;
     }

@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.ErroMsg;
@@ -301,21 +302,28 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     @Override
     protected void onPause() {
-        webViewOnPause();
+        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+            webViewOnPause();
+            webViewOnDestroy();
+            AgentWebConfig.clearDiskCache(this);
+        }
+
         super.onPause();
         isShown = false;
 
-        LogUtils.e("暂停剥线界面");
+        LogUtils.e("剥线界面：  onPause");
     }
 
 
     @Override
     protected void onResume() {
-        webViewOnResume();
+        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+            webViewOnResume();
+        }
         super.onResume();
         isShown = true;
-        LogUtils.e("恢复剥线界面");
         mPresenter.initStatus();
+        LogUtils.e("剥线界面： onResume");
     }
 
     private void webViewOnPause() {
@@ -345,8 +353,12 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     @Override
     protected void onDestroy() {
-        webViewOnDestroy();
+        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+            webViewOnDestroy();
+        }
         super.onDestroy();
+        LogUtils.e("剥线界面：   onDestroy ");
+
     }
 
 
@@ -354,6 +366,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     protected void onStop() {
         onUnBindReceiver();
         super.onStop();
+        LogUtils.e("剥线界面： onStop");
+
     }
 
     //------------------------ EventBus --------------------------
@@ -493,7 +507,9 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 break;
             case R.id.iv_setting:
 //                mPresenter.settingButton();
+//                webViewOnDestroy();
                 startActivity(new Intent(WireStrippingActivity.this, WiringStrippingSettingActivity.class));
+                finish();
                 break;
             case R.id.iv_back:
                 if (!mPresenter.isFastDoubleClick()) {
@@ -547,29 +563,29 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     }
 
     /**
-    * 切换急停、恢复急停图标
-    *
-    *@author Leo
-    *created at 2019/5/1 1:19 AM
-    */
+     * 切换急停、恢复急停图标
+     *
+     * @author Leo
+     * created at 2019/5/1 1:19 AM
+     */
     public void updateScram(boolean b) {
-        if (!b){
+        if (!b) {
             mIvScram.setImageDrawable(getResources().getDrawable(R.drawable.jiting_normal));
-        }else {
+        } else {
             mIvScram.setImageDrawable(getResources().getDrawable(R.drawable.jiechujiting_normal));
         }
     }
 
     /**
-    * 切换开始、停止图标
-    *
-    *@author Leo
-    *created at 2019/5/1 1:20 AM
-    */
+     * 切换开始、停止图标
+     *
+     * @author Leo
+     * created at 2019/5/1 1:20 AM
+     */
     public void updateStart(boolean b) {
-        if (!b){
+        if (!b) {
             mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
-        }else {
+        } else {
             mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.tingzhi_normal));
         }
     }

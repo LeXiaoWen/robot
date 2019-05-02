@@ -1,5 +1,6 @@
 package com.leo.robot.ui.setting.wiring_stripping_setting;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import com.leo.robot.ui.setting.cut_line_setting.fragment.ArmFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityMoveFragment;
 import com.leo.robot.ui.setting.wiring_stripping_setting.fragment.WiringStrippingFragment;
+import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -152,7 +154,10 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
                 switchFragment(mArmFragment).commit();
                 break;
             case R.id.iv_back:
-                finish();
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(new Intent(WiringStrippingSettingActivity.this, WireStrippingActivity.class));
+                    finish();
+                }
                 break;
         }
     }

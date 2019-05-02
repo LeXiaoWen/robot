@@ -1,5 +1,6 @@
 package com.leo.robot.ui.setting.wiring_setting;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import com.leo.robot.ui.setting.cut_line_setting.fragment.ArmFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityMoveFragment;
 import com.leo.robot.ui.setting.wiring_setting.fragment.WiringFragment;
+import com.leo.robot.ui.wiring.WiringActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -144,7 +146,10 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
                 switchFragment(mArmFragment).commit();
                 break;
             case R.id.iv_back:
-                finish();
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(new Intent(WiringSettingActivity.this, WiringActivity.class));
+                    finish();
+                }
                 break;
         }
     }

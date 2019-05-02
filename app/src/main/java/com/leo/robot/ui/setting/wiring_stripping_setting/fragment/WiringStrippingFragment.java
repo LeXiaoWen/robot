@@ -57,6 +57,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fg_wiring_stripping, container, false);
     }
 
@@ -70,14 +71,15 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         initVideo2();
         initVideo3();
         initVideo4();
+
         AgentWebConfig.debug();
         mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
     }
 
     private void initView(View view) {
 
-        mRlMain = (RelativeLayout) view.findViewById(R.id.rl_main);
-        mRl1 = (RelativeLayout) view.findViewById(R.id.rl1);
+        mRlMain = view.findViewById(R.id.rl_main);
+        mRl1 = view.findViewById(R.id.rl1);
         mRl2 = (RelativeLayout) view.findViewById(R.id.rl2);
         mRl3 = (RelativeLayout) view.findViewById(R.id.rl3);
         mRl4 = (RelativeLayout) view.findViewById(R.id.rl4);
@@ -110,24 +112,28 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         if (hidden) {
             //Fragment隐藏时调用
 //            webViewOnResume();
-
+            webViewOnDestroy();
+            AgentWebConfig.clearDiskCache(this.getContext());
         } else {
             //Fragment显示时调用
 //            webViewOnPause();
+            initMainVideo();
+            initVideo1();
+            initVideo2();
+            initVideo3();
+            initVideo4();
         }
     }
 
 
     @Override
     public void onPause() {
-        webViewOnPause();
         super.onPause();
         isPause = true;
     }
 
     @Override
     public void onResume() {
-        webViewOnResume();
         super.onResume();
         isPause = false;
     }
@@ -178,10 +184,11 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
      *
      * @author Leo
      * created at 2019/4/27 5:27 PM
+     * @param view
      */
     private void initVideo4() {
         mAgentWeb4 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(-1, -1))
+                .setAgentWebParent((RelativeLayout) mRl4.findViewById(R.id.rl4), new RelativeLayout.LayoutParams(-1, -1))
                 .closeIndicator()
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
