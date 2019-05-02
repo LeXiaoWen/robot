@@ -407,21 +407,21 @@
                 android:layout_width="251dp"
                 android:layout_height="59dp"
                 android:layout_marginTop="@dimen/dp_16"
-                android:src="@mipmap/get_pic"/>
+                android:src="@drawable/sel_get_pic"/>
 
             <ImageView
                 android:id="@+id/iv_confirm_location"
                 android:layout_width="251dp"
                 android:layout_height="59dp"
                 android:layout_marginTop="@dimen/dp_16"
-                android:src="@mipmap/confirm_location"/>
+                android:src="@drawable/querenxuandian_unclick"/>
 
             <ImageView
                 android:id="@+id/iv_back"
                 android:layout_width="251dp"
                 android:layout_height="59dp"
                 android:layout_marginTop="@dimen/dp_16"
-                android:src="@mipmap/back"/>
+                android:src="@drawable/xuandianfanhui_normal"/>
 
             <TextView
                 android:id="@+id/touch_show"

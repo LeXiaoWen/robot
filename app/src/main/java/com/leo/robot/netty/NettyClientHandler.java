@@ -13,10 +13,13 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.GenericFutureListener;
 import io.netty.util.concurrent.ScheduledFuture;
 
-/**
- * Created by 张俨 on 2018/1/10.
- */
 
+/**
+* netty
+*
+*@author Leo
+*created at 2019/5/2 11:52 AM
+*/
 public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
     private static final String TAG = NettyClientHandler.class.getName();
     private NettyListener listener;

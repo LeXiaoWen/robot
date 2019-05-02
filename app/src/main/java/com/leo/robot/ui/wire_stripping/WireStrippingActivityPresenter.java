@@ -210,9 +210,8 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 
     public void identificationButton() {
         if (isClickble) {
-            if (!isFastDoubleClick()) {
                 mActivity.startActivity(new Intent(mActivity, ChooseLocationActivity.class));
-            }
+                mActivity.finish();
         }
     }
 }

@@ -7,6 +7,7 @@ import com.leo.robot.bean.WiringMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.utils.CommandUtils;
+import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
 
 import javax.inject.Inject;
@@ -25,9 +26,11 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
     private boolean isStart = false;
 
     private boolean isClickble = false;
+    private final NettyClient mClient;
 
     @Inject
     public WiringActivityPresenter() {
+        mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.leo.robot.ui.wire_stripping.choose;
 
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
@@ -13,10 +13,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -369,26 +371,37 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
             case R.id.iv_confirm_location:
                 break;
             case R.id.iv_back:
-                finish();
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(new Intent(ChooseLocationActivity.this, WireStrippingActivity.class));
+                    finish();
+                }
                 break;
         }
     }
 
     @Override
     protected void onPause() {
-        webViewOnPause();
+        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+            webViewOnPause();
+            webViewOnDestroy();
+            AgentWebConfig.clearDiskCache(this);
+        }
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        webViewOnResume();
+        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+            webViewOnResume();
+        }
         super.onResume();
     }
 
     @Override
     protected void onDestroy() {
-        webViewOnDestroy();
+        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+            webViewOnDestroy();
+        }
         super.onDestroy();
     }
 
@@ -419,17 +432,16 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
 
 
     /**
-    * 接收视觉服务器base64数据
-    *
-    *@author Leo
-    *created at 2019/4/28 7:57 PM
-    */
+     * 接收视觉服务器base64数据
+     *
+     * @author Leo
+     * created at 2019/4/28 7:57 PM
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onVisionMsg(VisionMsg msg) {
-        LogUtils.e("图片数据 ： "  +msg.getMsg());
+        LogUtils.e("图片数据 ： " + msg.getMsg());
 
     }
-
 
 
 }

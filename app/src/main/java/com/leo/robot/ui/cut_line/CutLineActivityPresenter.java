@@ -12,6 +12,8 @@ import com.leo.robot.utils.TimeThread;
 
 import javax.inject.Inject;
 
+import cree.mvp.util.data.SPUtils;
+
 /**
  * created by Leo on 2019/4/18 10 : 46
  */
@@ -94,8 +96,19 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
     }
 
     public void initStatus() {
+        SPUtils utils = new SPUtils(RobotInit.CUT_LINE_ACTIVITY);
+        boolean isReady = utils.getBoolean(RobotInit.CUT_READY);
+        boolean isStart = utils.getBoolean(RobotInit.CUT_START);
+        boolean isStop = utils.getBoolean(RobotInit.CUT_STOP);
+        boolean isReset = utils.getBoolean(RobotInit.CUT_RESET);
+        boolean isEnd = utils.getBoolean(RobotInit.CUT_END);
+        isClickble = isReady;
 
-
+        mActivity.updateInit(isReady);
+        mActivity.updateCutStart(isStart);
+        mActivity.updateCutStop(isStop);
+        mActivity.updateCutReset(isReset);
+        mActivity.updateEnd(isEnd);
     }
 
     public String jugType(CutLineMsg msg) {

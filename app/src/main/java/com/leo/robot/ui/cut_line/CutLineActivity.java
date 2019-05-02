@@ -413,6 +413,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
             mTv2.setTextColor(getResources().getColor(R.color.color_status_wake_up));
             mIv2.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
         }
+        updateClickStatus(b);
     }
 
 
