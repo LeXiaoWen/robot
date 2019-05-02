@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.leo.robot.broadcast.BatteryReceiver;
+import com.leo.robot.constant.RobotInit;
 
 import java.lang.ref.WeakReference;
 
@@ -126,31 +128,36 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
         return super.onKeyDown(keyCode, event);
     }
 
-    public void showNormalDialog(Activity activity) {
+    public void showNormalDialog(Activity activity, String type) {
         /* @setIcon 设置对话框图标
          * @setTitle 设置对话框标题
          * @setMessage 设置对话框消息提示
          * setXXX方法返回Dialog对象，因此可以链式设置属性
          */
-//        final AlertDialog.Builder normalDialog =
-//                new AlertDialog.Builder(activity);
-//        normalDialog.setTitle("连接异常");
-//        normalDialog.setMessage("服务器连接失败，是否重连?");
-//        normalDialog.setPositiveButton("是",
-//                (dialog, which) -> {
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(activity);
+        normalDialog.setTitle("连接异常");
+        normalDialog.setMessage("服务器连接失败，是否重连?");
+        normalDialog.setPositiveButton("是",
+                (dialog, which) -> {
+                    if (type.equals(RobotInit.MASTER_CONTROL_NETTY)) {
+
+                    } else if (type.equals(RobotInit.VISION_NETTY)) {
+
+                    }
 //                    NettyClient.getInstance().reconnect();
-//                    dialog.dismiss();
-//                });
-//        normalDialog.setNegativeButton("否",
-//                (dialog, which) -> {
+                    dialog.dismiss();
+                });
+        normalDialog.setNegativeButton("否",
+                (dialog, which) -> {
 //                    NettyClient.getInstance().setReconnectNum(0);
 //                    NettyClient.getInstance().disconnect();
-////                    final Intent intent = new Intent(getApplication(), NettyService.class);
-////                    stopService(intent);
-//                    dialog.dismiss();
-//                });
-//        // 显示
-//        normalDialog.show();
+//                    final Intent intent = new Intent(getApplication(), NettyService.class);
+//                    stopService(intent);
+                    dialog.dismiss();
+                });
+        // 显示
+        normalDialog.show();
     }
 
 }

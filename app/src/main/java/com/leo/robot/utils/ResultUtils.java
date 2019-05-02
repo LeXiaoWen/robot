@@ -501,8 +501,10 @@ public class ResultUtils {
     public static void onConnectErro(String type) {
         TestBean testBean = new TestBean();
         if (RobotInit.MASTER_CONTROL_NETTY.equals(type)) {//主控服务器连接失败
+            testBean.setCode(RobotInit.MASTER_CONTROL_NETTY);
             testBean.setMsg("主控服务器连接失败  ");
         } else if (RobotInit.VISION_NETTY.equals(type)) {//视觉服务器连接失败
+            testBean.setCode(RobotInit.VISION_NETTY);
             testBean.setMsg("视觉服务器连接失败  ");
         }
         BusUtils.postMessage(testBean);

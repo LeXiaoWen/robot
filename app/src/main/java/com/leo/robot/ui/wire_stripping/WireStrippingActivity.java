@@ -20,6 +20,7 @@ import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.bean.TestBean;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.bean.WireStrippingMsg;
+import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
@@ -375,7 +376,13 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void acceptErroMsg(ErroMsg msg) {
         if (isShown) {
-            showNormalDialog(this);
+            if (msg.getCode().equals(RobotInit.MASTER_CONTROL_NETTY)) {
+//                showNormalDialog(this);
+            }else if (msg.getCode().equals(RobotInit.VISION_NETTY)){
+//                showNormalDialog(this);
+            }
+
+
 //            ToastUtils.showShortToast(msg.getMsg());
         }
     }
