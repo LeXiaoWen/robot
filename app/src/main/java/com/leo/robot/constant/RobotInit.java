@@ -128,6 +128,14 @@ public interface RobotInit {
 
     // ------------------------ 剪线界面 start --------------------------
 
+
+    /**
+     * 就绪
+     */
+
+    String CUT_INIT = "CUT_INIT";
+    String CUT_NOT_INIT = "CUT_NOT_INIT";
+
     /**
      * 到位
      */

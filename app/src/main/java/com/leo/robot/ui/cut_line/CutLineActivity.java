@@ -170,6 +170,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         mAgentWeb4 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -187,6 +188,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         mAgentWeb3 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -204,6 +206,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         mAgentWeb2 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -221,6 +224,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         mAgentWeb1 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -239,6 +243,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         mAgentWebMain = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -284,7 +289,6 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     }
 
 
-
     @Override
     protected void onStop() {
         onUnBindReceiver();
@@ -295,7 +299,8 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     protected void onResume() {
         if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
             webViewOnResume();
-        };
+        }
+        ;
         super.onResume();
         isShown = true;
         mPresenter.initStatus();
@@ -405,17 +410,24 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     //------------------------ 更新UI --------------------------
 
 
-
     public void updateInit(boolean b) {
+        mTv1.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIv1.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
+        if (b) {
+            mTv1.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIv1.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+        }
+        updateClickStatus(b);
+    }
+
+    public void updateReady(boolean b) {
         mTv2.setTextColor(getResources().getColor(R.color.color_status_normal));
         mIv2.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
         if (b) {
             mTv2.setTextColor(getResources().getColor(R.color.color_status_wake_up));
             mIv2.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
         }
-        updateClickStatus(b);
     }
-
 
 
     public void updateCutStart(boolean b) {

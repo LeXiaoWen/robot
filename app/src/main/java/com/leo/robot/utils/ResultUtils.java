@@ -379,19 +379,29 @@ public class ResultUtils {
     private static void onCutLine(String msg) {
         SPUtils utils = new SPUtils(RobotInit.CUT_LINE_ACTIVITY);
         CutLineMsg cutLineMsg = new CutLineMsg();
+        if (msg.equals(PushMsgCode.CUT_INIT)){//就绪
+            utils.putBoolean(RobotInit.CUT_INIT, true);
+            cutLineMsg.setCode(PushMsgCode.CUT_INIT);
 
-        if (msg.equals(PushMsgCode.CUT_READY)) {//到位
+            cutLineMsg.setMsg(RobotInit.CUT_INIT);
+            cutLineMsg.setHighlight(true);
+        } else if (msg.equals(PushMsgCode.CUT_NOT_INIT)){
+            utils.putBoolean(RobotInit.CUT_INIT, false);
+            cutLineMsg.setCode(PushMsgCode.CUT_NOT_INIT);
+
+            cutLineMsg.setMsg(RobotInit.CUT_NOT_INIT);
+            cutLineMsg.setHighlight(false);
+
+        }else if (msg.equals(PushMsgCode.CUT_READY)) {//到位
             utils.putBoolean(RobotInit.CUT_READY, true);
             cutLineMsg.setCode(PushMsgCode.CUT_READY);
 
             cutLineMsg.setMsg(RobotInit.CUT_READY);
-            cutLineMsg.setHighlight(true);
         } else if (msg.equals(PushMsgCode.CUT_NOT_READY)) {//未到位
             utils.putBoolean(RobotInit.CUT_READY, false);
             cutLineMsg.setCode(PushMsgCode.CUT_NOT_READY);
 
             cutLineMsg.setMsg(RobotInit.CUT_NOT_READY);
-            cutLineMsg.setHighlight(false);
         } else if (msg.equals(PushMsgCode.CUT_START)) {//剪线开始
             utils.putBoolean(RobotInit.CUT_START, true);
             cutLineMsg.setCode(PushMsgCode.CUT_START);

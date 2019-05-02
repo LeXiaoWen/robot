@@ -104,6 +104,7 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
         mAgentWeb4 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl4, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -121,6 +122,7 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
         mAgentWeb3 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl3, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -138,6 +140,7 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
         mAgentWeb2 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl2, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -155,6 +158,7 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
         mAgentWeb1 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl1, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
@@ -174,6 +178,7 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
         mAgentWebMain = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, -1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);

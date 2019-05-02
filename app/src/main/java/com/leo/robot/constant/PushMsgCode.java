@@ -87,7 +87,7 @@ public interface PushMsgCode {
     String WIRING_ENTER = "6709030101FF";
     String WIRING_NOT_ENTER = "6709030100FF";
     /**
-     * 引线固定
+     * 引线夹紧
      */
     String WIRING_FIXED = "6709040101FF";
     String WIRING_NOT_FIXED = "6709040100FF";
@@ -129,30 +129,36 @@ public interface PushMsgCode {
     // ------------------------ 剪线界面 start --------------------------
 
     /**
+     * 就绪
+      */
+    String CUT_INIT = "670A010101FF";
+    String CUT_NOT_INIT = "670A010100FF";
+
+    /**
      * 到位
      */
-    String CUT_READY = "670A010101FF";
-    String CUT_NOT_READY = "670A010100FF";
+    String CUT_READY = "670A020101FF";
+    String CUT_NOT_READY = "670A020100FF";
     /**
      * 剪线开始
      */
-    String CUT_START = "670A020101FF";
-    String CUT_NOT_START = "670A020100FF";
+    String CUT_START = "670A030101FF";
+    String CUT_NOT_START = "670A030100FF";
     /**
      * 剪线停止
      */
-    String CUT_STOP = "670A030101FF";
-    String CUT_NOT_STOP = "670A030100FF";
+    String CUT_STOP = "670A040101FF";
+    String CUT_NOT_STOP = "670A040100FF";
     /**
      * 钳口复位
      */
-    String CUT_RESET = "670A040101FF";
-    String CUT_NOT_RESET= "670A040101FF";
+    String CUT_RESET = "670A050101FF";
+    String CUT_NOT_RESET= "670A050100FF";
     /**
      * 结束
      */
-    String CUT_END = "670A050101FF";
-    String CUT_NOT_END = "670A050100FF";
+    String CUT_END = "670A060101FF";
+    String CUT_NOT_END = "670A060100FF";
 
 
     //------------------------ 剪线界面 end --------------------------

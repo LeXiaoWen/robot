@@ -261,6 +261,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         mAgentWebMain = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(-1, -1))
                 .closeIndicator()
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);

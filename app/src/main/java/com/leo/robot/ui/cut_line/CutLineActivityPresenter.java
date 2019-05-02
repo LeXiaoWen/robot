@@ -111,6 +111,7 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
 
     public void initStatus() {
         SPUtils utils = new SPUtils(RobotInit.CUT_LINE_ACTIVITY);
+        boolean isInit = utils.getBoolean(RobotInit.CUT_INIT);
         boolean isReady = utils.getBoolean(RobotInit.CUT_READY);
         boolean isStart = utils.getBoolean(RobotInit.CUT_START);
         boolean isStop = utils.getBoolean(RobotInit.CUT_STOP);
@@ -118,7 +119,8 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
         boolean isEnd = utils.getBoolean(RobotInit.CUT_END);
         isClickble = isReady;
 
-        mActivity.updateInit(isReady);
+        mActivity.updateInit(isInit);
+        mActivity.updateReady(isReady);
         mActivity.updateCutStart(isStart);
         mActivity.updateCutStop(isStop);
         mActivity.updateCutReset(isReset);
@@ -127,13 +129,18 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
 
     public String jugType(CutLineMsg msg) {
         String type = msg.getMsg();
-        if (type.equals(RobotInit.CUT_READY)) {
+        if (type.equals(RobotInit.CUT_INIT)) {
             mActivity.updateInit(true);
             isClickble = true;
-            return "剪线工具到位";
-        } else if (type.equals(RobotInit.CUT_NOT_READY)) {
+            return "剪线工具就绪";
+        } else if (type.equals(RobotInit.CUT_NOT_INIT)) {
             mActivity.updateInit(false);
             isClickble = false;
+        } else if (type.equals(RobotInit.CUT_READY)) {
+            mActivity.updateReady(true);
+            return "剪线工具到位";
+        } else if (type.equals(RobotInit.CUT_NOT_READY)) {
+            mActivity.updateReady(false);
         } else if (type.equals(RobotInit.CUT_START)) {
             mActivity.updateCutStart(true);
             return "剪线开始";

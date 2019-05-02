@@ -250,6 +250,7 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
         if (b) {
             mTvReady.setTextColor(getResources().getColor(R.color.color_status_wake_up));
             mIvReady.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+            mTvRemind.setText("请选择剥线位置第一点");
         }
     }
 
