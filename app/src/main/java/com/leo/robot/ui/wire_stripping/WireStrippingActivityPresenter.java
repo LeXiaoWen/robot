@@ -50,24 +50,24 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      * created at 2019/4/18 2:11 PM
      */
     public void scramButton() {
-        if (!isScram) { //急停
-            if (mClient != null) {
-                mClient.sendMsgTest(CommandUtils.getFlowArmShutdown());
-            }
-            mActivity.updateScram(true);
-            isScram = true;
-        } else {//回复急停
-            if (mClient != null) {
-                mClient.sendMsgTest(CommandUtils.getFlowArmResume());
-            }
-            mActivity.updateScram(false);
-            isScram = false;
-        }
         if (isClickble) {
-            NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmShutdown());
-            mActivity.refreshLogRv("发送急停命令");
-        }
+            if (!isScram) { //急停
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getFlowArmShutdown());
+                    mActivity.refreshLogRv("发送急停命令");
+                }
+                mActivity.updateScram(true);
+                isScram = true;
+            } else {//回复急停
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getFlowArmResume());
+                    mActivity.refreshLogRv("发送恢复急停命令");
 
+                }
+                mActivity.updateScram(false);
+                isScram = false;
+            }
+        }
     }
 
     /**
@@ -78,7 +78,7 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      */
     public void revocerButton() {
         if (isClickble) {
-            NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmRecover());
+            mClient.sendMsgTest(CommandUtils.getFlowArmRecover());
             mActivity.refreshLogRv("发送一键回收命令");
         }
 
@@ -94,12 +94,12 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 
         if (isClickble) {
             if (!isStart) { //开始
-                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmStart());
+                mClient.sendMsgTest(CommandUtils.getFlowArmStart());
                 isStart = true;
                 mActivity.updateStart(true);
                 mActivity.refreshLogRv("发送开始命令");
             } else {//停止
-                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getFlowArmStop());
+                mClient.sendMsgTest(CommandUtils.getFlowArmStop());
                 isStart = false;
                 mActivity.updateStart(false);
 
@@ -210,8 +210,8 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 
     public void identificationButton() {
         if (isClickble) {
-                mActivity.startActivity(new Intent(mActivity, ChooseLocationActivity.class));
-                mActivity.finish();
+            mActivity.startActivity(new Intent(mActivity, ChooseLocationActivity.class));
+            mActivity.finish();
         }
     }
 }

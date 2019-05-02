@@ -46,14 +46,23 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
      * created at 2019/4/18 2:11 PM
      */
     public void scramButton() {
-        if (!isScram) { //急停
-            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmShutdown());
-            mActivity.updateScramText("恢复急停");
-            isScram = true;
-        } else {//回复急停
-            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmResume());
-            mActivity.updateScramText("急停");
-            isScram = false;
+        if (isClickble) {
+            if (!isScram) { //急停
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getMainArmShutdown());
+                    mActivity.refreshLogRv("发送急停命令");
+                }
+                mActivity.updateScram(true);
+                isScram = true;
+            } else {//回复急停
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getMainArmResume());
+                    mActivity.refreshLogRv("发送恢复急停命令");
+
+                }
+                mActivity.updateScram(false);
+                isScram = false;
+            }
         }
     }
 
@@ -64,7 +73,12 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
      * created at 2019/4/18 2:17 PM
      */
     public void revocerButton() {
-        NettyClient.getInstance().sendMsg(CommandUtils.getMainArmRecover());
+        if (isClickble){
+            if (mClient!=null){
+                mClient.sendMsgTest(CommandUtils.getMainArmRecover());
+                mActivity.refreshLogRv("发送一键回收命令");
+            }
+        }
     }
 
     /**
@@ -74,14 +88,19 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
      * created at 2019/4/18 2:18 PM
      */
     public void startButton() {
-        if (!isStart) { //开始
-            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmStart());
-            isStart = true;
-            mActivity.updateStartText("停止");
-        } else {//停止
-            NettyClient.getInstance().sendMsg(CommandUtils.getMainArmStop());
-            isStart = false;
-            mActivity.updateStartText("开始");
+        if (isClickble) {
+            if (!isStart) { //开始
+                mClient.sendMsgTest(CommandUtils.getMainArmStart());
+                isStart = true;
+                mActivity.updateStart(true);
+                mActivity.refreshLogRv("发送开始命令");
+            } else {//停止
+                mClient.sendMsgTest(CommandUtils.getMainArmStop());
+                isStart = false;
+                mActivity.updateStart(false);
+
+                mActivity.refreshLogRv("发送停止命令");
+            }
         }
     }
 
@@ -112,7 +131,7 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
             mActivity.updateEnter(false);
         } else if (type.equals(RobotInit.WIRING_FIXED)) {//引线固定
             mActivity.updateFixed(true);
-            return "引线固定";
+            return "引线夹紧";
         } else if (type.equals(RobotInit.WIRING_NOT_FIXED)) {
             mActivity.updateFixed(false);
         } else if (type.equals(RobotInit.WIRING_TOOL_READY)) {//接线工具就位

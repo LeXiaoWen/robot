@@ -597,7 +597,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         if (!b) {
             mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
         } else {
-            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.tingzhi_normal));
+            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.atingzhi_normal));
         }
     }
 }

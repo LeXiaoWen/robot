@@ -46,14 +46,21 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
      * created at 2019/4/18 2:11 PM
      */
     public void scramButton() {
-        if (mClient != null) {
+        if (isClickble) {
             if (!isScram) { //急停
-                mClient.sendMsgTest(CommandUtils.getMainArmShutdown());
-//                mActivity.updateScramText("恢复急停");
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getMainArmShutdown());
+                    mActivity.refreshLogRv("发送急停命令");
+                }
+                mActivity.updateScram(true);
                 isScram = true;
             } else {//回复急停
-                mClient.sendMsgTest(CommandUtils.getMainArmResume());
-//                mActivity.updateScramText("急停");
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getMainArmResume());
+                    mActivity.refreshLogRv("发送恢复急停命令");
+
+                }
+                mActivity.updateScram(false);
                 isScram = false;
             }
         }
@@ -67,8 +74,11 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
      * created at 2019/4/18 2:17 PM
      */
     public void revocerButton() {
-        if (mClient != null) {
-            mClient.sendMsgTest(CommandUtils.getMainArmRecover());
+        if (isClickble) {
+            if (mClient != null) {
+                mClient.sendMsgTest(CommandUtils.getMainArmRecover());
+                mActivity.refreshLogRv("发送一键回收命令");
+            }
         }
     }
 
@@ -79,16 +89,20 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
      * created at 2019/4/18 2:18 PM
      */
     public void startButton() {
-        if (mClient != null) {
+        if (isClickble) {
             if (!isStart) { //开始
                 mClient.sendMsgTest(CommandUtils.getMainArmStart());
                 isStart = true;
+                mActivity.updateStart(true);
+                mActivity.refreshLogRv("发送开始命令");
             } else {//停止
                 mClient.sendMsgTest(CommandUtils.getMainArmStop());
                 isStart = false;
+                mActivity.updateStart(false);
+
+                mActivity.refreshLogRv("发送停止命令");
             }
         }
-
     }
 
     public void getPicButton() {

@@ -395,10 +395,19 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_scram:
+                if (!mPresenter.isFastDoubleClick()) {
+                    mPresenter.scramButton();
+                }
                 break;
             case R.id.iv_take_back:
+                if (!mPresenter.isFastDoubleClick()) {
+                    mPresenter.revocerButton();
+                }
                 break;
             case R.id.iv_start:
+                if (!mPresenter.isFastDoubleClick()) {
+                    mPresenter.startButton();
+                }
                 break;
             case R.id.iv_identification:
                 break;
@@ -470,6 +479,12 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     public void updateFixed(boolean isFixed) {
         //没有，预留
+        mTv4.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIv4.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
+        if (isFixed) {
+            mTv4.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIv4.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+        }
     }
 
     public void updateToolReady(boolean isToolReady) {
@@ -535,6 +550,30 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
             mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_unclick));
             mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_unclick));
             mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongshezhi_unclick));
+        }
+    }
+
+    public void refreshLogRv(String msg) {
+        String currentDate = DateUtils.getCurrentDate();
+        mLogData.add(currentDate + " " + msg);
+        mLogAdapter.notifyDataSetChanged();
+        mRlLog.scrollToPosition(mLogAdapter.getItemCount() - 1);
+
+    }
+
+    public void updateScram(boolean b) {
+        if (!b) {
+            mIvScram.setImageDrawable(getResources().getDrawable(R.drawable.jiting_normal));
+        } else {
+            mIvScram.setImageDrawable(getResources().getDrawable(R.drawable.jiechujiting_normal));
+        }
+    }
+
+    public void updateStart(boolean b) {
+        if (!b) {
+            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
+        } else {
+            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.atingzhi_normal));
         }
     }
 }

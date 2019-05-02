@@ -13,7 +13,11 @@ import android.widget.RelativeLayout;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
+import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.netty.NettyClient;
+import com.leo.robot.utils.CommandUtils;
+import com.leo.robot.utils.NettyManager;
 
 /**
  * 剪线设置
@@ -36,6 +40,7 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout mRl4;
     private ImageView mIv1;
     private ImageView mIv2;
+    private NettyClient mClient;
 
     @Nullable
     @Override
@@ -60,7 +65,7 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
         mIv2.setOnClickListener(this);
 
         initVideo();
-
+        mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
     }
 
     private void initVideo() {
@@ -110,7 +115,16 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.iv1:
+                if (mClient!=null){
+                    mClient.sendMsgTest(CommandUtils.getCutToolReset());
+                }
+                break;
+            case R.id.iv2:
+                if (mClient!=null){
+                    mClient.sendMsgTest(CommandUtils.getCutToolStart());
+                }
+                break;
         }
     }
 

@@ -184,7 +184,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
      *
      * @author Leo
      * created at 2019/4/27 5:27 PM
-     * @param view
+     * @param
      */
     private void initVideo4() {
         mAgentWeb4 = AgentWeb.with(this)
@@ -353,12 +353,12 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
                 break;
             case R.id.iv7:
                 if (mClient != null) {
-
+//                    mClient.sendMsgTest();
                 }
                 break;
             case R.id.iv8:
                 if (mClient != null) {
-
+                    mClient.sendMsgTest(CommandUtils.getFlowArmActionStop());
                 }
                 break;
         }

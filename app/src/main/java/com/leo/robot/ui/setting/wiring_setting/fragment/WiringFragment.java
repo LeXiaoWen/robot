@@ -16,6 +16,7 @@ import com.leo.robot.R;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
+import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 
 /**
@@ -48,6 +49,7 @@ public class WiringFragment extends Fragment implements View.OnClickListener {
     private ImageView mIv9;
     private ImageView mIv10;
     private NettyClient mClient;
+    private boolean isClicked = false;
 
     @Nullable
     @Override
@@ -87,7 +89,7 @@ public class WiringFragment extends Fragment implements View.OnClickListener {
         mIv10.setOnClickListener(this);
 
         initVideo();
-
+        mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
     }
 
     private void initVideo() {
@@ -119,6 +121,20 @@ public class WiringFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    /**
+     * 切换急停、恢复急停图标
+     *
+     * @author Leo
+     * created at 2019/5/1 1:19 AM
+     */
+    public void updateScram(boolean b) {
+        if (!b) {
+            mIv2.setImageDrawable(getResources().getDrawable(R.drawable.jiexian_jiting_clicked));
+        } else {
+            mIv2.setImageDrawable(getResources().getDrawable(R.drawable.jiexian_jiting_normal));
+        }
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -139,7 +155,71 @@ public class WiringFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv1:
 
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getTwistOpen());
+                }
+                break;
+            case R.id.iv2:
+                if (!isClicked){//急停
+                    isClicked = true;
+                    updateScram(true);
+                    if (mClient != null) {
+                        mClient.sendMsgTest(CommandUtils.getMainArmShutdown());
+                    }
+                }else {//恢复急停
+                    isClicked =false;
+                    updateScram(false);
+                    if (mClient != null) {
+                        mClient.sendMsgTest(CommandUtils.getMainArmResume());
+                    }
+                }
+
+                break;
+            case R.id.iv3:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getTwistFeederClamp());
+                }
+                break;
+            case R.id.iv4:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getTwistFeederClampReset());
+                }
+                break;
+            case R.id.iv5:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getClipLock());
+                }
+                break;
+            case R.id.iv6:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getTwistStart());
+                }
+                break;
+            case R.id.iv7:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getTwistFlip());
+                }
+                break;
+            case R.id.iv8:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getTwistInit());
+                }
+                break;
+            case R.id.iv9:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getSleeveStop());
+                }
+                break;
+            case R.id.iv10:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getSleeveLock());
+                }
+                break;
+
+        }
     }
 
 //    @Override

@@ -1089,6 +1089,51 @@ public class CommandUtils {
     //------------------------ 接线工具 start --------------------------
 
     /**
+     * 打开设备
+     *
+     * @author Leo
+     * created at 2019/5/2 1:50 PM
+     */
+    public static String getTwistOpen() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x09;
+        msg[2] = (byte) 0x01;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 支线夹紧
+     *
+     * @author Leo
+     * created at 2019/5/2 1:51 PM
+     */
+    public static String getTwistFeederClamp() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x09;
+        msg[2] = (byte) 0x0D;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+    * 支线夹紧复位
+    *
+    *@author Leo
+    *created at 2019/5/2 1:56 PM
+    */
+    public static String getTwistFeederClampReset() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x09;
+        msg[2] = (byte) 0x0E;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
      * 拧断开始
      *
      * @author Leo
@@ -1202,8 +1247,23 @@ public class CommandUtils {
     public static String getSleeveLock() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x09;
-        msg[2] = (byte) 0x09;
-        msg[3] = (byte) 0x0A;
+        msg[2] = (byte) 0x0A;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+    * 套筒停止
+    *
+    *@author Leo
+    *created at 2019/5/2 1:54 PM
+    */
+    public static String getSleeveStop() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x09;
+        msg[2] = (byte) 0x0C;
+        msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
     }

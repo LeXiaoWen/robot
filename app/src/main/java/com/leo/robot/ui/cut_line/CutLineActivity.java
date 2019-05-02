@@ -469,4 +469,28 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
             mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongshezhi_unclick));
         }
     }
+
+    public void updateScram(boolean b) {
+        if (!b) {
+            mIvScram.setImageDrawable(getResources().getDrawable(R.drawable.jiting_normal));
+        } else {
+            mIvScram.setImageDrawable(getResources().getDrawable(R.drawable.jiechujiting_normal));
+        }
+    }
+
+    public void updateStart(boolean b) {
+        if (!b) {
+            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
+        } else {
+            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.atingzhi_normal));
+        }
+    }
+
+    public void refreshLogRv(String msg) {
+        String currentDate = DateUtils.getCurrentDate();
+        mLogData.add(currentDate + " " + msg);
+        mLogAdapter.notifyDataSetChanged();
+        mRlLog.scrollToPosition(mLogAdapter.getItemCount() - 1);
+
+    }
 }
