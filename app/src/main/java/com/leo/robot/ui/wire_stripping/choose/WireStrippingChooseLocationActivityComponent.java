@@ -8,6 +8,6 @@ import dagger.Component;
 
 
 @Component
-public interface ChooseLocationActivityComponent {
+public interface WireStrippingChooseLocationActivityComponent {
     void inject(WireStrippingChooseLocationActivity activity);
 }

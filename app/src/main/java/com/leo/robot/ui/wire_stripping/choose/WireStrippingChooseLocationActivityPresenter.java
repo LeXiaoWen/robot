@@ -16,11 +16,11 @@ import cree.mvp.util.data.SPUtils;
  */
 
 
-public class ChooseLocationActivityPresenter extends RobotPresenter<WireStrippingChooseLocationActivity, WireStrippingChooseLocationActivityModel> {
+public class WireStrippingChooseLocationActivityPresenter extends RobotPresenter<WireStrippingChooseLocationActivity, WireStrippingChooseLocationActivityModel> {
 
     private boolean isClickble = false;
     @Inject
-    public ChooseLocationActivityPresenter() {
+    public WireStrippingChooseLocationActivityPresenter() {
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.leo.robot.ui.wire_stripping.choose;
+package com.leo.robot.ui.wiring.choose;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -19,14 +19,10 @@ import com.just.agentweb.MiddlewareWebClientBase;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.GetPicBean;
-import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.constant.UrlConstant;
-import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
+import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.MiddlewareWebViewClient;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,11 +30,11 @@ import butterknife.OnClick;
 import cree.mvp.util.develop.LogUtils;
 
 /**
- * created by Leo on 2019/4/27 11 : 27
+ * created by Leo on 2019/5/3 17 : 40
  */
 
 
-public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrippingChooseLocationActivityPresenter> implements View.OnTouchListener {
+public class WiringChooseLocationActivity extends NettyActivity<WiringChooseLocationActivityPresenter> implements View.OnTouchListener {
 
     @BindView(R.id.tv_date)
     TextView mTvDate;
@@ -48,54 +44,50 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     TextView mTvOwnPower;
     @BindView(R.id.tv_ground_power)
     TextView mTvGroundPower;
-    @BindView(R.id.tv_ready)
-    TextView mTvReady;
-    @BindView(R.id.iv_ready)
-    ImageView mIvReady;
-    @BindView(R.id.tv_init)
-    TextView mTvInit;
-    @BindView(R.id.iv_init)
-    ImageView mIvInit;
-    @BindView(R.id.tv_in_place)
-    TextView mTvInPlace;
-    @BindView(R.id.iv_in_place)
-    ImageView mIvInPlace;
-    @BindView(R.id.tv_clamping)
-    TextView mTvClamping;
-    @BindView(R.id.iv_clamping)
-    ImageView mIvClamping;
-    @BindView(R.id.tv_closure)
-    TextView mTvClosure;
-    @BindView(R.id.iv_closure)
-    ImageView mIvClosure;
-    @BindView(R.id.tv_peeling)
-    TextView mTvPeeling;
-    @BindView(R.id.iv_peeling)
-    ImageView mIvPeeling;
-    @BindView(R.id.tv_cut_off)
-    TextView mTvCutOff;
-    @BindView(R.id.iv_cut_off)
-    ImageView mIvCutOff;
-    @BindView(R.id.tv_unlock)
-    TextView mTvUnlock;
-    @BindView(R.id.iv_unlock)
-    ImageView mIvUnlock;
-    @BindView(R.id.tv_end)
-    TextView mTvEnd;
-    @BindView(R.id.iv_end)
-    ImageView mIvEnd;
-
+    @BindView(R.id.tv_1)
+    TextView mTv1;
+    @BindView(R.id.iv_1)
+    ImageView mIv1;
+    @BindView(R.id.tv_2)
+    TextView mTv2;
+    @BindView(R.id.iv_2)
+    ImageView mIv2;
+    @BindView(R.id.tv_3)
+    TextView mTv3;
+    @BindView(R.id.iv_3)
+    ImageView mIv3;
+    @BindView(R.id.tv_4)
+    TextView mTv4;
+    @BindView(R.id.iv_4)
+    ImageView mIv4;
+    @BindView(R.id.tv_5)
+    TextView mTv5;
+    @BindView(R.id.iv_5)
+    ImageView mIv5;
+    @BindView(R.id.tv_6)
+    TextView mTv6;
+    @BindView(R.id.iv_6)
+    ImageView mIv6;
+    @BindView(R.id.tv_7)
+    TextView mTv7;
+    @BindView(R.id.iv_7)
+    ImageView mIv7;
+    @BindView(R.id.tv_8)
+    TextView mTv8;
+    @BindView(R.id.iv_8)
+    ImageView mIv8;
+    @BindView(R.id.tv_9)
+    TextView mTv9;
+    @BindView(R.id.iv_9)
+    ImageView mIv9;
     @BindView(R.id.rl_main)
     RelativeLayout mRlMain;
     @BindView(R.id.rl_1)
     RelativeLayout mRl1;
-
     @BindView(R.id.rl_2)
     RelativeLayout mRl2;
-
     @BindView(R.id.rl_3)
     RelativeLayout mRl3;
-
     @BindView(R.id.rl_4)
     RelativeLayout mRl4;
     @BindView(R.id.tv_remind)
@@ -123,8 +115,6 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     private float x;
     private float y;
 
-    private MiddlewareWebClientBase mMiddleWareWebClient;
-
     @Override
     protected void notifyData(String message) {
 
@@ -132,13 +122,13 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
 
     @Override
     protected void bindingDagger2(@Nullable Bundle bundle) {
-        DaggerWireStrippingChooseLocationActivityComponent.create().inject(this);
+        DaggerWiringChooseLocationActivityComponent.create().inject(this);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_location);
+        setContentView(R.layout.activity_wiring_choose_location);
         ButterKnife.bind(this);
         initTile();
         initMainVideo();
@@ -274,97 +264,145 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
 
     }
 
+    //------------------------ 更新UI --------------------------
+    public void updateReady(boolean b) {
+        mTv1.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIv1.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
+        if (b) {
+            mTv1.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIv1.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+        }
+    }
+
+    public void updateGrab(boolean isGrab) {
+        mTv2.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIv2.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
+        if (isGrab) {
+            mTv2.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIv2.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+        }
+    }
+
+    public void updateEnter(boolean isEnter) {
+        mTv3.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIv3.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
+        if (isEnter) {
+            mTv3.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIv3.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+        }
+    }
+
+    public void updateFixed(boolean isFixed) {
+        //没有，预留
+        mTv4.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIv4.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
+        if (isFixed) {
+            mTv4.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIv4.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+        }
+    }
+
+    public void updateToolReady(boolean isToolReady) {
+        //没有，预留
+    }
+
+    public void updateLineReady(boolean isLineReady) {
+        mTv5.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIv5.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
+        if (isLineReady) {
+            mTv5.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIv5.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+        }
+    }
+
+    public void updateTwist(boolean isTwist) {
+        mTv6.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIv6.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
+        if (isTwist) {
+            mTv6.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIv6.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+        }
+    }
+
+    public void updateClipUnlock(boolean isClipUnlock) {
+
+        mTv7.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIv7.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
+        if (isClipUnlock) {
+            mTv7.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIv7.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+        }
+    }
+
+    public void updateSleeveUnlock(boolean isSleeveUnlock) {
+        mTv8.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIv8.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
+        if (isSleeveUnlock) {
+            mTv8.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIv8.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+        }
+
+    }
+
+    public void updateEnd(boolean isEnd) {
+        mTv9.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIv9.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
+        if (isEnd) {
+            mTv9.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIv9.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+        }
+    }
+
 
     private void initTile() {
         mPresenter.updateTime(mTvDate);
     }
 
-    //------------------------ 更新UI --------------------------
-    public void updateReady(boolean b) {
-        mTvReady.setTextColor(getResources().getColor(R.color.color_status_normal));
-        mIvReady.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
-        if (b) {
-            mTvReady.setTextColor(getResources().getColor(R.color.color_status_wake_up));
-            mIvReady.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
-            mTvRemind.setText("请选择剥线位置第一点");
+    @OnClick({R.id.iv_get_pic, R.id.iv_confirm_location, R.id.iv_back})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_get_pic:
+                scaleController(false);
+                mAgentWebMain.getWebCreator().getWebView().setOnTouchListener(this);
+                break;
+            case R.id.iv_confirm_location:
+                String x1;
+                String y1;
+                mWebView.setOnTouchListener(null);
+                scaleController(true);
+                if ("0.0".equals(String.valueOf(mNewScale))) {
+                    x1 = String.valueOf(x);
+                    y1 = String.valueOf(y);
+                    GetPicBean bean = CommandUtils.getPicBean1(x1 + "," + y1);
+                    LogUtils.e(bean.toString());
+
+                } else {
+                    x1 = String.valueOf(x / mNewScale);
+                    y1 = String.valueOf(y / mNewScale);
+                    GetPicBean bean = CommandUtils.getPicBean1(x1 + "," + y1);
+                    LogUtils.e(bean.toString());
+
+                }
+                break;
+            case R.id.iv_back:
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(new Intent(WiringChooseLocationActivity.this, WiringActivity.class));
+                    finish();
+                }
+                break;
         }
     }
 
-    public void updateInit(boolean b) {
-        mTvInit.setTextColor(getResources().getColor(R.color.color_status_normal));
-        mIvInit.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
-        if (b) {
-            mTvInit.setTextColor(getResources().getColor(R.color.color_status_wake_up));
-            mIvInit.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
-
-        }
-    }
-
-    public void updateInPlace(boolean b) {
-        mTvInPlace.setTextColor(getResources().getColor(R.color.color_status_normal));
-        mIvInPlace.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
-        if (b) {
-            mTvInPlace.setTextColor(getResources().getColor(R.color.color_status_wake_up));
-            mIvInPlace.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
-        }
-    }
-
-    public void updateClamping(boolean b) {
-        mTvClamping.setTextColor(getResources().getColor(R.color.color_status_normal));
-        mIvClamping.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
-        if (b) {
-            mTvClamping.setTextColor(getResources().getColor(R.color.color_status_wake_up));
-            mIvClamping.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
-        }
-    }
-
-    public void updateClosure(boolean b) {
-        mTvClosure.setTextColor(getResources().getColor(R.color.color_status_normal));
-        mIvClosure.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
-        if (b) {
-            mTvClosure.setTextColor(getResources().getColor(R.color.color_status_wake_up));
-            mIvClosure.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
-        }
-    }
-
-    public void updatePeeling(boolean b) {
-        mTvPeeling.setTextColor(getResources().getColor(R.color.color_status_normal));
-        mIvPeeling.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
-        if (b) {
-            mTvPeeling.setTextColor(getResources().getColor(R.color.color_status_wake_up));
-            mIvPeeling.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
-        }
-    }
-
-    public void updateCutOff(boolean b) {
-        mTvCutOff.setTextColor(getResources().getColor(R.color.color_status_normal));
-        mIvCutOff.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
-        if (b) {
-            mTvCutOff.setTextColor(getResources().getColor(R.color.color_status_wake_up));
-            mIvCutOff.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
-        }
-    }
-
-    public void updateUnlock(boolean b) {
-        mTvUnlock.setTextColor(getResources().getColor(R.color.color_status_normal));
-        mIvUnlock.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
-        if (b) {
-            mTvUnlock.setTextColor(getResources().getColor(R.color.color_status_wake_up));
-            mIvUnlock.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
-        }
-    }
-
-    public void updateEnd(boolean b) {
-        mTvEnd.setTextColor(getResources().getColor(R.color.color_status_normal));
-        mIvEnd.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
-        if (b) {
-            mTvEnd.setTextColor(getResources().getColor(R.color.color_status_wake_up));
-            mIvEnd.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
-        }
-    }
-
-    public void updateClickStatus(boolean b) {
-
+    /**
+     * 是否缩放
+     *
+     * @author Leo
+     * created at 2019/5/2 5:11 PM
+     */
+    private void scaleController(boolean isScale) {
+        mAgentWebMain.getWebCreator().getWebView().getSettings().setSupportZoom(isScale); //支持缩放，默认为true。是下面那个的前提。
+        mAgentWebMain.getWebCreator().getWebView().getSettings().setBuiltInZoomControls(isScale); //设置内置的缩放控件。若为false，则该WebView不可缩放
+        mAgentWebMain.getWebCreator().getWebView().getSettings().setDisplayZoomControls(false); //隐藏原生的缩放控件
     }
 
 
@@ -401,55 +439,6 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
          */
         return true;
     }
-
-    @OnClick({R.id.iv_get_pic, R.id.iv_confirm_location, R.id.iv_back})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.iv_get_pic:
-                scaleController(false);
-                mAgentWebMain.getWebCreator().getWebView().setOnTouchListener(this);
-                break;
-            case R.id.iv_confirm_location:
-                String x1;
-                String y1;
-                mWebView.setOnTouchListener(null);
-                scaleController(true);
-                if ("0.0".equals(String.valueOf(mNewScale))) {
-                    x1 = String.valueOf(x);
-                    y1 = String.valueOf(y);
-                    GetPicBean bean = CommandUtils.getPicBean1(x1 + "," + y1);
-                    LogUtils.e(bean.toString());
-
-                } else {
-                    x1 = String.valueOf(x / mNewScale);
-                    y1 = String.valueOf(y / mNewScale);
-                    GetPicBean bean = CommandUtils.getPicBean1(x1 + "," + y1);
-                    LogUtils.e(bean.toString());
-
-                }
-
-                break;
-            case R.id.iv_back:
-                if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(new Intent(WireStrippingChooseLocationActivity.this, WireStrippingActivity.class));
-                    finish();
-                }
-                break;
-        }
-    }
-
-    /**
-     * 是否缩放
-     *
-     * @author Leo
-     * created at 2019/5/2 5:11 PM
-     */
-    private void scaleController(boolean isScale) {
-        mAgentWebMain.getWebCreator().getWebView().getSettings().setSupportZoom(isScale); //支持缩放，默认为true。是下面那个的前提。
-        mAgentWebMain.getWebCreator().getWebView().getSettings().setBuiltInZoomControls(isScale); //设置内置的缩放控件。若为false，则该WebView不可缩放
-        mAgentWebMain.getWebCreator().getWebView().getSettings().setDisplayZoomControls(false); //隐藏原生的缩放控件
-    }
-
 
     @Override
     protected void onPause() {
@@ -500,19 +489,6 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
         mAgentWeb2.getWebLifeCycle().onDestroy();
         mAgentWeb3.getWebLifeCycle().onDestroy();
         mAgentWeb4.getWebLifeCycle().onDestroy();
-    }
-
-
-    /**
-     * 接收视觉服务器base64数据
-     *
-     * @author Leo
-     * created at 2019/4/28 7:57 PM
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onVisionMsg(VisionMsg msg) {
-        LogUtils.e("图片数据 ： " + msg.getMsg());
-
     }
 
 
