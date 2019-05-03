@@ -9,8 +9,8 @@ import cree.mvp.base.model.BaseModel;
  */
 
 
-public class ChooseLocationActivityModel extends BaseModel<ChooseLocationActivityPresenter> {
+public class WireStrippingChooseLocationActivityModel extends BaseModel<ChooseLocationActivityPresenter> {
     @Inject
-    public ChooseLocationActivityModel() {
+    public WireStrippingChooseLocationActivityModel() {
     }
 }

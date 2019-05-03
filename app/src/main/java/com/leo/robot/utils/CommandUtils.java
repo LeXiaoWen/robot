@@ -1299,12 +1299,12 @@ public class CommandUtils {
     }
 
 
-    public static GetPicBean getPicBean1() {
+    public static GetPicBean getPicBean1(String location) {
         GetPicBean getPicBean = new GetPicBean();
         GetPicBean.ParamsBean paramsBean = new GetPicBean.ParamsBean();
-        paramsBean.setHeight("640");
+        paramsBean.setWidth("640");
         paramsBean.setHeight("480");
-        paramsBean.setCoordinates("100.0,210.0");
+        paramsBean.setCoordinates(location);
         getPicBean.setMsgType("CmdUploadPic1");
         getPicBean.setVersion("1.0");
         getPicBean.setParams(paramsBean);
@@ -1314,7 +1314,7 @@ public class CommandUtils {
     public static GetPicBean getPicBean2() {
         GetPicBean getPicBean = new GetPicBean();
         GetPicBean.ParamsBean paramsBean = new GetPicBean.ParamsBean();
-        paramsBean.setHeight("640");
+        paramsBean.setWidth("640");
         paramsBean.setHeight("480");
         paramsBean.setCoordinates("100.0,210.0");
         getPicBean.setMsgType("CmdUploadPic1");

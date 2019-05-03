@@ -75,5 +75,23 @@ public class GetPicBean {
         public void setCoordinates(String coordinates) {
             this.coordinates = coordinates;
         }
+
+        @Override
+        public String toString() {
+            return "ParamsBean{" +
+                    "height='" + height + '\'' +
+                    ", width='" + width + '\'' +
+                    ", coordinates='" + coordinates + '\'' +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "GetPicBean{" +
+                "Version='" + Version + '\'' +
+                ", msgType='" + msgType + '\'' +
+                ", params=" + params +
+                '}';
     }
 }

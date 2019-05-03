@@ -8,7 +8,7 @@ import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
-import com.leo.robot.ui.wire_stripping.choose.ChooseLocationActivity;
+import com.leo.robot.ui.wire_stripping.choose.WireStrippingChooseLocationActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
@@ -210,7 +210,7 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 
     public void identificationButton() {
         if (isClickble) {
-            mActivity.startActivity(new Intent(mActivity, ChooseLocationActivity.class));
+            mActivity.startActivity(new Intent(mActivity, WireStrippingChooseLocationActivity.class));
             mActivity.finish();
         }
     }

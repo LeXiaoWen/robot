@@ -9,5 +9,5 @@ import dagger.Component;
 
 @Component
 public interface ChooseLocationActivityComponent {
-    void inject(ChooseLocationActivity activity);
+    void inject(WireStrippingChooseLocationActivity activity);
 }

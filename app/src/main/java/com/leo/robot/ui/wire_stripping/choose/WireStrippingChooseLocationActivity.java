@@ -1,5 +1,6 @@
 package com.leo.robot.ui.wire_stripping.choose;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,11 +15,15 @@ import android.widget.TextView;
 
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
+import com.just.agentweb.MiddlewareWebClientBase;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.bean.GetPicBean;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
+import com.leo.robot.utils.CommandUtils;
+import com.leo.robot.utils.MiddlewareWebViewClient;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -33,7 +38,7 @@ import cree.mvp.util.develop.LogUtils;
  */
 
 
-public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivityPresenter> implements View.OnTouchListener {
+public class WireStrippingChooseLocationActivity extends NettyActivity<ChooseLocationActivityPresenter> implements View.OnTouchListener {
 
     @BindView(R.id.tv_date)
     TextView mTvDate;
@@ -114,6 +119,11 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
     private WebView mWebView;
     private float mOldScale;
     private float mNewScale;
+
+    private float x;
+    private float y;
+
+    private MiddlewareWebClientBase mMiddleWareWebClient;
 
     @Override
     protected void notifyData(String message) {
@@ -208,17 +218,36 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
         initWebSetting(mAgentWeb1.getWebCreator().getWebView());
     }
 
+    @SuppressLint("NewApi")
     private void initMainVideo() {
         mAgentWebMain = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .useMiddlewareWebClient(getMiddlewareWebClient())
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
-
-
         initMainWebSetting(mAgentWebMain.getWebCreator().getWebView());
     }
+
+    /**
+     * 获取缩放比例
+     *
+     * @author Leo
+     * created at 2019/5/3 4:13 PM
+     */
+
+    protected MiddlewareWebClientBase getMiddlewareWebClient() {
+        return new MiddlewareWebViewClient() {
+            @Override
+            public void onScaleChanged(WebView view, float oldScale, float newScale) {
+                super.onScaleChanged(view, oldScale, newScale);
+                mNewScale = newScale;
+                LogUtils.e("缩放比例 ： " + newScale);
+            }
+        };
+    }
+
 
     private void initWebSetting(WebView view) {
         //取消滚动条
@@ -358,6 +387,8 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
              * 离开屏幕的位置
              */
             case MotionEvent.ACTION_UP:
+                x = event.getX() / 2 * mNewScale;
+                y = event.getY() / 2 * mNewScale;
                 mTouchShow.setText(event.getX() + "," + event.getY());
                 break;
             default:
@@ -379,12 +410,28 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
                 mAgentWebMain.getWebCreator().getWebView().setOnTouchListener(this);
                 break;
             case R.id.iv_confirm_location:
+                String x1;
+                String y1;
                 mWebView.setOnTouchListener(null);
                 scaleController(true);
+                if ("0.0".equals(String.valueOf(mNewScale))) {
+                    x1 = String.valueOf(x);
+                    y1 = String.valueOf(y);
+                    GetPicBean bean = CommandUtils.getPicBean1(x1 + "," + y1);
+                    LogUtils.e(bean.toString());
+
+                } else {
+                    x1 = String.valueOf(x / mNewScale);
+                    y1 = String.valueOf(y / mNewScale);
+                    GetPicBean bean = CommandUtils.getPicBean1(x1 + "," + y1);
+                    LogUtils.e(bean.toString());
+
+                }
+
                 break;
             case R.id.iv_back:
                 if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(new Intent(ChooseLocationActivity.this, WireStrippingActivity.class));
+                    startActivity(new Intent(WireStrippingChooseLocationActivity.this, WireStrippingActivity.class));
                     finish();
                 }
                 break;

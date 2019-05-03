@@ -79,7 +79,7 @@
             android:name=".ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".ui.wire_stripping.choose.ChooseLocationActivity"
+            android:name=".ui.wire_stripping.choose.WireStrippingChooseLocationActivity"
             android:screenOrientation="landscape"/>
     </application>
 
