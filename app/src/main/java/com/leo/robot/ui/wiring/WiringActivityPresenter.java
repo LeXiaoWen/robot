@@ -1,11 +1,13 @@
 package com.leo.robot.ui.wiring;
 
+import android.content.Intent;
 import android.widget.TextView;
 
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.WiringMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
+import com.leo.robot.ui.wiring.choose.WiringChooseLocationActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
@@ -193,5 +195,12 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
         mActivity.updateClipUnlock(isClipUnlock);
         mActivity.updateSleeveUnlock(isSleeveUnlock);
         mActivity.updateEnd(isEnd);
+    }
+
+    public void identificationClick() {
+        if (isClickble){
+            mActivity.startActivity(new Intent(mActivity, WiringChooseLocationActivity.class));
+            mActivity.finish();
+        }
     }
 }

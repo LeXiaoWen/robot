@@ -20,7 +20,6 @@ import com.leo.robot.bean.CutLineMsg;
 import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
-import com.leo.robot.ui.cut_line.choose.CutLineChooseLocationActivity;
 import com.leo.robot.ui.setting.cut_line_setting.CutLineSettingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.utils.DateUtils;
@@ -371,8 +370,8 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
                 break;
             case R.id.iv_identification:
                 if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(new Intent(CutLineActivity.this, CutLineChooseLocationActivity.class));
-                    finish();
+                   mPresenter.identificationClick();
+
                 }
                 break;
             case R.id.iv_setting:

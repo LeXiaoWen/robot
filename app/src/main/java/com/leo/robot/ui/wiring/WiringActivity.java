@@ -415,6 +415,9 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
                 }
                 break;
             case R.id.iv_identification:
+                if (!mPresenter.isFastDoubleClick()) {
+                    mPresenter.identificationClick();
+                }
                 break;
             case R.id.iv_setting:
                 if (!mPresenter.isFastDoubleClick()){

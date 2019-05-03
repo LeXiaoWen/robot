@@ -1,11 +1,13 @@
 package com.leo.robot.ui.cut_line;
 
+import android.content.Intent;
 import android.widget.TextView;
 
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.CutLineMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
+import com.leo.robot.ui.cut_line.choose.CutLineChooseLocationActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
@@ -163,5 +165,12 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
             mActivity.updateEnd(false);
         }
         return null;
+    }
+
+    public void identificationClick() {
+        if (isClickble){
+            mActivity.startActivity(new Intent(mActivity, CutLineChooseLocationActivity.class));
+            mActivity.finish();
+        }
     }
 }
