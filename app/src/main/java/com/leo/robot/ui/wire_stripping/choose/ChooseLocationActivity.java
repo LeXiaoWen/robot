@@ -112,7 +112,7 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
     private AgentWeb mAgentWeb3;
     private AgentWeb mAgentWeb2;
     private WebView mWebView;
-    private float mOldScale ;
+    private float mOldScale;
     private float mNewScale;
 
     @Override
@@ -215,6 +215,7 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
+
 
         initMainWebSetting(mAgentWebMain.getWebCreator().getWebView());
     }
@@ -357,7 +358,7 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
              * 离开屏幕的位置
              */
             case MotionEvent.ACTION_UP:
-                mTouchShow.setText( event.getX() + "," + event.getY());
+                mTouchShow.setText(event.getX() + "," + event.getY());
                 break;
             default:
                 break;
@@ -374,12 +375,12 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_get_pic:
-                mAgentWebMain.getWebCreator().getWebView().setOnTouchListener(this);
                 scaleController(false);
+                mAgentWebMain.getWebCreator().getWebView().setOnTouchListener(this);
                 break;
             case R.id.iv_confirm_location:
-                scaleController(true);
                 mWebView.setOnTouchListener(null);
+                scaleController(true);
                 break;
             case R.id.iv_back:
                 if (!mPresenter.isFastDoubleClick()) {
@@ -391,15 +392,15 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
     }
 
     /**
-    * 是否缩放
-    *
-    *@author Leo
-    *created at 2019/5/2 5:11 PM
-    */
-    private void scaleController(boolean isScale){
+     * 是否缩放
+     *
+     * @author Leo
+     * created at 2019/5/2 5:11 PM
+     */
+    private void scaleController(boolean isScale) {
         mAgentWebMain.getWebCreator().getWebView().getSettings().setSupportZoom(isScale); //支持缩放，默认为true。是下面那个的前提。
         mAgentWebMain.getWebCreator().getWebView().getSettings().setBuiltInZoomControls(isScale); //设置内置的缩放控件。若为false，则该WebView不可缩放
-        mAgentWebMain.getWebCreator().getWebView().getSettings().setDisplayZoomControls(true); //隐藏原生的缩放控件
+        mAgentWebMain.getWebCreator().getWebView().getSettings().setDisplayZoomControls(false); //隐藏原生的缩放控件
     }
 
 
@@ -466,7 +467,6 @@ public class ChooseLocationActivity extends NettyActivity<ChooseLocationActivity
         LogUtils.e("图片数据 ： " + msg.getMsg());
 
     }
-
 
 
 }
