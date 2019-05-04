@@ -21,6 +21,7 @@ import com.leo.robot.bean.OperatingModeBean;
 import com.leo.robot.bean.TestBean;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.bean.WireStrippingMsg;
+import com.leo.robot.constant.Constants;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
@@ -486,6 +487,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         if (b) {
             mTvEnd.setTextColor(getResources().getColor(R.color.color_status_wake_up));
             mIvEnd.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+            Constants.setFinishWrieStripping(true);
             ToastUtils.showShortToast("剥线作业结束，即将进入接线作业！");
             new Thread(() -> {
                 try {

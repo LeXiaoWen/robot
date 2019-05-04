@@ -13,6 +13,7 @@ import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.AllMsg;
 import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.constant.Constants;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
@@ -76,7 +77,6 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
         utils.putString(RobotInit.PUSH_MSG, message);
     }
-
 
 
     @Override
@@ -166,7 +166,11 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
                 break;
             case R.id.ibtn_wirin:
                 if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(WiringActivity.class);
+                    if (Constants.isFinishWrieStripping()) {
+                        startActivity(WiringActivity.class);
+                    }else {
+                        startActivity(WireStrippingActivity.class);
+                    }
 //                    ToastUtils.showShortToast("接线作业！");
 
                 }
