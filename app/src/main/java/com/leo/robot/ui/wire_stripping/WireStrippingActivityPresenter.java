@@ -30,6 +30,7 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 
     private boolean isClickble = false;
     private final NettyClient mClient;
+    public boolean isSettingClickble = false;
 
 
     @Inject
@@ -122,9 +123,10 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      * created at 2019/4/27 2:22 AM
      */
     public void settingButton() {
-        if (isClickble) {
+        if (isSettingClickble) {
             if (!isFastDoubleClick()) {
                 mActivity.startActivity(new Intent(mActivity, WiringStrippingSettingActivity.class));
+                mActivity.finish();
             }
         }
     }
@@ -134,11 +136,13 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         if (type.equals(RobotInit.WIRE_STRIPPING_READY)) {//就绪
             mActivity.updateReady(true);
             isClickble = true;
+            isSettingClickble = true;
             mActivity.updateClickStatus(true);
             return "剥线就绪";
         } else if (type.equals(RobotInit.WIRE_STRIPPING_NOT_READY)) {//未就绪
             mActivity.updateReady(false);
             isClickble = false;
+            isSettingClickble = false;
             mActivity.updateClickStatus(false);
         } else if (type.equals(RobotInit.WIRE_STRIPPING_INIT)) { //初始化动作
             mActivity.updateInit(true);

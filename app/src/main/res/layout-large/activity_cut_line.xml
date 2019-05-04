@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#F6F2F5"
     tools:ignore="MissingDefaultResource">
 
     <include layout="@layout/activity_title"/>

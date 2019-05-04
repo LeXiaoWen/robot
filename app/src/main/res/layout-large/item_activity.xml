@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="@dimen/dp_16"
     android:layout_marginTop="@dimen/dp_15"
-    android:background="#F6F2F5"
     tools:ignore="MissingDefaultResource">
 
     <RelativeLayout
@@ -40,7 +39,6 @@
         android:textSize="@dimen/sp_10"/>
 
     <android.support.v7.widget.RecyclerView
-        android:padding="@dimen/dp_10"
         android:id="@+id/rl_status"
         android:layout_width="218dp"
         android:layout_height="65dp"
@@ -48,6 +46,7 @@
         android:layout_marginLeft="@dimen/dp_16"
         android:layout_toRightOf="@id/rl_main"
         android:background="@color/white"
+        android:padding="@dimen/dp_10"
         android:scrollbarSize="5dp"
         android:scrollbarThumbVertical="@color/cmvp_gray"
         android:scrollbars="vertical"/>
@@ -67,7 +66,6 @@
         android:textSize="@dimen/sp_10"/>
 
     <android.support.v7.widget.RecyclerView
-        android:padding="@dimen/dp_10"
         android:id="@+id/rl_log"
         android:layout_width="218dp"
         android:layout_height="65dp"
@@ -75,6 +73,7 @@
         android:layout_marginLeft="@dimen/dp_16"
         android:layout_toRightOf="@id/rl_main"
         android:background="@color/white"
+        android:padding="@dimen/dp_10"
         android:scrollbarSize="5dp"
         android:scrollbarThumbVertical="@color/cmvp_gray"
         android:scrollbars="vertical"/>
@@ -178,7 +177,7 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="225dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="@dimen/dp_15"
@@ -196,44 +195,71 @@
 
         <ImageView
             android:id="@+id/iv_scram"
-            android:layout_width="225dp"
+            android:layout_width="match_parent"
             android:layout_height="59dp"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="15dp"
+            android:scaleType="fitXY"
             android:src="@drawable/jiting_normal"/>
 
-        <ImageView
-            android:id="@+id/iv_take_back"
-            android:layout_width="225dp"
-            android:layout_height="59dp"
-            android:layout_marginTop="@dimen/dp_16"
-            android:src="@drawable/yijianhuishou_unclick"/>
-
-        <ImageView
-            android:id="@+id/iv_start"
-            android:layout_width="225dp"
-            android:layout_height="59dp"
-            android:layout_marginTop="@dimen/dp_16"
-            android:src="@drawable/kaishi_unclick"/>
+        <View
+            android:layout_gravity="center"
+            android:layout_width="222dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="6dp"
+            android:background="#493E39"/>
 
         <ImageView
             android:id="@+id/iv_identification"
-            android:layout_width="225dp"
+            android:layout_width="match_parent"
             android:layout_height="59dp"
-            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitXY"
             android:src="@drawable/shibieluxian_unclick"/>
 
         <ImageView
-            android:id="@+id/iv_setting"
-            android:layout_width="225dp"
+            android:id="@+id/iv_start"
+            android:layout_width="match_parent"
             android:layout_height="59dp"
-            android:layout_marginTop="@dimen/dp_16"
-            android:src="@drawable/shoudongshezhi_normal"/>
+            android:layout_marginTop="@dimen/dp_12"
+            android:scaleType="fitXY"
+            android:src="@drawable/kaishi_unclick"/>
+
+        <View
+            android:layout_gravity="center"
+            android:layout_width="222dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:background="#493E39"/>
+
+        <ImageView
+            android:id="@+id/iv_take_back"
+            android:layout_width="match_parent"
+            android:layout_height="59dp"
+            android:layout_marginTop="6dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/yijianhuishou_unclick"/>
+
+        <ImageView
+            android:id="@+id/iv_setting"
+            android:layout_width="match_parent"
+            android:layout_height="59dp"
+            android:layout_marginTop="@dimen/dp_12"
+            android:scaleType="fitXY"
+            android:src="@drawable/shoudongcaozuo_unclick"/>
+
+        <View
+            android:layout_width="222dp"
+            android:layout_height="0.5dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:background="#493E39"/>
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="225dp"
+            android:layout_width="match_parent"
             android:layout_height="59dp"
-            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_6"
+            android:scaleType="fitXY"
             android:src="@drawable/activity_fanhui_normal"/>
 
 

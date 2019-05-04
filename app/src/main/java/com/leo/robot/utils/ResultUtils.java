@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.leo.robot.bean.AllMsg;
 import com.leo.robot.bean.CutLineMsg;
 import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.bean.OperatingModeBean;
+import com.leo.robot.bean.TakeBackBean;
 import com.leo.robot.bean.TestBean;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.bean.WireStrippingMsg;
@@ -94,6 +96,12 @@ public class ResultUtils {
             allMsg.setMsg("剪线指令");
             allMsg.setCode(msg);
             BusUtils.postMessage(allMsg);
+        }else if (msg.contains("InfoArm")){
+            TakeBackBean takeBackBean =mGson.fromJson(msg,TakeBackBean.class);
+            BusUtils.postMessage(takeBackBean);
+        }else if (msg.contains("InfoOperatingMode")){
+            OperatingModeBean modeBean = mGson.fromJson(msg, OperatingModeBean.class);
+            BusUtils.postMessage(modeBean);
         }
     }
 

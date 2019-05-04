@@ -17,12 +17,12 @@ import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.bean.OperatingModeBean;
 import com.leo.robot.bean.TestBean;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
-import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.DateUtils;
@@ -524,10 +524,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
                 break;
             case R.id.iv_setting:
-//                mPresenter.settingButton();
-//                webViewOnDestroy();
-                startActivity(new Intent(WireStrippingActivity.this, WiringStrippingSettingActivity.class));
-                finish();
+                mPresenter.settingButton();
                 break;
             case R.id.iv_back:
                 if (!mPresenter.isFastDoubleClick()) {
@@ -565,13 +562,13 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
             mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianshouhui_normal));
             mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
             mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_normal));
-            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongshezhi_normal));
+            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_normal));
             mTvRemind.setText("请开始选取剥线位置");
         } else {
             mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianhuishou_unclick));
             mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_unclick));
             mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_unclick));
-            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongshezhi_unclick));
+            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_unclick));
         }
     }
 
@@ -605,6 +602,21 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
             mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
         } else {
             mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.atingzhi_normal));
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void acceptOperatingModeBean(OperatingModeBean bean){
+        if (isShown){
+            String status = bean.getParams().getStatus();
+            if ("0".equals(status)){
+                ToastUtils.showShortToast("正处于自动作业模式。");
+                mPresenter.isSettingClickble = false;
+                mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_unclick));
+            }else {
+                mPresenter.isSettingClickble =true;
+                mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_normal));
+            }
         }
     }
 }
