@@ -15,13 +15,13 @@ import android.widget.TextView;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
-import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.CutLineMsg;
 import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.setting.cut_line_setting.CutLineSettingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
+import com.leo.robot.unity.UnityPlayerActivity;
 import com.leo.robot.utils.DateUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -43,7 +43,7 @@ import cree.mvp.util.ui.ToastUtils;
  */
 
 
-public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
+public class CutLineActivity extends UnityPlayerActivity<CutLineActivityPresenter> {
 
 
     @BindView(R.id.tv_date)
@@ -154,10 +154,11 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
         initAdapter();
         initMainVideo();
-        initVideo1();
+//        initVideo1();
         initVideo2();
         initVideo3();
         initVideo4();
+        mPresenter.setUnityView(mRl1);
     }
 
     /**
@@ -297,7 +298,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     @Override
     protected void onResume() {
-        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+        if (mAgentWebMain != null  && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
             webViewOnResume();
         }
         ;
@@ -308,7 +309,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     @Override
     protected void onPause() {
-        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+        if (mAgentWebMain != null  && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
             webViewOnPause();
             webViewOnDestroy();
             AgentWebConfig.clearDiskCache(this);
@@ -319,7 +320,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     @Override
     protected void onDestroy() {
-        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+        if (mAgentWebMain != null  && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
             webViewOnDestroy();
         }
         super.onDestroy();
@@ -370,25 +371,23 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
                 break;
             case R.id.iv_identification:
                 if (!mPresenter.isFastDoubleClick()) {
-                   mPresenter.identificationClick();
-
+                   mPresenter.identificationClick(mRl1);
                 }
                 break;
             case R.id.iv_setting:
                 if (!mPresenter.isFastDoubleClick()) {
                     startActivity(new Intent(CutLineActivity.this, CutLineSettingActivity.class));
-                    finish();
+                    finishActivity(mRl1);
                 }
                 break;
             case R.id.iv_back:
-                finish();
+                finishActivity(mRl1);
                 break;
         }
     }
 
     private void webViewOnPause() {
         mAgentWebMain.getWebLifeCycle().onPause();
-        mAgentWeb1.getWebLifeCycle().onPause();
         mAgentWeb2.getWebLifeCycle().onPause();
         mAgentWeb3.getWebLifeCycle().onPause();
         mAgentWeb4.getWebLifeCycle().onPause();
@@ -397,7 +396,6 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     private void webViewOnResume() {
         mAgentWebMain.getWebLifeCycle().onResume();
-        mAgentWeb1.getWebLifeCycle().onResume();
         mAgentWeb2.getWebLifeCycle().onResume();
         mAgentWeb3.getWebLifeCycle().onResume();
         mAgentWeb4.getWebLifeCycle().onResume();
@@ -405,7 +403,6 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     private void webViewOnDestroy() {
         mAgentWebMain.getWebLifeCycle().onDestroy();
-        mAgentWeb1.getWebLifeCycle().onDestroy();
         mAgentWeb2.getWebLifeCycle().onDestroy();
         mAgentWeb3.getWebLifeCycle().onDestroy();
         mAgentWeb4.getWebLifeCycle().onDestroy();

@@ -15,13 +15,13 @@ import android.widget.TextView;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
-import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.bean.WiringMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
+import com.leo.robot.unity.UnityPlayerActivity;
 import com.leo.robot.utils.DateUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -44,7 +44,7 @@ import cree.mvp.util.ui.ToastUtils;
  */
 
 
-public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
+public class WiringActivity extends UnityPlayerActivity<WiringActivityPresenter> {
 
 
     @BindView(R.id.tv_date)
@@ -172,10 +172,11 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
         initAdapter();
         initMainVideo();
-        initVideo1();
+//        initVideo1();
         initVideo2();
         initVideo3();
         initVideo4();
+        mPresenter.setUnityView(mRl1);
     }
 
     private void initAdapter() {
@@ -316,7 +317,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     @Override
     protected void onPause() {
-        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
             webViewOnPause();
             webViewOnDestroy();
             AgentWebConfig.clearDiskCache(this);
@@ -327,7 +328,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     @Override
     protected void onResume() {
-        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
             webViewOnResume();
         }
         super.onResume();
@@ -337,24 +338,12 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     @Override
     protected void onDestroy() {
-        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
             webViewOnDestroy();
         }
         super.onDestroy();
     }
 
-
-
-
-    public void updateScramText(String s) {
-//        mBtnScram.setText(s);
-        ToastUtils.showShortToast(s);
-    }
-
-    public void updateStartText(String s) {
-//        mBtnStart.setText(s);
-        ToastUtils.showShortToast(s);
-    }
 
     @Override
     protected void onStop() {
@@ -416,24 +405,24 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
                 break;
             case R.id.iv_identification:
                 if (!mPresenter.isFastDoubleClick()) {
-                    mPresenter.identificationClick();
+                    mPresenter.identificationClick(mRl1);
                 }
                 break;
             case R.id.iv_setting:
-                if (!mPresenter.isFastDoubleClick()){
+                if (!mPresenter.isFastDoubleClick()) {
                     startActivity(new Intent(WiringActivity.this, WiringSettingActivity.class));
-                    finish();
+                    finishActivity(mRl1);
                 }
                 break;
             case R.id.iv_back:
-                    finish();
+                finishActivity(mRl1);
                 break;
         }
     }
 
     private void webViewOnPause() {
         mAgentWebMain.getWebLifeCycle().onPause();
-        mAgentWeb1.getWebLifeCycle().onPause();
+//        mAgentWeb1.getWebLifeCycle().onPause();
         mAgentWeb2.getWebLifeCycle().onPause();
         mAgentWeb3.getWebLifeCycle().onPause();
         mAgentWeb4.getWebLifeCycle().onPause();
@@ -442,7 +431,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     private void webViewOnResume() {
         mAgentWebMain.getWebLifeCycle().onResume();
-        mAgentWeb1.getWebLifeCycle().onResume();
+//        mAgentWeb1.getWebLifeCycle().onResume();
         mAgentWeb2.getWebLifeCycle().onResume();
         mAgentWeb3.getWebLifeCycle().onResume();
         mAgentWeb4.getWebLifeCycle().onResume();
@@ -450,7 +439,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     private void webViewOnDestroy() {
         mAgentWebMain.getWebLifeCycle().onDestroy();
-        mAgentWeb1.getWebLifeCycle().onDestroy();
+//        mAgentWeb1.getWebLifeCycle().onDestroy();
         mAgentWeb2.getWebLifeCycle().onDestroy();
         mAgentWeb3.getWebLifeCycle().onDestroy();
         mAgentWeb4.getWebLifeCycle().onDestroy();

@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
-import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.bean.OperatingModeBean;
 import com.leo.robot.bean.TestBean;
@@ -26,6 +25,7 @@ import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.ui.wiring.WiringActivity;
+import com.leo.robot.unity.UnityPlayerActivity;
 import com.leo.robot.utils.DateUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -47,7 +47,7 @@ import cree.mvp.util.ui.ToastUtils;
  */
 
 
-public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPresenter> {
+public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActivityPresenter> {
 
     @BindView(R.id.tv_remind)
     TextView mTvRemind;
@@ -160,14 +160,14 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         initTile();
         initAdapter();
         initMainVideo();
-        initVideo1();
+//        initVideo1();
         initVideo2();
         initVideo3();
         initVideo4();
         initBroadcast(mTvGroundPower);
         mPresenter.initStatus();
 
-
+        mPresenter.setUnityView(mRl1);
     }
 
     /**
@@ -331,7 +331,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     private void webViewOnPause() {
         mAgentWebMain.getWebLifeCycle().onPause();
-        mAgentWeb1.getWebLifeCycle().onPause();
+//        mAgentWeb1.getWebLifeCycle().onPause();
         mAgentWeb2.getWebLifeCycle().onPause();
         mAgentWeb3.getWebLifeCycle().onPause();
         mAgentWeb4.getWebLifeCycle().onPause();
@@ -340,7 +340,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     private void webViewOnResume() {
         mAgentWebMain.getWebLifeCycle().onResume();
-        mAgentWeb1.getWebLifeCycle().onResume();
+//        mAgentWeb1.getWebLifeCycle().onResume();
         mAgentWeb2.getWebLifeCycle().onResume();
         mAgentWeb3.getWebLifeCycle().onResume();
         mAgentWeb4.getWebLifeCycle().onResume();
@@ -348,7 +348,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     private void webViewOnDestroy() {
         mAgentWebMain.getWebLifeCycle().onDestroy();
-        mAgentWeb1.getWebLifeCycle().onDestroy();
+//        mAgentWeb1.getWebLifeCycle().onDestroy();
         mAgentWeb2.getWebLifeCycle().onDestroy();
         mAgentWeb3.getWebLifeCycle().onDestroy();
         mAgentWeb4.getWebLifeCycle().onDestroy();
@@ -379,7 +379,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         if (isShown) {
             if (msg.getCode().equals(RobotInit.MASTER_CONTROL_NETTY)) {
 //                showNormalDialog(this);
-            }else if (msg.getCode().equals(RobotInit.VISION_NETTY)){
+            } else if (msg.getCode().equals(RobotInit.VISION_NETTY)) {
 //                showNormalDialog(this);
             }
 
@@ -521,7 +521,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 break;
             case R.id.iv_identification:
                 if (!mPresenter.isFastDoubleClick()) {
-                    mPresenter.identificationButton();
+                    mPresenter.identificationButton(mRl1);
                 }
 
                 break;
@@ -531,7 +531,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
             case R.id.iv_back:
                 if (!mPresenter.isFastDoubleClick()) {
                     refreshLogRv("按下返回键");
-                    finish();
+                    finishActivity(mRl1);
                 }
                 break;
         }
@@ -608,15 +608,15 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void acceptOperatingModeBean(OperatingModeBean bean){
-        if (isShown){
+    public void acceptOperatingModeBean(OperatingModeBean bean) {
+        if (isShown) {
             String status = bean.getParams().getStatus();
-            if ("0".equals(status)){
+            if ("0".equals(status)) {
                 ToastUtils.showShortToast("正处于自动作业模式。");
                 mPresenter.isSettingClickble = false;
                 mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_unclick));
-            }else {
-                mPresenter.isSettingClickble =true;
+            } else {
+                mPresenter.isSettingClickble = true;
                 mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_normal));
             }
         }

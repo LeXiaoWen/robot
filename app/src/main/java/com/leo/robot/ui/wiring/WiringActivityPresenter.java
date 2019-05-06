@@ -1,6 +1,7 @@
 package com.leo.robot.ui.wiring;
 
 import android.content.Intent;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.leo.robot.base.RobotPresenter;
@@ -11,6 +12,7 @@ import com.leo.robot.ui.wiring.choose.WiringChooseLocationActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
+import com.unity3d.player.UnityPlayer;
 
 import javax.inject.Inject;
 
@@ -29,6 +31,7 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
 
     private boolean isClickble = false;
     private final NettyClient mClient;
+    private UnityPlayer mUnityPlayer;
 
     @Inject
     public WiringActivityPresenter() {
@@ -197,10 +200,24 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
         mActivity.updateEnd(isEnd);
     }
 
-    public void identificationClick() {
+    public void identificationClick(RelativeLayout relativeLayout) {
         if (isClickble){
             mActivity.startActivity(new Intent(mActivity, WiringChooseLocationActivity.class));
-            mActivity.finish();
+            mActivity.finishActivity(relativeLayout);
         }
     }
+    public void setUnityView(RelativeLayout unityView) {
+        // TODO: 2019/5/6  直接使用父类的unityPlayer 不要自己去new一个
+        mUnityPlayer = mActivity.getUnityPlayer();
+        unityView.addView(mActivity.getUnityPlayer());
+        mActivity.getUnityPlayer().requestFocus();
+    }
+
+    public void removeUnityView(RelativeLayout unityView) {
+        if (unityView.getChildAt(0) != null) {
+            unityView.removeView(mUnityPlayer);
+        }
+        mActivity.getUnityPlayer().requestFocus();
+    }
+
 }

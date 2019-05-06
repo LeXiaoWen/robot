@@ -17,10 +17,10 @@ import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.just.agentweb.MiddlewareWebClientBase;
 import com.leo.robot.R;
-import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.GetPicBean;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.wiring.WiringActivity;
+import com.leo.robot.unity.UnityPlayerActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.MiddlewareWebViewClient;
 
@@ -34,7 +34,7 @@ import cree.mvp.util.develop.LogUtils;
  */
 
 
-public class WiringChooseLocationActivity extends NettyActivity<WiringChooseLocationActivityPresenter> implements View.OnTouchListener {
+public class WiringChooseLocationActivity extends UnityPlayerActivity<WiringChooseLocationActivityPresenter> implements View.OnTouchListener {
 
     @BindView(R.id.tv_date)
     TextView mTvDate;

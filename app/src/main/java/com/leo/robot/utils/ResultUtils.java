@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import com.leo.robot.bean.AllMsg;
 import com.leo.robot.bean.CutLineMsg;
 import com.leo.robot.bean.ErroMsg;
-import com.leo.robot.bean.OperatingModeBean;
-import com.leo.robot.bean.TakeBackBean;
 import com.leo.robot.bean.TestBean;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.bean.WireStrippingMsg;
@@ -44,15 +42,6 @@ public class ResultUtils {
 //        }
     }
 
-//    public static void onResultByType(String tag){
-//        if ("client1".equals(tag)){
-//            final String s = mGson.toJson(CommandUtils.getPicBean1());
-//            NettyManager.getInstance().getClientByTag(tag).sendMsgTest(s);
-//        }else if ("client2".equals(tag)){
-//            final String s = mGson.toJson(CommandUtils.getPicBean2());
-//            NettyManager.getInstance().getClientByTag(tag).sendMsgTest(s);
-//        }
-//    }
 
     /**
      * 处理连接失败消息
@@ -96,13 +85,23 @@ public class ResultUtils {
             allMsg.setMsg("剪线指令");
             allMsg.setCode(msg);
             BusUtils.postMessage(allMsg);
-        }else if (msg.contains("InfoArm")){
-            TakeBackBean takeBackBean =mGson.fromJson(msg,TakeBackBean.class);
-            BusUtils.postMessage(takeBackBean);
-        }else if (msg.contains("InfoOperatingMode")){
-            OperatingModeBean modeBean = mGson.fromJson(msg, OperatingModeBean.class);
-            BusUtils.postMessage(modeBean);
+        }else if (PushMsgCode.IS_AUTO_CONTROL.equals(s)){//是否能手动控制
+            onControlModel(msg);
+            allMsg.setMsg("是否能手动控制命令");
+            allMsg.setCode(msg);
+            BusUtils.postMessage(msg);
         }
+//        else if (msg.contains("InfoArm")){
+//            TakeBackBean takeBackBean =mGson.fromJson(msg,TakeBackBean.class);
+//            BusUtils.postMessage(takeBackBean);
+//        }else if (msg.contains("InfoOperatingMode")){
+//            OperatingModeBean modeBean = mGson.fromJson(msg, OperatingModeBean.class);
+//            BusUtils.postMessage(modeBean);
+//        }
+    }
+
+    private static void onControlModel(String msg) {
+
     }
 
     /**

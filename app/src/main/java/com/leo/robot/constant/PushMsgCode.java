@@ -10,6 +10,7 @@ public interface PushMsgCode {
     String WIRING = "09";
     String WIRE_STRIPPING = "08";
     String CUT_LINE = "0A";
+    String IS_AUTO_CONTROL = "OB";
 
     //------------------------ 剥线界面 start --------------------------
     /**
