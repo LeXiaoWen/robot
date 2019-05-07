@@ -200,10 +200,10 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
         mActivity.updateEnd(isEnd);
     }
 
-    public void identificationClick(RelativeLayout relativeLayout) {
+    public void identificationClick() {
         if (isClickble){
             mActivity.startActivity(new Intent(mActivity, WiringChooseLocationActivity.class));
-            mActivity.finishActivity(relativeLayout);
+            mActivity.finish();
         }
     }
     public void setUnityView(RelativeLayout unityView) {

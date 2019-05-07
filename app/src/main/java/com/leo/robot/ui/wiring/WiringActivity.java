@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.just.agentweb.AgentWeb;
-import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
 import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.bean.WiringMsg;
@@ -172,7 +171,6 @@ public class WiringActivity extends UnityPlayerActivity<WiringActivityPresenter>
 
         initAdapter();
         initMainVideo();
-//        initVideo1();
         initVideo2();
         initVideo3();
         initVideo4();
@@ -317,20 +315,13 @@ public class WiringActivity extends UnityPlayerActivity<WiringActivityPresenter>
 
     @Override
     protected void onPause() {
-        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
-            webViewOnPause();
-            webViewOnDestroy();
-            AgentWebConfig.clearDiskCache(this);
-        }
         super.onPause();
         isShown = false;
     }
 
     @Override
     protected void onResume() {
-        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
-            webViewOnResume();
-        }
+
         super.onResume();
         mPresenter.initStatus();
         isShown = true;
@@ -342,6 +333,7 @@ public class WiringActivity extends UnityPlayerActivity<WiringActivityPresenter>
             webViewOnDestroy();
         }
         super.onDestroy();
+        mUnityPlayer.quit();
     }
 
 
@@ -405,17 +397,17 @@ public class WiringActivity extends UnityPlayerActivity<WiringActivityPresenter>
                 break;
             case R.id.iv_identification:
                 if (!mPresenter.isFastDoubleClick()) {
-                    mPresenter.identificationClick(mRl1);
+                    mPresenter.identificationClick();
                 }
                 break;
             case R.id.iv_setting:
                 if (!mPresenter.isFastDoubleClick()) {
                     startActivity(new Intent(WiringActivity.this, WiringSettingActivity.class));
-                    finishActivity(mRl1);
+                    finish();
                 }
                 break;
             case R.id.iv_back:
-                finishActivity(mRl1);
+                finish();
                 break;
         }
     }

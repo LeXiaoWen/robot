@@ -47,7 +47,9 @@
         android:screenOrientation="fullSensor"
         android:supportsRtl="true"
         android:theme="@style/CMVP_FullTheme">
-        <activity android:name=".ui.wire_stripping.WireStrippingActivity">
+        <activity
+            android:name=".ui.wire_stripping.WireStrippingActivity"
+            android:screenOrientation="landscape">
 
         </activity>
 

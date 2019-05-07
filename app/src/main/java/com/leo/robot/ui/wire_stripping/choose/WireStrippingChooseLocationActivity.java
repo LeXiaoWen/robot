@@ -110,6 +110,8 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     TextView mTouchShow;
     @BindView(R.id.ll_main)
     LinearLayout mLlMain;
+    @BindView(R.id.rl_show)
+    RelativeLayout mRlShow;
 
     private AgentWeb mAgentWebMain;
     private AgentWeb mAgentWeb1;
@@ -147,8 +149,8 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
         initVideo3();
         initVideo4();
         mPresenter.initStatus();
-        mWebView = mAgentWebMain.getWebCreator().getWebView();
     }
+
 
     /**
      * 位姿仿真画面
@@ -227,7 +229,20 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
+        mWebView = mAgentWebMain.getWebCreator().getWebView();
+
         initMainWebSetting(mAgentWebMain.getWebCreator().getWebView());
+    }
+
+    private void initShowVideo(){
+        AgentWeb agentWebShow = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRlShow, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .useMiddlewareWebClient(getMiddlewareWebClient())
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+        initMainWebSetting(agentWebShow.getWebCreator().getWebView());
     }
 
     /**
@@ -402,7 +417,14 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
         return true;
     }
 
-    @OnClick({R.id.iv_get_pic, R.id.iv_confirm_location, R.id.iv_back})
+    @OnClick({R.id.iv_get_pic
+            , R.id.iv_confirm_location
+            , R.id.iv_back
+            , R.id.rl_main
+            , R.id.rl_1
+            , R.id.rl_2
+            , R.id.rl_3
+            , R.id.rl_4})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_get_pic:
@@ -434,6 +456,26 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                     startActivity(new Intent(WireStrippingChooseLocationActivity.this, WireStrippingActivity.class));
                     finish();
                 }
+                break;
+            case R.id.rl_main:
+//                if (mAgentWebMain!=null&&mAgentWeb1!=null&&mAgentWeb2!=null&&mAgentWeb3!=null&&mAgentWeb4!=null){
+//                    webViewOnPause();
+//                    webViewOnDestroy();
+//                }
+//                mRlMain.setVisibility(View.GONE);
+//                mRl1.setVisibility(View.GONE);
+//                mRl2.setVisibility(View.GONE);
+//                mRl3.setVisibility(View.GONE);
+//                mRl4.setVisibility(View.GONE);
+//                initShowVideo();
+                break;
+            case R.id.rl_1:
+                break;
+            case R.id.rl_2:
+                break;
+            case R.id.rl_3:
+                break;
+            case R.id.rl_4:
                 break;
         }
     }

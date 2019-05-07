@@ -12,12 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.leo.robot.R;
+import com.leo.robot.base.NettyActivity;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ArmFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityMoveFragment;
 import com.leo.robot.ui.setting.wiring_stripping_setting.fragment.WiringStrippingFragment;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
-import com.leo.robot.unity.UnityPlayerActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,7 +28,7 @@ import butterknife.OnClick;
  */
 
 
-public class WiringStrippingSettingActivity extends UnityPlayerActivity<WiringStrippingSettingActivityPresenter> {
+public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippingSettingActivityPresenter> {
 
     @BindView(R.id.fragment)
     FrameLayout mFragment;

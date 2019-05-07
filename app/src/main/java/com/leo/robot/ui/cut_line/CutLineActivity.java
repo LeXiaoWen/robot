@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.just.agentweb.AgentWeb;
-import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
 import com.leo.robot.bean.CutLineMsg;
 import com.leo.robot.bean.ErroMsg;
@@ -154,7 +153,6 @@ public class CutLineActivity extends UnityPlayerActivity<CutLineActivityPresente
 
         initAdapter();
         initMainVideo();
-//        initVideo1();
         initVideo2();
         initVideo3();
         initVideo4();
@@ -215,23 +213,6 @@ public class CutLineActivity extends UnityPlayerActivity<CutLineActivityPresente
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
     }
 
-    /**
-     * 行线画面
-     *
-     * @author Leo
-     * created at 2019/4/27 5:26 PM
-     */
-    private void initVideo1() {
-        mAgentWeb1 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-                .closeIndicator()
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
-                .createAgentWeb()
-                .ready()
-                .go(UrlConstant.CAMERA_URL);
-
-        initWebSetting(mAgentWeb1.getWebCreator().getWebView());
-    }
 
 
     /**
@@ -298,10 +279,6 @@ public class CutLineActivity extends UnityPlayerActivity<CutLineActivityPresente
 
     @Override
     protected void onResume() {
-        if (mAgentWebMain != null  && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
-            webViewOnResume();
-        }
-        ;
         super.onResume();
         isShown = true;
         mPresenter.initStatus();
@@ -309,11 +286,6 @@ public class CutLineActivity extends UnityPlayerActivity<CutLineActivityPresente
 
     @Override
     protected void onPause() {
-        if (mAgentWebMain != null  && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
-            webViewOnPause();
-            webViewOnDestroy();
-            AgentWebConfig.clearDiskCache(this);
-        }
         super.onPause();
         isShown = false;
     }
@@ -324,6 +296,7 @@ public class CutLineActivity extends UnityPlayerActivity<CutLineActivityPresente
             webViewOnDestroy();
         }
         super.onDestroy();
+        mUnityPlayer.quit();
     }
 
     //------------------------ EventBus --------------------------
@@ -371,17 +344,17 @@ public class CutLineActivity extends UnityPlayerActivity<CutLineActivityPresente
                 break;
             case R.id.iv_identification:
                 if (!mPresenter.isFastDoubleClick()) {
-                   mPresenter.identificationClick(mRl1);
+                   mPresenter.identificationClick();
                 }
                 break;
             case R.id.iv_setting:
                 if (!mPresenter.isFastDoubleClick()) {
                     startActivity(new Intent(CutLineActivity.this, CutLineSettingActivity.class));
-                    finishActivity(mRl1);
+                    finish();
                 }
                 break;
             case R.id.iv_back:
-                finishActivity(mRl1);
+                finish();
                 break;
         }
     }

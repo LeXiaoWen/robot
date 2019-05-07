@@ -121,7 +121,7 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
         boolean isStop = utils.getBoolean(RobotInit.CUT_STOP);
         boolean isReset = utils.getBoolean(RobotInit.CUT_RESET);
         boolean isEnd = utils.getBoolean(RobotInit.CUT_END);
-        isClickble = isReady;
+        isClickble = isInit;
 
         mActivity.updateInit(isInit);
         mActivity.updateReady(isReady);
@@ -169,10 +169,10 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
         return null;
     }
 
-    public void identificationClick(RelativeLayout relativeLayout) {
+    public void identificationClick() {
         if (isClickble) {
             mActivity.startActivity(new Intent(mActivity, CutLineChooseLocationActivity.class));
-            mActivity.finishActivity(relativeLayout);
+            mActivity.finish();
         }
     }
 
@@ -183,10 +183,5 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
         mActivity.getUnityPlayer().requestFocus();
     }
 
-    public void removeUnityView(RelativeLayout unityView) {
-        if (unityView.getChildAt(0) != null) {
-            unityView.removeView(mUnityPlayer);
-        }
-        mActivity.getUnityPlayer().requestFocus();
-    }
+
 }

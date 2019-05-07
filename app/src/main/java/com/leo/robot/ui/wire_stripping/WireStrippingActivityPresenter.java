@@ -124,9 +124,10 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      *
      * @author Leo
      * created at 2019/4/27 2:22 AM
+     * @param
      */
     public void settingButton() {
-        if (isSettingClickble) {
+        if (isClickble) {
             if (!isFastDoubleClick()) {
                 mActivity.startActivity(new Intent(mActivity, WiringStrippingSettingActivity.class));
                 mActivity.finish();
@@ -215,10 +216,10 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     }
 
 
-    public void identificationButton(RelativeLayout relativeLayout) {
+    public void identificationButton() {
         if (isClickble) {
             mActivity.startActivity(new Intent(mActivity, WireStrippingChooseLocationActivity.class));
-            mActivity.finishActivity(relativeLayout);
+            mActivity.finish();
         }
     }
 

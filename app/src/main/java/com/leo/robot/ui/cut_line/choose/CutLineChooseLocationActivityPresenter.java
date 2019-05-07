@@ -36,7 +36,7 @@ public class CutLineChooseLocationActivityPresenter extends RobotPresenter<CutLi
         boolean isStop = utils.getBoolean(RobotInit.CUT_STOP);
         boolean isReset = utils.getBoolean(RobotInit.CUT_RESET);
         boolean isEnd = utils.getBoolean(RobotInit.CUT_END);
-        isClickble = isReady;
+        isClickble = isInit;
 
         mActivity.updateInit(isInit);
         mActivity.updateReady(isReady);

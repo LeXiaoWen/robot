@@ -1,7 +1,7 @@
 package com.leo.robot;
 
 import com.leo.robot.constant.RobotInit;
-import com.tencent.bugly.Bugly;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import cree.mvp.base.activity.BaseApplication;
 import cree.mvp.util.data.SPUtils;
@@ -21,11 +21,10 @@ public class App extends BaseApplication {
         //吐司初始化
         ToastUtils.init(true);
 
-        Bugly.init(getApplicationContext(), "eb991c2317", false);
+        CrashReport.initCrashReport(getApplicationContext(), "1a9d059890", true);
         new SPUtils(RobotInit.WIRE_STRIPPING_ACTIVITY).clear();
         new SPUtils(RobotInit.WIRING_ACTIVITY).clear();
         new SPUtils(RobotInit.CUT_LINE_ACTIVITY).clear();
-
     }
 
     @Override

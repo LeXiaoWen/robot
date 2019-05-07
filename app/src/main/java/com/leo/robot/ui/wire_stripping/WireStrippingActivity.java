@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.just.agentweb.AgentWeb;
-import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
 import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.bean.OperatingModeBean;
@@ -132,7 +131,6 @@ public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActi
     //机器人状态
     private ActionAdapter mStatusAdapter;
     private AgentWeb mAgentWebMain;
-    private AgentWeb mAgentWeb1;
     private AgentWeb mAgentWeb4;
     private AgentWeb mAgentWeb3;
     private AgentWeb mAgentWeb2;
@@ -160,14 +158,19 @@ public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActi
         initTile();
         initAdapter();
         initMainVideo();
-//        initVideo1();
         initVideo2();
         initVideo3();
         initVideo4();
         initBroadcast(mTvGroundPower);
         mPresenter.initStatus();
 
-        mPresenter.setUnityView(mRl1);
+        initUnity();
+    }
+
+    private void initUnity() {
+        mUnityPlayer = getUnityPlayer();
+        mRl1.addView(mUnityPlayer);
+        mUnityPlayer.requestFocus();
     }
 
     /**
@@ -224,23 +227,6 @@ public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActi
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
     }
 
-    /**
-     * 行线画面
-     *
-     * @author Leo
-     * created at 2019/4/27 5:26 PM
-     */
-    private void initVideo1() {
-        mAgentWeb1 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-                .closeIndicator()
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
-                .createAgentWeb()
-                .ready()
-                .go(UrlConstant.CAMERA_URL);
-
-        initWebSetting(mAgentWeb1.getWebCreator().getWebView());
-    }
 
 
     /**
@@ -305,11 +291,7 @@ public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActi
 
     @Override
     protected void onPause() {
-        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
-            webViewOnPause();
-            webViewOnDestroy();
-            AgentWebConfig.clearDiskCache(this);
-        }
+
 
         super.onPause();
         isShown = false;
@@ -320,9 +302,7 @@ public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActi
 
     @Override
     protected void onResume() {
-        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
-            webViewOnResume();
-        }
+
         super.onResume();
         isShown = true;
         mPresenter.initStatus();
@@ -340,7 +320,6 @@ public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActi
 
     private void webViewOnResume() {
         mAgentWebMain.getWebLifeCycle().onResume();
-//        mAgentWeb1.getWebLifeCycle().onResume();
         mAgentWeb2.getWebLifeCycle().onResume();
         mAgentWeb3.getWebLifeCycle().onResume();
         mAgentWeb4.getWebLifeCycle().onResume();
@@ -348,7 +327,6 @@ public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActi
 
     private void webViewOnDestroy() {
         mAgentWebMain.getWebLifeCycle().onDestroy();
-//        mAgentWeb1.getWebLifeCycle().onDestroy();
         mAgentWeb2.getWebLifeCycle().onDestroy();
         mAgentWeb3.getWebLifeCycle().onDestroy();
         mAgentWeb4.getWebLifeCycle().onDestroy();
@@ -356,12 +334,12 @@ public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActi
 
     @Override
     protected void onDestroy() {
-        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
             webViewOnDestroy();
         }
         super.onDestroy();
+        mUnityPlayer.quit();
         LogUtils.e("剥线界面：   onDestroy ");
-
     }
 
 
@@ -521,7 +499,7 @@ public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActi
                 break;
             case R.id.iv_identification:
                 if (!mPresenter.isFastDoubleClick()) {
-                    mPresenter.identificationButton(mRl1);
+                    mPresenter.identificationButton();
                 }
 
                 break;
@@ -531,8 +509,9 @@ public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActi
             case R.id.iv_back:
                 if (!mPresenter.isFastDoubleClick()) {
                     refreshLogRv("按下返回键");
-                    finishActivity(mRl1);
+                    finish();
                 }
+//                SendUtils.sendMainArmRotate();
                 break;
         }
     }

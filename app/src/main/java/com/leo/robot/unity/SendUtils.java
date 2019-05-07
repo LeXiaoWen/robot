@@ -10,6 +10,8 @@ import com.unity3d.player.UnityPlayer;
 
 public class SendUtils {
 
+    private static String test = "{\"msgId\":\"MA\",\"params\":{\"A\":\"45.00\",\"B\":\"-90.00\",\"C\":\"0.00\",\"D\":\"-90.00\",\"E\":\"0.00\",\"F\":\"0.00\"}}";
+
     /**
     * 设置机械运动速度，类型float
     *
@@ -26,8 +28,8 @@ public class SendUtils {
     *@author Leo
     *created at 2019/5/6 10:19 PM
     */
-    public static void sendMainArmRotate(String rotate){
-        UnityPlayer.UnitySendMessage("MessageController","SetMaRobotValue",rotate);
+    public static void sendMainArmRotate(){
+        UnityPlayer.UnitySendMessage("MessageController","SetMaRobotValue",test);
     }
 
     /**

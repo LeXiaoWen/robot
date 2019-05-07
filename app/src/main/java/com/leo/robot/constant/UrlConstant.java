@@ -15,6 +15,7 @@ public class UrlConstant {
 
     //测试
     public static final String MASTER_NETTY_HOST = "192.168.1.7";
+//    public static final String MASTER_NETTY_HOST = "192.168.2.171";
     public static final String VISION_NETTY_HOST = "192.168.1.9";
 
     /**
