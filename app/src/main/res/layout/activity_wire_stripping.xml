@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F6F2F5"
+    tools:ignore="MissingDefaultResource">
+
+    <include layout="@layout/activity_title"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_60"
+        android:background="@color/title_background_color"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="9">
+        <!--就绪-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_ready"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="就绪"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_ready"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--初始化动作-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_init"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="初始化动作"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_init"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--就位-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_in_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="剥线工具就位"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_in_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--主线夹紧-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_clamping"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="主线夹紧"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_clamping"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--夹具闭合-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_closure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="夹具闭合"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_closure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--旋转剥皮-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_peeling"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="旋转剥皮"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_peeling"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--切断绝缘皮-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_cut_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="切断绝缘皮"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_cut_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--解锁-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_unlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="解锁"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_unlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+        <!--结束-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="结束"
+                android:textColor="@color/push_status_normal_color"
+                android:textSize="@dimen/sp_16"/>
+
+            <ImageView
+                android:id="@+id/iv_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:src="@drawable/push_status_normal"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <include layout="@layout/item_activity"/>
+
+
+</LinearLayout>

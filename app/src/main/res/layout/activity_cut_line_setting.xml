@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="MissingDefaultResource">
+    <FrameLayout
+        android:background="#F5F2F5"
+        android:id="@+id/fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:background="#21524A">
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="52dp"
+            android:drawableLeft="@mipmap/gongju_clicked"
+            android:drawablePadding="9dp"
+            android:gravity="center"
+            android:text="剪线末端工具组"
+            android:textColor="@color/setting_text_clicked"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="117dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="49dp"
+            android:layout_toRightOf="@id/tv1"
+            android:drawableLeft="@mipmap/weiyidian_normal"
+            android:drawablePadding="9dp"
+            android:gravity="center"
+            android:text="主臂末端位移"
+            android:textColor="@color/setting_text_normal"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv3"
+            android:layout_width="102dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="49dp"
+            android:layout_toRightOf="@id/tv2"
+            android:drawableLeft="@mipmap/icon212_normal"
+            android:drawablePadding="9dp"
+            android:gravity="center"
+            android:text="主臂末端位姿"
+            android:textColor="@color/setting_text_normal"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv4"
+            android:layout_width="87dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="49dp"
+            android:layout_toRightOf="@id/tv3"
+            android:drawableLeft="@mipmap/fill_normal"
+            android:drawablePadding="9dp"
+            android:gravity="center"
+            android:text="主臂关节"
+            android:textColor="@color/setting_text_normal"
+            android:textSize="12sp"/>
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="122dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="61dp"
+            android:src="@mipmap/setting_back_normal"/>
+
+    </RelativeLayout>
+    <include layout="@layout/activity_title"/>
+
+</RelativeLayout>

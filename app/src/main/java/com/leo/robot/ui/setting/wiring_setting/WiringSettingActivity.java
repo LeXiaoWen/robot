@@ -10,25 +10,23 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.leo.robot.R;
+import com.leo.robot.base.NettyActivity;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ArmFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityMoveFragment;
 import com.leo.robot.ui.setting.wiring_setting.fragment.WiringFragment;
 import com.leo.robot.ui.wiring.WiringActivity;
-import com.leo.robot.unity.UnityPlayerActivity;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * created by Leo on 2019/4/20 15 : 24
  */
 
 
-public class WiringSettingActivity extends UnityPlayerActivity<WiringSettingActivityPresenter> {
+public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPresenter> {
     @BindView(R.id.fragment)
     FrameLayout mFragment;
     @BindView(R.id.tv1)

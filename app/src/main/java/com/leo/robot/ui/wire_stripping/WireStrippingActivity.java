@@ -11,34 +11,27 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
-import com.leo.robot.bean.ErroMsg;
-import com.leo.robot.bean.OperatingModeBean;
-import com.leo.robot.bean.TestBean;
-import com.leo.robot.bean.VisionMsg;
-import com.leo.robot.bean.WireStrippingMsg;
+import com.leo.robot.base.NettyActivity;
+import com.leo.robot.bean.*;
 import com.leo.robot.constant.Constants;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.ui.wiring.WiringActivity;
-import com.leo.robot.unity.UnityPlayerActivity;
 import com.leo.robot.utils.DateUtils;
-
+import cree.mvp.util.data.StringUtils;
+import cree.mvp.util.develop.LogUtils;
+import cree.mvp.util.ui.ToastUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import cree.mvp.util.data.StringUtils;
-import cree.mvp.util.develop.LogUtils;
-import cree.mvp.util.ui.ToastUtils;
 
 /**
  * 剥线作业
@@ -46,7 +39,7 @@ import cree.mvp.util.ui.ToastUtils;
  */
 
 
-public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActivityPresenter> {
+public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPresenter> {
 
     @BindView(R.id.tv_remind)
     TextView mTvRemind;
@@ -164,14 +157,14 @@ public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActi
         initBroadcast(mTvGroundPower);
         mPresenter.initStatus();
 
-        initUnity();
+//        initUnity();
     }
 
-    private void initUnity() {
-        mUnityPlayer = getUnityPlayer();
-        mRl1.addView(mUnityPlayer);
-        mUnityPlayer.requestFocus();
-    }
+//    private void initUnity() {
+//        mUnityPlayer = getUnityPlayer();
+//        mRl1.addView(mUnityPlayer);
+//        mUnityPlayer.requestFocus();
+//    }
 
     /**
      * 位姿仿真画面
@@ -338,7 +331,7 @@ public class WireStrippingActivity extends UnityPlayerActivity<WireStrippingActi
             webViewOnDestroy();
         }
         super.onDestroy();
-        mUnityPlayer.quit();
+//        mUnityPlayer.quit();
         LogUtils.e("剥线界面：   onDestroy ");
     }
 

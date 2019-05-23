@@ -4,29 +4,34 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.AllMsg;
 import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.constant.Constants;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.netty.NettyClient;
+import com.leo.robot.netty.NettyListener;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import com.leo.robot.utils.NettyManager;
+import com.leo.robot.utils.ResultUtils;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.ui.ToastUtils;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * created by Leo on 2019/4/14 18 : 11
@@ -52,10 +57,15 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     ImageButton mIbtnCutLine;
     @BindView(R.id.ibtn_cleaning)
     ImageButton mIbtnCleaning;
+    @BindView(R.id.et_ip)
+    EditText mEtIp;
+    @BindView(R.id.et_port)
+    EditText mEtPort;
+    @BindView(R.id.btn_connect)
+    Button mBtnConnect;
     private boolean isShown = false;
 
     private FragmentManager manager = getSupportFragmentManager();
-
 
     @Override
     protected void bindingDagger2(@Nullable Bundle bundle) {
@@ -156,7 +166,7 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         }
     }
 
-    @OnClick({R.id.ibtn_wire_stripping, R.id.ibtn_wirin, R.id.ibtn_cut_line, R.id.ibtn_cleaning})
+    @OnClick({R.id.ibtn_wire_stripping, R.id.ibtn_wirin, R.id.ibtn_cut_line, R.id.ibtn_cleaning,R.id.btn_connect})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ibtn_wire_stripping:
@@ -168,7 +178,7 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
                 if (!mPresenter.isFastDoubleClick()) {
                     if (Constants.isFinishWrieStripping()) {
                         startActivity(WiringActivity.class);
-                    }else {
+                    } else {
                         startActivity(WireStrippingActivity.class);
                     }
 //                    ToastUtils.showShortToast("接线作业！");
@@ -186,6 +196,45 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
                 ToastUtils.showShortToast("清洗绝缘子作业！");
 
                 break;
+            case R.id.btn_connect:
+                String ip = mEtIp.getText().toString().trim();
+                String port = mEtPort.getText().toString().trim();
+                if (!TextUtils.isEmpty(ip)&&!TextUtils.isEmpty(port)){
+                    initMasterNetty(ip,Integer.valueOf(port));
+                }
+                break;
+        }
+    }
+
+    /**
+     * 视觉服务器
+     * @param ip
+     * @param integer
+     */
+    private void initMasterNetty(String ip, Integer port) {
+        NettyClient client = new NettyClient();
+        NettyManager.getInstance().addNettyClient(RobotInit.MASTER_CONTROL_NETTY, client);
+
+        client.setListener(new NettyListener() {
+            @Override
+            public void onMessageResponse(String msg) {
+                ResultUtils.onResultByType(msg,RobotInit.MASTER_CONTROL_NETTY);
+            }
+
+            @Override
+            public void onServiceStatusConnectChanged(int statusCode) {
+                if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
+                    ResultUtils.onConnectSuccess(RobotInit.MASTER_CONTROL_NETTY);
+                } else {
+                    ResultUtils.onConnectErro(RobotInit.MASTER_CONTROL_NETTY);
+                }
+            }
+        });
+
+        if (!client.getConnectStatus()) {
+            new Thread(() -> {
+                client.connect(ip, port);//连接服务器
+            }).start();
         }
     }
 }

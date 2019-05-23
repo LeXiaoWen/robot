@@ -1,9 +1,7 @@
 package com.leo.robot.ui.wiring;
 
 import android.content.Intent;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.WiringMsg;
 import com.leo.robot.constant.RobotInit;
@@ -13,10 +11,9 @@ import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
 import com.unity3d.player.UnityPlayer;
+import cree.mvp.util.data.SPUtils;
 
 import javax.inject.Inject;
-
-import cree.mvp.util.data.SPUtils;
 
 /**
  * created by Leo on 2019/4/18 10 : 46
@@ -206,18 +203,18 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
             mActivity.finish();
         }
     }
-    public void setUnityView(RelativeLayout unityView) {
-        // TODO: 2019/5/6  直接使用父类的unityPlayer 不要自己去new一个
-        mUnityPlayer = mActivity.getUnityPlayer();
-        unityView.addView(mActivity.getUnityPlayer());
-        mActivity.getUnityPlayer().requestFocus();
-    }
-
-    public void removeUnityView(RelativeLayout unityView) {
-        if (unityView.getChildAt(0) != null) {
-            unityView.removeView(mUnityPlayer);
-        }
-        mActivity.getUnityPlayer().requestFocus();
-    }
+//    public void setUnityView(RelativeLayout unityView) {
+//        // TODO: 2019/5/6  直接使用父类的unityPlayer 不要自己去new一个
+//        mUnityPlayer = mActivity.getUnityPlayer();
+//        unityView.addView(mActivity.getUnityPlayer());
+//        mActivity.getUnityPlayer().requestFocus();
+//    }
+//
+//    public void removeUnityView(RelativeLayout unityView) {
+//        if (unityView.getChildAt(0) != null) {
+//            unityView.removeView(mUnityPlayer);
+//        }
+//        mActivity.getUnityPlayer().requestFocus();
+//    }
 
 }

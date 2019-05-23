@@ -11,30 +11,27 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
+import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.CutLineMsg;
 import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.setting.cut_line_setting.CutLineSettingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
-import com.leo.robot.unity.UnityPlayerActivity;
 import com.leo.robot.utils.DateUtils;
-
+import cree.mvp.util.data.SPUtils;
+import cree.mvp.util.data.StringUtils;
+import cree.mvp.util.ui.ToastUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import cree.mvp.util.data.SPUtils;
-import cree.mvp.util.data.StringUtils;
-import cree.mvp.util.ui.ToastUtils;
 
 /**
  * 剪线作业
@@ -42,7 +39,7 @@ import cree.mvp.util.ui.ToastUtils;
  */
 
 
-public class CutLineActivity extends UnityPlayerActivity<CutLineActivityPresenter> {
+public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
 
     @BindView(R.id.tv_date)
@@ -156,7 +153,7 @@ public class CutLineActivity extends UnityPlayerActivity<CutLineActivityPresente
         initVideo2();
         initVideo3();
         initVideo4();
-        mPresenter.setUnityView(mRl1);
+//        mPresenter.setUnityView(mRl1);
     }
 
     /**
@@ -296,7 +293,7 @@ public class CutLineActivity extends UnityPlayerActivity<CutLineActivityPresente
             webViewOnDestroy();
         }
         super.onDestroy();
-        mUnityPlayer.quit();
+//        mUnityPlayer.quit();
     }
 
     //------------------------ EventBus --------------------------

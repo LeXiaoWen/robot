@@ -1,9 +1,7 @@
 package com.leo.robot.ui.wire_stripping;
 
 import android.content.Intent;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.RobotInit;
@@ -14,10 +12,9 @@ import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
 import com.unity3d.player.UnityPlayer;
+import cree.mvp.util.data.SPUtils;
 
 import javax.inject.Inject;
-
-import cree.mvp.util.data.SPUtils;
 
 /**
  * created by Leo on 2019/4/18 10 : 46
@@ -112,12 +109,6 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         }
     }
 
-    public void getPicButton() {
-        if (isClickble) {
-            mActivity.refreshStatusRv("发送识别路线命令");
-        }
-
-    }
 
     /**
      * 手动设置
@@ -234,18 +225,18 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         //设置从臂旋转，类型string  （将json以string的形式传参）
 //        UnityPlayer.UnitySendMessage("MessageController","SetFaRobotValue","");
     }
-    public void setUnityView(RelativeLayout unityView) {
-        // TODO: 2019/5/6  直接使用父类的unityPlayer 不要自己去new一个
-        mUnityPlayer = mActivity.getUnityPlayer();
-        unityView.addView(mActivity.getUnityPlayer());
-        mActivity.getUnityPlayer().requestFocus();
-    }
-
-    public void removeUnityView(RelativeLayout unityView) {
-        if (unityView.getChildAt(0) != null) {
-            unityView.removeView(mUnityPlayer);
-        }
-        mActivity.getUnityPlayer().requestFocus();
-    }
+//    public void setUnityView(RelativeLayout unityView) {
+//        // TODO: 2019/5/6  直接使用父类的unityPlayer 不要自己去new一个
+//        mUnityPlayer = mActivity.getUnityPlayer();
+//        unityView.addView(mActivity.getUnityPlayer());
+//        mActivity.getUnityPlayer().requestFocus();
+//    }
+//
+//    public void removeUnityView(RelativeLayout unityView) {
+//        if (unityView.getChildAt(0) != null) {
+//            unityView.removeView(mUnityPlayer);
+//        }
+//        mActivity.getUnityPlayer().requestFocus();
+//    }
 
 }

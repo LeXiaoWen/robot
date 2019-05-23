@@ -1,0 +1,30 @@
+package com.leo.robot.test.netty;
+
+
+
+/**
+* netty 状态
+*
+*@author Leo
+*created at 2019/5/2 11:53 AM
+*/
+
+public interface NettyListener {
+
+    byte STATUS_CONNECT_SUCCESS = 1;
+
+    byte STATUS_CONNECT_CLOSED = 2;
+
+    byte STATUS_CONNECT_ERROR = 0;
+
+
+    /**
+     * 对消息的处理
+     */
+    void onMessageResponse(byte[] messageHolder);
+
+    /**
+     * 当服务状态发生变化时触发
+     */
+    void onServiceStatusConnectChanged(int statusCode);
+}

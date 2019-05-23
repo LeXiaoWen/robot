@@ -4,7 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
+import butterknife.ButterKnife;
 import com.google.gson.Gson;
 import com.leo.robot.R;
 import com.leo.robot.bean.TestBean;
@@ -16,20 +16,17 @@ import com.leo.robot.service.NettyService;
 import com.leo.robot.ui.main.MainActivity;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.ResultUtils;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.concurrent.TimeUnit;
-
-import butterknife.ButterKnife;
 import cree.mvp.util.permissions.PermissionsUtils;
 import cree.mvp.util.permissions.rx.PerAction1;
 import cree.mvp.util.permissions.rx.PerActionError;
 import cree.mvp.util.ui.ToastUtils;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 启动页
@@ -50,7 +47,7 @@ public class LauncherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_launcher);
         ButterKnife.bind(this);
         //主控服务器
-        initMasterNetty();
+//        initMasterNetty();
         //视觉服务器
 //        initVisionNetty();
 //        initService();

@@ -70,8 +70,14 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         initVideo3();
         initVideo4();
 
+//        initUnity();
         AgentWebConfig.debug();
         mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
+    }
+
+    private void initUnity() {
+//        mRl4.addView(mUnityPlayer);
+//        mUnityPlayer.requestFocus();
     }
 
     private void initView(View view) {
@@ -314,7 +320,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         mAgentWeb1.getWebLifeCycle().onDestroy();
         mAgentWeb2.getWebLifeCycle().onDestroy();
         mAgentWeb3.getWebLifeCycle().onDestroy();
-        mAgentWeb4.getWebLifeCycle().onDestroy();
+//        mAgentWeb4.getWebLifeCycle().onDestroy();
     }
 
     @Override
