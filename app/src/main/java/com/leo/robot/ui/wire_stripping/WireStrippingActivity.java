@@ -9,21 +9,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
-import com.leo.robot.bean.*;
+import com.leo.robot.bean.OperatingModeBean;
+import com.leo.robot.bean.SocketStatusBean;
+import com.leo.robot.bean.VisionMsg;
+import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.Constants;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.DateUtils;
+import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.develop.LogUtils;
 import cree.mvp.util.ui.ToastUtils;
@@ -116,6 +122,16 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     TextView mTvDate;
     @BindView(R.id.rl_log)
     RecyclerView mRlLog;
+    @BindView(R.id.tv_robot_status)
+    TextView mTvRobotStatus;
+    @BindView(R.id.tv_log)
+    TextView mTvLog;
+    @BindView(R.id.tv_type)
+    TextView mTvType;
+    @BindView(R.id.spin_kit)
+    SpinKitView mSpinKit;
+    @BindView(R.id.ll_status)
+    LinearLayout mLlStatus;
 
 
     private boolean isPause;
@@ -133,9 +149,14 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
 
     @Override
-    protected void notifyData(String message) {
-//        SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
-//        utils.putString(RobotInit.PUSH_MSG, message);
+    protected void notifyData(int status, String message) {
+        mTvType.setText(message);
+
+        if (status==0){//未连接
+            mSpinKit.setVisibility(View.VISIBLE);
+        }else {//已连接
+            mSpinKit.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -157,7 +178,23 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         initBroadcast(mTvGroundPower);
         mPresenter.initStatus();
 
+        initSocketStatus();
+
+
 //        initUnity();
+    }
+
+    private void initSocketStatus() {
+        SPUtils socket = new SPUtils("socket");
+        boolean status = socket.getBoolean("status");
+        if (status){
+            mTvType.setText("与主控服务器连接成功");
+            mSpinKit.setVisibility(View.GONE);
+
+        }else {
+            mTvType.setText("与主控服务器断开连接，正在重连");
+            mSpinKit.setVisibility(View.VISIBLE);
+        }
     }
 
 //    private void initUnity() {
@@ -219,7 +256,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
     }
-
 
 
     /**
@@ -345,17 +381,36 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     }
 
     //------------------------ EventBus --------------------------
+
+    /**
+     * socket连接状态信息
+     *
+     * @author Leo
+     * created at 2019/5/24 1:44 AM
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void acceptErroMsg(ErroMsg msg) {
+    public void socketStatus(SocketStatusBean bean) {
+        String type = bean.getType();
+        String code = bean.getCode();
+        String msg = bean.getMsg();
         if (isShown) {
-            if (msg.getCode().equals(RobotInit.MASTER_CONTROL_NETTY)) {
-//                showNormalDialog(this);
-            } else if (msg.getCode().equals(RobotInit.VISION_NETTY)) {
-//                showNormalDialog(this);
+            if (type.equals(RobotInit.MASTER_CONTROL_NETTY)) {//主控服务器
+                if ("0".equals(code)) {//连接失败或断开连接
+                    mTvType.setText("与主控服务器断开连接，正在重连");
+                    mSpinKit.setVisibility(View.VISIBLE);
+                } else if ("1".equals(code)) {//连接成功
+                    mTvType.setText("与主控服务器连接成功");
+                    mSpinKit.setVisibility(View.GONE);
+                }
+            } else if (type.equals(RobotInit.VISION_NETTY)) {//视觉服务器
+                if ("0".equals(code)) {//连接失败或断开连接
+//                    ToastUtils.showShortToast(msg);
+
+                } else if ("1".equals(code)) {//连接成功
+//                    ToastUtils.showShortToast(msg);
+
+                }
             }
-
-
-//            ToastUtils.showShortToast(msg.getMsg());
         }
     }
 
@@ -546,10 +601,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void toastMsg(TestBean bean) {
-        ToastUtils.showShortToast(bean.getMsg());
-    }
+
 
     /**
      * 切换急停、恢复急停图标

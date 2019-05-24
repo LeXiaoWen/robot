@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.bean.SocketStatusBean;
+import com.leo.robot.constant.RobotInit;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.ArmFragment;
 import com.leo.robot.ui.setting.cut_line_setting.fragment.CutLineFragment;
@@ -22,6 +24,8 @@ import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityMoveFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * 手动设置页面
@@ -52,6 +56,7 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
     @BindView(R.id.tv_ground_power)
     TextView mTvGroundPower;
 
+    private boolean isShown = false;
     private Fragment mCurrentFragment = new Fragment();
     private ArmFragment mArmFragment = new ArmFragment();
     private CutLineFragment mCutLineFragment = new CutLineFragment();
@@ -59,8 +64,14 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
     private ExtremityMoveFragment mExtremityMoveFragment = new ExtremityMoveFragment();
 
     @Override
-    protected void notifyData(String message) {
-
+    protected void notifyData(int status, String message) {
+//        mTvType.setText(message);
+//
+//        if (status==0){//未连接
+//            mSpinKit.setVisibility(View.VISIBLE);
+//        }else {//已连接
+//            mSpinKit.setVisibility(View.GONE);
+//        }
     }
 
     @Override
@@ -114,8 +125,17 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
         onUnBindReceiver();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isShown = false;
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isShown = true;
+    }
 
     @OnClick({R.id.tv1, R.id.tv2, R.id.tv3, R.id.tv4, R.id.iv_back})
     public void onViewClicked(View view) {
@@ -226,6 +246,31 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
         view.setCompoundDrawablePadding(10);
         view.setTextColor(color);
     }
+    /**
+     * socket连接状态信息
+     *
+     * @author Leo
+     * created at 2019/5/24 1:44 AM
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void socketStatus(SocketStatusBean bean) {
+        String type = bean.getType();
+        String code = bean.getCode();
+        if (isShown) {
+            if (type.equals(RobotInit.MASTER_CONTROL_NETTY)) {//主控服务器
+                if ("0".equals(code)){//连接失败或断开连接
 
+                }else if ("1".equals(code)){//连接成功
+
+                }
+            } else if (type.equals(RobotInit.VISION_NETTY)) {//视觉服务器
+                if ("0".equals(code)){//连接失败或断开连接
+
+                }else if ("1".equals(code)){//连接成功
+
+                }
+            }
+        }
+    }
 
 }

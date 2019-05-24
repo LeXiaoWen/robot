@@ -1,17 +1,10 @@
 package com.leo.robot.utils;
 
 import com.google.gson.Gson;
-import com.leo.robot.bean.AllMsg;
-import com.leo.robot.bean.CutLineMsg;
-import com.leo.robot.bean.ErroMsg;
-import com.leo.robot.bean.TestBean;
-import com.leo.robot.bean.VisionMsg;
-import com.leo.robot.bean.WireStrippingMsg;
-import com.leo.robot.bean.WiringMsg;
+import com.leo.robot.bean.*;
 import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
-
 import cree.mvp.util.bus.BusUtils;
 import cree.mvp.util.data.SPUtils;
 
@@ -24,6 +17,7 @@ import cree.mvp.util.data.SPUtils;
 public class ResultUtils {
     public static final int PUSH_MSG = 1, ERRO_MSG = 0;
     private static Gson mGson = new Gson();
+    private static boolean isFirst = false;
 
     /**
      * 消息的统一分发
@@ -43,17 +37,7 @@ public class ResultUtils {
     }
 
 
-    /**
-     * 处理连接失败消息
-     *
-     * @author Leo
-     * created at 2019/4/20 11:26 PM
-     */
-    private static void erroMsg(String msg) {
-        ErroMsg erroMsg = new ErroMsg();
-        erroMsg.setMsg(msg);
-        BusUtils.postMessage(erroMsg);
-    }
+
 
     /**
      * 主控服务器推送消息信息
@@ -64,7 +48,7 @@ public class ResultUtils {
      */
 
     private static void masterControlpushMsg(String msg) {
-        TestBean testBean = new TestBean();
+        SocketStatusBean testBean = new SocketStatusBean();
         testBean.setMsg("接收到主控服务器发送的消息       ：" + msg);
         BusUtils.postMessage(testBean);
 
@@ -462,15 +446,6 @@ public class ResultUtils {
         BusUtils.postMessage(cutLineMsg);
     }
 
-    /**
-     * 主界面
-     *
-     * @author Leo
-     * created at 2019/4/20 11:11 PM
-     */
-    private static void onMain(String msg) {
-
-    }
 
 
     /**
@@ -480,9 +455,11 @@ public class ResultUtils {
      * created at 2019/4/27 10:08 PM
      */
     public static void onConnectSuccess(String type) {
-        TestBean testBean = new TestBean();
+        SocketStatusBean testBean = new SocketStatusBean();
         if (RobotInit.MASTER_CONTROL_NETTY.equals(type)) {//主控服务器连接成功
             testBean.setMsg("主控服务器连接成功  ");
+            testBean.setType(RobotInit.MASTER_CONTROL_NETTY);
+            testBean.setCode("1");
             String s = mGson.toJson(CommandUtils.getMasterControlBean());
             NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
             if (client != null) {
@@ -490,13 +467,29 @@ public class ResultUtils {
             }
         } else if (RobotInit.VISION_NETTY.equals(type)) {//视觉服务器连接成功
             testBean.setMsg("视觉服务器连接成功  ");
+            testBean.setType(RobotInit.VISION_NETTY);
+            testBean.setCode("1");
             String s = mGson.toJson(CommandUtils.getVisionBean());
             NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.VISION_NETTY);
             if (client != null) {
                 client.sendMsgTest(s);
             }
         }
-        BusUtils.postMessage(testBean);
+        if (!isFirst){
+            new Thread(() -> {
+                try {
+                    Thread.sleep(4000);
+                    BusUtils.postMessage(testBean);
+                    isFirst = true;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }else {
+            BusUtils.postMessage(testBean);
+        }
+
+
     }
 
     /**
@@ -506,13 +499,16 @@ public class ResultUtils {
      * created at 2019/4/27 10:08 PM
      */
     public static void onConnectErro(String type) {
-        TestBean testBean = new TestBean();
+        SocketStatusBean testBean = new SocketStatusBean();
         if (RobotInit.MASTER_CONTROL_NETTY.equals(type)) {//主控服务器连接失败
-            testBean.setCode(RobotInit.MASTER_CONTROL_NETTY);
+            testBean.setType(RobotInit.MASTER_CONTROL_NETTY);
             testBean.setMsg("主控服务器连接失败  ");
+            testBean.setCode("0");
         } else if (RobotInit.VISION_NETTY.equals(type)) {//视觉服务器连接失败
-            testBean.setCode(RobotInit.VISION_NETTY);
+            testBean.setType(RobotInit.VISION_NETTY);
             testBean.setMsg("视觉服务器连接失败  ");
+            testBean.setCode("0");
+
         }
         BusUtils.postMessage(testBean);
     }
@@ -538,7 +534,7 @@ public class ResultUtils {
      * created at 2019/4/27 10:18 PM
      */
     private static void onVisionMsg(String msg) {
-        TestBean testBean = new TestBean();
+        SocketStatusBean testBean = new SocketStatusBean();
         testBean.setMsg("接收到视觉服务器发送的消息       ：" + msg);
         BusUtils.postMessage(testBean);
 

@@ -1,5 +1,6 @@
 package com.leo.robot.service;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,24 +9,31 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-
+import com.google.gson.Gson;
+import com.leo.robot.base.ActivityManager;
+import com.leo.robot.base.NettyActivity;
+import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.netty.NettyListener;
-import com.leo.robot.netty.bean.NettyBaseFeed;
-import com.leo.robot.netty.bean.Netty_RegisterInfo;
+import com.leo.robot.utils.CommandUtils;
+import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.ResultUtils;
+import cree.mvp.util.data.SPUtils;
 
-import cree.mvp.util.develop.LogUtils;
+import java.util.Map;
+import java.util.Stack;
 
 
 /**
  * @author Leo
  * created at 2019/4/14 6:04 PM
  */
-public class NettyService extends Service implements NettyListener {
-
+public class NettyService extends Service  {
+    private static Gson mGson = new Gson();
     private NetworkReceiver receiver;
     public static final String TAG = NettyService.class.getName();
 
@@ -49,8 +57,8 @@ public class NettyService extends Service implements NettyListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        NettyClient.getInstance().setListener(this);
-        connect();
+        initMasterNetty();
+//        initVisionNetty();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -58,70 +66,119 @@ public class NettyService extends Service implements NettyListener {
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
-        NettyClient.getInstance().setReconnectNum(0);
-        NettyClient.getInstance().disconnect();
+        Map<String, NettyClient> clientMap = NettyManager.getInstance().getClientMap();
+        for (NettyClient client : clientMap.values()) {
+            client.setReconnectNum(0);
+            client.disconnect();
+        }
     }
 
-    private void connect() {
-        if (!NettyClient.getInstance().getConnectStatus()) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-//                    NettyClient.getInstance().connect();//连接服务器
+    /**
+     * 视觉服务器
+     */
+    private void initVisionNetty() {
+        NettyClient client = new NettyClient();
+        NettyManager.getInstance().addNettyClient(RobotInit.VISION_NETTY, client);
+        client.setListener(new NettyListener() {
+            @Override
+            public void onMessageResponse(String msg) {
+                ResultUtils.onResultByType(msg,RobotInit.VISION_NETTY);
+            }
+
+            @Override
+            public void onServiceStatusConnectChanged(int statusCode) {
+                if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
+
+                    notifyData(1,"与视觉控服务器连接成功");
+                }  else if (statusCode == NettyListener.STATUS_CONNECT_ERROR){//通信异常
+                    notifyData(1,"与视觉控服务器连接异常，正在重连");
+
+                }else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED){//服务器主动断开
+                    notifyData(1,"视觉控服务器断开连接，正在重连");
+
+                    client.setConnectStatus(false);
+                    new Thread(() -> {
+                        client.connect(UrlConstant.VISION_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
+                    }).start();
                 }
+            }
+        });
+
+        if (!client.getConnectStatus()) {
+            new Thread(() -> {
+                client.connect(UrlConstant.VISION_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
             }).start();
         }
     }
 
-    @Override
-    public void onMessageResponse(String messageHolder) {
-        LogUtils.e("msg",messageHolder);
+    /**
+     * 主控服务器
+     *
+     * @author Leo
+     * created at 2019/4/27 10:06 PM
+     */
+    private void initMasterNetty() {
+        NettyClient client = new NettyClient();
+        NettyManager.getInstance().addNettyClient(RobotInit.MASTER_CONTROL_NETTY, client);
+        client.setListener(new NettyListener() {
+            @Override
+            public void onMessageResponse(String msg) {
+                ResultUtils.onResultByType(msg,RobotInit.MASTER_CONTROL_NETTY);
+            }
 
-        ResultUtils.onResult(messageHolder,ResultUtils.PUSH_MSG);
-//        notifyData(NettyActivity.MSG_FROM_SERVER, messageHolder);
+            @Override
+            public void onServiceStatusConnectChanged(int statusCode) {
+                SPUtils socket = new SPUtils("socket");
+
+                if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
+                    notifyData(1,"与主控服务器连接成功");
+                    String s = mGson.toJson(CommandUtils.getMasterControlBean());
+                    NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
+                    if (client != null) {
+                        client.sendMsgTest(s);
+                    }
+                    socket.putBoolean("status",true);
+                } else if (statusCode == NettyListener.STATUS_CONNECT_ERROR){//通信异常
+                    notifyData(0,"与主控服务器连接异常，正在重连");
+                    socket.putBoolean("status",false);
+
+                }else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED){//服务器主动断开
+                    socket.putBoolean("status",false);
+                    notifyData(0,"主控服务器断开连接，正在重连");
+                    client.setConnectStatus(false);
+                    new Thread(() -> {
+                        client.connect(UrlConstant.MASTER_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
+                    }).start();
+                }
+            }
+        });
+
+        if (!client.getConnectStatus()) {
+            new Thread(() -> {
+                client.connect(UrlConstant.MASTER_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
+            }).start();
+        }
     }
+
+
 
     private void notifyData(int type, String messageHolder) {
-//        final Stack<Activity> activities = ActivityManager.getInstance().getActivities();
-//        for (Activity activity : activities) {
-//            if (activity == null || activity.isFinishing()) {
-//                continue;
-//            }
-//            Message message = Message.obtain();
-//            message.what = type;
-//            message.obj = messageHolder;
-////            if (activity instanceof NettyActivity) {
-////                ((NettyActivity)activity).getHandler().sendMessage(message);
-////            }
-//        }
-    }
-
-    @Override
-    public void onServiceStatusConnectChanged(int statusCode) {
-        if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
-            Log.e(TAG, "connect sucessful");
-            sendAuthor();
-        } else {
-            Log.e(TAG, "connect fail statusCode = " + statusCode);
-            ResultUtils.onResult(String.valueOf("服务器连接失败"),ResultUtils.ERRO_MSG);
-//            notifyData(NettyActivity.MSG_NET_WORK_ERROR, String.valueOf("服务器连接失败"));
+        final Stack<Activity> activities = ActivityManager.getInstance().getActivities();
+        for (Activity activity : activities) {
+            if (activity == null || activity.isFinishing()) {
+                continue;
+            }
+            Message message = Message.obtain();
+            message.what = type;
+            message.obj = messageHolder;
+            if (activity instanceof NettyActivity) {
+                ((NettyActivity)activity).getHandler().sendMessage(message);
+            }
         }
-
     }
 
-    /**
-     * 发送认证信息
-     */
-    private void sendAuthor() {
-        final Netty_RegisterInfo nettyRegisterInfo = new Netty_RegisterInfo();
-        nettyRegisterInfo.setUserId(1);
-        nettyRegisterInfo.setUserType(2);
-        final NettyBaseFeed<Netty_RegisterInfo> reqRegisterVONettyBaseFeed = new NettyBaseFeed<>();
-        reqRegisterVONettyBaseFeed.setCmd(1);
-        reqRegisterVONettyBaseFeed.setModule(1);
-        reqRegisterVONettyBaseFeed.setData(nettyRegisterInfo);
-        NettyClient.getInstance().sendMessage(reqRegisterVONettyBaseFeed, null);
-    }
+
+
 
     public class NetworkReceiver extends BroadcastReceiver {
         @Override
@@ -131,7 +188,8 @@ public class NettyService extends Service implements NettyListener {
             if (activeNetwork != null) { // connected to the internet
                 if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI
                         || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                    connect();
+                    initMasterNetty();
+                    initVisionNetty();
                     Log.e(TAG, "connecting ...");
                 }
             }

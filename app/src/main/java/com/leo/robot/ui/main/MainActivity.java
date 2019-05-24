@@ -7,20 +7,18 @@ import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.AllMsg;
 import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.constant.Constants;
 import com.leo.robot.constant.RobotInit;
-import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.netty.NettyListener;
 import com.leo.robot.ui.cut_line.CutLineActivity;
@@ -29,6 +27,7 @@ import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.ResultUtils;
 import cree.mvp.util.data.SPUtils;
+import cree.mvp.util.develop.LogUtils;
 import cree.mvp.util.ui.ToastUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -63,7 +62,14 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     EditText mEtPort;
     @BindView(R.id.btn_connect)
     Button mBtnConnect;
+    @BindView(R.id.spin_kit)
+    SpinKitView mSpinKit;
+    @BindView(R.id.ll_status)
+    LinearLayout mLlStatus;
+    @BindView(R.id.tv_type)
+    TextView mTvType;
     private boolean isShown = false;
+    private boolean isFirst = false;
 
     private FragmentManager manager = getSupportFragmentManager();
 
@@ -80,12 +86,38 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         //实时更新时间（1秒更新一次）
         mPresenter.updateTime(mTvDate);
         initBroadcast(mTvGroundPower);
+        initSocketStatus();
+
     }
 
+    /**
+    * 初始化sokcet连接状态
+    *
+    *@author Leo
+    *created at 2019/5/24 11:30 PM
+    */
+    private void initSocketStatus() {
+        SPUtils socket = new SPUtils("socket");
+        boolean status = socket.getBoolean("status");
+        if (status) {
+            mTvType.setText("与主控服务器连接成功");
+            mSpinKit.setVisibility(View.GONE);
+        } else {
+            mTvType.setText("与主控服务器断开连接，正在重连");
+            mSpinKit.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     @Override
-    protected void notifyData(String message) {
-        SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
-        utils.putString(RobotInit.PUSH_MSG, message);
+    protected void notifyData(int status, String message) {
+        mTvType.setText(message);
+
+        if (status == 0) {//未连接
+            mSpinKit.setVisibility(View.VISIBLE);
+        } else {//已连接
+            mSpinKit.setVisibility(View.GONE);
+        }
     }
 
 
@@ -106,6 +138,7 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         onUnBindReceiver();
         super.onDestroy();
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void acceptErroMsg(ErroMsg msg) {
@@ -166,7 +199,38 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         }
     }
 
-    @OnClick({R.id.ibtn_wire_stripping, R.id.ibtn_wirin, R.id.ibtn_cut_line, R.id.ibtn_cleaning,R.id.btn_connect})
+    /**
+     * socket连接状态信息
+     *
+     * @author Leo
+     * created at 2019/5/24 1:44 AM
+     */
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void socketStatus(SocketStatusBean bean) {
+//        String type = bean.getType();
+//        String code = bean.getCode();
+//        String msg = bean.getMsg();
+//        if (isShown) {
+//            if (type.equals(RobotInit.MASTER_CONTROL_NETTY)) {//主控服务器
+//                if ("0".equals(code)) {//连接失败或断开连接
+//                    mTvType.setText("与主控服务器断开连接，正在重连");
+//                    mSpinKit.setVisibility(View.VISIBLE);
+//                } else if ("1".equals(code)) {//连接成功
+//                    mTvType.setText("与主控服务器连接成功");
+//                    mSpinKit.setVisibility(View.GONE);
+//                }
+//            } else if (type.equals(RobotInit.VISION_NETTY)) {//视觉服务器
+//                if ("0".equals(code)) {//连接失败或断开连接
+////                    ToastUtils.showShortToast(msg);
+//
+//                } else if ("1".equals(code)) {//连接成功
+////                    ToastUtils.showShortToast(msg);
+//
+//                }
+//            }
+//        }
+//    }
+    @OnClick({R.id.ibtn_wire_stripping, R.id.ibtn_wirin, R.id.ibtn_cut_line, R.id.ibtn_cleaning, R.id.btn_connect})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ibtn_wire_stripping:
@@ -199,8 +263,8 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
             case R.id.btn_connect:
                 String ip = mEtIp.getText().toString().trim();
                 String port = mEtPort.getText().toString().trim();
-                if (!TextUtils.isEmpty(ip)&&!TextUtils.isEmpty(port)){
-                    initMasterNetty(ip,Integer.valueOf(port));
+                if (!TextUtils.isEmpty(ip) && !TextUtils.isEmpty(port)) {
+                    initMasterNetty(ip, Integer.valueOf(port));
                 }
                 break;
         }
@@ -208,6 +272,7 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
 
     /**
      * 视觉服务器
+     *
      * @param ip
      * @param integer
      */
@@ -218,15 +283,20 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         client.setListener(new NettyListener() {
             @Override
             public void onMessageResponse(String msg) {
-                ResultUtils.onResultByType(msg,RobotInit.MASTER_CONTROL_NETTY);
+                ResultUtils.onResultByType(msg, RobotInit.MASTER_CONTROL_NETTY);
             }
 
             @Override
             public void onServiceStatusConnectChanged(int statusCode) {
                 if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
                     ResultUtils.onConnectSuccess(RobotInit.MASTER_CONTROL_NETTY);
-                } else {
+                } else if (statusCode == NettyListener.STATUS_CONNECT_ERROR) {
                     ResultUtils.onConnectErro(RobotInit.MASTER_CONTROL_NETTY);
+                } else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED) {
+                    client.setConnectStatus(false);
+                    new Thread(() -> {
+                        client.connect(ip, port);//连接服务器
+                    }).start();
                 }
             }
         });

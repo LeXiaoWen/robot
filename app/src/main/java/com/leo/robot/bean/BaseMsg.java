@@ -9,6 +9,15 @@ public abstract class BaseMsg {
     private String code;
     private String msg;
     private boolean isHighlight;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public boolean isHighlight() {
         return isHighlight;

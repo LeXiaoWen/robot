@@ -3,12 +3,10 @@ package com.leo.robot.ui.cleaning;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
-
-import com.leo.robot.R;
-import com.leo.robot.base.NettyActivity;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.leo.robot.R;
+import com.leo.robot.base.NettyActivity;
 
 /**
  * 清洗绝缘子作业
@@ -27,8 +25,14 @@ public class CleaningActivity extends NettyActivity<CleaningActivityPresenter> {
     TextView mTvGroundPower;
 
     @Override
-    protected void notifyData(String message) {
-
+    protected void notifyData(int status, String message) {
+//        mTvType.setText(message);
+//
+//        if (status==0){//未连接
+//            mSpinKit.setVisibility(View.VISIBLE);
+//        }else {//已连接
+//            mSpinKit.setVisibility(View.GONE);
+//        }
     }
 
     @Override

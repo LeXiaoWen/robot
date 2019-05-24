@@ -34,10 +34,10 @@ public class NettyClient {
 
     private boolean isConnect = false;
 
-//    private int reconnectNum = Integer.MAX_VALUE;
-    private int reconnectNum = 2;
+    private int reconnectNum = Integer.MAX_VALUE;
+//    private int reconnectNum = 2;
 
-    private long reconnectIntervalTime = 5000;
+    private long reconnectIntervalTime = 3000;
     public final static String TAG = NettyClient.class.getName();
     private final Gson gson;
     private Bootstrap bootstrap;

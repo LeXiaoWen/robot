@@ -9,15 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
-import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.bean.WiringMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
@@ -27,7 +29,6 @@ import com.leo.robot.utils.DateUtils;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.develop.LogUtils;
-import cree.mvp.util.ui.ToastUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -128,6 +129,12 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     ImageView mIv8;
     @BindView(R.id.iv_9)
     ImageView mIv9;
+    @BindView(R.id.tv_type)
+    TextView mTvType;
+    @BindView(R.id.spin_kit)
+    SpinKitView mSpinKit;
+    @BindView(R.id.ll_status)
+    LinearLayout mLlStatus;
     private boolean isPause;
 
     private List<String> mLogData;
@@ -147,9 +154,14 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     private boolean isShown = false;
 
     @Override
-    protected void notifyData(String message) {
-//        SPUtils utils = new SPUtils(RobotInit.PUSH_KEY);
-//        utils.putString(RobotInit.PUSH_MSG, message);
+    protected void notifyData(int status, String message) {
+        mTvType.setText(message);
+
+        if (status==0){//未连接
+            mSpinKit.setVisibility(View.VISIBLE);
+        }else {//已连接
+            mSpinKit.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -172,6 +184,20 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         initVideo3();
         initVideo4();
 //        mPresenter.setUnityView(mRl1);
+        initSocketStatus();
+    }
+
+    private void initSocketStatus() {
+        SPUtils socket = new SPUtils("socket");
+        boolean status = socket.getBoolean("status");
+        if (status) {
+            mTvType.setText("与主控服务器连接成功");
+            mSpinKit.setVisibility(View.GONE);
+
+        } else {
+            mTvType.setText("与主控服务器断开连接，正在重连");
+            mSpinKit.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initAdapter() {
@@ -343,13 +369,31 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     //------------------------ EventBus --------------------------
 
+    /**
+     * socket连接状态信息
+     *
+     * @author Leo
+     * created at 2019/5/24 1:44 AM
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void acceptErroMsg(ErroMsg msg) {
+    public void socketStatus(SocketStatusBean bean) {
+        String type = bean.getType();
+        String code = bean.getCode();
         if (isShown) {
-            ToastUtils.showShortToast(msg.getMsg());
+            if (type.equals(RobotInit.MASTER_CONTROL_NETTY)) {//主控服务器
+                if ("0".equals(code)) {//连接失败或断开连接
+                } else if ("1".equals(code)) {//连接成功
+
+                }
+            } else if (type.equals(RobotInit.VISION_NETTY)) {//视觉服务器
+                if ("0".equals(code)) {//连接失败或断开连接
+
+                } else if ("1".equals(code)) {//连接成功
+
+                }
+            }
         }
     }
-
 
     /**
      * 接收接线命令

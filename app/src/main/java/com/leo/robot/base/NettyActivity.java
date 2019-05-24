@@ -10,14 +10,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.widget.TextView;
-
 import com.leo.robot.broadcast.BatteryReceiver;
 import com.leo.robot.constant.RobotInit;
-
-import java.lang.ref.WeakReference;
-
 import cree.mvp.base.activity.BaseActivity;
 import cree.mvp.base.presenter.BasePresenter;
+
+import java.lang.ref.WeakReference;
 
 /**
  * created by Leo on 2019/4/14 18 : 01
@@ -79,11 +77,13 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
             super.handleMessage(msg);
             if (activity == null || activity.get() == null) return;
             final NettyActivity nettyActivity = activity.get();
-            switch (msg.what) {
-                case NettyActivity.MSG_FROM_SERVER:
-                    nettyActivity.notifyData((String) msg.obj);
-                    break;
-            }
+//            switch (msg.what) {
+//                case 0:
+//                    nettyActivity.notifyData((String) msg.obj);
+//                    break;
+//            }
+            nettyActivity.notifyData(msg.what,(String) msg.obj);
+
         }
     }
 
@@ -92,7 +92,7 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
      *
      * @param message
      */
-    protected abstract void notifyData(String message);
+    protected abstract void notifyData(int status,String message);
 
     public void onUnBindReceiver() {
         if (mReceiverTag) {

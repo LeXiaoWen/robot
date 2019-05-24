@@ -58,9 +58,16 @@ public class ControllerActivity extends NettyActivity<ControllerActivityPresente
         DaggerControllerActivityComponent.create().inject(this);
     }
 
-    @Override
-    protected void notifyData(String message) {
 
+    @Override
+    protected void notifyData(int status, String message) {
+//        mTvType.setText(message);
+//
+//        if (status==0){//未连接
+//            mSpinKit.setVisibility(View.VISIBLE);
+//        }else {//已连接
+//            mSpinKit.setVisibility(View.GONE);
+//        }
     }
 
     @Override

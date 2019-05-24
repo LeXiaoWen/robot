@@ -51,4 +51,8 @@ public class NettyManager {
         client.setListener(null);
         mNettyClients.remove(tag);
     }
+
+    public Map<String,NettyClient> getClientMap(){
+        return mNettyClients;
+    }
 }

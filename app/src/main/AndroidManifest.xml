@@ -54,10 +54,10 @@
 
         </activity>
 
-        <!--<service-->
-        <!--android:name=".service.NettyService"-->
-        <!--android:enabled="true"-->
-        <!--android:exported="true"/>-->
+        <service
+        android:name=".service.NettyService"
+        android:enabled="true"
+        android:exported="true"/>
 
         <activity
                 android:name=".ui.launcher.LauncherActivity"

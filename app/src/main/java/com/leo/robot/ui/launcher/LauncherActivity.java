@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import butterknife.ButterKnife;
 import com.google.gson.Gson;
 import com.leo.robot.R;
-import com.leo.robot.bean.TestBean;
+import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
@@ -50,7 +50,7 @@ public class LauncherActivity extends AppCompatActivity {
 //        initMasterNetty();
         //视觉服务器
 //        initVisionNetty();
-//        initService();
+        initService();
         initPermisson();
     }
 
@@ -92,7 +92,6 @@ public class LauncherActivity extends AppCompatActivity {
     private void initMasterNetty() {
         NettyClient client = new NettyClient();
         NettyManager.getInstance().addNettyClient(RobotInit.MASTER_CONTROL_NETTY, client);
-
         client.setListener(new NettyListener() {
             @Override
             public void onMessageResponse(String msg) {
@@ -103,8 +102,13 @@ public class LauncherActivity extends AppCompatActivity {
             public void onServiceStatusConnectChanged(int statusCode) {
                 if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
                     ResultUtils.onConnectSuccess(RobotInit.MASTER_CONTROL_NETTY);
-                } else {
+                } else if (statusCode == NettyListener.STATUS_CONNECT_ERROR){
                     ResultUtils.onConnectErro(RobotInit.MASTER_CONTROL_NETTY);
+                }else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED){
+                    client.setConnectStatus(false);
+                    new Thread(() -> {
+                        client.connect(UrlConstant.MASTER_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
+                    }).start();
                 }
             }
         });
@@ -207,7 +211,7 @@ public class LauncherActivity extends AppCompatActivity {
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void toastMsg(TestBean bean){
+    public void toastMsg(SocketStatusBean bean){
         ToastUtils.showShortToast(bean.getMsg());
     }
 }
