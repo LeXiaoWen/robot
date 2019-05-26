@@ -14,7 +14,7 @@ public class UrlConstant {
 //    public static final String VISION_NETTY_HOST = "192.168.1.203";
 
     //测试
-    public static final String MASTER_NETTY_HOST = "192.168.1.4";
+    public static final String MASTER_NETTY_HOST = "192.168.1.5";
 //    public static final String MASTER_NETTY_HOST = "192.168.2.171";
     public static final String VISION_NETTY_HOST = "192.168.1.9";
 
@@ -29,11 +29,11 @@ public class UrlConstant {
     /**
      * 行线相机
      */
-    public static final String LINE_CAMERA_URL = "rtsp://192.168.1.106:8554/back";
+    public static final String LINE_CAMERA_URL = "http://192.168.1.203:8080/stream?topic=/sys_1/output&type=mjpeg";
     /**
      * 引流线相机
      */
-    public static final String DRAIN_LINE_CAMERA_URL = "rtsp://192.168.1.106:8080/back";
+    public static final String DRAIN_LINE_CAMERA_URL = "http://192.168.1.203:8080/stream?topic=/sys_0/output&type=mjpeg";
     /**
      * 手爪相机
      */
@@ -45,8 +45,15 @@ public class UrlConstant {
 //    public static final String CAMERA_URL = "http://192.168.1.10:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
 
     /**
-     * 机械臂相机
+     * 主机械臂相机
      */
-    public static final String ARM_CAMERA_UREL = "";
+    public static final String ARM_MAIN_CAMERA_UREL = "http://192.168.1.203:8080/stream?topic=/usb_cam3/image_raw&type=ros_compressed";
+    /**
+     * 从机械臂相机
+     */
+    public static final String ARM_FLOW_CAMERA_UREL = "http://192.168.1.203:8080/stream?topic=/usb_cam4/image_raw&type=ros_compressed";
+
+
+
 
 }

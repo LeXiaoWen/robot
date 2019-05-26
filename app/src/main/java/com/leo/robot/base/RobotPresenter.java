@@ -20,7 +20,7 @@ public abstract class RobotPresenter<A extends NettyActivity,M extends BaseModel
     public static boolean isFastDoubleClick() {
         long time = System.currentTimeMillis();
         long timeD = time - lastClickTime;
-        if (0 < timeD && timeD < 1000) {
+        if (0 < timeD && timeD < 500) {
             ToastUtils.showShortToast("其他作业进行中，请稍等！");
             return true;
         }

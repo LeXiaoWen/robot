@@ -48,7 +48,6 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
      * created at 2019/4/18 2:11 PM
      */
     public void scramButton() {
-        if (isClickble) {
             if (!isScram) { //急停
                 if (mClient != null) {
                     mClient.sendMsgTest(CommandUtils.getMainArmShutdown());
@@ -65,7 +64,6 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
                 mActivity.updateScram(false);
                 isScram = false;
             }
-        }
     }
 
     /**
@@ -75,12 +73,10 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
      * created at 2019/4/18 2:17 PM
      */
     public void revocerButton() {
-        if (isClickble){
             if (mClient!=null){
                 mClient.sendMsgTest(CommandUtils.getMainArmRecover());
                 mActivity.refreshLogRv("发送一键回收命令");
             }
-        }
     }
 
     /**
@@ -90,7 +86,6 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
      * created at 2019/4/18 2:18 PM
      */
     public void startButton() {
-        if (isClickble) {
             if (!isStart) { //开始
                 mClient.sendMsgTest(CommandUtils.getMainArmStart());
                 isStart = true;
@@ -103,7 +98,6 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
 
                 mActivity.refreshLogRv("发送停止命令");
             }
-        }
     }
 
     public void getPicButton() {
@@ -198,10 +192,8 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
     }
 
     public void identificationClick() {
-        if (isClickble){
             mActivity.startActivity(new Intent(mActivity, WiringChooseLocationActivity.class));
             mActivity.finish();
-        }
     }
 //    public void setUnityView(RelativeLayout unityView) {
 //        // TODO: 2019/5/6  直接使用父类的unityPlayer 不要自己去new一个

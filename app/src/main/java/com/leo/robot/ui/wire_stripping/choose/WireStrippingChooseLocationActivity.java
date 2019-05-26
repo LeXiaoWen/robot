@@ -12,7 +12,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.just.agentweb.MiddlewareWebClientBase;
@@ -24,14 +27,10 @@ import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.MiddlewareWebViewClient;
-
+import cree.mvp.util.data.SPUtils;
+import cree.mvp.util.develop.LogUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import cree.mvp.util.develop.LogUtils;
 
 /**
  * created by Leo on 2019/4/27 11 : 27
@@ -112,6 +111,12 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     LinearLayout mLlMain;
     @BindView(R.id.rl_show)
     RelativeLayout mRlShow;
+    @BindView(R.id.tv_type)
+    TextView mTvType;
+    @BindView(R.id.spin_kit)
+    SpinKitView mSpinKit;
+    @BindView(R.id.ll_status)
+    LinearLayout mLlStatus;
 
     private AgentWeb mAgentWebMain;
     private AgentWeb mAgentWeb1;
@@ -129,13 +134,22 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
 
     @Override
     protected void notifyData(int status, String message) {
-//        mTvType.setText(message);
-//
-//        if (status==0){//未连接
-//            mSpinKit.setVisibility(View.VISIBLE);
-//        }else {//已连接
-//            mSpinKit.setVisibility(View.GONE);
-//        }
+        mTvType.setText(message);
+
+        if (status == 0) {//未连接
+            updateReady(false);
+            updateInit(false);
+            updateInPlace(false);
+            updateClamping(false);
+            updateClosure(false);
+            updatePeeling(false);
+            updateCutOff(false);
+            updateUnlock(false);
+            updateEnd(false);
+            mSpinKit.setVisibility(View.VISIBLE);
+        } else {//已连接
+            mSpinKit.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -153,11 +167,23 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
         initVideo1();
         initVideo2();
         initVideo3();
-        initVideo4();
+//        initVideo4();
         mPresenter.initStatus();
+        initSocketStatus();
     }
 
+    private void initSocketStatus() {
+        SPUtils socket = new SPUtils("socket");
+        boolean status = socket.getBoolean("status");
+        if (status){
+            mTvType.setText("与主控服务器连接成功");
+            mSpinKit.setVisibility(View.GONE);
 
+        }else {
+            mTvType.setText("与主控服务器断开连接，正在重连");
+            mSpinKit.setVisibility(View.VISIBLE);
+        }
+    }
     /**
      * 位姿仿真画面
      *
@@ -176,7 +202,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     }
 
     /**
-     * 机械臂画面
+     * 从臂画面
      *
      * @author Leo
      * created at 2019/4/27 5:26 PM
@@ -187,13 +213,13 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
 
         initWebSetting(mAgentWeb3.getWebCreator().getWebView());
     }
 
     /**
-     * 引流线画面
+     * 主臂画面
      *
      * @author Leo
      * created at 2019/4/27 5:26 PM
@@ -204,13 +230,13 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
 
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
     }
 
     /**
-     * 行线画面
+     * 引流线画面
      *
      * @author Leo
      * created at 2019/4/27 5:26 PM
@@ -221,7 +247,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
 
         initWebSetting(mAgentWeb1.getWebCreator().getWebView());
     }
@@ -234,13 +260,13 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                 .useMiddlewareWebClient(getMiddlewareWebClient())
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.LINE_CAMERA_URL);
         mWebView = mAgentWebMain.getWebCreator().getWebView();
 
         initMainWebSetting(mAgentWebMain.getWebCreator().getWebView());
     }
 
-    private void initShowVideo(){
+    private void initShowVideo() {
         AgentWeb agentWebShow = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlShow, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()

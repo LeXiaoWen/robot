@@ -78,11 +78,8 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      * created at 2019/4/18 2:17 PM
      */
     public void revocerButton() {
-        if (isClickble) {
-            mClient.sendMsgTest(CommandUtils.getFlowArmRecover());
-            mActivity.refreshLogRv("发送一键回收命令");
-        }
-
+        mClient.sendMsgTest(CommandUtils.getFlowArmRecover());
+        mActivity.refreshLogRv("发送一键回收命令");
     }
 
     /**
@@ -93,19 +90,17 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      */
     public void startButton() {
 
-        if (isClickble) {
-            if (!isStart) { //开始
-                mClient.sendMsgTest(CommandUtils.getFlowArmStart());
-                isStart = true;
-                mActivity.updateStart(true);
-                mActivity.refreshLogRv("发送开始命令");
-            } else {//停止
-                mClient.sendMsgTest(CommandUtils.getFlowArmStop());
-                isStart = false;
-                mActivity.updateStart(false);
+        if (!isStart) { //开始
+            mClient.sendMsgTest(CommandUtils.getFlowArmStart());
+            isStart = true;
+            mActivity.updateStart(true);
+            mActivity.refreshLogRv("发送开始命令");
+        } else {//停止
+            mClient.sendMsgTest(CommandUtils.getFlowArmStop());
+            isStart = false;
+            mActivity.updateStart(false);
 
-                mActivity.refreshLogRv("发送停止命令");
-            }
+            mActivity.refreshLogRv("发送停止命令");
         }
     }
 
@@ -113,16 +108,14 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     /**
      * 手动设置
      *
+     * @param
      * @author Leo
      * created at 2019/4/27 2:22 AM
-     * @param
      */
     public void settingButton() {
-        if (isClickble) {
-            if (!isFastDoubleClick()) {
-                mActivity.startActivity(new Intent(mActivity, WiringStrippingSettingActivity.class));
-                mActivity.finish();
-            }
+        if (!isFastDoubleClick()) {
+            mActivity.startActivity(new Intent(mActivity, WiringStrippingSettingActivity.class));
+            mActivity.finish();
         }
     }
 
@@ -203,22 +196,20 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         mActivity.updatePeeling(isPeeling);
         mActivity.updateCutOff(isCutOff);
         mActivity.updateUnlock(isUnlock);
-        mActivity.updateEnd(isEnd);
+//        mActivity.updateEnd(isEnd);
+        mActivity.updateEndNormal(isEnd);
     }
 
 
     public void identificationButton() {
-        if (isClickble) {
-            mActivity.startActivity(new Intent(mActivity, WireStrippingChooseLocationActivity.class));
-            mActivity.finish();
-        }
+        mActivity.startActivity(new Intent(mActivity, WireStrippingChooseLocationActivity.class));
+        mActivity.finish();
     }
 
 
-
-    public void sendMsgToUnity(){
+    public void sendMsgToUnity() {
         //设置机械运动速度，类型float
-        UnityPlayer.UnitySendMessage("MessageController","SetMoveSpeed","5.01");
+        UnityPlayer.UnitySendMessage("MessageController", "SetMoveSpeed", "5.01");
 
         //设置主臂旋转，类型string  （将json以string的形式传参）
 //        UnityPlayer.UnitySendMessage("MessageController","SetMaRobotValue","");

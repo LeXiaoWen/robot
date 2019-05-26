@@ -141,6 +141,12 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         mTvType.setText(message);
 
         if (status == 0) {//未连接
+            updateInit(false);
+            updateReady(false);
+            updateCutStart(false);
+            updateCutStop(false);
+            updateCutReset(false);
+            updateEnd(false);
             mSpinKit.setVisibility(View.VISIBLE);
         } else {//已连接
             mSpinKit.setVisibility(View.GONE);
@@ -184,7 +190,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     }
 
     /**
-     * 位姿仿真画面
+     * 从臂画面
      *
      * @author Leo
      * created at 2019/4/27 5:27 PM
@@ -196,13 +202,13 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
 
         initWebSetting(mAgentWeb4.getWebCreator().getWebView());
     }
 
     /**
-     * 机械臂画面
+     * 主臂画面
      *
      * @author Leo
      * created at 2019/4/27 5:26 PM
@@ -214,7 +220,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
 
         initWebSetting(mAgentWeb3.getWebCreator().getWebView());
     }
@@ -232,14 +238,14 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
 
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
     }
 
 
     /**
-     * 云台画面
+     * 行线画面
      *
      * @author Leo
      * created at 2019/4/27 5:26 PM
@@ -251,7 +257,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.LINE_CAMERA_URL);
 
         initWebSetting(mAgentWebMain.getWebCreator().getWebView());
 
@@ -486,18 +492,11 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
 
     public void updateClickStatus(boolean b) {
-        if (b) {
-            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianshouhui_normal));
-            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
-            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_normal));
-            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongshezhi_normal));
-            mTvRemind.setText("剪线");
-        } else {
-            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianhuishou_unclick));
-            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_unclick));
-            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_unclick));
-            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongshezhi_unclick));
-        }
+        mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianshouhui_normal));
+        mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
+        mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_normal));
+        mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongshezhi_normal));
+        mTvRemind.setText("剪线");
     }
 
     public void updateScram(boolean b) {

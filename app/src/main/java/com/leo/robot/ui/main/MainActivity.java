@@ -199,37 +199,7 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         }
     }
 
-    /**
-     * socket连接状态信息
-     *
-     * @author Leo
-     * created at 2019/5/24 1:44 AM
-     */
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void socketStatus(SocketStatusBean bean) {
-//        String type = bean.getType();
-//        String code = bean.getCode();
-//        String msg = bean.getMsg();
-//        if (isShown) {
-//            if (type.equals(RobotInit.MASTER_CONTROL_NETTY)) {//主控服务器
-//                if ("0".equals(code)) {//连接失败或断开连接
-//                    mTvType.setText("与主控服务器断开连接，正在重连");
-//                    mSpinKit.setVisibility(View.VISIBLE);
-//                } else if ("1".equals(code)) {//连接成功
-//                    mTvType.setText("与主控服务器连接成功");
-//                    mSpinKit.setVisibility(View.GONE);
-//                }
-//            } else if (type.equals(RobotInit.VISION_NETTY)) {//视觉服务器
-//                if ("0".equals(code)) {//连接失败或断开连接
-////                    ToastUtils.showShortToast(msg);
-//
-//                } else if ("1".equals(code)) {//连接成功
-////                    ToastUtils.showShortToast(msg);
-//
-//                }
-//            }
-//        }
-//    }
+
     @OnClick({R.id.ibtn_wire_stripping, R.id.ibtn_wirin, R.id.ibtn_cut_line, R.id.ibtn_cleaning, R.id.btn_connect})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -245,7 +215,6 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
                     } else {
                         startActivity(WireStrippingActivity.class);
                     }
-//                    ToastUtils.showShortToast("接线作业！");
 
                 }
                 break;

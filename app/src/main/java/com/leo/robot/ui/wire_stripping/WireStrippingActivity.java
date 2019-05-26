@@ -153,6 +153,15 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mTvType.setText(message);
 
         if (status==0){//未连接
+           updateReady(false);
+            updateInit(false);
+            updateInPlace(false);
+            updateClamping(false);
+            updateClosure(false);
+            updatePeeling(false);
+            updateCutOff(false);
+            updateUnlock(false);
+            updateEnd(false);
             mSpinKit.setVisibility(View.VISIBLE);
         }else {//已连接
             mSpinKit.setVisibility(View.GONE);
@@ -204,7 +213,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 //    }
 
     /**
-     * 位姿仿真画面
+     * 从臂画面
      *
      * @author Leo
      * created at 2019/4/27 5:27 PM
@@ -216,13 +225,13 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
 
         initWebSetting(mAgentWeb4.getWebCreator().getWebView());
     }
 
     /**
-     * 机械臂画面
+     * 主臂画面
      *
      * @author Leo
      * created at 2019/4/27 5:26 PM
@@ -234,7 +243,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
 
         initWebSetting(mAgentWeb3.getWebCreator().getWebView());
     }
@@ -252,14 +261,14 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
 
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
     }
 
 
     /**
-     * 云台画面
+     * 行线画面
      *
      * @author Leo
      * created at 2019/4/27 5:26 PM
@@ -271,7 +280,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.LINE_CAMERA_URL);
 
         initWebSetting(mAgentWebMain.getWebCreator().getWebView());
 
@@ -513,18 +522,38 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         if (b) {
             mTvEnd.setTextColor(getResources().getColor(R.color.color_status_wake_up));
             mIvEnd.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
-            Constants.setFinishWrieStripping(true);
-            ToastUtils.showShortToast("剥线作业结束，即将进入接线作业！");
-            new Thread(() -> {
-                try {
-                    Thread.sleep(2000);
-                    startActivity(new Intent(WireStrippingActivity.this, WiringActivity.class));
-                    finish();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+            entryWiringActivity();
         }
+    }
+
+    public void updateEndNormal(boolean isEnd) {
+        mTvEnd.setTextColor(getResources().getColor(R.color.color_status_normal));
+        mIvEnd.setImageDrawable(getResources().getDrawable(R.drawable.push_status_normal));
+        if (isEnd) {
+            mTvEnd.setTextColor(getResources().getColor(R.color.color_status_wake_up));
+            mIvEnd.setImageDrawable(getResources().getDrawable(R.drawable.push_status_wakeup));
+        }
+    }
+
+
+    /**
+    * 接收到剥线结束命令后，自动跳转到接线页面
+    *
+    *@author Leo
+    *created at 2019/5/26 12:28 PM
+    */
+    private void entryWiringActivity(){
+        Constants.setFinishWrieStripping(true);
+        ToastUtils.showShortToast("剥线作业结束，即将进入接线作业！");
+        new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+                startActivity(new Intent(WireStrippingActivity.this, WiringActivity.class));
+                finish();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     @OnClick({R.id.iv_scram, R.id.iv_take_back, R.id.iv_start, R.id.iv_identification, R.id.iv_setting, R.id.iv_back})
@@ -587,18 +616,18 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
      * created at 2019/4/27 2:10 AM
      */
     public void updateClickStatus(boolean b) {
-        if (b) {
-            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianshouhui_normal));
-            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
-            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_normal));
-            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_normal));
+//        if (b) {
+//            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianshouhui_normal));
+//            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
+//            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_normal));
+//            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_normal));
             mTvRemind.setText("请开始选取剥线位置");
-        } else {
-            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianhuishou_unclick));
-            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_unclick));
-            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_unclick));
-            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_unclick));
-        }
+//        } else {
+//            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianhuishou_unclick));
+//            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_unclick));
+//            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_unclick));
+//            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_unclick));
+//        }
     }
 
 
@@ -645,4 +674,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
             }
         }
     }
+
+
 }

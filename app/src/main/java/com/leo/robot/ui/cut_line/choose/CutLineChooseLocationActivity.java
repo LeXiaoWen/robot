@@ -12,7 +12,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.just.agentweb.MiddlewareWebClientBase;
@@ -23,10 +26,7 @@ import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.MiddlewareWebViewClient;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.develop.LogUtils;
 
 /**
@@ -91,6 +91,12 @@ public class CutLineChooseLocationActivity extends NettyActivity<CutLineChooseLo
     TextView mTouchShow;
     @BindView(R.id.ll_main)
     LinearLayout mLlMain;
+    @BindView(R.id.tv_type)
+    TextView mTvType;
+    @BindView(R.id.spin_kit)
+    SpinKitView mSpinKit;
+    @BindView(R.id.ll_status)
+    LinearLayout mLlStatus;
     private AgentWeb mAgentWebMain;
     private AgentWeb mAgentWeb1;
     private AgentWeb mAgentWeb4;
@@ -106,13 +112,33 @@ public class CutLineChooseLocationActivity extends NettyActivity<CutLineChooseLo
 
     @Override
     protected void notifyData(int status, String message) {
-//        mTvType.setText(message);
-//
-//        if (status==0){//未连接
-//            mSpinKit.setVisibility(View.VISIBLE);
-//        }else {//已连接
-//            mSpinKit.setVisibility(View.GONE);
-//        }
+        mTvType.setText(message);
+
+        if (status == 0) {//未连接
+            updateInit(false);
+            updateReady(false);
+            updateCutStart(false);
+            updateCutStop(false);
+            updateCutReset(false);
+            updateEnd(false);
+            mSpinKit.setVisibility(View.VISIBLE);
+        } else {//已连接
+            mSpinKit.setVisibility(View.GONE);
+        }
+    }
+
+
+    private void initSocketStatus() {
+        SPUtils socket = new SPUtils("socket");
+        boolean status = socket.getBoolean("status");
+        if (status) {
+            mTvType.setText("与主控服务器连接成功");
+            mSpinKit.setVisibility(View.GONE);
+
+        } else {
+            mTvType.setText("与主控服务器断开连接，正在重连");
+            mSpinKit.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -133,6 +159,7 @@ public class CutLineChooseLocationActivity extends NettyActivity<CutLineChooseLo
         initVideo4();
         mPresenter.initStatus();
         mWebView = mAgentWebMain.getWebCreator().getWebView();
+        initSocketStatus();
     }
 
     /**
@@ -402,6 +429,7 @@ public class CutLineChooseLocationActivity extends NettyActivity<CutLineChooseLo
          */
         return true;
     }
+
     @Override
     protected void onPause() {
         if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {

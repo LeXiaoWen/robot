@@ -215,7 +215,7 @@
             android:layout_height="59dp"
             android:layout_marginTop="5dp"
             android:scaleType="fitXY"
-            android:src="@drawable/shibieluxian_unclick"/>
+            android:src="@drawable/shibieluxian_normal"/>
 
         <ImageView
             android:id="@+id/iv_start"
@@ -223,7 +223,7 @@
             android:layout_height="59dp"
             android:layout_marginTop="@dimen/dp_12"
             android:scaleType="fitXY"
-            android:src="@drawable/kaishi_unclick"/>
+            android:src="@drawable/kaishi_normal"/>
 
         <View
             android:layout_gravity="center"
@@ -238,7 +238,7 @@
             android:layout_height="59dp"
             android:layout_marginTop="6dp"
             android:scaleType="fitXY"
-            android:src="@drawable/yijianhuishou_unclick"/>
+            android:src="@drawable/yijianshouhui_normal"/>
 
         <ImageView
             android:id="@+id/iv_setting"
@@ -246,7 +246,7 @@
             android:layout_height="59dp"
             android:layout_marginTop="@dimen/dp_12"
             android:scaleType="fitXY"
-            android:src="@drawable/shoudongcaozuo_unclick"/>
+            android:src="@drawable/shoudongcaozuo_normal"/>
 
         <View
             android:layout_width="222dp"

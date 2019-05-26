@@ -47,7 +47,6 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
      * created at 2019/4/18 2:11 PM
      */
     public void scramButton() {
-        if (isClickble) {
             if (!isScram) { //急停
                 if (mClient != null) {
                     mClient.sendMsgTest(CommandUtils.getMainArmShutdown());
@@ -64,7 +63,6 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
                 mActivity.updateScram(false);
                 isScram = false;
             }
-        }
 
     }
 
@@ -75,12 +73,10 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
      * created at 2019/4/18 2:17 PM
      */
     public void revocerButton() {
-        if (isClickble) {
             if (mClient != null) {
                 mClient.sendMsgTest(CommandUtils.getMainArmRecover());
                 mActivity.refreshLogRv("发送一键回收命令");
             }
-        }
     }
 
     /**
@@ -90,7 +86,6 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
      * created at 2019/4/18 2:18 PM
      */
     public void startButton() {
-        if (isClickble) {
             if (!isStart) { //开始
                 mClient.sendMsgTest(CommandUtils.getMainArmStart());
                 isStart = true;
@@ -103,7 +98,6 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
 
                 mActivity.refreshLogRv("发送停止命令");
             }
-        }
     }
 
     public void getPicButton() {
@@ -167,10 +161,8 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
     }
 
     public void identificationClick() {
-        if (isClickble) {
             mActivity.startActivity(new Intent(mActivity, CutLineChooseLocationActivity.class));
             mActivity.finish();
-        }
     }
 
 //    public void setUnityView(RelativeLayout unityView) {

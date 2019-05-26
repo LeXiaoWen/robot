@@ -14,6 +14,7 @@ import com.leo.robot.broadcast.BatteryReceiver;
 import com.leo.robot.constant.RobotInit;
 import cree.mvp.base.activity.BaseActivity;
 import cree.mvp.base.presenter.BasePresenter;
+import cree.mvp.util.data.SPUtils;
 
 import java.lang.ref.WeakReference;
 
@@ -82,6 +83,11 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
 //                    nettyActivity.notifyData((String) msg.obj);
 //                    break;
 //            }
+            if (msg.what == 0){
+                new SPUtils(RobotInit.WIRE_STRIPPING_ACTIVITY).clear();
+                new SPUtils(RobotInit.WIRING_ACTIVITY).clear();
+                new SPUtils(RobotInit.CUT_LINE_ACTIVITY).clear();
+            }
             nettyActivity.notifyData(msg.what,(String) msg.obj);
 
         }
