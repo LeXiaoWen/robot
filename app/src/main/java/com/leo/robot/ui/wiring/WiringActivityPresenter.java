@@ -51,6 +51,7 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
             if (!isScram) { //急停
                 if (mClient != null) {
                     mClient.sendMsgTest(CommandUtils.getMainArmShutdown());
+                    mClient.sendMsgTest(CommandUtils.getFlowArmShutdown());
                     mActivity.refreshLogRv("发送急停命令");
                 }
                 mActivity.updateScram(true);
@@ -58,6 +59,7 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
             } else {//回复急停
                 if (mClient != null) {
                     mClient.sendMsgTest(CommandUtils.getMainArmResume());
+                    mClient.sendMsgTest(CommandUtils.getFlowArmResume());
                     mActivity.refreshLogRv("发送恢复急停命令");
 
                 }

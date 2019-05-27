@@ -557,7 +557,7 @@ public class CommandUtils {
      */
     public static String getFlowArmWrist1Add() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x01;
+        msg[1] = (byte) 0x02;
         msg[2] = (byte) 0x08;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
@@ -1052,11 +1052,11 @@ public class CommandUtils {
     }
 
     /**
-    * 剥线停止
-    *
-    *@author Leo
-    *created at 2019/5/2 2:37 PM
-    */
+     * 剥线停止
+     *
+     * @author Leo
+     * created at 2019/5/2 2:37 PM
+     */
     public static String getStrippingStop() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x08;
@@ -1344,4 +1344,61 @@ public class CommandUtils {
     }
 
     //------------------------ 接线工具 end --------------------------
+
+    //------------------------ 滑台控制命令 --------------------------
+
+    /**
+     * 水平滑台左移
+     *
+     * @author Leo
+     * created at 2019/5/27 12:02 AM
+     */
+    public static String slideTableLeftMove() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x04;
+        msg[2] = (byte) 0x01;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 滑台右移
+     *
+     * @author Leo
+     * created at 2019/5/27 12:03 AM
+     */
+    public static String slideTableRightMove() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x04;
+        msg[2] = (byte) 0x02;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+    /**
+    * 滑台复位
+    *
+    *@author Leo
+    *created at 2019/5/27 12:03 AM
+    */
+    public static String slideTableResetMove() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x04;
+        msg[2] = (byte) 0x04;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    //------------------------ 摄像机移动命令 --------------------------
+    public static String camera1LeftMove(){
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x04;
+        msg[2] = (byte) 0x04;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
 }

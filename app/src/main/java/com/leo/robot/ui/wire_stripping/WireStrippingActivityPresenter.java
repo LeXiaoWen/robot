@@ -51,9 +51,9 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      * created at 2019/4/18 2:11 PM
      */
     public void scramButton() {
-        if (isClickble) {
             if (!isScram) { //急停
                 if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getMainArmShutdown());
                     mClient.sendMsgTest(CommandUtils.getFlowArmShutdown());
                     mActivity.refreshLogRv("发送急停命令");
                 }
@@ -61,6 +61,7 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
                 isScram = true;
             } else {//回复急停
                 if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.getMainArmResume());
                     mClient.sendMsgTest(CommandUtils.getFlowArmResume());
                     mActivity.refreshLogRv("发送恢复急停命令");
 
@@ -68,7 +69,6 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
                 mActivity.updateScram(false);
                 isScram = false;
             }
-        }
     }
 
     /**

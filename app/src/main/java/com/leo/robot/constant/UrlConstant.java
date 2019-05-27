@@ -41,7 +41,7 @@ public class UrlConstant {
     /**
      * 云台相机
      */
-    public static final String CAMERA_URL = "http://192.168.1.203:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
+    public static final String CAMERA_URL = "http://192.168.1.9:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
 //    public static final String CAMERA_URL = "http://192.168.1.10:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
 
     /**

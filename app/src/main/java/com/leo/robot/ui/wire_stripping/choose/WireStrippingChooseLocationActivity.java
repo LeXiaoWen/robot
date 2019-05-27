@@ -260,7 +260,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                 .useMiddlewareWebClient(getMiddlewareWebClient())
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.LINE_CAMERA_URL);
+                .go(UrlConstant.CAMERA_URL);
         mWebView = mAgentWebMain.getWebCreator().getWebView();
 
         initMainWebSetting(mAgentWebMain.getWebCreator().getWebView());
@@ -428,7 +428,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
              * 触屏实时位置
              */
             case MotionEvent.ACTION_MOVE:
-                mTouchShow.setText("实时位置：(" + event.getX() + "," + event.getY());
+                mTouchShow.setText("实时位置：(" + event.getX()/2 + "," + event.getY()/2);
                 break;
             /**
              * 离开屏幕的位置
@@ -436,7 +436,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
             case MotionEvent.ACTION_UP:
                 x = event.getX() / 2 * mNewScale;
                 y = event.getY() / 2 * mNewScale;
-                mTouchShow.setText(event.getX() + "," + event.getY());
+                mTouchShow.setText(event.getX()/2 + "," + event.getY()/2);
                 break;
             default:
                 break;

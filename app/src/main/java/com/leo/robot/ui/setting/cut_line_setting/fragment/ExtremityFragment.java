@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
@@ -45,12 +45,12 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
     private RelativeLayout mRl4;
 
     private NettyClient mClient;
-    private ImageView mIv1;
-    private ImageView mIv2;
-    private ImageView mIv3;
-    private ImageView mIv4;
-    private ImageView mIv5;
-    private ImageView mIv6;
+    private ImageButton mIv1;
+    private ImageButton mIv2;
+    private ImageButton mIv3;
+    private ImageButton mIv4;
+    private ImageButton mIv5;
+    private ImageButton mIv6;
 
     @Nullable
     @Override
@@ -77,21 +77,83 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
         mRl3 = (RelativeLayout) view.findViewById(R.id.rl3);
         mRl4 = (RelativeLayout) view.findViewById(R.id.rl4);
 
-        mIv1 = (ImageView) view.findViewById(R.id.iv1);
-        mIv2 = (ImageView) view.findViewById(R.id.iv2);
-        mIv3 = (ImageView) view.findViewById(R.id.iv3);
-        mIv4 = (ImageView) view.findViewById(R.id.iv4);
-        mIv5 = (ImageView) view.findViewById(R.id.iv5);
-        mIv6 = (ImageView) view.findViewById(R.id.iv6);
-        mIv1.setOnClickListener(this);
-        mIv2.setOnClickListener(this);
-        mIv3.setOnClickListener(this);
-        mIv4.setOnClickListener(this);
-        mIv5.setOnClickListener(this);
-        mIv6.setOnClickListener(this);
+        mIv1 = (ImageButton) view.findViewById(R.id.iv1);
+        mIv2 = (ImageButton) view.findViewById(R.id.iv2);
+        mIv3 = (ImageButton) view.findViewById(R.id.iv3);
+        mIv4 = (ImageButton) view.findViewById(R.id.iv4);
+        mIv5 = (ImageButton) view.findViewById(R.id.iv5);
+        mIv6 = (ImageButton) view.findViewById(R.id.iv6);
+        mIv1.setOnTouchListener(mOnDownClickListener);
+        mIv2.setOnTouchListener(mOnDownClickListener);
+        mIv3.setOnTouchListener(mOnDownClickListener);
+        mIv4.setOnTouchListener(mOnDownClickListener);
+        mIv5.setOnTouchListener(mOnDownClickListener);
+        mIv6.setOnTouchListener(mOnDownClickListener);
         mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
 
 
+    }
+
+    private View.OnTouchListener mOnDownClickListener = (v, event) -> {
+        int action = event.getAction();
+        if (action == MotionEvent.ACTION_DOWN) { //按下
+            switch (v.getId()) {
+                case R.id.iv1:
+                    if (mClient != null) {
+                        up();
+                    }
+                    break;
+                case R.id.iv2:
+                    if (mClient != null) {
+                        down();
+                    }
+                    break;
+                case R.id.iv3:
+                    if (mClient != null) {
+                        left();
+                    }
+                    break;
+                case R.id.iv4:
+                    if (mClient != null) {
+                        right();
+                    }
+                    break;
+                case R.id.iv5:
+                    if (mClient != null) {
+                        forward();
+                    }
+                    break;
+                case R.id.iv6:
+                    if (mClient != null) {
+                        backward();
+                    }
+                    break;
+            }
+        } else if (action == MotionEvent.ACTION_UP) {//松开
+            if (TAG == 1) {//主臂
+                if (mClient != null) {
+                    mainArmUp();
+                }
+            } else {//从臂
+                if (mClient != null) {
+                    flowArmUp();
+                }
+            }
+        }
+        return false;
+    };
+
+    private void flowArmUp() {
+        if (mClient != null) {
+
+            mClient.sendMsgTest(CommandUtils.getFlowArmActionStop());
+        }
+    }
+
+    private void mainArmUp() {
+        if (mClient != null) {
+            mClient.sendMsgTest(CommandUtils.getMainArmActionStop());
+        }
     }
 
     /**
