@@ -58,7 +58,7 @@ public class NettyService extends Service  {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         initMasterNetty();
-//        initVisionNetty();
+        initVisionNetty();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -90,11 +90,16 @@ public class NettyService extends Service  {
                 if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
 
                     notifyData(1,"与视觉控服务器连接成功");
+                    String s = mGson.toJson(CommandUtils.getVisionBean());
+                    NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.VISION_NETTY);
+                    if (client != null) {
+                        client.sendMsgTest(s);
+                    }
                 }  else if (statusCode == NettyListener.STATUS_CONNECT_ERROR){//通信异常
-                    notifyData(1,"与视觉控服务器连接异常，正在重连");
+//                    notifyData(1,"与视觉控服务器连接异常，正在重连");
 
                 }else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED){//服务器主动断开
-                    notifyData(1,"视觉控服务器断开连接，正在重连");
+//                    notifyData(1,"视觉控服务器断开连接，正在重连");
 
                     client.setConnectStatus(false);
                     new Thread(() -> {

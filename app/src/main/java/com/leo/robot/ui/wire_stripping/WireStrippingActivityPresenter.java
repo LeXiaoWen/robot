@@ -1,9 +1,12 @@
 package com.leo.robot.ui.wire_stripping;
 
 import android.content.Intent;
+import android.view.View;
 import android.widget.TextView;
+import com.leo.robot.R;
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.WireStrippingMsg;
+import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
@@ -207,6 +210,55 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     }
 
 
+    public void handleLogic(View contentView) {
+        View.OnClickListener listener = v -> {
+            mActivity.dismissPop();
+            switch (v.getId()){
+                case R.id.tv_menu1:
+                    if (mClient!=null){
+                        mClient.sendMsgTest(CommandUtils.aLineOrder());
+                    }
+                    break;
+                case R.id.tv_menu2:
+                    if (mClient!=null){
+                        mClient.sendMsgTest(CommandUtils.bLineOrder());
+                    }
+                    break;
+                case R.id.tv_menu3:
+                    if (mClient!=null){
+                        mClient.sendMsgTest(CommandUtils.cLineOrder());
+                    }
+                    break;
+
+            }
+        };
+        contentView.findViewById(R.id.tv_menu1).setOnClickListener(listener);
+        contentView.findViewById(R.id.tv_menu2).setOnClickListener(listener);
+        contentView.findViewById(R.id.tv_menu3).setOnClickListener(listener);
+    }
+
+
+    /**
+     * 判断当前指令是哪个摄像机选择第几个点
+     *
+     *@author Leo
+     *created at 2019/5/29 9:27 PM
+     */
+    public void jugCameraLocationType(String code) {
+        if (code.equals(PushMsgCode.CAMERA1_CHOOSE_LOCATION1)){//usb1相机选择点1
+            mActivity.jumpChooseActivity(1,1);
+        }else if (code.equals(PushMsgCode.CAMERA1_CHOOSE_LOCATION2)){//usb1相机选择点2
+            mActivity.jumpChooseActivity(1,2);
+
+        }else if (code.equals(PushMsgCode.CAMERA2_CHOOSE_LOCATION1)){//usb2相机选择点1
+            mActivity.jumpChooseActivity(2,1);
+
+        }else if (code.equals(PushMsgCode.CAMERA2_CHOOSE_LOCATION2)){//usb2相机选择点2
+            mActivity.jumpChooseActivity(2,2);
+
+        }
+    }
+
     public void sendMsgToUnity() {
         //设置机械运动速度，类型float
         UnityPlayer.UnitySendMessage("MessageController", "SetMoveSpeed", "5.01");
@@ -216,6 +268,10 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         //设置从臂旋转，类型string  （将json以string的形式传参）
 //        UnityPlayer.UnitySendMessage("MessageController","SetFaRobotValue","");
     }
+
+
+
+
 //    public void setUnityView(RelativeLayout unityView) {
 //        // TODO: 2019/5/6  直接使用父类的unityPlayer 不要自己去new一个
 //        mUnityPlayer = mActivity.getUnityPlayer();
@@ -229,5 +285,9 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 //        }
 //        mActivity.getUnityPlayer().requestFocus();
 //    }
+
+
+
+
 
 }

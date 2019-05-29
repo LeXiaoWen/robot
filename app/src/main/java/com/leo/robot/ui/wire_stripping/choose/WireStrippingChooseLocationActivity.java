@@ -8,29 +8,33 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.just.agentweb.AgentWeb;
-import com.just.agentweb.AgentWebConfig;
 import com.just.agentweb.MiddlewareWebClientBase;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
-import com.leo.robot.bean.GetPicBean;
+import com.leo.robot.bean.LocationMsg;
 import com.leo.robot.bean.VisionMsg;
+import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.netty.NettyClient;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
+import com.leo.robot.utils.ByteUtils;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.MiddlewareWebViewClient;
+import com.leo.robot.utils.NettyManager;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.develop.LogUtils;
+import cree.mvp.util.ui.ToastUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * created by Leo on 2019/4/27 11 : 27
@@ -99,10 +103,9 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     RelativeLayout mRl4;
     @BindView(R.id.tv_remind)
     TextView mTvRemind;
-    @BindView(R.id.iv_get_pic)
-    ImageView mIvGetPic;
-    @BindView(R.id.iv_confirm_location)
-    ImageView mIvConfirmLocation;
+
+    @BindView(R.id.btn_confirm_location)
+    Button mBtnConfirmLocation;
     @BindView(R.id.iv_back)
     ImageView mIvBack;
     @BindView(R.id.touch_show)
@@ -118,19 +121,74 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     @BindView(R.id.ll_status)
     LinearLayout mLlStatus;
 
+    @BindView(R.id.btn_left)
+    Button mBtnLeft;
+    @BindView(R.id.btn_right)
+    Button mBtnRight;
+    @BindView(R.id.btn_reset)
+    Button mBtnReset;
+
+    @BindView(R.id.btn_up)
+    Button mBtnUp;
+    @BindView(R.id.btn_down)
+    Button mBtnDown;
+    @BindView(R.id.btn_reset1)
+    Button mBtnReset1;
+    @BindView(R.id.btn_switch)
+    Button mBtnSwitch;
+    @BindView(R.id.tv_level)
+    TextView mTvLevel;
+    @BindView(R.id.ll_level)
+    LinearLayout mLlLevel;
+    @BindView(R.id.tv_vertical)
+    TextView mTvVertical;
+    @BindView(R.id.ll_vertical)
+    LinearLayout mLlVertical;
+
+    @BindView(R.id.rb1)
+    RadioButton mRb1;
+    @BindView(R.id.rb2)
+    RadioButton mRb2;
+    @BindView(R.id.rb3)
+    RadioButton mRb3;
+    @BindView(R.id.rb4)
+    RadioButton mRb4;
+    @BindView(R.id.rg)
+    RadioGroup mRg;
+    @BindView(R.id.btn_confirm_results)
+    Button mBtnConfirmResults;
+    @BindView(R.id.btn_giveup_results)
+    Button mBtnGiveupResults;
+    @BindView(R.id.btn_confirm_slide_table)
+    Button mBtnConfirmSlideTable;
+
+
     private AgentWeb mAgentWebMain;
-    private AgentWeb mAgentWeb1;
-    private AgentWeb mAgentWeb4;
-    private AgentWeb mAgentWeb3;
-    private AgentWeb mAgentWeb2;
+
     private WebView mWebView;
     private float mOldScale;
     private float mNewScale;
+    private List<AgentWeb> mAgentWebList = new ArrayList<>();
 
-    private float x;
-    private float y;
+    private int x;
+    private int y;
+    //水平滑台位置
+    private String landSlideTabLocation;
+    //垂直滑台位置
+    private String verticalSlideTabLocation;
+    private int switchTag = 1;
 
-    private MiddlewareWebClientBase mMiddleWareWebClient;
+
+    public NettyClient mMasterClient;
+    public NettyClient mVisionClient;
+    private boolean isSwitch = false;
+    //第几次选点
+    private int chooseCount = 0;
+
+    //发送选点信息
+    private StringBuilder location;
+    private static byte[] msg = new byte[4];
+    private int radioButtonTag = 1;
 
     @Override
     protected void notifyData(int status, String message) {
@@ -163,119 +221,151 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
         setContentView(R.layout.activity_choose_location);
         ButterKnife.bind(this);
         initTile();
-        initMainVideo();
-        initVideo1();
-        initVideo2();
-        initVideo3();
-//        initVideo4();
+        Intent intent = getIntent();
+        int tag = intent.getIntExtra("tag", 1);
+        int location = intent.getIntExtra("location", 1);
+        if (tag == 1) {
+            usb1();
+            if (location == 1) {
+                mTvRemind.setText("请选择第一个点位");
+            } else {
+                chooseCount = 1;
+                mTvRemind.setText("请选择第二个点位");
+            }
+        } else {
+            usb2();
+            if (location == 1) {
+                mTvRemind.setText("请选择第一个点位");
+            } else {
+                chooseCount = 1;
+                mTvRemind.setText("请选择第二个点位");
+            }
+        }
+
         mPresenter.initStatus();
         initSocketStatus();
+
+        initClient();
+
+        initListener();
+
+
     }
+
+    private void initClient() {
+        mMasterClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
+        mVisionClient = NettyManager.getInstance().getClientByTag(RobotInit.VISION_NETTY);
+    }
+
+    private void initListener() {
+        mBtnLeft.setOnTouchListener(mOnDownClickListener);
+        mBtnRight.setOnTouchListener(mOnDownClickListener);
+        mBtnReset.setOnTouchListener(mOnDownClickListener);
+        mBtnUp.setOnTouchListener(mOnDownClickListener);
+        mBtnDown.setOnTouchListener(mOnDownClickListener);
+        mBtnReset1.setOnTouchListener(mOnDownClickListener);
+        mRg.setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId) {
+                case R.id.rb1:
+                    radioButtonTag = 1;
+                    break;
+                case R.id.rb2:
+                    radioButtonTag = 2;
+                    break;
+                case R.id.rb3:
+                    radioButtonTag = 3;
+                    break;
+                case R.id.rb4:
+                    radioButtonTag = 4;
+                    break;
+
+            }
+        });
+    }
+
+    private View.OnTouchListener mOnDownClickListener = (v, event) -> {
+        int action = event.getAction();
+        if (action == MotionEvent.ACTION_DOWN) { //按下
+            switch (v.getId()) {
+                case R.id.btn_right:
+                    if (mMasterClient != null) {
+                        mMasterClient.sendMsgTest(CommandUtils.landSlideTableRightMove());
+                    }
+                    break;
+                case R.id.btn_left:
+                    if (mMasterClient != null) {
+                        mMasterClient.sendMsgTest(CommandUtils.landSlideTableLeftMove());
+                    }
+                    break;
+                case R.id.btn_reset:
+                    if (mMasterClient != null) {
+                        mMasterClient.sendMsgTest(CommandUtils.landSlideTableResetMove());
+                    }
+                    break;
+                case R.id.btn_up:
+                    if (mMasterClient != null) {
+
+                        mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableUpMove());
+
+                    }
+                    break;
+                case R.id.btn_down:
+                    if (mMasterClient != null) {
+                        mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableDownMove());
+
+                    }
+                    break;
+                case R.id.btn_reset1:
+                    if (mMasterClient != null) {
+                        mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableResetMove());
+
+                    }
+                    break;
+
+            }
+        } else if (action == MotionEvent.ACTION_UP) {//松开
+            if (v.getId() == R.id.btn_left || v.getId() == R.id.btn_right || v.getId() == R.id.btn_reset) {
+                if (mMasterClient != null) {
+                    mMasterClient.sendMsgTest(CommandUtils.landSlideTableStopMove());
+                }
+            } else {
+                if (mMasterClient != null) {
+                    mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableStopMove());
+                }
+            }
+
+        }
+        return false;
+    };
 
     private void initSocketStatus() {
         SPUtils socket = new SPUtils("socket");
         boolean status = socket.getBoolean("status");
-        if (status){
+        if (status) {
             mTvType.setText("与主控服务器连接成功");
             mSpinKit.setVisibility(View.GONE);
 
-        }else {
+        } else {
             mTvType.setText("与主控服务器断开连接，正在重连");
             mSpinKit.setVisibility(View.VISIBLE);
         }
     }
-    /**
-     * 位姿仿真画面
-     *
-     * @author Leo
-     * created at 2019/4/27 5:27 PM
-     */
-    private void initVideo4() {
-        mAgentWeb4 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-                .closeIndicator()
-                .createAgentWeb()
-                .ready()
-                .go(UrlConstant.CAMERA_URL);
 
-        initWebSetting(mAgentWeb4.getWebCreator().getWebView());
-    }
-
-    /**
-     * 从臂画面
-     *
-     * @author Leo
-     * created at 2019/4/27 5:26 PM
-     */
-    private void initVideo3() {
-        mAgentWeb3 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-                .closeIndicator()
-                .createAgentWeb()
-                .ready()
-                .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
-
-        initWebSetting(mAgentWeb3.getWebCreator().getWebView());
-    }
-
-    /**
-     * 主臂画面
-     *
-     * @author Leo
-     * created at 2019/4/27 5:26 PM
-     */
-    private void initVideo2() {
-        mAgentWeb2 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-                .closeIndicator()
-                .createAgentWeb()
-                .ready()
-                .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
-
-        initWebSetting(mAgentWeb2.getWebCreator().getWebView());
-    }
-
-    /**
-     * 引流线画面
-     *
-     * @author Leo
-     * created at 2019/4/27 5:26 PM
-     */
-    private void initVideo1() {
-        mAgentWeb1 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-                .closeIndicator()
-                .createAgentWeb()
-                .ready()
-                .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
-
-        initWebSetting(mAgentWeb1.getWebCreator().getWebView());
-    }
 
     @SuppressLint("NewApi")
-    private void initMainVideo() {
+    private void initMainVideo(String url) {
         mAgentWebMain = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
                 .useMiddlewareWebClient(getMiddlewareWebClient())
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(url);
         mWebView = mAgentWebMain.getWebCreator().getWebView();
 
         initMainWebSetting(mAgentWebMain.getWebCreator().getWebView());
     }
 
-    private void initShowVideo() {
-        AgentWeb agentWebShow = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRlShow, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-                .closeIndicator()
-                .useMiddlewareWebClient(getMiddlewareWebClient())
-                .createAgentWeb()
-                .ready()
-                .go(UrlConstant.CAMERA_URL);
-        initMainWebSetting(agentWebShow.getWebCreator().getWebView());
-    }
 
     /**
      * 获取缩放比例
@@ -296,17 +386,6 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     }
 
 
-    private void initWebSetting(WebView view) {
-        //取消滚动条
-        view.setHorizontalScrollBarEnabled(false);
-        view.setVerticalScrollBarEnabled(false);
-
-        view.getSettings().setUseWideViewPort(true);
-        view.getSettings().setLoadWithOverviewMode(true);
-        //缩放
-//        view.getSettings().setBuiltInZoomControls(true);
-    }
-
     private void initMainWebSetting(WebView view) {
         //取消滚动条
         view.setHorizontalScrollBarEnabled(false);
@@ -315,10 +394,10 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
         view.getSettings().setUseWideViewPort(true);
         view.getSettings().setLoadWithOverviewMode(true);
         //缩放操作
-        view.getSettings().setSupportZoom(true); //支持缩放，默认为true。是下面那个的前提。
-        view.getSettings().setBuiltInZoomControls(true); //设置内置的缩放控件。若为false，则该WebView不可缩放
-        view.getSettings().setDisplayZoomControls(false); //隐藏原生的缩放控件
-
+//        view.getSettings().setSupportZoom(true); //支持缩放，默认为true。是下面那个的前提。
+//        view.getSettings().setBuiltInZoomControls(true); //设置内置的缩放控件。若为false，则该WebView不可缩放
+//        view.getSettings().setDisplayZoomControls(false); //隐藏原生的缩放控件
+        view.setOnTouchListener(this);
     }
 
 
@@ -428,15 +507,28 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
              * 触屏实时位置
              */
             case MotionEvent.ACTION_MOVE:
-                mTouchShow.setText("实时位置：(" + event.getX()/2 + "," + event.getY()/2);
+//                x = (int) event.getX() / 2;
+//                y = (int) event.getY() / 2;
+//                mTouchShow.setText("实时位置：(" + x + "," + y + ")");
                 break;
             /**
              * 离开屏幕的位置
              */
             case MotionEvent.ACTION_UP:
-                x = event.getX() / 2 * mNewScale;
-                y = event.getY() / 2 * mNewScale;
-                mTouchShow.setText(event.getX()/2 + "," + event.getY()/2);
+//                x = event.getX() / 2 * mNewScale;
+//                y = event.getY() / 2 * mNewScale;
+                x = (int) event.getX() / 2;
+                y = (int) event.getY() / 2;
+                mTouchShow.setText(x + "," + y);
+                if (switchTag == 1) {//水平滑台
+                    if (mMasterClient != null) {
+                        mMasterClient.sendMsgTest(CommandUtils.getLandSlideTable());
+                    }
+                } else if (switchTag == 2) { //垂直滑台
+                    if (mMasterClient != null) {
+                        mMasterClient.sendMsgTest(CommandUtils.getVerticalSlideTable());
+                    }
+                }
                 break;
             default:
                 break;
@@ -449,39 +541,24 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
         return true;
     }
 
-    @OnClick({R.id.iv_get_pic
-            , R.id.iv_confirm_location
+    @OnClick({
+            R.id.btn_confirm_location
             , R.id.iv_back
-            , R.id.rl_main
-            , R.id.rl_1
-            , R.id.rl_2
-            , R.id.rl_3
-            , R.id.rl_4})
+            , R.id.btn_switch
+            , R.id.btn_giveup_results
+            , R.id.btn_confirm_results
+            , R.id.btn_confirm_slide_table
+
+    })
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_get_pic:
-                scaleController(false);
-                mAgentWebMain.getWebCreator().getWebView().setOnTouchListener(this);
-                break;
-            case R.id.iv_confirm_location:
-                String x1;
-                String y1;
-                mWebView.setOnTouchListener(null);
-                scaleController(true);
-                if ("0.0".equals(String.valueOf(mNewScale))) {
-                    x1 = String.valueOf(x);
-                    y1 = String.valueOf(y);
-                    GetPicBean bean = CommandUtils.getPicBean1(x1 + "," + y1);
-                    LogUtils.e(bean.toString());
-
-                } else {
-                    x1 = String.valueOf(x / mNewScale);
-                    y1 = String.valueOf(y / mNewScale);
-                    GetPicBean bean = CommandUtils.getPicBean1(x1 + "," + y1);
-                    LogUtils.e(bean.toString());
-
-                }
-
+//            case R.id.iv_get_pic:
+//                scaleController(false);
+//                mAgentWebMain.getWebCreator().getWebView().setOnTouchListener(this);
+//                break;
+            case R.id.btn_confirm_location:
+//                confirmLocation();
+                sendConfirmMsg();
                 break;
             case R.id.iv_back:
                 if (!mPresenter.isFastDoubleClick()) {
@@ -489,27 +566,178 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                     finish();
                 }
                 break;
-            case R.id.rl_main:
-//                if (mAgentWebMain!=null&&mAgentWeb1!=null&&mAgentWeb2!=null&&mAgentWeb3!=null&&mAgentWeb4!=null){
-//                    webViewOnPause();
-//                    webViewOnDestroy();
-//                }
-//                mRlMain.setVisibility(View.GONE);
-//                mRl1.setVisibility(View.GONE);
-//                mRl2.setVisibility(View.GONE);
-//                mRl3.setVisibility(View.GONE);
-//                mRl4.setVisibility(View.GONE);
-//                initShowVideo();
+
+            case R.id.btn_switch:
+                mTvRemind.setText(null);
+                for (AgentWeb agentWeb : mAgentWebList) {
+                    agentWeb.destroy();
+                }
+                mAgentWebList.clear();
+                mAgentWebMain = null;
+                mWebView=null;
+                mRlMain.removeViewAt(1);
+                if (!isSwitch) {
+                    usb2();
+                } else {
+                    usb1();
+                }
                 break;
-            case R.id.rl_1:
+
+            case R.id.btn_giveup_results:
+                giveUpResult();
+
+
                 break;
-            case R.id.rl_2:
+            case R.id.btn_confirm_results:
+                confirmResult();
                 break;
-            case R.id.rl_3:
+            case R.id.btn_confirm_slide_table:
+                if (mMasterClient!=null){
+                    mMasterClient.sendMsgTest(CommandUtils.confirmSlideTable());
+                }
                 break;
-            case R.id.rl_4:
+
+
+        }
+    }
+
+    private void giveUpResult() {
+        if (mVisionClient != null) {
+//                    if (switchTag == 1) {
+//                        mVisionClient.sendMsgTest(CommandUtils.cancelLocation1);
+//                    } else if (switchTag == 2) {
+//                        mVisionClient.sendMsgTest(CommandUtils.cancelLocation2);
+//
+//                    }
+            switch (radioButtonTag) {
+                case 1:
+                    mVisionClient.sendMsgTest(CommandUtils.cancelLocation1);
+                    break;
+                case 2:
+                    mVisionClient.sendMsgTest(CommandUtils.cancelLocation1);
+                    break;
+                case 3:
+                    mVisionClient.sendMsgTest(CommandUtils.cancelLocation2);
+                    break;
+                case 4:
+                    mVisionClient.sendMsgTest(CommandUtils.cancelLocation2);
+                    break;
+            }
+            chooseCount = 0;
+            mTvRemind.setText("已撤销选点，请选择第一个点位");
+
+        } else {
+            ToastUtils.showShortToast("未连接视觉服务器");
+
+        }
+    }
+
+    private void confirmResult() {
+        switch (radioButtonTag) {
+            case 1:
+                mVisionClient.sendMsgTest(CommandUtils.cancelLocation1);
+                break;
+            case 2:
+                mVisionClient.sendMsgTest(CommandUtils.cancelLocation1);
+                break;
+            case 3:
+                mVisionClient.sendMsgTest(CommandUtils.cancelLocation2);
+                break;
+            case 4:
+                mVisionClient.sendMsgTest(CommandUtils.cancelLocation2);
                 break;
         }
+    }
+
+    private void sendConfirmMsg() {
+        if (mVisionClient != null) {
+            switch (radioButtonTag) {
+                case 1:
+                    mVisionClient.sendMsgTest(CommandUtils.msg1);
+                    break;
+                case 2:
+                    mVisionClient.sendMsgTest(CommandUtils.msg2);
+                    break;
+                case 3:
+                    mVisionClient.sendMsgTest(CommandUtils.msg3);
+                    break;
+                case 4:
+                    mVisionClient.sendMsgTest(CommandUtils.msg4);
+                    break;
+            }
+        } else {
+            ToastUtils.showShortToast("未连接视觉服务器");
+        }
+
+    }
+
+
+    /**
+     * 确认选点
+     *
+     * @author Leo
+     * created at 2019/5/29 10:00 PM
+     */
+    private void confirmLocation() {
+        location = new StringBuilder();
+        chooseCount++;
+
+
+        if (chooseCount == 1) {//第一次选点
+            String s = locationMsg(chooseCount);
+
+            if (switchTag == 1 && landSlideTabLocation != null) {
+                if (mVisionClient != null) {
+                    mVisionClient.sendMsgTest(s);
+                }
+            } else if (switchTag == 2 && verticalSlideTabLocation != null) {
+                if (mVisionClient != null) {
+                    mVisionClient.sendMsgTest(s);
+                }
+            }
+            mTvRemind.setText("请选择第二个点位");
+
+            LogUtils.e("发送选点1信息 ： " + s);
+        } else if (chooseCount == 2) {//第二次选点
+            String s = locationMsg(chooseCount);
+
+            if (switchTag == 1 && landSlideTabLocation != null) {
+                if (mVisionClient != null) {
+                    mVisionClient.sendMsgTest(s);
+                }
+            } else if (switchTag == 2 && verticalSlideTabLocation != null) {
+                if (mVisionClient != null) {
+                    mVisionClient.sendMsgTest(s);
+                }
+            }
+            chooseCount = 0;
+            LogUtils.e("发送选点2信息 ： " + s);
+            mTvRemind.setText("选择点位完成");
+        }
+    }
+
+    private void usb1() {
+        mBtnSwitch.setText("引流线识别");
+        isSwitch = false;
+        mTvVertical.setVisibility(View.GONE);
+        mLlVertical.setVisibility(View.GONE);
+        mTvLevel.setVisibility(View.VISIBLE);
+        mLlLevel.setVisibility(View.VISIBLE);
+        switchTag = 1;
+
+        initMainVideo(UrlConstant.DRAIN_LINE_CAMERA_URL);
+    }
+
+    private void usb2() {
+        mBtnSwitch.setText("行线识别");
+        isSwitch = true;
+        mTvVertical.setVisibility(View.VISIBLE);
+        mLlVertical.setVisibility(View.VISIBLE);
+        mTvLevel.setVisibility(View.GONE);
+        mLlLevel.setVisibility(View.GONE);
+        switchTag = 2;
+
+        initMainVideo(UrlConstant.LINE_CAMERA_URL);
     }
 
     /**
@@ -527,17 +755,15 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
 
     @Override
     protected void onPause() {
-        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+        if (mAgentWebMain != null) {
             webViewOnPause();
-            webViewOnDestroy();
-            AgentWebConfig.clearDiskCache(this);
         }
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+        if (mAgentWebMain != null) {
             webViewOnResume();
         }
         super.onResume();
@@ -545,7 +771,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
 
     @Override
     protected void onDestroy() {
-        if (mAgentWebMain != null && mAgentWeb1 != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+        if (mAgentWebMain != null) {
             webViewOnDestroy();
         }
         super.onDestroy();
@@ -553,27 +779,27 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
 
     private void webViewOnPause() {
         mAgentWebMain.getWebLifeCycle().onPause();
-        mAgentWeb1.getWebLifeCycle().onPause();
-        mAgentWeb2.getWebLifeCycle().onPause();
-        mAgentWeb3.getWebLifeCycle().onPause();
-        mAgentWeb4.getWebLifeCycle().onPause();
+//        mAgentWeb1.getWebLifeCycle().onPause();
+//        mAgentWeb2.getWebLifeCycle().onPause();
+//        mAgentWeb3.getWebLifeCycle().onPause();
+//        mAgentWeb4.getWebLifeCycle().onPause();
 
     }
 
     private void webViewOnResume() {
         mAgentWebMain.getWebLifeCycle().onResume();
-        mAgentWeb1.getWebLifeCycle().onResume();
-        mAgentWeb2.getWebLifeCycle().onResume();
-        mAgentWeb3.getWebLifeCycle().onResume();
-        mAgentWeb4.getWebLifeCycle().onResume();
+//        mAgentWeb1.getWebLifeCycle().onResume();
+//        mAgentWeb2.getWebLifeCycle().onResume();
+//        mAgentWeb3.getWebLifeCycle().onResume();
+//        mAgentWeb4.getWebLifeCycle().onResume();
     }
 
     private void webViewOnDestroy() {
         mAgentWebMain.getWebLifeCycle().onDestroy();
-        mAgentWeb1.getWebLifeCycle().onDestroy();
-        mAgentWeb2.getWebLifeCycle().onDestroy();
-        mAgentWeb3.getWebLifeCycle().onDestroy();
-        mAgentWeb4.getWebLifeCycle().onDestroy();
+//        mAgentWeb1.getWebLifeCycle().onDestroy();
+//        mAgentWeb2.getWebLifeCycle().onDestroy();
+//        mAgentWeb3.getWebLifeCycle().onDestroy();
+//        mAgentWeb4.getWebLifeCycle().onDestroy();
     }
 
 
@@ -587,6 +813,62 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     public void onVisionMsg(VisionMsg msg) {
         LogUtils.e("图片数据 ： " + msg.getMsg());
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLocationMsg(LocationMsg msg) {
+        if (msg.getMsg() != null && msg.getMsg().length() > 5) {
+            String s = msg.getMsg().substring(8, 16);
+            if ("0".equals(msg.getCode())) {//垂直滑台
+                verticalSlideTabLocation = s;
+            } else if ("1".equals(msg.getCode())) {//水平滑台
+                landSlideTabLocation = s;
+            }
+            ToastUtils.showShortToast("成功获取滑台位置");
+
+        }
+    }
+
+
+    private String locationMsg(int chooseCount) {
+        String x = ByteUtils.numToHex32(this.x);
+        String y = ByteUtils.numToHex32(this.y);
+        String y1 = y.substring(0, 2);
+        String y2 = y.substring(2, 4);
+        String y3 = y.substring(4, 6);
+        String y4 = y.substring(6, 8);
+        String x1 = x.substring(0, 2);
+        String x2 = x.substring(2, 4);
+        String x3 = x.substring(4, 6);
+        String x4 = x.substring(6, 8);
+
+        if (switchTag == 1) {//水平滑台
+            location.append("640210");
+        } else if (switchTag == 2) {//垂直滑台
+            location.append("640610");
+        }
+
+        if (chooseCount == 1) {
+            location.append("01000000");
+        } else if (chooseCount == 2) {
+            location.append("02000000");
+        }
+        location.append(x4);
+        location.append(x3);
+        location.append(x2);
+        location.append(x1);
+        location.append(y4);
+        location.append(y3);
+        location.append(y2);
+        location.append(y1);
+        if (switchTag == 1) {
+            location.append(landSlideTabLocation);
+        } else if (switchTag == 2) {
+            location.append(verticalSlideTabLocation);
+        }
+        location.append("FF");
+
+        return location.toString();
     }
 
 

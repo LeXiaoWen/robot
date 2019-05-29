@@ -48,11 +48,13 @@ public class ResultUtils {
      */
 
     private static void masterControlpushMsg(String msg) {
-        SocketStatusBean testBean = new SocketStatusBean();
-        testBean.setMsg("接收到主控服务器发送的消息       ：" + msg);
-        BusUtils.postMessage(testBean);
+//        SocketStatusBean testBean = new SocketStatusBean();
+//        testBean.setType(RobotInit.MASTER_CONTROL_NETTY);
+//        testBean.setMsg("接收到主控服务器发送的消息       ：" + msg);
+//        BusUtils.postMessage(testBean);
 
         AllMsg allMsg = new AllMsg();
+        LocationMsg locationMsg = new LocationMsg();
         String s = msg.substring(2, 4);
         if (PushMsgCode.WIRE_STRIPPING.equals(s)) {//剥线
             onWiringStripping(msg);
@@ -74,6 +76,20 @@ public class ResultUtils {
             allMsg.setMsg("是否能手动控制命令");
             allMsg.setCode(msg);
             BusUtils.postMessage(msg);
+        }else if (msg.contains(PushMsgCode.VERTICAL_SLIDE_TABLE)){//垂直滑台
+
+            locationMsg.setMsg(msg);
+            locationMsg.setCode("0");
+            BusUtils.postMessage(locationMsg);
+        }else if (msg.contains(PushMsgCode.LAND_SLIDE_TABLE)){//水平滑台
+            locationMsg.setMsg(msg);
+            locationMsg.setCode("1");
+            BusUtils.postMessage(locationMsg);
+        }else if (PushMsgCode.CHOOSE_LOCATION.equals(s)){//选点指令
+            ChooseCameraLocationMsg chooseCameraLocationMsg = new ChooseCameraLocationMsg();
+            chooseCameraLocationMsg.setMsg("相机选点指令");
+            chooseCameraLocationMsg.setCode(msg);
+            BusUtils.postMessage(chooseCameraLocationMsg);
         }
 //        else if (msg.contains("InfoArm")){
 //            TakeBackBean takeBackBean =mGson.fromJson(msg,TakeBackBean.class);
@@ -534,9 +550,10 @@ public class ResultUtils {
      * created at 2019/4/27 10:18 PM
      */
     private static void onVisionMsg(String msg) {
-        SocketStatusBean testBean = new SocketStatusBean();
-        testBean.setMsg("接收到视觉服务器发送的消息       ：" + msg);
-        BusUtils.postMessage(testBean);
+//        SocketStatusBean testBean = new SocketStatusBean();
+//        testBean.setType(RobotInit.VISION_NETTY);
+//        testBean.setMsg("接收到视觉服务器发送的消息       ：" + msg);
+//        BusUtils.postMessage(testBean);
 
         VisionMsg visionMsg = new VisionMsg();
         visionMsg.setMsg(msg);

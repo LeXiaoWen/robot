@@ -11,6 +11,8 @@ public interface PushMsgCode {
     String WIRE_STRIPPING = "08";
     String CUT_LINE = "0A";
     String IS_AUTO_CONTROL = "OB";
+    //选点命令
+    String CHOOSE_LOCATION = "0D";
 
     //------------------------ 剥线界面 start --------------------------
     /**
@@ -131,7 +133,7 @@ public interface PushMsgCode {
 
     /**
      * 就绪
-      */
+     */
     String CUT_INIT = "670A010101FF";
     String CUT_NOT_INIT = "670A010100FF";
 
@@ -154,7 +156,7 @@ public interface PushMsgCode {
      * 钳口复位
      */
     String CUT_RESET = "670A050101FF";
-    String CUT_NOT_RESET= "670A050100FF";
+    String CUT_NOT_RESET = "670A050100FF";
     /**
      * 结束
      */
@@ -163,4 +165,30 @@ public interface PushMsgCode {
 
 
     //------------------------ 剪线界面 end --------------------------
+
+    //------------------------ 选点指令 --------------------------
+    /**
+     * USB1 请选择行线第一个点
+     */
+    String CAMERA1_CHOOSE_LOCATION1 = "670D01000FF";
+    /**
+     * USB1 请选择行线第二个点
+     */
+    String CAMERA1_CHOOSE_LOCATION2 = "670D02000FF";
+    /**
+     * USB2 请选择行线第一个点
+     */
+    String CAMERA2_CHOOSE_LOCATION1 = "670D03000FF";
+    /**
+     * USB2 请选择行线第二个点
+     */
+    String CAMERA2_CHOOSE_LOCATION2 = "670D04000FF";
+
+    //------------------------ 水平滑台返回命令 --------------------------
+    String LAND_SLIDE_TABLE = "67040304";
+
+
+    //------------------------ 垂直滑台返回命令 --------------------------
+
+    String VERTICAL_SLIDE_TABLE = "67050304";
 }

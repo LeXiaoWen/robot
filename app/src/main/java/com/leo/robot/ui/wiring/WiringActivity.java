@@ -20,15 +20,18 @@ import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.SocketStatusBean;
+import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.bean.WiringMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
+import com.leo.robot.ui.wiring.choose.WiringChooseLocationActivity;
 import com.leo.robot.utils.DateUtils;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.develop.LogUtils;
+import cree.mvp.util.ui.ToastUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -597,6 +600,22 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
             mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
         } else {
             mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.atingzhi_normal));
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void acceptVisionMsg(VisionMsg msg) {
+        if (isShown) {
+            ToastUtils.showShortToast("接收到选点命令，即将进入选点页面！");
+            new Thread(() -> {
+                try {
+                    Thread.sleep(2000);
+                    startActivity(new Intent(WiringActivity.this, WiringChooseLocationActivity.class));
+                    finish();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
         }
     }
 }

@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -19,16 +17,15 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
-import com.leo.robot.bean.OperatingModeBean;
-import com.leo.robot.bean.SocketStatusBean;
-import com.leo.robot.bean.VisionMsg;
-import com.leo.robot.bean.WireStrippingMsg;
+import com.leo.robot.bean.*;
 import com.leo.robot.constant.Constants;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
+import com.leo.robot.ui.wire_stripping.choose.WireStrippingChooseLocationActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.DateUtils;
+import com.leo.robot.view.CustomPopWindow;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.develop.LogUtils;
@@ -132,6 +129,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     SpinKitView mSpinKit;
     @BindView(R.id.ll_status)
     LinearLayout mLlStatus;
+    @BindView(R.id.btn_jump)
+    Button mBtnJump;
 
 
     private boolean isPause;
@@ -146,14 +145,15 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     private List<String> mLogData;
     //操作日志
     private ActionAdapter mLogAdapter;
+    private CustomPopWindow mCustomPopWindow;
 
 
     @Override
     protected void notifyData(int status, String message) {
         mTvType.setText(message);
 
-        if (status==0){//未连接
-           updateReady(false);
+        if (status == 0) {//未连接
+            updateReady(false);
             updateInit(false);
             updateInPlace(false);
             updateClamping(false);
@@ -163,7 +163,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
             updateUnlock(false);
             updateEnd(false);
             mSpinKit.setVisibility(View.VISIBLE);
-        }else {//已连接
+        } else {//已连接
             mSpinKit.setVisibility(View.GONE);
         }
     }
@@ -188,19 +188,18 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mPresenter.initStatus();
 
         initSocketStatus();
-
-
+        mBtnJump.setVisibility(View.VISIBLE);
 //        initUnity();
     }
 
     private void initSocketStatus() {
         SPUtils socket = new SPUtils("socket");
         boolean status = socket.getBoolean("status");
-        if (status){
+        if (status) {
             mTvType.setText("与主控服务器连接成功");
             mSpinKit.setVisibility(View.GONE);
 
-        }else {
+        } else {
             mTvType.setText("与主控服务器断开连接，正在重连");
             mSpinKit.setVisibility(View.VISIBLE);
         }
@@ -436,9 +435,18 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void acceptVisionMsg(VisionMsg msg) {
-        if (isShown) {
-            ToastUtils.showShortToast("接收到视觉服务器推送消息 ： " + msg.getMsg());
-        }
+//        if (isShown) {
+//            ToastUtils.showShortToast("接收到选点命令，即将进入选点页面！");
+//            new Thread(() -> {
+//                try {
+//                    Thread.sleep(2000);
+//                    startActivity(new Intent(WireStrippingActivity.this, WireStrippingChooseLocationActivity.class));
+//                    finish();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }).start();
+//        }
     }
 
     //------------------------ 更新UI --------------------------
@@ -537,12 +545,12 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
 
     /**
-    * 接收到剥线结束命令后，自动跳转到接线页面
-    *
-    *@author Leo
-    *created at 2019/5/26 12:28 PM
-    */
-    private void entryWiringActivity(){
+     * 接收到剥线结束命令后，自动跳转到接线页面
+     *
+     * @author Leo
+     * created at 2019/5/26 12:28 PM
+     */
+    private void entryWiringActivity() {
         Constants.setFinishWrieStripping(true);
         ToastUtils.showShortToast("剥线作业结束，即将进入接线作业！");
         new Thread(() -> {
@@ -556,7 +564,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         }).start();
     }
 
-    @OnClick({R.id.iv_scram, R.id.iv_take_back, R.id.iv_start, R.id.iv_identification, R.id.iv_setting, R.id.iv_back})
+    @OnClick({R.id.iv_scram, R.id.iv_take_back, R.id.iv_start, R.id.iv_identification, R.id.iv_setting, R.id.iv_back, R.id.btn_jump})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_scram:
@@ -570,9 +578,11 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 }
                 break;
             case R.id.iv_start:
-                if (!mPresenter.isFastDoubleClick()) {
-                    mPresenter.startButton();
-                }
+//                if (!mPresenter.isFastDoubleClick()) {
+//                    mPresenter.startButton();
+//                }
+
+                startClick();
                 break;
             case R.id.iv_identification:
                 if (!mPresenter.isFastDoubleClick()) {
@@ -590,8 +600,26 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 }
 //                SendUtils.sendMainArmRotate();
                 break;
+            case R.id.btn_jump:
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(new Intent(WireStrippingActivity.this, WiringActivity.class));
+                    finish();
+                }
+                break;
         }
     }
+
+    private void startClick() {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.pop_menu, null);
+        //处理popWindow 显示内容
+        mPresenter.handleLogic(contentView);
+        //创建并显示popWindow
+        mCustomPopWindow = new CustomPopWindow.PopupWindowBuilder(this)
+                .setView(contentView)
+                .create()
+                .showAsDropDown(mIvStart, 260, 20);
+    }
+
 
     public void refreshStatusRv(String msg) {
         String currentDate = DateUtils.getCurrentDate();
@@ -621,7 +649,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 //            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
 //            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_normal));
 //            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_normal));
-            mTvRemind.setText("请开始选取剥线位置");
+        mTvRemind.setText("请开始选取剥线位置");
 //        } else {
 //            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianhuishou_unclick));
 //            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_unclick));
@@ -629,7 +657,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 //            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_unclick));
 //        }
     }
-
 
 
     /**
@@ -675,5 +702,54 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCameraLocationMsg(ChooseCameraLocationMsg msg) {
+        String code = msg.getCode();
+        mPresenter.jugCameraLocationType(code);
+    }
 
+
+    /**
+     * 消失pop
+     *
+     * @author Leo
+     * created at 2019/5/29 9:10 PM
+     */
+    public void dismissPop() {
+        if (mCustomPopWindow != null) {
+            mCustomPopWindow.dissmiss();
+        }
+    }
+
+    public void jumpChooseActivity(int camera, int location) {
+        Intent intent = new Intent(WireStrippingActivity.this, WireStrippingChooseLocationActivity.class);
+        if (camera == 1) {
+            intent.putExtra("tag", 1);
+            if (location == 1) {
+                intent.putExtra("location", 1);
+            } else {
+                intent.putExtra("location", 2);
+            }
+            ToastUtils.showShortToast("接收到选点命令，即将进入USB1选点页面！");
+
+        } else {
+            intent.putExtra("tag", 2);
+            if (location == 1) {
+                intent.putExtra("location", 1);
+            } else {
+                intent.putExtra("location", 2);
+            }
+            ToastUtils.showShortToast("接收到选点命令，即将进入USB2选点页面！");
+
+        }
+        new Thread(() -> {
+            try {
+                Thread.sleep(1500);
+                startActivity(intent);
+                finish();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
 }

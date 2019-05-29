@@ -158,4 +158,8 @@ public class ByteUtils {
         } /** end of for (int liv_Count = 0; liv_Count < length; liv_Count++) */
         return byteToStr(msg, length) + byteToStr(mByte, mByte.length).substring(byteToStr(mByte, mByte.length).length() - 4, byteToStr(mByte, mByte.length).length());
     }
+
+    public static String numToHex32(int b) {
+        return String.format("%08x", b);
+    }
 }

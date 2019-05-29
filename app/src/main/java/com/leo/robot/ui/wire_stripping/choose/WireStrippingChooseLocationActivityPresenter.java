@@ -1,15 +1,13 @@
 package com.leo.robot.ui.wire_stripping.choose;
 
 import android.widget.TextView;
-
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.utils.TimeThread;
+import cree.mvp.util.data.SPUtils;
 
 import javax.inject.Inject;
-
-import cree.mvp.util.data.SPUtils;
 
 /**
  * created by Leo on 2019/4/27 11 : 27
@@ -19,6 +17,7 @@ import cree.mvp.util.data.SPUtils;
 public class WireStrippingChooseLocationActivityPresenter extends RobotPresenter<WireStrippingChooseLocationActivity, WireStrippingChooseLocationActivityModel> {
 
     private boolean isClickble = false;
+
     @Inject
     public WireStrippingChooseLocationActivityPresenter() {
     }
@@ -106,4 +105,7 @@ public class WireStrippingChooseLocationActivityPresenter extends RobotPresenter
         mActivity.updateUnlock(isUnlock);
         mActivity.updateEnd(isEnd);
     }
+
+
+
 }

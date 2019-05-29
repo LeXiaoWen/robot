@@ -1353,7 +1353,7 @@ public class CommandUtils {
      * @author Leo
      * created at 2019/5/27 12:02 AM
      */
-    public static String slideTableLeftMove() {
+    public static String landSlideTableLeftMove() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x04;
         msg[2] = (byte) 0x01;
@@ -1363,12 +1363,12 @@ public class CommandUtils {
     }
 
     /**
-     * 滑台右移
+     * 横向滑台右移
      *
      * @author Leo
      * created at 2019/5/27 12:03 AM
      */
-    public static String slideTableRightMove() {
+    public static String landSlideTableRightMove() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x04;
         msg[2] = (byte) 0x02;
@@ -1376,13 +1376,14 @@ public class CommandUtils {
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
     }
+
     /**
-    * 滑台复位
-    *
-    *@author Leo
-    *created at 2019/5/27 12:03 AM
-    */
-    public static String slideTableResetMove() {
+     * 水平滑台复位
+     *
+     * @author Leo
+     * created at 2019/5/27 12:03 AM
+     */
+    public static String landSlideTableResetMove() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x04;
         msg[2] = (byte) 0x04;
@@ -1391,14 +1392,186 @@ public class CommandUtils {
         return ConvertCode.bytes2HexString(msg);
     }
 
-    //------------------------ 摄像机移动命令 --------------------------
-    public static String camera1LeftMove(){
+    /**
+     * 水平滑台停止
+     *
+     * @author Leo
+     * created at 2019/5/27 9:08 PM
+     */
+    public static String landSlideTableStopMove() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x04;
+        msg[2] = (byte) 0x05;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    //------------------------ 垂直滑台 --------------------------
+
+    /**
+     * 垂直滑台上移命令
+     *
+     * @author Leo
+     * created at 2019/5/27 9:08 PM
+     */
+    public static String verticalSlideTableUpMove() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x05;
+        msg[2] = (byte) 0x01;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 垂直滑台下移命令
+     *
+     * @author Leo
+     * created at 2019/5/27 9:08 PM
+     */
+    public static String verticalSlideTableDownMove() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x05;
+        msg[2] = (byte) 0x02;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 垂直滑台复位命令
+     *
+     * @author Leo
+     * created at 2019/5/27 9:08 PM
+     */
+    public static String verticalSlideTableResetMove() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x05;
         msg[2] = (byte) 0x04;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
     }
+
+    /**
+     * 垂直滑台停止命令
+     *
+     * @author Leo
+     * created at 2019/5/27 9:08 PM
+     */
+    public static String verticalSlideTableStopMove() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x05;
+        msg[2] = (byte) 0x05;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    //------------------------ 请求水平滑台位置 --------------------------
+
+    /**
+     * 请求水平滑台位置
+     *
+     * @author Leo
+     * created at 2019/5/28 12:28 AM
+     */
+    public static String getLandSlideTable() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x04;
+        msg[2] = (byte) 0x06;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+     * 请求垂直滑台位置
+     *
+     * @author Leo
+     * created at 2019/5/28 12:30 AM
+     */
+    public static String getVerticalSlideTable() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x05;
+        msg[2] = (byte) 0x06;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+    * 确认滑台位置
+    *
+    *@author Leo
+    *created at 2019/5/29 10:18 PM
+    */
+    public static String confirmSlideTable(){
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x0C;
+        msg[2] = (byte) 0x05;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    //------------------------ 线路作业指令 --------------------------
+
+
+    /**
+    * A线路作业指令
+    *
+    *@author Leo
+    *created at 2019/5/29 9:06 PM
+    */
+    public static String aLineOrder() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x0C;
+        msg[2] = (byte) 0x01;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+    * B线路作业指令
+    *
+    *@author Leo
+    *created at 2019/5/29 9:06 PM
+    */
+    public static String bLineOrder() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x0C;
+        msg[2] = (byte) 0x02;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+    * C线路作业指令
+    *
+    *@author Leo
+    *created at 2019/5/29 9:06 PM
+    */
+    public static String cLineOrder() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x0C;
+        msg[2] = (byte) 0x03;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+
+    public static String cancelLocation1 = "640400FF";
+    public static String cancelLocation2 = "640800FF";
+
+
+    public static String msg1 = "6402100000803F00007543000043E200A09B44FF";
+    public static String msg2 = "6402100000004000007543000043E200A09B44FF";
+    public static String msg3 = "6406100000803F00007543000043E200A09B44FF";
+    public static String msg4 = "6406100000803F00007543000043E200A09B44FF";
 
 }

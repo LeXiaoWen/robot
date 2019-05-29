@@ -185,15 +185,35 @@
         android:layout_marginRight="@dimen/dp_15"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_remind"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20"
-            android:textColor="#EA3340"
-            android:textSize="@dimen/sp_12"
-            tools:text="剥线工具就位，请按下开始键。"/>
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:id="@+id/tv_remind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:textColor="#EA3340"
+                    android:textSize="@dimen/sp_12"
+                    tools:text="剥线工具就位，请按下开始键。"/>
+            
+            <Button
+                    android:visibility="gone"
+                    android:layout_marginRight="21dp"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/btn_jump"
+                    android:textSize="10sp"
+                    android:textColor="#ffffff"
+                    android:text="跳转至接线"
+                    android:background="#21524A"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_width="61dp"
+                    android:layout_height="19dp">
 
+            </Button>
+
+        </RelativeLayout>
+        
         <ImageView
             android:id="@+id/iv_scram"
             android:layout_width="match_parent"
