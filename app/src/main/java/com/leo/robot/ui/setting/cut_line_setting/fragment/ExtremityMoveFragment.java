@@ -168,7 +168,7 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
 
         initWebSetting(mAgentWeb4.getWebCreator().getWebView());
     }
@@ -186,7 +186,7 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
 
         initWebSetting(mAgentWeb3.getWebCreator().getWebView());
     }
@@ -204,7 +204,7 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
 
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
     }
@@ -222,7 +222,7 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
 
         initWebSetting(mAgentWeb1.getWebCreator().getWebView());
     }
@@ -242,7 +242,7 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(UrlConstant.LINE_CAMERA_URL);
 
         initWebSetting(mAgentWebMain.getWebCreator().getWebView());
 

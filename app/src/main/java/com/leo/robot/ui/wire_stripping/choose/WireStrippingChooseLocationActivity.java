@@ -793,7 +793,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
         mLlLevel.setVisibility(View.VISIBLE);
         switchTag = 1;
 
-        initMainVideo(UrlConstant.CAMERA_URL);
+        initMainVideo(UrlConstant.LINE_CAMERA_URL);
     }
 
     private void usb2() {
@@ -805,7 +805,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
         mLlLevel.setVisibility(View.GONE);
         switchTag = 2;
 
-        initMainVideo(UrlConstant.LINE_CAMERA_URL);
+        initMainVideo(UrlConstant.DRAIN_LINE_CAMERA_URL);
     }
 
     /**
