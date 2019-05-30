@@ -1502,12 +1502,12 @@ public class CommandUtils {
     }
 
     /**
-    * 确认滑台位置
-    *
-    *@author Leo
-    *created at 2019/5/29 10:18 PM
-    */
-    public static String confirmSlideTable(){
+     * 确认滑台位置
+     *
+     * @author Leo
+     * created at 2019/5/29 10:18 PM
+     */
+    public static String confirmSlideTable() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x0C;
         msg[2] = (byte) 0x05;
@@ -1520,11 +1520,11 @@ public class CommandUtils {
 
 
     /**
-    * A线路作业指令
-    *
-    *@author Leo
-    *created at 2019/5/29 9:06 PM
-    */
+     * A线路作业指令
+     *
+     * @author Leo
+     * created at 2019/5/29 9:06 PM
+     */
     public static String aLineOrder() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x0C;
@@ -1535,11 +1535,11 @@ public class CommandUtils {
     }
 
     /**
-    * B线路作业指令
-    *
-    *@author Leo
-    *created at 2019/5/29 9:06 PM
-    */
+     * B线路作业指令
+     *
+     * @author Leo
+     * created at 2019/5/29 9:06 PM
+     */
     public static String bLineOrder() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x0C;
@@ -1550,11 +1550,11 @@ public class CommandUtils {
     }
 
     /**
-    * C线路作业指令
-    *
-    *@author Leo
-    *created at 2019/5/29 9:06 PM
-    */
+     * C线路作业指令
+     *
+     * @author Leo
+     * created at 2019/5/29 9:06 PM
+     */
     public static String cLineOrder() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x0C;
@@ -1564,14 +1564,59 @@ public class CommandUtils {
         return ConvertCode.bytes2HexString(msg);
     }
 
+    /**
+     * 请求行线、引流线距离
+     *
+     * @author Leo
+     * created at 2019/5/30 9:07 PM
+     */
+    public static String lineLocation() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x08;
+        msg[2] = (byte) 0x0C;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
 
-    public static String cancelLocation1 = "640400FF";
-    public static String cancelLocation2 = "640800FF";
 
 
-    public static String msg1 = "6402100000803F00007543000043E200A09B44FF";
-    public static String msg2 = "6402100000004000007543000043E200A09B44FF";
-    public static String msg3 = "6406100000803F00007543000043E200A09B44FF";
-    public static String msg4 = "6406100000803F00007543000043E200A09B44FF";
+
+    /**
+     * usb1 第一个点位 确认选点
+     */
+    public static String CAMERA1_LOCATION1 = "64021001000000";
+    /**
+     * usb1 第二个点位 确认选点
+     */
+    public static String CAMERA1_LOCATION2 = "64021002000000";
+    /**
+     * usb2 第一个点位 确认选点
+     */
+    public static String CAMERA2_LOCATION1 = "64061001000000";
+    /**
+     * usb2 第二个点位 确认选点
+     */
+    public static String CAMERA2_LOCATION2 = "64061002000000";
+
+    /**
+     * usb1  确认雷达锚点结果
+     */
+    public static String CAMERA1_CONFIRM = "640300FF";
+
+    /**
+     * usb2  确认雷达锚点结果
+     */
+    public static String CAMERA2_CONFIRM = "640700FF";
+    /**
+     * usb1  舍弃雷达锚点结果
+     */
+    public static String CAMERA1_CANCEL = "640400FF";
+
+    /**
+     * usb2  舍弃雷达锚点结果
+     */
+    public static String CAMERA2_CANCEL = "640800FF";
+
 
 }

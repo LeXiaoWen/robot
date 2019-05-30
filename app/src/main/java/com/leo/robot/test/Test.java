@@ -9,19 +9,23 @@ import com.leo.robot.utils.ByteUtils;
 
 public class Test {
     static char[] tmp = new char[]{0x3F,0xAB,0xAE,0xE2,0x3C,0x40,0x70,0xEB};
-    static {
-        // 加载库
-        System.loadLibrary("ur5");
-    }
+
     public static void main(String[] args) {
 
-        String msg = "BFBFE320113D5F9B";
+//        String msg = "BFBFE320113D5F9B";
 
 //        System.out.println(getValue(msg));
 //        hexToDouble();
 
-        byte[] bytes = ByteUtils.hex2byte(msg);
+//        byte[] bytes = ByteUtils.hex2byte(msg);
 //        System.out.println(v);
+
+        int i = 9;
+        byte[] bytes = ByteUtils.intToByteArray(i);
+        for (byte aByte : bytes) {
+            System.out.println(aByte);
+        }
+        System.out.println(bytes);
     }
 
 
@@ -87,5 +91,5 @@ public class Test {
     }
 
 
-    public static native double hexToDouble(char buffer);
+
 }

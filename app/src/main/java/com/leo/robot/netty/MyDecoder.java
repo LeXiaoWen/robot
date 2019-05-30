@@ -1,12 +1,11 @@
 package com.leo.robot.netty;
 
 import android.util.Log;
-
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+
+import java.util.List;
 
 /**
  * created by Leo on 2019/4/19 22 : 23
@@ -31,25 +30,6 @@ public class MyDecoder extends ByteToMessageDecoder {
         out.add(str);
     }
 
-    public String bytesToHexString(byte[] bArray) {
-        StringBuffer sb = new StringBuffer(bArray.length);
-        String sTemp;
-        for (int i = 0; i < bArray.length; i++) {
-            sTemp = Integer.toHexString(0xFF & bArray[i]);
-            if (sTemp.length() < 2)
-                sb.append(0);
-            sb.append(sTemp.toUpperCase());
-        }
-        return sb.toString();
-    }
-
-    public static String toHexString1(byte[] b) {
-        StringBuffer buffer = new StringBuffer();
-        for (int i = 0; i < b.length; ++i) {
-            buffer.append(toHexString1(b[i]));
-        }
-        return buffer.toString();
-    }
 
     public static String toHexString1(byte b) {
         String s = Integer.toHexString(b & 0xFF);

@@ -408,10 +408,61 @@
                     android:id="@+id/tv_remind"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_10"
                     android:textColor="#EA3340"
                     android:textSize="@dimen/sp_12"
                     tools:text="剥线工具就位，请按下开始键。"/>
+
+            <LinearLayout
+                    android:weightSum="2"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:textColor="#EA3340"
+                            android:textSize="@dimen/sp_12"
+                            android:text="行线距离 ： "
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    <TextView
+                            android:textColor="#EA3340"
+                            android:textSize="@dimen/sp_12"
+                            android:layout_marginLeft="@dimen/dp_10"
+                            android:id="@+id/tv_line1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:textColor="#EA3340"
+                            android:textSize="@dimen/sp_12"
+                            android:text="引流线距离 ： "
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    <TextView
+                            android:layout_marginLeft="@dimen/dp_10"
+                            android:textColor="#EA3340"
+                            android:textSize="@dimen/sp_12"
+                            android:id="@+id/tv_line2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
             <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -454,6 +505,15 @@
                             android:layout_height="wrap_content"/>
 
                 </RadioGroup>
+                <TextView
+                        android:layout_below="@id/rg"
+                        android:id="@+id/touch_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_40"
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                />
 
                 <LinearLayout
                         android:gravity="center"
@@ -463,26 +523,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
                     <Button
-                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_6"
                             android:text="确认选点"
                             android:id="@+id/btn_confirm_location"
                             android:layout_width="140dp"
                             android:layout_height="wrap_content"/>
 
                     <Button
-                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_6"
                             android:text="确认结果"
                             android:id="@+id/btn_confirm_results"
                             android:layout_width="140dp"
                             android:layout_height="wrap_content"/>
                     <Button
-                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_6"
                             android:text="舍弃结果"
                             android:id="@+id/btn_giveup_results"
                             android:layout_width="140dp"
                             android:layout_height="wrap_content"/>
                     <Button
-                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_6"
                             android:text="确定滑台位置"
                             android:id="@+id/btn_confirm_slide_table"
                             android:layout_width="140dp"
@@ -495,7 +555,7 @@
             <TextView
                     android:id="@+id/tv_level"
                     android:textColor="#000000"
-                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_6"
                     android:text="水平滑台控制:"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -574,12 +634,12 @@
                     android:id="@+id/iv_back"
                     android:layout_width="251dp"
                     android:layout_height="59dp"
-                    android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_10"
                     android:src="@drawable/xuandianfanhui_normal"/>
 
             <LinearLayout
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_10"
                     android:id="@+id/ll_status"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
@@ -606,14 +666,7 @@
                         app:SpinKit_Color="#000000"/>
 
             </LinearLayout>
-            <TextView
-                    android:id="@+id/touch_show"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_40"
-                    android:textColor="#000000"
-                    android:textSize="15sp"
-            />
+
 
             <TextView
                     android:layout_width="239dp"

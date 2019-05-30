@@ -21,6 +21,7 @@ public class ByteUtils {
         }
         return str;
     }
+
     /**
      * 16进制转换成为string类型字符串
      *
@@ -48,6 +49,7 @@ public class ByteUtils {
         }
         return s;
     }
+
     /**
      * 向串口发送数据转为字节数组
      */
@@ -64,6 +66,7 @@ public class ByteUtils {
         }
         return bytes;
     }
+
     /**
      * 接收到的字节数组转换16进制字符串
      */
@@ -78,6 +81,7 @@ public class ByteUtils {
         }
         return ret;
     }
+
     public static String bytesToHexString(byte[] src) {
         StringBuilder stringBuilder = new StringBuilder("");
         if (src == null || src.length <= 0) {
@@ -93,6 +97,7 @@ public class ByteUtils {
         }
         return stringBuilder.toString();
     }
+
     /**
      * 接收到的字节数组转换16进制字符串
      */
@@ -141,7 +146,7 @@ public class ByteUtils {
 
     /**
      * 指令校验和,并取出后两位字节
-     * */
+     */
     public static String getSum16(byte[] msg, int length) {
         long mSum = 0;
         byte[] mByte = new byte[length];
@@ -161,5 +166,65 @@ public class ByteUtils {
 
     public static String numToHex32(int b) {
         return String.format("%08x", b);
+    }
+
+
+    /**
+     * int到byte[] 由高位到低位
+     *
+     * @param i 需要转换为byte数组的整行值。
+     * @return byte数组
+     */
+    public static byte[] intToByteArray(int i) {
+        byte[] result = new byte[4];
+        result[3] = (byte) ((i >> 24) & 0xFF);
+        result[2] = (byte) ((i >> 16) & 0xFF);
+        result[1] = (byte) ((i >> 8) & 0xFF);
+        result[0] = (byte) (i & 0xFF);
+        return result;
+    }
+
+    /**
+    * 16进制字符串由低位转高位
+    *
+    *@author Leo
+    *created at 2019/5/30 10:32 PM
+    */
+    public static String stringLowToHight(String x,String y){
+        StringBuilder location = new StringBuilder();
+        String y1 = y.substring(0, 2);
+        String y2 = y.substring(2, 4);
+        String y3 = y.substring(4, 6);
+        String y4 = y.substring(6, 8);
+        String x1 = x.substring(0, 2);
+        String x2 = x.substring(2, 4);
+        String x3 = x.substring(4, 6);
+        String x4 = x.substring(6, 8);
+
+
+        location.append(x4);
+        location.append(x3);
+        location.append(x2);
+        location.append(x1);
+        location.append(y4);
+        location.append(y3);
+        location.append(y2);
+        location.append(y1);
+        return location.toString();
+    }
+
+
+
+    /**
+    * byte[]转int
+    *
+    *@author Leo
+    *created at 2019/5/30 9:54 PM
+    */
+    public static int byteArrayToInt(byte[] b) {
+        return b[0] & 0xFF |
+                (b[1] & 0xFF) << 8 |
+                (b[2] & 0xFF) << 16 |
+                (b[3] & 0xFF) << 24;
     }
 }

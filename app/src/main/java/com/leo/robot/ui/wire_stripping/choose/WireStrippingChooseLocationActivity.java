@@ -3,6 +3,8 @@ package com.leo.robot.ui.wire_stripping.choose;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.just.agentweb.AgentWeb;
 import com.just.agentweb.MiddlewareWebClientBase;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.bean.LineLocationMsg;
 import com.leo.robot.bean.LocationMsg;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.constant.RobotInit;
@@ -35,6 +38,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * created by Leo on 2019/4/27 11 : 27
@@ -161,6 +166,10 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     Button mBtnGiveupResults;
     @BindView(R.id.btn_confirm_slide_table)
     Button mBtnConfirmSlideTable;
+    @BindView(R.id.tv_line1)
+    TextView mTvLine1;
+    @BindView(R.id.tv_line2)
+    TextView mTvLine2;
 
 
     private AgentWeb mAgentWebMain;
@@ -173,9 +182,9 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     private int x;
     private int y;
     //水平滑台位置
-    private String landSlideTabLocation;
+    private String landSlideTabLocation = "05000000";
     //垂直滑台位置
-    private String verticalSlideTabLocation;
+    private String verticalSlideTabLocation = "08000000";
     private int switchTag = 1;
 
 
@@ -249,8 +258,41 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
 
         initListener();
 
-
+//        initLineLocation();
     }
+
+    /**
+     * 实时请求行线、引流线距离
+     *
+     * @author Leo
+     * created at 2019/5/30 9:06 PM
+     */
+    private void initLineLocation() {
+        mTimer.schedule(mTimerTask, 1000, 500);//延时1s，每隔500毫秒执行一次run方法
+    }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                if (mMasterClient != null) {
+                    mMasterClient.sendMsgTest(CommandUtils.lineLocation());
+                }
+            }
+            super.handleMessage(msg);
+        }
+    };
+
+    Timer mTimer = new Timer();
+    TimerTask mTimerTask = new TimerTask() {
+        @Override
+        public void run() {
+            Message message = new Message();
+            message.what = 1;
+            handler.sendMessage(message);
+        }
+    };
+
 
     private void initClient() {
         mMasterClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
@@ -260,10 +302,8 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     private void initListener() {
         mBtnLeft.setOnTouchListener(mOnDownClickListener);
         mBtnRight.setOnTouchListener(mOnDownClickListener);
-        mBtnReset.setOnTouchListener(mOnDownClickListener);
         mBtnUp.setOnTouchListener(mOnDownClickListener);
         mBtnDown.setOnTouchListener(mOnDownClickListener);
-        mBtnReset1.setOnTouchListener(mOnDownClickListener);
         mRg.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.rb1:
@@ -297,11 +337,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                         mMasterClient.sendMsgTest(CommandUtils.landSlideTableLeftMove());
                     }
                     break;
-                case R.id.btn_reset:
-                    if (mMasterClient != null) {
-                        mMasterClient.sendMsgTest(CommandUtils.landSlideTableResetMove());
-                    }
-                    break;
+
                 case R.id.btn_up:
                     if (mMasterClient != null) {
 
@@ -315,12 +351,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
 
                     }
                     break;
-                case R.id.btn_reset1:
-                    if (mMasterClient != null) {
-                        mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableResetMove());
 
-                    }
-                    break;
 
             }
         } else if (action == MotionEvent.ACTION_UP) {//松开
@@ -548,16 +579,14 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
             , R.id.btn_giveup_results
             , R.id.btn_confirm_results
             , R.id.btn_confirm_slide_table
+            , R.id.btn_reset
+            , R.id.btn_reset1
 
     })
     public void onViewClicked(View view) {
         switch (view.getId()) {
-//            case R.id.iv_get_pic:
-//                scaleController(false);
-//                mAgentWebMain.getWebCreator().getWebView().setOnTouchListener(this);
-//                break;
+
             case R.id.btn_confirm_location:
-//                confirmLocation();
                 sendConfirmMsg();
                 break;
             case R.id.iv_back:
@@ -574,7 +603,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                 }
                 mAgentWebList.clear();
                 mAgentWebMain = null;
-                mWebView=null;
+                mWebView = null;
                 mRlMain.removeViewAt(1);
                 if (!isSwitch) {
                     usb2();
@@ -584,16 +613,25 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                 break;
 
             case R.id.btn_giveup_results:
-                giveUpResult();
-
-
+                cancelResult();
                 break;
             case R.id.btn_confirm_results:
                 confirmResult();
                 break;
             case R.id.btn_confirm_slide_table:
-                if (mMasterClient!=null){
+                if (mMasterClient != null) {
                     mMasterClient.sendMsgTest(CommandUtils.confirmSlideTable());
+                }
+                break;
+            case R.id.btn_reset:
+                if (mMasterClient != null) {
+                    mMasterClient.sendMsgTest(CommandUtils.landSlideTableResetMove());
+                }
+                break;
+            case R.id.btn_reset1:
+                if (mMasterClient != null) {
+                    mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableResetMove());
+
                 }
                 break;
 
@@ -601,26 +639,21 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
         }
     }
 
-    private void giveUpResult() {
+    private void cancelResult() {
         if (mVisionClient != null) {
-//                    if (switchTag == 1) {
-//                        mVisionClient.sendMsgTest(CommandUtils.cancelLocation1);
-//                    } else if (switchTag == 2) {
-//                        mVisionClient.sendMsgTest(CommandUtils.cancelLocation2);
-//
-//                    }
+
             switch (radioButtonTag) {
                 case 1:
-                    mVisionClient.sendMsgTest(CommandUtils.cancelLocation1);
+                    mVisionClient.sendMsgTest(CommandUtils.CAMERA1_CANCEL);
                     break;
                 case 2:
-                    mVisionClient.sendMsgTest(CommandUtils.cancelLocation1);
+                    mVisionClient.sendMsgTest(CommandUtils.CAMERA1_CANCEL);
                     break;
                 case 3:
-                    mVisionClient.sendMsgTest(CommandUtils.cancelLocation2);
+                    mVisionClient.sendMsgTest(CommandUtils.CAMERA2_CANCEL);
                     break;
                 case 4:
-                    mVisionClient.sendMsgTest(CommandUtils.cancelLocation2);
+                    mVisionClient.sendMsgTest(CommandUtils.CAMERA2_CANCEL);
                     break;
             }
             chooseCount = 0;
@@ -632,37 +665,72 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
         }
     }
 
-    private void confirmResult() {
-        switch (radioButtonTag) {
-            case 1:
-                mVisionClient.sendMsgTest(CommandUtils.cancelLocation1);
-                break;
-            case 2:
-                mVisionClient.sendMsgTest(CommandUtils.cancelLocation1);
-                break;
-            case 3:
-                mVisionClient.sendMsgTest(CommandUtils.cancelLocation2);
-                break;
-            case 4:
-                mVisionClient.sendMsgTest(CommandUtils.cancelLocation2);
-                break;
-        }
-    }
+    /**
+    * 确认描点结局
+    *
+    *@author Leo
+    *created at 2019/5/30 10:46 PM
+    */
 
-    private void sendConfirmMsg() {
+    private void confirmResult() {
         if (mVisionClient != null) {
             switch (radioButtonTag) {
                 case 1:
-                    mVisionClient.sendMsgTest(CommandUtils.msg1);
+                    mVisionClient.sendMsgTest(CommandUtils.CAMERA1_CONFIRM);
                     break;
                 case 2:
-                    mVisionClient.sendMsgTest(CommandUtils.msg2);
+                    mVisionClient.sendMsgTest(CommandUtils.CAMERA1_CONFIRM);
                     break;
                 case 3:
-                    mVisionClient.sendMsgTest(CommandUtils.msg3);
+                    mVisionClient.sendMsgTest(CommandUtils.CAMERA2_CONFIRM);
                     break;
                 case 4:
-                    mVisionClient.sendMsgTest(CommandUtils.msg4);
+                    mVisionClient.sendMsgTest(CommandUtils.CAMERA2_CONFIRM);
+                    break;
+            }
+        }
+
+    }
+
+    private void sendConfirmMsg() {
+        StringBuilder s;
+        String x = ByteUtils.numToHex32(this.x);
+        String y = ByteUtils.numToHex32(this.y);
+        String location = ByteUtils.stringLowToHight(x, y);
+
+        if (mVisionClient != null) {
+            switch (radioButtonTag) {
+                case 1:
+                    s = new StringBuilder();
+                    s.append(CommandUtils.CAMERA1_LOCATION1);
+                    s.append(location);
+                    s.append(landSlideTabLocation);
+                    s.append("FF");
+                    mVisionClient.sendMsgTest(s.toString());
+                    break;
+                case 2:
+                    s = new StringBuilder();
+                    s.append(CommandUtils.CAMERA1_LOCATION2);
+                    s.append(location);
+                    s.append(landSlideTabLocation);
+                    s.append("FF");
+                    mVisionClient.sendMsgTest(s.toString());
+                    break;
+                case 3:
+                    s = new StringBuilder();
+                    s.append(CommandUtils.CAMERA2_LOCATION1);
+                    s.append(location);
+                    s.append(verticalSlideTabLocation);
+                    s.append("FF");
+                    mVisionClient.sendMsgTest(s.toString());
+                    break;
+                case 4:
+                    s = new StringBuilder();
+                    s.append(CommandUtils.CAMERA2_LOCATION2);
+                    s.append(location);
+                    s.append(verticalSlideTabLocation);
+                    s.append("FF");
+                    mVisionClient.sendMsgTest(s.toString());
                     break;
             }
         } else {
@@ -725,7 +793,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
         mLlLevel.setVisibility(View.VISIBLE);
         switchTag = 1;
 
-        initMainVideo(UrlConstant.DRAIN_LINE_CAMERA_URL);
+        initMainVideo(UrlConstant.CAMERA_URL);
     }
 
     private void usb2() {
@@ -775,6 +843,10 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
             webViewOnDestroy();
         }
         super.onDestroy();
+        mTimer.cancel();
+        mTimer = null;
+        mTimerTask.cancel();
+        mTimerTask = null;
     }
 
     private void webViewOnPause() {
@@ -815,6 +887,12 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
 
     }
 
+    /**
+     * 主控服务器回复滑台位置
+     *
+     * @author Leo
+     * created at 2019/5/30 10:09 PM
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLocationMsg(LocationMsg msg) {
         if (msg.getMsg() != null && msg.getMsg().length() > 5) {
@@ -825,6 +903,31 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                 landSlideTabLocation = s;
             }
             ToastUtils.showShortToast("成功获取滑台位置");
+
+        }
+    }
+
+    /**
+     * 主控服务器行线、引流线位置
+     *
+     * @author Leo
+     * created at 2019/5/30 10:09 PM
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLineLocationMsg(LineLocationMsg msg) {
+
+        if (msg.getCode() != null && msg.getCode().length() > 8) {
+            String s = msg.getCode().substring(8, 24);
+            String line1 = s.substring(0, 8);
+            String line2 = s.substring(8, 16);
+            byte[] line11 = ByteUtils.hex2byte(line1);
+            byte[] line22 = ByteUtils.hex2byte(line2);
+
+            int lineValue1 = ByteUtils.byteArrayToInt(line11);
+            int lineValue2 = ByteUtils.byteArrayToInt(line22);
+
+            mTvLine1.setText(String.valueOf(lineValue1));
+            mTvLine2.setText(String.valueOf(lineValue2));
 
         }
     }
@@ -870,6 +973,5 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
 
         return location.toString();
     }
-
 
 }

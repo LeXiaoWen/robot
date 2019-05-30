@@ -191,4 +191,9 @@ public interface PushMsgCode {
     //------------------------ 垂直滑台返回命令 --------------------------
 
     String VERTICAL_SLIDE_TABLE = "67050304";
+
+    /**
+     * 主控回复行线、引流线位置
+     */
+    String LINE_LOCATION = "67080B08";
 }

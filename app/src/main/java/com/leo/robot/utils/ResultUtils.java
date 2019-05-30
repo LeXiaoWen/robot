@@ -57,10 +57,19 @@ public class ResultUtils {
         LocationMsg locationMsg = new LocationMsg();
         String s = msg.substring(2, 4);
         if (PushMsgCode.WIRE_STRIPPING.equals(s)) {//剥线
-            onWiringStripping(msg);
-            allMsg.setMsg("剥线指令");
-            allMsg.setCode(msg);
-            BusUtils.postMessage(allMsg);
+
+            if (msg.contains(PushMsgCode.LINE_LOCATION)){//主控服务器回复行线、引流线位置
+                LineLocationMsg lineLocationMsg = new LineLocationMsg();
+                lineLocationMsg.setMsg("行线、引流线位置");
+                lineLocationMsg.setCode(msg);
+                BusUtils.postMessage(lineLocationMsg);
+            }else {
+                onWiringStripping(msg);
+                allMsg.setMsg("剥线指令");
+                allMsg.setCode(msg);
+                BusUtils.postMessage(allMsg);
+            }
+
         } else if (PushMsgCode.WIRING.equals(s)) {//接线
             onWiring(msg);
             allMsg.setMsg("接线指令");
