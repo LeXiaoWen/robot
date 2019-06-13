@@ -50,7 +50,7 @@ public class LauncherActivity extends AppCompatActivity {
 //        initMasterNetty();
         //视觉服务器
 //        initVisionNetty();
-        initService();
+//        initService();
         initPermisson();
     }
 

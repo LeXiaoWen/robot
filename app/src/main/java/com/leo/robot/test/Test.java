@@ -8,7 +8,14 @@ import com.leo.robot.utils.ByteUtils;
 
 
 public class Test {
-    static char[] tmp = new char[]{0x3F,0xAB,0xAE,0xE2,0x3C,0x40,0x70,0xEB};
+
+    static {
+        System.loadLibrary("libUR10");
+    }
+
+    public static native String ActionMove(String msg);
+
+    static char[] tmp = new char[]{0x3F, 0xAB, 0xAE, 0xE2, 0x3C, 0x40, 0x70, 0xEB};
 
     public static void main(String[] args) {
 
@@ -20,12 +27,14 @@ public class Test {
 //        byte[] bytes = ByteUtils.hex2byte(msg);
 //        System.out.println(v);
 
-        int i = 9;
-        byte[] bytes = ByteUtils.intToByteArray(i);
-        for (byte aByte : bytes) {
-            System.out.println(aByte);
-        }
-        System.out.println(bytes);
+//        int i = 9;
+//        byte[] bytes = ByteUtils.intToByteArray(i);
+//        for (byte aByte : bytes) {
+//            System.out.println(aByte);
+//        }
+//        System.out.println(bytes);
+        String s = ActionMove("ACTION_MOVE_1");
+        System.out.println(s);
     }
 
 
@@ -89,7 +98,6 @@ public class Test {
         }
         return Double.longBitsToDouble(value);
     }
-
 
 
 }

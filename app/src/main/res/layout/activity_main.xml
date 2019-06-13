@@ -20,7 +20,6 @@
 
         <LinearLayout
                 android:id="@+id/ll_status"
-                android:visibility="gone"
                 android:layout_marginBottom="130dp"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
@@ -30,20 +29,21 @@
 
             <TextView
                     android:id="@+id/tv_type"
-                    android:text="与服务器断开，正在重连"
+                    tools:text="与服务器断开，正在重连"
                     android:textStyle="bold"
                     android:textColor="#000000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             <com.github.ybq.android.spinkit.SpinKitView
-                    android:layout_marginLeft="@dimen/dp_20"
                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:visibility="gone"
+                    android:layout_marginLeft="@dimen/dp_10"
                     android:id="@+id/spin_kit"
                     style="@style/SpinKitView.Small.FadingCircle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    app:SpinKit_Color="#c3c3c3" />
+                    app:SpinKit_Color="#000000"/>
 
         </LinearLayout>
     </RelativeLayout>
@@ -86,54 +86,102 @@
     </LinearLayout>
 
 
-    <LinearLayout
-            android:visibility="gone"
-            android:layout_marginRight="@dimen/dp_20"
-            android:layout_marginTop="60dp"
-            android:layout_alignParentRight="true"
-            android:orientation="vertical"
-            android:layout_width="100dp"
-            android:layout_height="200dp">
-
+    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:layout_marginTop="60dp"
+                  android:layout_alignParentRight="true">
         <LinearLayout
+
                 android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <TextView
-                    android:text="IP"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            <EditText
-                    android:id="@+id/et_ip"
-                    android:background="@null"
+                android:layout_width="100dp"
+                android:layout_height="200dp">
+
+            <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:text="IP"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <EditText
+                        android:id="@+id/et_ip1"
+                        android:background="@null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:text="PORT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <EditText
+                        android:id="@+id/et_port1"
+                        android:background="@null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <Button
+                    android:id="@+id/btn_connect1"
+                    android:text="视觉服务器连接"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
         </LinearLayout>
         <LinearLayout
+                android:layout_marginRight="@dimen/dp_20"
                 android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <TextView
-                    android:text="PORT"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            <EditText
-                    android:id="@+id/et_port"
-                    android:background="@null"
+                android:layout_width="100dp"
+                android:layout_height="200dp">
+
+            <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:text="IP"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <EditText
+                        android:id="@+id/et_ip"
+                        android:background="@null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:text="PORT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <EditText
+                        android:id="@+id/et_port"
+                        android:background="@null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <Button
+                    android:id="@+id/btn_connect"
+                    android:text="主控服务器连接"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
         </LinearLayout>
-
-        <Button
-                android:id="@+id/btn_connect"
-                android:text="连接"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
     </LinearLayout>
+
 
     <include layout="@layout/activity_title"/>
 

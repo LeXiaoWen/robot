@@ -19,20 +19,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-
-
     <uses-permission
             android:name="android.permission.READ_LOGS"
             tools:ignore="ProtectedPermissions"/>
-
-
-    <!--<supports-screens-->
-            <!--android:anyDensity="true"-->
-            <!--android:largeScreens="true"-->
-            <!--android:normalScreens="true"-->
-            <!--android:smallScreens="true"-->
-            <!--android:xlargeScreens="true"/>-->
-
 
     <application
             android:name=".App"
@@ -48,111 +37,79 @@
             android:supportsRtl="true"
             android:theme="@style/CMVP_FullTheme">
         <activity
-                android:launchMode="singleTask"
+                android:name=".ui.launcher.LauncherActivity"
+                >
+        </activity>
+        <activity
                 android:name=".ui.wire_stripping.WireStrippingActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape">
-
         </activity>
 
         <service
-        android:name=".service.NettyService"
-        android:enabled="true"
-        android:exported="true"/>
+                android:name=".service.NettyService"
+                android:enabled="true"
+                android:exported="true"/>
 
         <activity
-                android:name=".ui.launcher.LauncherActivity"
+                android:name=".test.URTestActivity"
                 android:launchMode="singleTask"
                 android:screenOrientation="landscape"
-                android:theme="@style/AppStartTheme">
+                >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
-
         </activity>
         <activity
-                android:launchMode="singleTask"
                 android:name=".ui.main.MainActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
         <activity
-                android:launchMode="singleTask"
                 android:name=".ui.controller.ControllerActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
         <activity
-                android:launchMode="singleTask"
                 android:name=".ui.cleaning.CleaningActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
         <activity
-                android:launchMode="singleTask"
                 android:name=".ui.cut_line.CutLineActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
         <activity
-                android:launchMode="singleTask"
                 android:name=".test.TestActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
         <activity
-                android:launchMode="singleTask"
                 android:name=".ui.wiring.WiringActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
         <activity
-                android:launchMode="singleTask"
                 android:name=".ui.setting.cut_line_setting.CutLineSettingActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
         <activity
-                android:launchMode="singleTask"
                 android:name=".ui.setting.wiring_setting.WiringSettingActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
         <activity
-                android:launchMode="singleTask"
                 android:name=".ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
         <activity
-                android:launchMode="singleTask"
                 android:name=".ui.wire_stripping.choose.WireStrippingChooseLocationActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
         <activity
-                android:launchMode="singleTask"
                 android:name=".ui.wiring.choose.WiringChooseLocationActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
         <activity
-                android:launchMode="singleTask"
                 android:name=".ui.cut_line.choose.CutLineChooseLocationActivity"
+                android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
-
-        <!--<meta-data-->
-                <!--android:name="unityplayer.UnityActivity"-->
-                <!--android:value="true"/>-->
-        <!--<meta-data-->
-                <!--android:name="unity.build-id"-->
-                <!--android:value="58da3426-cbf1-4f72-9bd2-f660f38675c2"/>-->
-        <!--<meta-data-->
-                <!--android:name="unity.splash-mode"-->
-                <!--android:value="0"/>-->
-        <!--<meta-data-->
-                <!--android:name="unity.splash-enable"-->
-                <!--android:value="True"/>-->
-        <!--<meta-data-->
-                <!--android:name="android.max_aspect"-->
-                <!--android:value="2.1"/>-->
     </application>
 
-
-    <!--<uses-feature android:glEsVersion="0x00020000"/>-->
-    <!--<uses-feature-->
-            <!--android:name="android.hardware.vulkan"-->
-            <!--android:required="false"/>-->
-
-
-    <!--<uses-feature-->
-            <!--android:name="android.hardware.touchscreen"-->
-            <!--android:required="false"/>-->
-    <!--<uses-feature-->
-            <!--android:name="android.hardware.touchscreen.multitouch"-->
-            <!--android:required="false"/>-->
-    <!--<uses-feature-->
-            <!--android:name="android.hardware.touchscreen.multitouch.distinct"-->
-            <!--android:required="false"/>-->
 </manifest>
-

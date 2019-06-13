@@ -258,7 +258,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
 
         initListener();
 
-//        initLineLocation();
+        initLineLocation();
     }
 
     /**

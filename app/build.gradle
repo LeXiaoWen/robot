@@ -10,15 +10,21 @@ android {
         multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 12
-        versionName "v1.4.1"
+        versionCode 13
+        versionName "v1.4.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions.includeCompileClasspath = true
         }
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11 -frtti -fexceptions"
+            }
+        }
         ndk {
+            moduleName "ur10"
             //APP的build.gradle设置支持的SO库架构
-            abiFilters 'armeabi-v7a', 'x86'
+            abiFilters 'armeabi-v7a', 'x86', 'x86_64', 'arm64-v8a'
         }
 
     }
@@ -33,11 +39,17 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
-//    sourceSets {
-//        main {
-//            jniLibs.srcDirs = ['libs']
-//        }
-//    }
+
+    externalNativeBuild {
+        cmake {
+            path 'src/main/cpp/CMakeLists.txt'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {

@@ -16,9 +16,9 @@ import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.AllMsg;
 import com.leo.robot.bean.ErroMsg;
-import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.constant.Constants;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.netty.NettyListener;
 import com.leo.robot.ui.cut_line.CutLineActivity;
@@ -27,7 +27,6 @@ import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.ResultUtils;
 import cree.mvp.util.data.SPUtils;
-import cree.mvp.util.develop.LogUtils;
 import cree.mvp.util.ui.ToastUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -68,6 +67,12 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     LinearLayout mLlStatus;
     @BindView(R.id.tv_type)
     TextView mTvType;
+    @BindView(R.id.et_ip1)
+    EditText mEtIp1;
+    @BindView(R.id.et_port1)
+    EditText mEtPort1;
+    @BindView(R.id.btn_connect1)
+    Button mBtnConnect1;
     private boolean isShown = false;
     private boolean isFirst = false;
 
@@ -91,11 +96,11 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     }
 
     /**
-    * 初始化sokcet连接状态
-    *
-    *@author Leo
-    *created at 2019/5/24 11:30 PM
-    */
+     * 初始化sokcet连接状态
+     *
+     * @author Leo
+     * created at 2019/5/24 11:30 PM
+     */
     private void initSocketStatus() {
         SPUtils socket = new SPUtils("socket");
         boolean status = socket.getBoolean("status");
@@ -200,7 +205,7 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     }
 
 
-    @OnClick({R.id.ibtn_wire_stripping, R.id.ibtn_wirin, R.id.ibtn_cut_line, R.id.ibtn_cleaning, R.id.btn_connect})
+    @OnClick({R.id.ibtn_wire_stripping, R.id.ibtn_wirin, R.id.ibtn_cut_line, R.id.ibtn_cleaning, R.id.btn_connect,R.id.btn_connect1})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ibtn_wire_stripping:
@@ -236,6 +241,13 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
                     initMasterNetty(ip, Integer.valueOf(port));
                 }
                 break;
+            case R.id.btn_connect1:
+                String ip1 = mEtIp1.getText().toString().trim();
+                String port1 = mEtPort1.getText().toString().trim();
+                if (!TextUtils.isEmpty(ip1) && !TextUtils.isEmpty(port1)) {
+                    initVisionNetty(ip1, Integer.valueOf(port1));
+                }
+                break;
         }
     }
 
@@ -243,7 +255,7 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
      * 视觉服务器
      *
      * @param ip
-     * @param integer
+     * @param
      */
     private void initMasterNetty(String ip, Integer port) {
         NettyClient client = new NettyClient();
@@ -276,4 +288,49 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
             }).start();
         }
     }
+
+
+    /**
+     * 视觉服务器
+     */
+    private void initVisionNetty(String ip,int port) {
+        NettyClient client = new NettyClient();
+        NettyManager.getInstance().addNettyClient(RobotInit.VISION_NETTY, client);
+        client.setListener(new NettyListener() {
+            @Override
+            public void onMessageResponse(String msg) {
+                ResultUtils.onResultByType(msg,RobotInit.VISION_NETTY);
+            }
+
+            @Override
+            public void onServiceStatusConnectChanged(int statusCode) {
+                if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
+                    ResultUtils.onConnectSuccess(RobotInit.VISION_NETTY);
+//                    notifyData(1,"与视觉控服务器连接成功");
+//                    String s = mGson.toJson(CommandUtils.getVisionBean());
+//                    NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.VISION_NETTY);
+//                    if (client != null) {
+//                        client.sendMsgTest(s);
+//                    }
+                }  else if (statusCode == NettyListener.STATUS_CONNECT_ERROR){//通信异常
+//                    notifyData(1,"与视觉控服务器连接异常，正在重连");
+                    ResultUtils.onConnectErro(RobotInit.VISION_NETTY);
+                }else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED){//服务器主动断开
+//                    notifyData(1,"视觉控服务器断开连接，正在重连");
+
+                    client.setConnectStatus(false);
+                    new Thread(() -> {
+                        client.connect(UrlConstant.VISION_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
+                    }).start();
+                }
+            }
+        });
+
+        if (!client.getConnectStatus()) {
+            new Thread(() -> {
+                client.connect(ip, port);//连接服务器
+            }).start();
+        }
+    }
+
 }
