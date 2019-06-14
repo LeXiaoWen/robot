@@ -99,7 +99,7 @@ public class JNIUtils {
      * @author Leo
      * created at 2019/6/13 10:59 PM
      */
-    public native double HexToDouble(char[] chars);
+    public native double HexToDouble(byte[] chars);
 
     /**
      * 设置机械臂移动速度

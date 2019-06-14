@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/ll_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="MissingDefaultResource">
+
+    <include layout="@layout/activity_title"/>
+
+
+    <LinearLayout
+            android:padding="@dimen/dp_10"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+                android:text="画面选点"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <LinearLayout
+                android:layout_marginLeft="@dimen/dp_20"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:textColor="#EA3340"
+                    android:textSize="@dimen/sp_12"
+                    android:text="行线距离 ： "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:textColor="#EA3340"
+                    android:textSize="@dimen/sp_12"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:id="@+id/tv_line1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_marginLeft="@dimen/dp_40"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:textColor="#EA3340"
+                    android:textSize="@dimen/sp_12"
+                    android:text="引流线距离 ： "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:textColor="#EA3340"
+                    android:textSize="@dimen/sp_12"
+                    android:id="@+id/tv_line2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        <RelativeLayout
+                android:focusableInTouchMode="true"
+                android:id="@+id/rl_main"
+                android:layout_width="640dp"
+                android:layout_height="480dp"
+                android:layout_marginLeft="16dp"
+                android:background="@color/black">
+
+
+            <TextView
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:padding="@dimen/dp_6"
+                    android:text="USB1画面"
+                    android:textColor="@color/cmvp_white"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:layout_marginLeft="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_below="@id/rl_main"
+                android:layout_width="640dp"
+                android:layout_height="wrap_content">
+            <LinearLayout
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                <ImageButton
+                        android:id="@+id/ib_1"
+                        android:layout_gravity="center"
+                        android:src="@drawable/left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <ImageButton
+                        android:id="@+id/ib_2"
+                        android:layout_marginLeft="@dimen/dp_80"
+                        android:layout_gravity="center"
+                        android:src="@drawable/right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="11dp"
+                android:layout_marginRight="11dp"
+                android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/tv_remind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:textColor="#EA3340"
+                    android:textSize="@dimen/sp_12"
+                    tools:text="剥线工具就位，请按下开始键。"/>
+
+            <LinearLayout
+                    android:weightSum="2"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:textColor="#000000"
+                            android:textSize="@dimen/sp_12"
+                            android:text="水平滑台 ： "
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    <TextView
+                            android:textColor="#000000"
+                            android:textSize="@dimen/sp_12"
+                            android:layout_marginLeft="@dimen/dp_10"
+                            android:id="@+id/tv_table1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:textColor="#000000"
+                            android:textSize="@dimen/sp_12"
+                            android:text="垂直滑台 ： "
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    <TextView
+                            android:layout_marginLeft="@dimen/dp_10"
+                            android:textColor="#000000"
+                            android:textSize="@dimen/sp_12"
+                            android:id="@+id/tv_table2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tv_no"
+                    android:layout_marginTop="@dimen/dp_80"
+                    android:textColor="#EA3340"
+                    android:textSize="16sp"
+                    android:layout_gravity="center"
+                    android:text="不可选点！"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:id="@+id/ll_level"
+                    android:weightSum="3"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <Button
+                        android:id="@+id/btn_controle1"
+                        android:text="向上"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <Button
+                        android:id="@+id/btn_controle2"
+                        android:text="向下"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <Button
+                        android:id="@+id/btn_confirm"
+                        android:text="确认位置"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                    android:id="@+id/rl_"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <RadioGroup
+                        android:id="@+id/rg"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    <RadioButton
+                            android:button="@drawable/sel_choose"
+                            android:padding="@dimen/dp_10"
+                            android:checked="true"
+                            android:text="行线第一点"
+                            android:id="@+id/rb1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    <RadioButton
+                            android:button="@drawable/sel_choose"
+                            android:padding="@dimen/dp_10"
+                            android:text="行线第二点"
+                            android:id="@+id/rb2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                </RadioGroup>
+                <TextView
+                        android:layout_below="@id/rg"
+                        android:id="@+id/touch_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_40"
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                />
+
+                <LinearLayout
+                        android:gravity="center"
+                        android:layout_alignParentRight="true"
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    <Button
+                            android:layout_marginTop="@dimen/dp_6"
+                            android:text="获取滑台位置"
+                            android:id="@+id/btn_get_slide_table"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"/>
+                    <Button
+                            android:layout_marginTop="@dimen/dp_6"
+                            android:text="确认选点"
+                            android:id="@+id/btn_confirm_location"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"/>
+
+                    <Button
+                            android:layout_marginTop="@dimen/dp_6"
+                            android:text="确认结果"
+                            android:id="@+id/btn_confirm_results"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"/>
+                    <Button
+                            android:layout_marginTop="@dimen/dp_6"
+                            android:text="舍弃结果"
+                            android:id="@+id/btn_giveup_results"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+            <ImageView
+
+                    android:id="@+id/iv_back"
+                    android:layout_width="251dp"
+                    android:layout_height="59dp"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:src="@drawable/xuandianfanhui_normal"/>
+
+            <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:id="@+id/ll_status"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:id="@+id/tv_type"
+                        tools:text="与服务器断开，正在重连"
+                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <com.github.ybq.android.spinkit.SpinKitView
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:visibility="gone"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/spin_kit"
+                        style="@style/SpinKitView.Small.FadingCircle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:SpinKit_Color="#000000"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                    android:visibility="gone"
+                    android:layout_width="239dp"
+                    android:layout_height="39dp"
+                    android:layout_marginTop="121dp"
+                    android:singleLine="false"
+                    android:text="操作说明：请在待识别图片上点击剥线位置然后按“确认选点”。"
+                    android:textColor="#000000"
+                    android:textSize="15sp"/>
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

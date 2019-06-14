@@ -110,14 +110,6 @@ Java_com_leo_robot_JNIUtils_ActionStopJ(JNIEnv *env, jobject instance) {
     return env->NewStringUTF(str.c_str());
 }
 extern "C"
-JNIEXPORT jdouble JNICALL
-Java_com_leo_robot_JNIUtils_HexToDouble(JNIEnv *env, jobject instance, jcharArray chars_) {
-    jchar *chars = env->GetCharArrayElements(chars_, NULL);
-
-    // TODO
-//    ur10.HexToDouble();
-    env->ReleaseCharArrayElements(chars_, chars, 0);
-}extern "C"
 JNIEXPORT void JNICALL
 Java_com_leo_robot_JNIUtils_SetMoveSpeed(JNIEnv *env, jobject instance, jfloat v) {
 
@@ -164,4 +156,17 @@ std::string jstring2str(JNIEnv *env, jstring jstr) {
     std::string stemp(rtn);
     free(rtn);
     return stemp;
+}
+
+extern "C"
+JNIEXPORT jdouble JNICALL
+Java_com_leo_robot_JNIUtils_HexToDouble(JNIEnv *env, jobject instance, jbyteArray chars_) {
+    unsigned char *chars = (unsigned char*)env->GetByteArrayElements(chars_, 0);
+
+
+    // TODO
+//    ur10.HexToDouble(chars);
+
+//    env->ReleaseByteArrayElements(chars_, chars, 0);
+    return ur10.HexToDouble(chars);
 }
