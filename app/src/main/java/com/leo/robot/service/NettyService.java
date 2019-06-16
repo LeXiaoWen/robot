@@ -17,15 +17,23 @@ import com.leo.robot.base.ActivityManager;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.netty.ClientIdleStateTrigger;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.netty.NettyListener;
+import com.leo.robot.netty.arm.ArmNettyClient;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.ResultUtils;
 import cree.mvp.util.data.SPUtils;
+import io.netty.channel.Channel;
+import io.netty.util.concurrent.GenericFutureListener;
+import io.netty.util.concurrent.ScheduledFuture;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -36,8 +44,11 @@ public class NettyService extends Service {
     private static Gson mGson = new Gson();
     private NetworkReceiver receiver;
     public static final String TAG = NettyService.class.getName();
+    private List<Integer> ports = new ArrayList<>();
+
 
     public NettyService() {
+
     }
 
     @Override
@@ -57,8 +68,13 @@ public class NettyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        initMasterNetty();
-//        initVisionNetty();
+        ports.add(UrlConstant.FLOW_ARM_PORT1);
+        ports.add(UrlConstant.FLOW_ARM_PORT2);
+        ports.add(UrlConstant.FLOW_ARM_PORT3);
+        initMasterNetty();
+        initVisionNetty();
+//        initMainArmNetty();
+//        initFlowArmNetty();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -106,6 +122,11 @@ public class NettyService extends Service {
                         client.connect(UrlConstant.VISION_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
                     }).start();
                 }
+            }
+
+            @Override
+            public void onServiceHeart(Channel channel) {
+
             }
         });
 
@@ -156,6 +177,11 @@ public class NettyService extends Service {
                     }).start();
                 }
             }
+
+            @Override
+            public void onServiceHeart(Channel channel) {
+//                ping(channel);
+            }
         });
 
         if (!client.getConnectStatus()) {
@@ -165,6 +191,8 @@ public class NettyService extends Service {
         }
     }
 
+
+
     /**
      * 主机械臂
      *
@@ -172,12 +200,12 @@ public class NettyService extends Service {
      * created at 2019/6/14 8:18 PM
      */
     private void initMainArmNetty() {
-        NettyClient client = new NettyClient();
-        NettyManager.getInstance().addNettyClient(RobotInit.MASTER_CONTROL_NETTY, client);
+        ArmNettyClient client = new ArmNettyClient();
+        NettyManager.getInstance().addNettyClient(RobotInit.MAIN_ARM_NETTY, client);
         client.setListener(new NettyListener() {
             @Override
             public void onMessageResponse(String msg) {
-                ResultUtils.onResultByType(msg, RobotInit.MASTER_CONTROL_NETTY);
+                ResultUtils.onResultByType(msg, RobotInit.MAIN_ARM_NETTY);
             }
 
             @Override
@@ -185,7 +213,7 @@ public class NettyService extends Service {
                 SPUtils socket = new SPUtils("socket");
 
                 if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
-                    notifyData(1, "与主控服务器连接成功");
+                    notifyData(1, "与主机械臂连接成功");
                     String s = mGson.toJson(CommandUtils.getMasterControlBean());
                     NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
                     if (client != null) {
@@ -193,23 +221,28 @@ public class NettyService extends Service {
                     }
                     socket.putBoolean("status", true);
                 } else if (statusCode == NettyListener.STATUS_CONNECT_ERROR) {//通信异常
-                    notifyData(0, "与主控服务器连接异常，正在重连");
+                    notifyData(0, "与主机械臂连接异常，正在重连");
                     socket.putBoolean("status", false);
 
                 } else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED) {//服务器主动断开
                     socket.putBoolean("status", false);
-                    notifyData(0, "主控服务器断开连接，正在重连");
+                    notifyData(0, "主机械臂断开连接，正在重连");
                     client.setConnectStatus(false);
                     new Thread(() -> {
-                        client.connect(UrlConstant.MASTER_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
+                        client.connect(UrlConstant.MAIN_ARM_NETTY_HOST, ports);//连接服务器
                     }).start();
                 }
+            }
+
+            @Override
+            public void onServiceHeart(Channel channel) {
+
             }
         });
 
         if (!client.getConnectStatus()) {
             new Thread(() -> {
-                client.connect(UrlConstant.MASTER_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
+                client.connect(UrlConstant.MAIN_ARM_NETTY_HOST, ports);//连接服务器
             }).start();
         }
     }
@@ -221,12 +254,12 @@ public class NettyService extends Service {
      * created at 2019/6/14 8:18 PM
      */
     private void initFlowArmNetty() {
-        NettyClient client = new NettyClient();
-        NettyManager.getInstance().addNettyClient(RobotInit.MASTER_CONTROL_NETTY, client);
+        ArmNettyClient client = new ArmNettyClient();
+        NettyManager.getInstance().addNettyClient(RobotInit.FLOW_ARM_NETTY, client);
         client.setListener(new NettyListener() {
             @Override
             public void onMessageResponse(String msg) {
-                ResultUtils.onResultByType(msg, RobotInit.MASTER_CONTROL_NETTY);
+                ResultUtils.onResultByType(msg, RobotInit.FLOW_ARM_NETTY);
             }
 
             @Override
@@ -234,7 +267,7 @@ public class NettyService extends Service {
                 SPUtils socket = new SPUtils("socket");
 
                 if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
-                    notifyData(1, "与主控服务器连接成功");
+                    notifyData(1, "与从机械臂连接成功");
                     String s = mGson.toJson(CommandUtils.getMasterControlBean());
                     NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
                     if (client != null) {
@@ -242,23 +275,28 @@ public class NettyService extends Service {
                     }
                     socket.putBoolean("status", true);
                 } else if (statusCode == NettyListener.STATUS_CONNECT_ERROR) {//通信异常
-                    notifyData(0, "与主控服务器连接异常，正在重连");
+                    notifyData(0, "与从机械臂连接异常，正在重连");
                     socket.putBoolean("status", false);
 
                 } else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED) {//服务器主动断开
                     socket.putBoolean("status", false);
-                    notifyData(0, "主控服务器断开连接，正在重连");
+                    notifyData(0, "从机械臂断开连接，正在重连");
                     client.setConnectStatus(false);
                     new Thread(() -> {
-                        client.connect(UrlConstant.MASTER_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
+                        client.connect(UrlConstant.FLOW_ARM_NETTY_HOST, ports);//连接服务器
                     }).start();
                 }
+            }
+
+            @Override
+            public void onServiceHeart(Channel channel) {
+
             }
         });
 
         if (!client.getConnectStatus()) {
             new Thread(() -> {
-                client.connect(UrlConstant.MASTER_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
+                client.connect(UrlConstant.FLOW_ARM_NETTY_HOST, ports);//连接服务器
             }).start();
         }
     }
@@ -295,6 +333,28 @@ public class NettyService extends Service {
             }
         }
     }
+    private void ping(Channel channel) {
+//        int second = Math.max(1, random.nextInt(baseRandom));
+//        System.out.println("next heart beat will send after " + second + "s.");
+        ScheduledFuture<?> future = channel.eventLoop().schedule(new Runnable() {
+            @Override
+            public void run() {
+                if (channel.isActive()) {
+                    System.out.println("sending heart beat to the server...");
+                    channel.writeAndFlush(ClientIdleStateTrigger.HEART_BEAT);
+                } else {
+                    System.err.println("The connection had broken, cancel the task that will send a heart beat.");
+                    channel.closeFuture();
+                    throw new RuntimeException();
+                }
+            }
+        }, 500, TimeUnit.MILLISECONDS);
 
+        future.addListener((GenericFutureListener) future1 -> {
+            if (future1.isSuccess()) {
+                ping(channel);
+            }
+        });
+    }
 
 }
