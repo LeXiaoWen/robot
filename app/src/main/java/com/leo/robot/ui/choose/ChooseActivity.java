@@ -30,6 +30,7 @@ import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.*;
+import com.leo.robot.view.DrawView;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.develop.LogUtils;
 import cree.mvp.util.ui.ToastUtils;
@@ -111,6 +112,8 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     TextView mTvNo;
     @BindView(R.id.rl_)
     RelativeLayout mRl;
+    @BindView(R.id.tv_video)
+    TextView mTvVideo;
     private AgentWeb mAgentWeb;
     private WebView mWebView;
     private float mNewScale;
@@ -124,6 +127,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     private static Gson mGson = new Gson();
     private List<Integer> ports = new ArrayList<>();
     private ArmNettyClient client;
+    private DrawView mDrawView;
 
     @Override
     protected void notifyData(int status, String message) {
@@ -163,10 +167,11 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         initSocketStatus();
 
         initListener();
-        mPresenter.initLineLocation();
+//        mPresenter.initLineLocation();
 
 
         mPresenter.initClient();
+        mDrawView = new DrawView(this);
     }
 
     private void initVideoStatus() {
@@ -328,19 +333,25 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
              * 离开屏幕的位置
              */
             case MotionEvent.ACTION_UP:
-
+                DrawView drawView = new DrawView(this);
+//                drawView.setLayoutParams(new ViewGroup.LayoutParams(640,480));
+                drawView.currentY = (int)event.getY();
+                drawView.currentX = (int)event.getX();
+                //添加标记（控件）
+                mRlMain.addView(drawView);
+                //添加标记（删除）
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(1000);
+                        runOnUiThread(() -> mRlMain.removeView(drawView));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
                 x = (int) event.getX() / 2;
                 y = (int) event.getY() / 2;
                 mTouchShow.setText(x + "," + y);
-//                if (mVideoTag == 0) {//水平滑台
-//                    if (mMasterClient != null) {
-//                        mMasterClient.sendMsgTest(CommandUtils.getLandSlideTable());
-//                    }
-//                } else if (mVideoTag == 1) { //垂直滑台
-//                    if (mMasterClient != null) {
-//                        mMasterClient.sendMsgTest(CommandUtils.getVerticalSlideTable());
-//                    }
-//                }
+
                 break;
             default:
                 break;
@@ -361,8 +372,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
             R.id.btn_confirm_results,
             R.id.btn_get_slide_table,
             R.id.btn_confirm,
-            R.id.btn_controle1,
-            R.id.btn_controle2
+
 
     })
     public void onViewClicked(View view) {
@@ -370,14 +380,14 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         switch (view.getId()) {
             case R.id.ib_1:
 //                if (!mPresenter.isFastDoubleClick()) {
-                    clearVideo();
-                    previousVideo();
+                clearVideo();
+                previousVideo();
 //                }
                 break;
             case R.id.ib_2:
 //                if (!mPresenter.isFastDoubleClick()) {
-                    clearVideo();
-                    nextVideo();
+                clearVideo();
+                nextVideo();
 //                }
                 break;
             case R.id.btn_confirm_location:
@@ -402,7 +412,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
                 }
                 break;
             case R.id.btn_giveup_results://舍弃结果
-                mPresenter.cancelResult(radioButtonTag);
+                mPresenter.cancelResult(mVideoTag);
                 break;
             case R.id.btn_confirm_results://确认结果
                 mPresenter.confirmResult(mVideoTag);
@@ -413,35 +423,37 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
                 ToastUtils.showShortToast("获取滑台位置");
                 break;
             case R.id.btn_confirm://确认位置
+                mPresenter.confirmLocation();
 //                initMainArmNetty();
 //                ToastUtils.showShortToast("确认位置");
                 break;
-            case R.id.btn_controle1:
-//                client.sendMsg29999("hello word1");
-//                ArmNettyClient client1 = (ArmNettyClient) NettyManager.getInstance().getClientByTag(RobotInit.MAIN_ARM_NETTY);
-//                client1.sendMsg29999(Test.msg);
-                switch (mVideoTag) {
-                    case 0://行线
-                        ToastUtils.showShortToast("向上");
-                        break;
-                    case 1://引流线
-                        ToastUtils.showShortToast("向左");
-                        break;
-                }
-                break;
-            case R.id.btn_controle2:
-//                ArmNettyClient client2 = (ArmNettyClient) NettyManager.getInstance().getClientByTag(RobotInit.MAIN_ARM_NETTY);
-//                client2.sendMsg30001(Test.msg);
-
-                switch (mVideoTag) {
-                    case 0://行线
-                        ToastUtils.showShortToast("向下");
-                        break;
-                    case 1://引流线
-                        ToastUtils.showShortToast("向右");
-                        break;
-                }
-                break;
+//            case R.id.btn_controle1:
+////                client.sendMsg29999("hello word1");
+////                ArmNettyClient client1 = (ArmNettyClient) NettyManager.getInstance().getClientByTag(RobotInit.MAIN_ARM_NETTY);
+////                client1.sendMsg29999(Test.msg);
+//                switch (mVideoTag) {
+//                    case 0://行线
+//                        mPresenter.controle1();
+////                        ToastUtils.showShortToast("向上");
+//                        break;
+//                    case 1://引流线
+////                        ToastUtils.showShortToast("向左");
+//                        break;
+//                }
+//                break;
+//            case R.id.btn_controle2:
+////                ArmNettyClient client2 = (ArmNettyClient) NettyManager.getInstance().getClientByTag(RobotInit.MAIN_ARM_NETTY);
+////                client2.sendMsg30001(Test.msg);
+//
+//                switch (mVideoTag) {
+//                    case 0://行线
+////                        ToastUtils.showShortToast("向下");
+//                        break;
+//                    case 1://引流线
+////                        ToastUtils.showShortToast("向右");
+//                        break;
+//                }
+//                break;
         }
     }
 
@@ -527,26 +539,31 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
                 initVideo(UrlConstant.URL[4]);
                 mVideoTag = 4;
                 changeControleUi(3);
+                videoText();
                 break;
             case 1:
                 initVideo(UrlConstant.URL[0]);
                 mVideoTag = 0;
                 changeControleUi(1);
+                videoText();
                 break;
             case 2:
                 initVideo(UrlConstant.URL[1]);
                 mVideoTag = 1;
                 changeControleUi(2);
+                videoText();
                 break;
             case 3:
                 initVideo(UrlConstant.URL[2]);
                 mVideoTag = 2;
                 changeControleUi(3);
+                videoText();
                 break;
             case 4:
                 initVideo(UrlConstant.URL[3]);
                 mVideoTag = 3;
                 changeControleUi(3);
+                videoText();
                 break;
         }
     }
@@ -564,26 +581,51 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
                 initVideo(UrlConstant.URL[1]);
                 mVideoTag = 1;
                 changeControleUi(2);
+                videoText();
                 break;
             case 1:
                 initVideo(UrlConstant.URL[2]);
                 mVideoTag = 2;
                 changeControleUi(3);
+                videoText();
                 break;
             case 2:
                 initVideo(UrlConstant.URL[3]);
                 mVideoTag = 3;
                 changeControleUi(3);
+                videoText();
                 break;
             case 3:
                 initVideo(UrlConstant.URL[4]);
                 mVideoTag = 4;
                 changeControleUi(3);
+                videoText();
                 break;
             case 4:
                 initVideo(UrlConstant.URL[0]);
                 mVideoTag = 0;
                 changeControleUi(1);
+                videoText();
+                break;
+        }
+    }
+
+    private void videoText() {
+        switch (mVideoTag) {
+            case 0:
+                mTvVideo.setText("行线画面");
+                break;
+            case 1:
+                mTvVideo.setText("引流线画面");
+                break;
+            case 2:
+                mTvVideo.setText("云台画面");
+                break;
+            case 3:
+                mTvVideo.setText("主臂画面");
+                break;
+            case 4:
+                mTvVideo.setText("从臂画面");
                 break;
         }
     }
@@ -597,15 +639,15 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     private void changeControleUi(int tag) {
         switch (tag) {
             case 1://行线
-                mBtnControle1.setText("向上");
-                mBtnControle2.setText("向下");
+                mBtnControle1.setText("向左");
+                mBtnControle2.setText("向右");
                 mRb1.setText("行线第一点");
                 mRb2.setText("行线第二点");
                 showOrHidden(false);
                 break;
             case 2://引流线
-                mBtnControle1.setText("向左");
-                mBtnControle2.setText("向右");
+                mBtnControle1.setText("向上");
+                mBtnControle2.setText("向下");
                 mRb1.setText("引流线第一点");
                 mRb2.setText("引流线第二点");
                 showOrHidden(false);

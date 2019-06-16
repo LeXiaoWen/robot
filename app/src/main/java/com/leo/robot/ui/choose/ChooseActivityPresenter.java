@@ -77,7 +77,6 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
     };
 
 
-
     public void initClient() {
         mMasterClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
         mVisionClient = NettyManager.getInstance().getClientByTag(RobotInit.VISION_NETTY);
@@ -87,12 +86,13 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
         switch (videoTag) {
             case 0:
                 if (mMasterClient != null) {
-                    mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableUpMove());
+                    mMasterClient.sendMsgTest(CommandUtils.landSlideTableLeftMove());
                 }
+
                 break;
             case 1:
                 if (mMasterClient != null) {
-                    mMasterClient.sendMsgTest(CommandUtils.landSlideTableLeftMove());
+                    mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableUpMove());
                 }
                 break;
         }
@@ -102,13 +102,12 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
         switch (videoTag) {
             case 0:
                 if (mMasterClient != null) {
-                    mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableDownMove());
+                    mMasterClient.sendMsgTest(CommandUtils.landSlideTableRightMove());
                 }
                 break;
             case 1:
-
                 if (mMasterClient != null) {
-                    mMasterClient.sendMsgTest(CommandUtils.landSlideTableRightMove());
+                    mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableDownMove());
                 }
                 break;
         }
@@ -116,39 +115,47 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
 
     public void controleActionUp(int videoTag) {
         switch (videoTag) {
-            case 0://垂直滑台
+            case 0://水平滑台
                 if (mMasterClient != null) {
-                    new Thread(() -> {
-                        try {
-                            Thread.sleep(100);
-                            mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableStopMove());
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }).start();
+//                    new Thread(() -> {
+//                        try {
+//                            Thread.sleep(100);
+//                            mMasterClient.sendMsgTest(CommandUtils.landSlideTableStopMove());
+//                            mMasterClient.sendMsgTest(CommandUtils.getLandSlideTable());
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }).start();
+                    mMasterClient.sendMsgTest(CommandUtils.landSlideTableStopMove());
+                    mMasterClient.sendMsgTest(CommandUtils.getLandSlideTable());
                 }
                 break;
-            case 1://水平滑台
+            case 1://垂直滑台
                 if (mMasterClient != null) {
-                    new Thread(() -> {
-                        try {
-                            Thread.sleep(100);
-                            mMasterClient.sendMsgTest(CommandUtils.landSlideTableStopMove());
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }).start();
+//                    new Thread(() -> {
+//                        try {
+//                            Thread.sleep(100);
+//                            mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableStopMove());
+//                            mMasterClient.sendMsgTest(CommandUtils.getVerticalSlideTable());
+//
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }).start();
+                    mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableStopMove());
+                    mMasterClient.sendMsgTest(CommandUtils.getVerticalSlideTable());
+
                 }
                 break;
         }
     }
 
     /**
-    * 获取滑台位置
-    *
-    *@author Leo
-    *created at 2019/6/16 4:22 PM
-    */
+     * 获取滑台位置
+     *
+     * @author Leo
+     * created at 2019/6/16 4:22 PM
+     */
     public void getSlideTableLocation() {
         if (mMasterClient != null) {
             mMasterClient.sendMsgTest(CommandUtils.getLandSlideTable());
@@ -186,11 +193,11 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
     }
 
     /**
-    * 撤销选点
-    *
-    *@author Leo
-    *created at 2019/6/16 4:24 PM
-    */
+     * 撤销选点
+     *
+     * @author Leo
+     * created at 2019/6/16 4:24 PM
+     */
     public void cancelResult(int videoTag) {
         if (mVisionClient != null) {
 
@@ -271,5 +278,12 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
         mTimer = null;
         mTimerTask.cancel();
         mTimerTask = null;
+    }
+
+
+    public void confirmLocation() {
+        if (mMasterClient!=null){
+            mMasterClient.sendMsgTest(CommandUtils.confirmSlideTable());
+        }
     }
 }
