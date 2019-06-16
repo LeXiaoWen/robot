@@ -1,8 +1,7 @@
 package com.leo.robot.ui.choose;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,8 +12,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.github.ybq.android.spinkit.SpinKitView;
+import com.google.gson.Gson;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.MiddlewareWebClientBase;
+import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.LineLocationMsg;
@@ -22,18 +23,22 @@ import com.leo.robot.bean.LocationMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
-import com.leo.robot.utils.ByteUtils;
-import com.leo.robot.utils.CommandUtils;
-import com.leo.robot.utils.MiddlewareWebViewClient;
-import com.leo.robot.utils.NettyManager;
+import com.leo.robot.netty.NettyListener;
+import com.leo.robot.netty.arm.ArmBean;
+import com.leo.robot.netty.arm.ArmNettyClient;
+import com.leo.robot.ui.cut_line.CutLineActivity;
+import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
+import com.leo.robot.ui.wiring.WiringActivity;
+import com.leo.robot.utils.*;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.develop.LogUtils;
 import cree.mvp.util.ui.ToastUtils;
+import io.netty.channel.Channel;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 选点新页面
@@ -109,29 +114,34 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     private AgentWeb mAgentWeb;
     private WebView mWebView;
     private float mNewScale;
-    public NettyClient mMasterClient;
-    public NettyClient mVisionClient;
     private int radioButtonTag = 1;
     private int mVideoTag = 0;
     private int x;
     private int y;
-    //水平滑台位置
-    private String landSlideTabLocation = "05000000";
-    //垂直滑台位置
-    private String verticalSlideTabLocation = "08000000";
-    //第几次选点
-    private int chooseCount = 0;
+    private int mActivityTag = 0;
+
+
+    private static Gson mGson = new Gson();
+    private List<Integer> ports = new ArrayList<>();
+    private ArmNettyClient client;
 
     @Override
     protected void notifyData(int status, String message) {
-        mTvType.setText(message);
 
-        if (status == 0) {//未连接
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTvType.setText(message);
+                if (status == 0) {//未连接
 
-            mSpinKit.setVisibility(View.VISIBLE);
-        } else {//已连接
-            mSpinKit.setVisibility(View.GONE);
-        }
+                    mSpinKit.setVisibility(View.VISIBLE);
+                } else {//已连接
+                    mSpinKit.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
     }
 
     @Override
@@ -145,53 +155,49 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         setContentView(R.layout.activity_choose);
         ButterKnife.bind(this);
         initTile();
+        initBroadcast(mTvGroundPower);
+
+        initVideoStatus();
+
+
         initSocketStatus();
-        initClient();
-        initVideo(UrlConstant.URL[0]);
+
         initListener();
-        initLineLocation();
+        mPresenter.initLineLocation();
+
+
+        mPresenter.initClient();
     }
 
-    /**
-     * 实时请求行线、引流线距离
-     *
-     * @author Leo
-     * created at 2019/5/30 9:06 PM
-     */
-    private void initLineLocation() {
-        mTimer.schedule(mTimerTask, 1000, 500);//延时1s，每隔500毫秒执行一次run方法
-    }
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 1) {
-                if (mMasterClient != null) {
-                    mMasterClient.sendMsgTest(CommandUtils.lineLocation());
-                }
+    private void initVideoStatus() {
+        Intent intent = getIntent();
+        int tag = intent.getIntExtra("tag", 1);
+        int location = intent.getIntExtra("location", 1);
+        mActivityTag = intent.getIntExtra("activity", 0);
+        if (tag == 1) {
+            initVideo(UrlConstant.URL[0]);
+            if (location == 1) {
+                mTvRemind.setText("请选择第一个点位");
+            } else {
+                mPresenter.chooseCount = 1;
+                mTvRemind.setText("请选择第二个点位");
             }
-            super.handleMessage(msg);
+        } else if (tag == 2) {
+            initVideo(UrlConstant.URL[1]);
+            if (location == 1) {
+                mTvRemind.setText("请选择第一个点位");
+            } else {
+                mPresenter.chooseCount = 1;
+                mTvRemind.setText("请选择第二个点位");
+            }
         }
-    };
+    }
 
-    Timer mTimer = new Timer();
-    TimerTask mTimerTask = new TimerTask() {
-        @Override
-        public void run() {
-            Message message = new Message();
-            message.what = 1;
-            handler.sendMessage(message);
-        }
-    };
 
     private void initTile() {
         mPresenter.updateTime(mTvDate);
     }
 
-    private void initClient() {
-        mMasterClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
-        mVisionClient = NettyManager.getInstance().getClientByTag(RobotInit.VISION_NETTY);
-    }
 
     private void initListener() {
         mBtnControle1.setOnTouchListener(mOnDownClickListener);
@@ -215,44 +221,17 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         int action = event.getAction();
         if (action == MotionEvent.ACTION_DOWN) { //按下
             switch (v.getId()) {
-                case R.id.btn_right:
-                    if (mMasterClient != null) {
-                        mMasterClient.sendMsgTest(CommandUtils.landSlideTableRightMove());
-                    }
+                case R.id.btn_controle1:
+                    mPresenter.controle1ActionDown(mVideoTag);
                     break;
-                case R.id.btn_left:
-                    if (mMasterClient != null) {
-                        mMasterClient.sendMsgTest(CommandUtils.landSlideTableLeftMove());
-                    }
+                case R.id.btn_controle2:
+                    mPresenter.controle2ActionDown(mVideoTag);
                     break;
-
-//                case R.id.btn_up:
-//                    if (mMasterClient != null) {
-//
-//                        mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableUpMove());
-//
-//                    }
-//                    break;
-//                case R.id.btn_down:
-//                    if (mMasterClient != null) {
-//                        mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableDownMove());
-//
-//                    }
-//                    break;
 
 
             }
         } else if (action == MotionEvent.ACTION_UP) {//松开
-            if (v.getId() == R.id.btn_left || v.getId() == R.id.btn_right || v.getId() == R.id.btn_reset) {
-                if (mMasterClient != null) {
-                    mMasterClient.sendMsgTest(CommandUtils.landSlideTableStopMove());
-                }
-            } else {
-                if (mMasterClient != null) {
-                    mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableStopMove());
-                }
-            }
-
+            mPresenter.controleActionUp(mVideoTag);
         }
         return false;
     };
@@ -341,23 +320,23 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
              * 触屏实时位置
              */
             case MotionEvent.ACTION_MOVE:
-//                x = (int) event.getX() / 2;
-//                y = (int) event.getY() / 2;
-//                mTouchShow.setText("实时位置：(" + x + "," + y + ")");
+                x = (int) event.getX() / 2;
+                y = (int) event.getY() / 2;
+                mTouchShow.setText("实时位置：(" + x + "," + y + ")");
                 break;
             /**
              * 离开屏幕的位置
              */
             case MotionEvent.ACTION_UP:
 
-//                x = (int) event.getX() / 2;
-//                y = (int) event.getY() / 2;
-//                mTouchShow.setText(x + "," + y);
-//                if (switchTag == 1) {//水平滑台
+                x = (int) event.getX() / 2;
+                y = (int) event.getY() / 2;
+                mTouchShow.setText(x + "," + y);
+//                if (mVideoTag == 0) {//水平滑台
 //                    if (mMasterClient != null) {
 //                        mMasterClient.sendMsgTest(CommandUtils.getLandSlideTable());
 //                    }
-//                } else if (switchTag == 2) { //垂直滑台
+//                } else if (mVideoTag == 1) { //垂直滑台
 //                    if (mMasterClient != null) {
 //                        mMasterClient.sendMsgTest(CommandUtils.getVerticalSlideTable());
 //                    }
@@ -390,34 +369,57 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
 
         switch (view.getId()) {
             case R.id.ib_1:
-                clearVideo();
-                previousVideo();
+//                if (!mPresenter.isFastDoubleClick()) {
+                    clearVideo();
+                    previousVideo();
+//                }
                 break;
             case R.id.ib_2:
-                clearVideo();
-                nextVideo();
+//                if (!mPresenter.isFastDoubleClick()) {
+                    clearVideo();
+                    nextVideo();
+//                }
                 break;
             case R.id.btn_confirm_location:
-                sendConfirmMsg();
+                mPresenter.sendConfirmMsg(x, y, mVideoTag, radioButtonTag);
                 break;
             case R.id.iv_back:
                 if (!mPresenter.isFastDoubleClick()) {
+                    switch (mActivityTag) {
+                        case 1:
+                            startActivity(new Intent(ChooseActivity.this, WireStrippingActivity.class));
+                            break;
+                        case 2:
+                            startActivity(new Intent(ChooseActivity.this, WiringActivity.class));
+                            break;
+                        case 3:
+                            startActivity(new Intent(ChooseActivity.this, CutLineActivity.class));
+                            break;
+                    }
+                    mAgentWeb = null;
+                    mWebView = null;
                     finish();
                 }
                 break;
             case R.id.btn_giveup_results://舍弃结果
-                cancelResult();
+                mPresenter.cancelResult(radioButtonTag);
                 break;
             case R.id.btn_confirm_results://确认结果
-                confirmResult();
+                mPresenter.confirmResult(mVideoTag);
                 break;
             case R.id.btn_get_slide_table://获取滑台位置
+                mPresenter.getSlideTableLocation();
+
                 ToastUtils.showShortToast("获取滑台位置");
                 break;
             case R.id.btn_confirm://确认位置
-                ToastUtils.showShortToast("确认位置");
+//                initMainArmNetty();
+//                ToastUtils.showShortToast("确认位置");
                 break;
             case R.id.btn_controle1:
+//                client.sendMsg29999("hello word1");
+//                ArmNettyClient client1 = (ArmNettyClient) NettyManager.getInstance().getClientByTag(RobotInit.MAIN_ARM_NETTY);
+//                client1.sendMsg29999(Test.msg);
                 switch (mVideoTag) {
                     case 0://行线
                         ToastUtils.showShortToast("向上");
@@ -428,6 +430,9 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
                 }
                 break;
             case R.id.btn_controle2:
+//                ArmNettyClient client2 = (ArmNettyClient) NettyManager.getInstance().getClientByTag(RobotInit.MAIN_ARM_NETTY);
+//                client2.sendMsg30001(Test.msg);
+
                 switch (mVideoTag) {
                     case 0://行线
                         ToastUtils.showShortToast("向下");
@@ -440,27 +445,60 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         }
     }
 
-
     /**
-     * 确认描点结果
+     * 主机械臂
      *
      * @author Leo
-     * created at 2019/5/30 10:46 PM
+     * created at 2019/6/14 8:18 PM
      */
-
-    private void confirmResult() {
-        if (mVisionClient != null) {
-            switch (mVideoTag) {
-                case 1:
-                    mVisionClient.sendMsgTest(CommandUtils.CAMERA1_CONFIRM);
-                    break;
-                case 2:
-                    mVisionClient.sendMsgTest(CommandUtils.CAMERA2_CONFIRM);
-                    break;
+    private void initMainArmNetty() {
+        client = new ArmNettyClient();
+//        NettyManager.getInstance().addNettyClient(RobotInit.MAIN_ARM_NETTY, client);
+        client.setListener(new NettyListener() {
+            @Override
+            public void onMessageResponse(String msg) {
+                ResultUtils.onResultByType(msg, RobotInit.MAIN_ARM_NETTY);
             }
-        }
 
+            @Override
+            public void onServiceStatusConnectChanged(int statusCode) {
+                SPUtils socket = new SPUtils("socket");
+
+                if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
+                    notifyData(1, "与主控服务器连接成功");
+                    String s = mGson.toJson(CommandUtils.getMasterControlBean());
+                    NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
+                    if (client != null) {
+                        client.sendMsgTest(s);
+                    }
+                    socket.putBoolean("status", true);
+                } else if (statusCode == NettyListener.STATUS_CONNECT_ERROR) {//通信异常
+                    notifyData(0, "与主控服务器连接异常，正在重连");
+                    socket.putBoolean("status", false);
+
+                } else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED) {//服务器主动断开
+                    socket.putBoolean("status", false);
+                    notifyData(0, "主控服务器断开连接，正在重连");
+                    client.setConnectStatus(false);
+                    new Thread(() -> {
+                        client.connect(UrlConstant.MAIN_ARM_NETTY_HOST, ports);//连接服务器
+                    }).start();
+                }
+            }
+
+            @Override
+            public void onServiceHeart(Channel channel) {
+
+            }
+        });
+
+        if (!client.getConnectStatus()) {
+            new Thread(() -> {
+                client.connect(UrlConstant.MAIN_ARM_NETTY_HOST, ports);//连接服务器
+            }).start();
+        }
     }
+
 
     /**
      * 切换视频前清除数据
@@ -469,9 +507,11 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
      * created at 2019/6/14 6:19 PM
      */
     private void clearVideo() {
+//        mAgentWeb.getWebLifeCycle().onDestroy();
         mAgentWeb = null;
         mWebView = null;
-        mRlMain.removeViewAt(1);
+//        mRlMain.removeViewAt(1);
+        mRlMain.removeAllViews();
     }
 
     /**
@@ -587,88 +627,6 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         }
     }
 
-    private void cancelResult() {
-        if (mVisionClient != null) {
-
-            switch (radioButtonTag) {
-                case 1:
-                    mVisionClient.sendMsgTest(CommandUtils.CAMERA1_CANCEL);
-                    break;
-                case 2:
-                    mVisionClient.sendMsgTest(CommandUtils.CAMERA1_CANCEL);
-                    break;
-                case 3:
-                    mVisionClient.sendMsgTest(CommandUtils.CAMERA2_CANCEL);
-                    break;
-                case 4:
-                    mVisionClient.sendMsgTest(CommandUtils.CAMERA2_CANCEL);
-                    break;
-            }
-            chooseCount = 0;
-            mTvRemind.setText("已撤销选点，请选择第一个点位");
-
-        } else {
-            ToastUtils.showShortToast("未连接视觉服务器");
-
-        }
-    }
-
-    private void sendConfirmMsg() {
-        StringBuilder s;
-        String x = ByteUtils.numToHex32(this.x);
-        String y = ByteUtils.numToHex32(this.y);
-        String location = ByteUtils.stringLowToHight(x, y);
-
-        if (mVisionClient != null) {
-            switch (radioButtonTag) {
-                case 1:
-                    switch (mVideoTag) {
-                        case 0://行线
-                            s = new StringBuilder();
-                            s.append(CommandUtils.CAMERA1_LOCATION1);
-                            s.append(location);
-                            s.append(landSlideTabLocation);
-                            s.append("FF");
-                            mVisionClient.sendMsgTest(s.toString());
-                            break;
-                        case 1://引流线
-                            s = new StringBuilder();
-                            s.append(CommandUtils.CAMERA2_LOCATION1);
-                            s.append(location);
-                            s.append(verticalSlideTabLocation);
-                            s.append("FF");
-                            mVisionClient.sendMsgTest(s.toString());
-                            break;
-                    }
-
-                    break;
-                case 2:
-                    switch (mVideoTag) {
-                        case 0:
-                            s = new StringBuilder();
-                            s.append(CommandUtils.CAMERA1_LOCATION2);
-                            s.append(location);
-                            s.append(landSlideTabLocation);
-                            s.append("FF");
-                            mVisionClient.sendMsgTest(s.toString());
-                            break;
-                        case 1:
-                            s = new StringBuilder();
-                            s.append(CommandUtils.CAMERA2_LOCATION2);
-                            s.append(location);
-                            s.append(verticalSlideTabLocation);
-                            s.append("FF");
-                            mVisionClient.sendMsgTest(s.toString());
-                            break;
-                    }
-
-                    break;
-            }
-        } else {
-            ToastUtils.showShortToast("未连接视觉服务器");
-        }
-
-    }
 
     /**
      * 主控服务器回复滑台位置
@@ -681,9 +639,9 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         if (msg.getMsg() != null && msg.getMsg().length() > 5) {
             String s = msg.getMsg().substring(8, 16);
             if ("0".equals(msg.getCode())) {//垂直滑台
-                verticalSlideTabLocation = s;
+                mPresenter.verticalSlideTabLocation = s;
             } else if ("1".equals(msg.getCode())) {//水平滑台
-                landSlideTabLocation = s;
+                mPresenter.landSlideTabLocation = s;
             }
             ToastUtils.showShortToast("成功获取滑台位置");
 
@@ -721,12 +679,45 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         if (mAgentWeb != null) {
             mAgentWeb.getWebLifeCycle().onPause();
         }
+        mPresenter.onDestroy();
+        onUnBindReceiver();
         super.onDestroy();
         mAgentWeb = null;
         mWebView = null;
-        mTimer.cancel();
-        mTimer = null;
-        mTimerTask.cancel();
-        mTimerTask = null;
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void mainArmMsg(ArmBean bean) {
+        String code = bean.getCode();
+        String msg = bean.getMsg();
+        if (msg.length() == 2216) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+//                    JNIUtils.getInstance().GetDataPort30003(msg, "Marm");
+                    String s = JNIUtils.getInstance().ActionMove("ACTION_MOVE_1", "Marm");
+                    LogUtils.e(s);
+
+                }
+            }).start();
+            if (code.equals("0")) {//30003数据
+                ToastUtils.showShortToast("30003数据 " + msg);
+            } else if (code.equals("1")) {//29999数据
+                ToastUtils.showShortToast("29999数据 " + msg);
+            }
+        }
+
+    }
+
+
+    /**
+     * 撤销选点后提示文字
+     *
+     * @author Leo
+     * created at 2019/6/16 4:24 PM
+     */
+    public void showMsg(String s) {
+        mTvRemind.setText(s);
     }
 }
