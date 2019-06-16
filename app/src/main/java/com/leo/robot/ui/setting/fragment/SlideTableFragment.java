@@ -45,6 +45,7 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
     private AgentWeb mAgentWeb;
     private WebView mWebView;
     private int mVideoTag = 0;
+    private TextView tvVideo;
 
 
     public void setTAG(int TAG) {
@@ -135,6 +136,7 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
         btnUp = (Button) view.findViewById(R.id.btn_up);
         btnDown = (Button) view.findViewById(R.id.btn_down);
         btnVerticalReset = (Button) view.findViewById(R.id.btn_vertical_reset);
+        tvVideo = (TextView) view.findViewById(R.id.tv_video);
         ImageButton rb1 = (ImageButton) view.findViewById(R.id.ib_1);
         ImageButton rb2 = (ImageButton) view.findViewById(R.id.ib_2);
         rb1.setOnClickListener(this);
@@ -258,22 +260,27 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
             case 0:
                 initVideo(UrlConstant.URL[4]);
                 mVideoTag = 4;
+                videoText();
                 break;
             case 1:
                 initVideo(UrlConstant.URL[0]);
                 mVideoTag = 0;
+                videoText();
                 break;
             case 2:
                 initVideo(UrlConstant.URL[1]);
                 mVideoTag = 1;
+                videoText();
                 break;
             case 3:
                 initVideo(UrlConstant.URL[2]);
                 mVideoTag = 2;
+                videoText();
                 break;
             case 4:
                 initVideo(UrlConstant.URL[3]);
                 mVideoTag = 3;
+                videoText();
                 break;
         }
     }
@@ -290,22 +297,27 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
             case 0:
                 initVideo(UrlConstant.URL[1]);
                 mVideoTag = 1;
+                videoText();
                 break;
             case 1:
                 initVideo(UrlConstant.URL[2]);
                 mVideoTag = 2;
+                videoText();
                 break;
             case 2:
                 initVideo(UrlConstant.URL[3]);
                 mVideoTag = 3;
+                videoText();
                 break;
             case 3:
                 initVideo(UrlConstant.URL[4]);
                 mVideoTag = 4;
+                videoText();
                 break;
             case 4:
                 initVideo(UrlConstant.URL[0]);
                 mVideoTag = 0;
+                videoText();
                 break;
         }
     }
@@ -314,5 +326,25 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
         mAgentWeb = null;
         mWebView = null;
         mRlMain.removeAllViews();
+    }
+
+    private void videoText(){
+        switch (mVideoTag){
+            case 0:
+                tvVideo.setText("行线画面");
+                break;
+            case 1:
+                tvVideo.setText("引流线画面");
+                break;
+            case 2:
+                tvVideo.setText("云台画面");
+                break;
+            case 3:
+                tvVideo.setText("主臂画面");
+                break;
+            case 4:
+                tvVideo.setText("从臂画面");
+                break;
+        }
     }
 }
