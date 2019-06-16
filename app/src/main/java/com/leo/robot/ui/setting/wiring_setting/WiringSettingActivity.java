@@ -17,10 +17,7 @@ import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.constant.RobotInit;
-import com.leo.robot.ui.setting.cut_line_setting.fragment.ArmFragment;
-import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityFragment;
-import com.leo.robot.ui.setting.cut_line_setting.fragment.ExtremityMoveFragment;
-import com.leo.robot.ui.setting.wiring_setting.fragment.WiringFragment;
+import com.leo.robot.ui.setting.fragment.*;
 import com.leo.robot.ui.wiring.WiringActivity;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -51,6 +48,8 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
     TextView mTvOwnPower;
     @BindView(R.id.tv_ground_power)
     TextView mTvGroundPower;
+    @BindView(R.id.tv5)
+    TextView mTv5;
 
     private boolean isShown = false;
     private Fragment mCurrentFragment = new Fragment();
@@ -58,7 +57,7 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
     private WiringFragment mWiringFragment = new WiringFragment();
     private ExtremityFragment mExtremityFragment = new ExtremityFragment();
     private ExtremityMoveFragment mExtremityMoveFragment = new ExtremityMoveFragment();
-
+    private SlideTableFragment mSlideTableFragment = new SlideTableFragment();
 
     @Override
     protected void notifyData(int status, String message) {
@@ -134,7 +133,7 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
         isShown = true;
     }
 
-    @OnClick({R.id.tv1, R.id.tv2, R.id.tv3, R.id.tv4, R.id.iv_back})
+    @OnClick({R.id.tv1, R.id.tv2, R.id.tv3, R.id.tv4, R.id.tv5, R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv1:
@@ -142,6 +141,7 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
                 changeStatusNormal(mTv2, 2);
                 changeStatusNormal(mTv3, 3);
                 changeStatusNormal(mTv4, 4);
+                changeStatusNormal(mTv5, 5);
                 switchFragment(mWiringFragment).commit();
                 break;
             case R.id.tv2:
@@ -149,6 +149,7 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
                 changeStatusNormal(mTv1, 1);
                 changeStatusNormal(mTv3, 3);
                 changeStatusNormal(mTv4, 4);
+                changeStatusNormal(mTv5, 5);
                 switchFragment(mExtremityMoveFragment).commit();
                 break;
             case R.id.tv3:
@@ -156,6 +157,7 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
                 changeStatusNormal(mTv2, 2);
                 changeStatusNormal(mTv1, 1);
                 changeStatusNormal(mTv4, 4);
+                changeStatusNormal(mTv5, 5);
                 switchFragment(mExtremityFragment).commit();
                 break;
             case R.id.tv4:
@@ -163,7 +165,16 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
                 changeStatusNormal(mTv1, 1);
                 changeStatusNormal(mTv3, 3);
                 changeStatusNormal(mTv2, 2);
+                changeStatusNormal(mTv5, 5);
                 switchFragment(mArmFragment).commit();
+                break;
+            case R.id.tv5:
+                changeStatusCliecked(mTv5, 5);
+                changeStatusNormal(mTv1, 1);
+                changeStatusNormal(mTv3, 3);
+                changeStatusNormal(mTv2, 2);
+                changeStatusNormal(mTv4, 4);
+                switchFragment(mSlideTableFragment).commit();
                 break;
             case R.id.iv_back:
                 if (!mPresenter.isFastDoubleClick()) {
@@ -200,7 +211,10 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
             case 4:
                 color = getResources().getColor(R.color.setting_text_normal);
                 drawable = getResources().getDrawable(R.drawable.fill_normal);
-
+                break;
+            case 5:
+                color = getResources().getColor(R.color.setting_text_normal);
+                drawable = getResources().getDrawable(R.drawable.weiyidian_normal);
                 break;
         }
         view.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
@@ -235,7 +249,10 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
             case 4:
                 color = getResources().getColor(R.color.setting_text_clicked);
                 drawable = getResources().getDrawable(R.drawable.fill_clicked);
-
+                break;
+            case 5:
+                color = getResources().getColor(R.color.setting_text_clicked);
+                drawable = getResources().getDrawable(R.drawable.weiyidian_clicked);
                 break;
         }
         view.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
@@ -255,15 +272,15 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
         String code = bean.getCode();
         if (isShown) {
             if (type.equals(RobotInit.MASTER_CONTROL_NETTY)) {//主控服务器
-                if ("0".equals(code)){//连接失败或断开连接
+                if ("0".equals(code)) {//连接失败或断开连接
 
-                }else if ("1".equals(code)){//连接成功
+                } else if ("1".equals(code)) {//连接成功
 
                 }
             } else if (type.equals(RobotInit.VISION_NETTY)) {//视觉服务器
-                if ("0".equals(code)){//连接失败或断开连接
+                if ("0".equals(code)) {//连接失败或断开连接
 
-                }else if ("1".equals(code)){//连接成功
+                } else if ("1".equals(code)) {//连接成功
 
                 }
             }
