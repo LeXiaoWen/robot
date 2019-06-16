@@ -1,4 +1,4 @@
-package com.leo.robot.ui.setting.cut_line_setting.fragment;
+package com.leo.robot.ui.setting.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,21 +20,14 @@ import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 
 /**
- * 末端位移设置
+ * 末端位姿设置
  * created by Leo on 2019/4/18 22 : 06
  */
 
 
-public class ExtremityMoveFragment extends Fragment implements View.OnClickListener {
+public class ExtremityFragment extends Fragment implements View.OnClickListener {
     private boolean isPause;
     private int TAG = 0;
-    private NettyClient mClient;
-    private ImageButton mIv1;
-    private ImageButton mIv2;
-    private ImageButton mIv3;
-    private ImageButton mIv4;
-    private ImageButton mIv5;
-    private ImageButton mIv6;
 
     public void setTAG(int TAG) {
         this.TAG = TAG;
@@ -51,10 +44,18 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
     private RelativeLayout mRl3;
     private RelativeLayout mRl4;
 
+    private NettyClient mClient;
+    private ImageButton mIv1;
+    private ImageButton mIv2;
+    private ImageButton mIv3;
+    private ImageButton mIv4;
+    private ImageButton mIv5;
+    private ImageButton mIv6;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fg_extremity_move, container, false);
+        return inflater.inflate(R.layout.fg_extremity, container, false);
     }
 
     @Override
@@ -70,7 +71,6 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
     }
 
     private void initView(View view) {
-
         mRlMain = (RelativeLayout) view.findViewById(R.id.rl_main);
         mRl1 = (RelativeLayout) view.findViewById(R.id.rl1);
         mRl2 = (RelativeLayout) view.findViewById(R.id.rl2);
@@ -90,8 +90,9 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
         mIv5.setOnTouchListener(mOnDownClickListener);
         mIv6.setOnTouchListener(mOnDownClickListener);
         mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
-    }
 
+
+    }
 
     private View.OnTouchListener mOnDownClickListener = (v, event) -> {
         int action = event.getAction();
@@ -369,9 +370,9 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
     private void down() {
         if (mClient != null) {
             if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmDisDown());
+                mClient.sendMsgTest(CommandUtils.getMainArmPosDown());
             } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmDisDown());
+                mClient.sendMsgTest(CommandUtils.getFlowArmPosDown());
             }
         }
     }
@@ -379,9 +380,9 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
     private void up() {
         if (mClient != null) {
             if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmDisUp());
+                mClient.sendMsgTest(CommandUtils.getMainArmPosUp());
             } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmDisUp());
+                mClient.sendMsgTest(CommandUtils.getFlowArmPosUp());
             }
         }
 
@@ -390,9 +391,9 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
     private void right() {
         if (mClient != null) {
             if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmDisRight());
+                mClient.sendMsgTest(CommandUtils.getMainArmPosRight());
             } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmDisRight());
+                mClient.sendMsgTest(CommandUtils.getFlowArmPosRight());
             }
         }
 
@@ -401,9 +402,9 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
     private void left() {
         if (mClient != null) {
             if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmDisLeft());
+                mClient.sendMsgTest(CommandUtils.getMainArmPosLeft());
             } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmDisLeft());
+                mClient.sendMsgTest(CommandUtils.getFlowArmPosLeft());
             }
         }
 
@@ -412,9 +413,9 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
     private void backward() {
         if (mClient != null) {
             if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmDisRotateRight());
+                mClient.sendMsgTest(CommandUtils.getMainArmPosRotateRight());
             } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmDisRotateRight());
+                mClient.sendMsgTest(CommandUtils.getFlowArmPosRotateRight());
             }
         }
 
@@ -423,9 +424,9 @@ public class ExtremityMoveFragment extends Fragment implements View.OnClickListe
     private void forward() {
         if (mClient != null) {
             if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmDisRotateLeft());
+                mClient.sendMsgTest(CommandUtils.getMainArmPosRotateLeft());
             } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmDisRotateLeft());
+                mClient.sendMsgTest(CommandUtils.getFlowArmPosRotateLeft());
             }
         }
 

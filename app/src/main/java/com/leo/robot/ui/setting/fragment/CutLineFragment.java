@@ -1,4 +1,4 @@
-package com.leo.robot.ui.setting.cut_line_setting.fragment;
+package com.leo.robot.ui.setting.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
