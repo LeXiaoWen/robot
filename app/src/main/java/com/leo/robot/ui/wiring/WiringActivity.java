@@ -8,10 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -19,14 +16,16 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.bean.ChooseCameraLocationMsg;
 import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.bean.WiringMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
+import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
-import com.leo.robot.ui.wiring.choose.WiringChooseLocationActivity;
 import com.leo.robot.utils.DateUtils;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.data.StringUtils;
@@ -138,6 +137,10 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     SpinKitView mSpinKit;
     @BindView(R.id.ll_status)
     LinearLayout mLlStatus;
+    @BindView(R.id.btn_jump)
+    Button mBtnJump;
+    @BindView(R.id.btn_jump2)
+    Button mBtnJump2;
     private boolean isPause;
 
     private List<String> mLogData;
@@ -198,6 +201,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         initVideo4();
 //        mPresenter.setUnityView(mRl1);
         initSocketStatus();
+        mBtnJump2.setVisibility(View.VISIBLE);
     }
 
     private void initSocketStatus() {
@@ -280,7 +284,6 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
     }
-
 
 
     /**
@@ -414,7 +417,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         mRlStatus.scrollToPosition(mStatusAdapter.getItemCount() - 1);
     }
 
-    @OnClick({R.id.iv_scram, R.id.iv_take_back, R.id.iv_start, R.id.iv_identification, R.id.iv_setting, R.id.iv_back})
+    @OnClick({R.id.iv_scram, R.id.iv_take_back, R.id.iv_start, R.id.iv_identification, R.id.iv_setting, R.id.iv_back,R.id.btn_jump2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_scram:
@@ -445,6 +448,12 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
                 break;
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.btn_jump2:
+                if (!mPresenter.isFastDoubleClick()) {
+                    startActivity(new Intent(WiringActivity.this, WireStrippingActivity.class));
+                    finish();
+                }
                 break;
         }
     }
@@ -605,17 +614,59 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void acceptVisionMsg(VisionMsg msg) {
+//        if (isShown) {
+//            ToastUtils.showShortToast("接收到选点命令，即将进入选点页面！");
+//            new Thread(() -> {
+//                try {
+//                    Thread.sleep(2000);
+//                    startActivity(new Intent(WiringActivity.this, WiringChooseLocationActivity.class));
+//                    finish();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }).start();
+//        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCameraLocationMsg(ChooseCameraLocationMsg msg) {
         if (isShown) {
-            ToastUtils.showShortToast("接收到选点命令，即将进入选点页面！");
-            new Thread(() -> {
-                try {
-                    Thread.sleep(2000);
-                    startActivity(new Intent(WiringActivity.this, WiringChooseLocationActivity.class));
-                    finish();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+            String code = msg.getCode();
+            mPresenter.jugCameraLocationType(code);
         }
+
+    }
+
+    public void jumpChooseActivity(int camera, int location) {
+        Intent intent = new Intent(WiringActivity.this, ChooseActivity.class);
+        intent.putExtra("activity", 2);
+        if (camera == 1) {
+            intent.putExtra("tag", 1);
+            if (location == 1) {
+                intent.putExtra("location", 1);
+            } else {
+                intent.putExtra("location", 2);
+            }
+            ToastUtils.showShortToast("接收到选点命令，即将进入USB1选点页面！");
+
+        } else {
+            intent.putExtra("tag", 2);
+            if (location == 1) {
+                intent.putExtra("location", 1);
+            } else {
+                intent.putExtra("location", 2);
+            }
+            ToastUtils.showShortToast("接收到选点命令，即将进入USB2选点页面！");
+
+        }
+        new Thread(() -> {
+            try {
+                Thread.sleep(1500);
+                startActivity(intent);
+                finish();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

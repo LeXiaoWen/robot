@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.widget.TextView;
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.WiringMsg;
+import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
-import com.leo.robot.ui.wiring.choose.WiringChooseLocationActivity;
+import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
@@ -194,8 +195,30 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
     }
 
     public void identificationClick() {
-            mActivity.startActivity(new Intent(mActivity, WiringChooseLocationActivity.class));
+        Intent intent = new Intent(mActivity, ChooseActivity.class);
+        intent.putExtra("activity",2);
+        mActivity.startActivity(intent);
             mActivity.finish();
+    }
+
+    /**
+     * 判断当前指令是哪个摄像机选择第几个点
+     *
+     *@author Leo
+     *created at 2019/5/29 9:27 PM
+     */
+    public void jugCameraLocationType(String code) {
+        if (code.equals(PushMsgCode.CAMERA1_CHOOSE_LOCATION1)){//usb1相机选择点1
+            mActivity.jumpChooseActivity(1,1);
+        }else if (code.equals(PushMsgCode.CAMERA1_CHOOSE_LOCATION2)){//usb1相机选择点2
+            mActivity.jumpChooseActivity(1,2);
+
+        }else if (code.equals(PushMsgCode.CAMERA2_CHOOSE_LOCATION1)){//usb2相机选择点1
+            mActivity.jumpChooseActivity(2,1);
+
+        }else if (code.equals(PushMsgCode.CAMERA2_CHOOSE_LOCATION2)){//usb2相机选择点2
+            mActivity.jumpChooseActivity(2,2);
+        }
     }
 //    public void setUnityView(RelativeLayout unityView) {
 //        // TODO: 2019/5/6  直接使用父类的unityPlayer 不要自己去new一个

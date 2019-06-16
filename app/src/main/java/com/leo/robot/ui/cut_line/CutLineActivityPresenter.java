@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.widget.TextView;
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.CutLineMsg;
+import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
-import com.leo.robot.ui.cut_line.choose.CutLineChooseLocationActivity;
+import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
@@ -29,6 +30,7 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
 
     private boolean isClickble = false;
     private UnityPlayer mUnityPlayer;
+
     @Inject
     public CutLineActivityPresenter() {
         mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
@@ -47,24 +49,24 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
      * created at 2019/4/18 2:11 PM
      */
     public void scramButton() {
-            if (!isScram) { //急停
-                if (mClient != null) {
-                    mClient.sendMsgTest(CommandUtils.getMainArmShutdown());
-                    mClient.sendMsgTest(CommandUtils.getFlowArmShutdown());
-                    mActivity.refreshLogRv("发送急停命令");
-                }
-                mActivity.updateScram(true);
-                isScram = true;
-            } else {//回复急停
-                if (mClient != null) {
-                    mClient.sendMsgTest(CommandUtils.getMainArmResume());
-                    mClient.sendMsgTest(CommandUtils.getFlowArmResume());
-                    mActivity.refreshLogRv("发送恢复急停命令");
-
-                }
-                mActivity.updateScram(false);
-                isScram = false;
+        if (!isScram) { //急停
+            if (mClient != null) {
+                mClient.sendMsgTest(CommandUtils.getMainArmShutdown());
+                mClient.sendMsgTest(CommandUtils.getFlowArmShutdown());
+                mActivity.refreshLogRv("发送急停命令");
             }
+            mActivity.updateScram(true);
+            isScram = true;
+        } else {//回复急停
+            if (mClient != null) {
+                mClient.sendMsgTest(CommandUtils.getMainArmResume());
+                mClient.sendMsgTest(CommandUtils.getFlowArmResume());
+                mActivity.refreshLogRv("发送恢复急停命令");
+
+            }
+            mActivity.updateScram(false);
+            isScram = false;
+        }
 
     }
 
@@ -75,10 +77,10 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
      * created at 2019/4/18 2:17 PM
      */
     public void revocerButton() {
-            if (mClient != null) {
-                mClient.sendMsgTest(CommandUtils.getMainArmRecover());
-                mActivity.refreshLogRv("发送一键回收命令");
-            }
+        if (mClient != null) {
+            mClient.sendMsgTest(CommandUtils.getMainArmRecover());
+            mActivity.refreshLogRv("发送一键回收命令");
+        }
     }
 
     /**
@@ -88,18 +90,18 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
      * created at 2019/4/18 2:18 PM
      */
     public void startButton() {
-            if (!isStart) { //开始
-                mClient.sendMsgTest(CommandUtils.getMainArmStart());
-                isStart = true;
-                mActivity.updateStart(true);
-                mActivity.refreshLogRv("发送开始命令");
-            } else {//停止
-                mClient.sendMsgTest(CommandUtils.getMainArmStop());
-                isStart = false;
-                mActivity.updateStart(false);
+        if (!isStart) { //开始
+            mClient.sendMsgTest(CommandUtils.getMainArmStart());
+            isStart = true;
+            mActivity.updateStart(true);
+            mActivity.refreshLogRv("发送开始命令");
+        } else {//停止
+            mClient.sendMsgTest(CommandUtils.getMainArmStop());
+            isStart = false;
+            mActivity.updateStart(false);
 
-                mActivity.refreshLogRv("发送停止命令");
-            }
+            mActivity.refreshLogRv("发送停止命令");
+        }
     }
 
     public void getPicButton() {
@@ -163,8 +165,31 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
     }
 
     public void identificationClick() {
-            mActivity.startActivity(new Intent(mActivity, CutLineChooseLocationActivity.class));
-            mActivity.finish();
+        Intent intent = new Intent(mActivity, ChooseActivity.class);
+        intent.putExtra("activity", 3);
+
+        mActivity.startActivity(intent);
+        mActivity.finish();
+    }
+
+    /**
+     * 判断当前指令是哪个摄像机选择第几个点
+     *
+     * @author Leo
+     * created at 2019/5/29 9:27 PM
+     */
+    public void jugCameraLocationType(String code) {
+        if (code.equals(PushMsgCode.CAMERA1_CHOOSE_LOCATION1)) {//usb1相机选择点1
+            mActivity.jumpChooseActivity(1, 1);
+        } else if (code.equals(PushMsgCode.CAMERA1_CHOOSE_LOCATION2)) {//usb1相机选择点2
+            mActivity.jumpChooseActivity(1, 2);
+
+        } else if (code.equals(PushMsgCode.CAMERA2_CHOOSE_LOCATION1)) {//usb2相机选择点1
+            mActivity.jumpChooseActivity(2, 1);
+
+        } else if (code.equals(PushMsgCode.CAMERA2_CHOOSE_LOCATION2)) {//usb2相机选择点2
+            mActivity.jumpChooseActivity(2, 2);
+        }
     }
 
 //    public void setUnityView(RelativeLayout unityView) {

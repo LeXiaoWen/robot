@@ -19,12 +19,13 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.bean.ChooseCameraLocationMsg;
 import com.leo.robot.bean.CutLineMsg;
 import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.bean.VisionMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
-import com.leo.robot.ui.cut_line.choose.CutLineChooseLocationActivity;
+import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.ui.setting.cut_line_setting.CutLineSettingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.utils.DateUtils;
@@ -528,17 +529,59 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void acceptVisionMsg(VisionMsg msg) {
-        if (isShown) {
-            ToastUtils.showShortToast("接收到选点命令，即将进入选点页面！");
-            new Thread(() -> {
-                try {
-                    Thread.sleep(2000);
-                    startActivity(new Intent(CutLineActivity.this, CutLineChooseLocationActivity.class));
-                    finish();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+//        if (isShown) {
+//            ToastUtils.showShortToast("接收到选点命令，即将进入选点页面！");
+//            new Thread(() -> {
+//                try {
+//                    Thread.sleep(2000);
+//                    startActivity(new Intent(CutLineActivity.this, CutLineChooseLocationActivity.class));
+//                    finish();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }).start();
+//        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCameraLocationMsg(ChooseCameraLocationMsg msg) {
+        if (isShown){
+            String code = msg.getCode();
+            mPresenter.jugCameraLocationType(code);
         }
+
+    }
+
+
+    public void jumpChooseActivity(int camera, int location) {
+        Intent intent = new Intent(CutLineActivity.this, ChooseActivity.class);
+        intent.putExtra("activity",3);
+        if (camera == 1) {
+            intent.putExtra("tag", 1);
+            if (location == 1) {
+                intent.putExtra("location", 1);
+            } else {
+                intent.putExtra("location", 2);
+            }
+            ToastUtils.showShortToast("接收到选点命令，即将进入USB1选点页面！");
+
+        } else {
+            intent.putExtra("tag", 2);
+            if (location == 1) {
+                intent.putExtra("location", 1);
+            } else {
+                intent.putExtra("location", 2);
+            }
+            ToastUtils.showShortToast("接收到选点命令，即将进入USB2选点页面！");
+
+        }
+        new Thread(() -> {
+            try {
+                Thread.sleep(1500);
+                startActivity(intent);
+                finish();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }
