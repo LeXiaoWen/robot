@@ -52,9 +52,10 @@
                 android:exported="true"/>
 
         <activity
-                android:name=".ui.choose.ChooseActivity"
+                android:name=".ui.launcher.LauncherActivity"
                 android:launchMode="singleTask"
                 android:screenOrientation="landscape"
+                android:theme="@style/AppStartTheme"
                 >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -110,7 +111,7 @@
                 android:name=".ui.cut_line.choose.CutLineChooseLocationActivity"
                 android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
-        <activity android:name=".ui.launcher.LauncherActivity"
+        <activity android:name=".ui.choose.ChooseActivity"
                   android:launchMode="singleTask"
                   android:screenOrientation="landscape"/>
     </application>

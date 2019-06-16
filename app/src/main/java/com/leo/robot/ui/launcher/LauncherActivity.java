@@ -20,6 +20,7 @@ import cree.mvp.util.permissions.PermissionsUtils;
 import cree.mvp.util.permissions.rx.PerAction1;
 import cree.mvp.util.permissions.rx.PerActionError;
 import cree.mvp.util.ui.ToastUtils;
+import io.netty.channel.Channel;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import rx.Observable;
@@ -50,7 +51,7 @@ public class LauncherActivity extends AppCompatActivity {
 //        initMasterNetty();
         //视觉服务器
 //        initVisionNetty();
-//        initService();
+        initService();
         initPermisson();
     }
 
@@ -73,6 +74,11 @@ public class LauncherActivity extends AppCompatActivity {
                 } else {
                     ResultUtils.onConnectErro(RobotInit.VISION_NETTY);
                 }
+            }
+
+            @Override
+            public void onServiceHeart(Channel channel) {
+
             }
         });
 
@@ -110,6 +116,11 @@ public class LauncherActivity extends AppCompatActivity {
                         client.connect(UrlConstant.MASTER_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
                     }).start();
                 }
+            }
+
+            @Override
+            public void onServiceHeart(Channel channel) {
+
             }
         });
 

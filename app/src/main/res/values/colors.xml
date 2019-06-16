@@ -9,7 +9,7 @@
     <color name="color_status_normal">#BFBFBF</color>
     <color name="color_status_wake_up">#ECAD3C</color>
 
-    <color name="setting_text_normal">#493E39</color>
+    <color name="setting_text_normal">#ffffff</color>
     <color name="setting_text_clicked">#ECAD3C</color>
 
 </resources>
