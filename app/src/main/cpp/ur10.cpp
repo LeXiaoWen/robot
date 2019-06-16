@@ -12,6 +12,7 @@ string UR10::GetDataPort29999(string str)
 {
     str_29999=str;
 }
+
 void UR10::GetDataPort30003()
 {
     uint8_t tmp[18][8]={0};

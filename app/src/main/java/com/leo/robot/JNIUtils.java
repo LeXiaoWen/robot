@@ -133,5 +133,79 @@ public class JNIUtils {
     public native String doubleToString4(double num);
 
 
+    /**
+     * 获取29999端口字符串数据
+     *
+     * @author Leo
+     * created at 2019/6/13 10:41 PM
+     */
+    public native void GetDataPort29999(String s,String name);
+
+    /**
+     * 获取30003端口16进制数据
+     *
+     * @author Leo
+     * created at 2019/6/13 10:53 PM
+     */
+    public native void GetDataPort30003(String s, String name);
+
+    /**
+     * 末端位移控制
+     *
+     * @author Leo
+     * created at 2019/6/13 10:54 PM
+     */
+    public native String ActionMove(String s,String name);
+
+    /**
+     * 末端位姿控制
+     *
+     * @author Leo
+     * created at 2019/6/13 10:55 PM
+     */
+    public native String ActionPose(String s,String name);
+
+    /**
+     * 关节控制
+     *
+     * @author Leo
+     * created at 2019/6/13 10:56 PM
+     */
+    public native String ActionJoint(String s,String name);
+
+    /**
+     * Dash命令
+     *
+     * @author Leo
+     * created at 2019/6/13 10:56 PM
+     */
+    public native String ActionDash(String s,String name);
+
+    /**
+     * 动作停止命令
+     *
+     * @author Leo
+     * created at 2019/6/13 10:56 PM
+     */
+    public native String ActionStopJ(String name);
+
+
+
+    /**
+     * 设置机械臂移动速度
+     *
+     * @author Leo
+     * created at 2019/6/13 11:01 PM
+     */
+    public native void SetMoveSpeed(float v,String name);
+    /**
+     * 设置机械臂运动加速度
+     *
+     *@author Leo
+     *created at 2019/6/13 11:02 PM
+     */
+    public native void SetMoveAcc(float v,String name);
+
+
 
 }

@@ -3,6 +3,8 @@
 #include <string>
 #include "ur10.h"
 #include "ur10.cpp"
+#include "ur.h"
+#include "ur.cpp"
 
 /* Header for class com_leo_robot_JNIUtils */
 
@@ -12,6 +14,7 @@
 extern "C" {
 #endif
 UR10 ur10;
+UR ur;
 std::string jstring2str(JNIEnv *env, jstring jstr);
 /*
  * Class:     com_leo_robot_JNIUtils
@@ -109,6 +112,16 @@ Java_com_leo_robot_JNIUtils_ActionStopJ(JNIEnv *env, jobject instance) {
 
     return env->NewStringUTF(str.c_str());
 }
+//extern "C"
+//JNIEXPORT jdouble JNICALL
+//Java_com_leo_robot_JNIUtils_HexToDouble(JNIEnv *env, jobject instance, jcharArray chars_) {
+//    unsigned char *a = (unsigned char*)env->GetCharArrayElements(chars_, NULL);
+//    // TODO
+//    double s = ur10.HexToDouble(a);
+////    env->ReleaseCharArrayElements(chars_, chars, 0);
+//    return s;
+//}
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_leo_robot_JNIUtils_SetMoveSpeed(JNIEnv *env, jobject instance, jfloat v) {
@@ -158,15 +171,142 @@ std::string jstring2str(JNIEnv *env, jstring jstr) {
     return stemp;
 }
 
-extern "C"
-JNIEXPORT jdouble JNICALL
-Java_com_leo_robot_JNIUtils_HexToDouble(JNIEnv *env, jobject instance, jbyteArray chars_) {
-    unsigned char *chars = (unsigned char*)env->GetByteArrayElements(chars_, 0);
+//extern "C"
+//JNIEXPORT jdouble JNICALL
+//Java_com_leo_robot_JNIUtils_HexToDouble(JNIEnv *env, jobject instance, jbyteArray chars_) {
+//    unsigned char *chars = (unsigned char*)env->GetByteArrayElements(chars_, 0);
+//
+//
+//    // TODO
+////    ur10.HexToDouble(chars);
+//
+////    env->ReleaseByteArrayElements(chars_, chars, 0);
+//    return ur10.HexToDouble(chars);
+//}
 
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_leo_robot_JNIUtils_GetDataPort29999__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
+                                                                                     jstring s_, jstring name_) {
+    const char *s = env->GetStringUTFChars(s_, 0);
+    const char *name = env->GetStringUTFChars(name_, 0);
+
+
+    std::string str = jstring2str(env, s_);
+    std::string str1 = jstring2str(env, name_);
+    // TODO
+    ur.GetDataPort29999(str,str1);
+
+    env->ReleaseStringUTFChars(s_, s);
+    env->ReleaseStringUTFChars(name_, name);
+}extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_ActionMove__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
+                                                                               jstring s_, jstring name_) {
+    const char *s = env->GetStringUTFChars(s_, 0);
+    const char *name = env->GetStringUTFChars(name_, 0);
 
     // TODO
-//    ur10.HexToDouble(chars);
+    std::string str = jstring2str(env, s_);
+    std::string str1 = jstring2str(env, name_);
 
-//    env->ReleaseByteArrayElements(chars_, chars, 0);
-    return ur10.HexToDouble(chars);
+    std::string str2 =   ur.ActionMove(str,str1);
+    env->ReleaseStringUTFChars(s_, s);
+    env->ReleaseStringUTFChars(name_, name);
+
+    return env->NewStringUTF(str2.c_str());
+}extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_ActionPose__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
+                                                                               jstring s_, jstring name_) {
+    const char *s = env->GetStringUTFChars(s_, 0);
+    const char *name = env->GetStringUTFChars(name_, 0);
+
+    // TODO
+    std::string str = jstring2str(env, s_);
+    std::string str1 = jstring2str(env, name_);
+
+    std::string str2 =   ur.ActionPose(str,str1);
+    env->ReleaseStringUTFChars(s_, s);
+    env->ReleaseStringUTFChars(name_, name);
+
+    return env->NewStringUTF(str2.c_str());
+}extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_ActionJoint__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
+                                                                                jstring s_, jstring name_) {
+    const char *s = env->GetStringUTFChars(s_, 0);
+    const char *name = env->GetStringUTFChars(name_, 0);
+
+    // TODO
+    std::string str = jstring2str(env, s_);
+    std::string str1 = jstring2str(env, name_);
+
+    std::string str2 =   ur.ActionJoint(str,str1);
+    env->ReleaseStringUTFChars(s_, s);
+    env->ReleaseStringUTFChars(name_, name);
+
+    return env->NewStringUTF(str2.c_str());
+}extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_ActionDash__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
+                                                                               jstring s_, jstring name_) {
+    const char *s = env->GetStringUTFChars(s_, 0);
+    const char *name = env->GetStringUTFChars(name_, 0);
+
+    // TODO
+    std::string str = jstring2str(env, s_);
+    std::string str1 = jstring2str(env, name_);
+
+    std::string str2 =   ur.ActionDash(str,str1);
+
+    env->ReleaseStringUTFChars(s_, s);
+    env->ReleaseStringUTFChars(name_, name);
+
+    return env->NewStringUTF(str2.c_str());
+}extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_ActionStopJ__Ljava_lang_String_2(JNIEnv *env, jobject instance, jstring name_) {
+    const char *name = env->GetStringUTFChars(name_, 0);
+
+    // TODO
+    std::string na = jstring2str(env, name_);
+    std::string str = ur.ActionStopJ(na);
+
+    env->ReleaseStringUTFChars(name_, name);
+
+    return env->NewStringUTF(str.c_str());
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_leo_robot_JNIUtils_SetMoveSpeed__FLjava_lang_String_2(JNIEnv *env, jobject instance, jfloat v, jstring name_) {
+    const char *name = env->GetStringUTFChars(name_, 0);
+
+    // TODO
+    std::string na = jstring2str(env, name_);
+    ur.SetMoveSpeed(v,na);
+    env->ReleaseStringUTFChars(name_, name);
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_leo_robot_JNIUtils_SetMoveAcc__FLjava_lang_String_2(JNIEnv *env, jobject instance, jfloat v, jstring name_) {
+    const char *name = env->GetStringUTFChars(name_, 0);
+
+    // TODO
+    std::string na = jstring2str(env, name_);
+    ur.SetMoveAcc(v,na);
+    env->ReleaseStringUTFChars(name_, name);
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_leo_robot_JNIUtils_GetDataPort30003__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
+                                                                                     jstring s_, jstring name_) {
+    const char *s = env->GetStringUTFChars(s_, 0);
+    const char *name = env->GetStringUTFChars(name_, 0);
+
+    // TODO
+    std::string str = jstring2str(env, s_);
+    std::string str1 = jstring2str(env, name_);
+    ur.GetDataPort30003(str,str1);
+
+//    env->ReleaseStringUTFChars(s_, s);
+//    env->ReleaseStringUTFChars(name_, name);
 }
