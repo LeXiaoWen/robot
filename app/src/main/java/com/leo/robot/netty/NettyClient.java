@@ -165,18 +165,29 @@ public class NettyClient {
             return;
         }
 //        final String s = gson.toJson(bean);
-        channel.writeAndFlush(s).addListener(new FutureListener() {
-
+        new Thread(new Runnable() {
             @Override
-            public void success() {
-                Log.e(TAG, "发送成功--->" + s);
-            }
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                    channel.writeAndFlush(s).addListener(new FutureListener() {
 
-            @Override
-            public void error() {
-                Log.e(TAG, "发送失败--->" + s);
+                        @Override
+                        public void success() {
+                            Log.e(TAG, "发送成功--->" + s);
+                        }
+
+                        @Override
+                        public void error() {
+                            Log.e(TAG, "发送失败--->" + s);
+                        }
+                    });
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        }).start();
+
     }
 
     /**
