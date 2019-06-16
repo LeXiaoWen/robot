@@ -5,6 +5,7 @@ import com.leo.robot.bean.*;
 import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
+import com.leo.robot.netty.arm.ArmBean;
 import cree.mvp.util.bus.BusUtils;
 import cree.mvp.util.data.SPUtils;
 
@@ -549,6 +550,43 @@ public class ResultUtils {
             masterControlpushMsg(msg);
         } else if (RobotInit.VISION_NETTY.equals(type)) {//视觉服务器消息
             onVisionMsg(msg);
+        } else if (RobotInit.MAIN_ARM_NETTY.equals(type)){//主臂
+            onMainArm(msg);
+        }else if (RobotInit.FLOW_ARM_NETTY.equals(type)){//从臂
+            onFlowArm(msg);
+        }
+    }
+
+    /**
+    * 从臂数据
+    *
+    *@author Leo
+    *created at 2019/6/14 9:21 PM
+    */
+    private static void onFlowArm(String msg) {
+        if (msg.length()>1000) {//30003端口数据
+
+        }else {//29999端口数据
+
+        }
+    }
+
+    /**
+    * 主臂数据
+    *
+    *@author Leo
+    *created at 2019/6/14 9:21 PM
+    */
+    private static void onMainArm(String msg) {
+            ArmBean armBean = new ArmBean();
+        if (msg.length()>1000) {//30003端口数据
+            armBean.setCode("0");
+            armBean.setMsg(msg);
+            BusUtils.postMessage(armBean);
+        }else {//29999端口数据
+            armBean.setCode("1");
+            armBean.setMsg(msg);
+            BusUtils.postMessage(armBean);
         }
     }
 
