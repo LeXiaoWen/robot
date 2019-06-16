@@ -13,6 +13,8 @@ public interface RobotInit {
     String CUT_LINE_ACTIVITY = "cutLine";
     String MASTER_CONTROL_NETTY = "MASTER_CONTROL_NETTY";
     String VISION_NETTY = "VISION";
+    String MAIN_ARM_NETTY = "MAIN_ARM_NETTY";
+    String FLOW_ARM_NETTY = "FLOW_ARM_NETTY";
 
     //------------------------ 剥线 start --------------------------
     /**
@@ -155,7 +157,7 @@ public interface RobotInit {
      * 钳口复位
      */
     String CUT_RESET = "CUT_RESET";
-    String CUT_NOT_RESET= "CUT_NOT_RESET";
+    String CUT_NOT_RESET = "CUT_NOT_RESET";
     /**
      * 结束
      */
@@ -164,5 +166,19 @@ public interface RobotInit {
 
 
     //------------------------ 剪线界面 end --------------------------
+
+
+    String ACTION_J0_1 = "ACTION_J0_1";
+    String ACTION_J0_2 = "ACTION_J0_2";
+    String ACTION_J1_1 = "ACTION_J1_1";
+    String ACTION_J1_2 = "ACTION_J1_2";
+    String ACTION_J2_1 = "ACTION_J2_1";
+    String ACTION_J2_2 = "ACTION_J2_2";
+    String ACTION_J3_1 = "ACTION_J3_1";
+    String ACTION_J3_2 = "ACTION_J3_2";
+    String ACTION_J4_1 = "ACTION_J4_1";
+    String ACTION_J4_2 = "ACTION_J4_2";
+    String ACTION_J5_1 = "ACTION_J5_1";
+    String ACTION_J5_2 = "ACTION_J5_2";
 
 }
