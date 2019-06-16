@@ -1,17 +1,15 @@
 package com.leo.robot.netty;
 
 import android.util.Log;
-
 import com.google.gson.Gson;
-
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.GenericFutureListener;
 import io.netty.util.concurrent.ScheduledFuture;
+
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -35,7 +33,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         NettyClient.getInstance().setConnectStatus(true);
         listener.onServiceStatusConnectChanged(NettyListener.STATUS_CONNECT_SUCCESS);
-//        ping(ctx.channel());
+        listener.onServiceHeart(ctx.channel());
     }
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
@@ -72,7 +70,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
                     throw new RuntimeException();
                 }
             }
-        }, second, TimeUnit.SECONDS);
+        }, 500, TimeUnit.MILLISECONDS);
 
         future.addListener((GenericFutureListener) future1 -> {
             if (future1.isSuccess()) {

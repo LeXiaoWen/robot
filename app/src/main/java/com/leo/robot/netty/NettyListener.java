@@ -1,6 +1,7 @@
 package com.leo.robot.netty;
 
 
+import io.netty.channel.Channel;
 
 /**
 * netty 状态
@@ -27,4 +28,10 @@ public interface NettyListener {
      * 当服务状态发生变化时触发
      */
     void onServiceStatusConnectChanged(int statusCode);
+
+    /**
+     * 发送心跳
+     * @param channel
+     */
+    void onServiceHeart(Channel channel);
 }

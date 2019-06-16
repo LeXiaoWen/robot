@@ -1,6 +1,5 @@
 package com.leo.robot.netty;
 
-import android.util.Log;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -20,24 +19,36 @@ public class MyDecoder extends ByteToMessageDecoder {
         byte[] b = new byte[buffer.readableBytes()];
 //复制内容到字节数组b
         buffer.readBytes(b);
-//字节数组转字符串
 
-//        String s = ConvertCode.receiveHexToString(b);
-        String str = new String(b);
-        Log.e(TAG, "decode: " + str);
-        System.out.println(str);
-
-        out.add(str);
-    }
-
-
-    public static String toHexString1(byte b) {
-        String s = Integer.toHexString(b & 0xFF);
-        if (s.length() == 1) {
-            return "0" + s;
-        } else {
-            return s;
+        //字节数组转字符串
+        if (b.length>1000){
+            String str = bytesToHexString(b);
+            out.add(str);
+        }else {
+            String str = new String(b);
+            out.add(str);
         }
+
     }
+
+
+    public String bytesToHexString(byte[] bArr) {
+        StringBuffer sb = new StringBuffer(bArr.length);
+        String sTmp;
+
+        for (int i = 0; i < bArr.length; i++) {
+            sTmp = Integer.toHexString(0xFF & bArr[i]);
+            if (sTmp.length() < 2)
+                sb.append(0);
+            sb.append(sTmp.toUpperCase());
+        }
+
+        return sb.toString();
+    }
+
+
+
+
+
 
 }

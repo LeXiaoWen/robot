@@ -28,6 +28,7 @@ import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.ResultUtils;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.ui.ToastUtils;
+import io.netty.channel.Channel;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -280,6 +281,11 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
                     }).start();
                 }
             }
+
+            @Override
+            public void onServiceHeart(Channel channel) {
+
+            }
         });
 
         if (!client.getConnectStatus()) {
@@ -323,6 +329,11 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
                         client.connect(UrlConstant.VISION_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
                     }).start();
                 }
+            }
+
+            @Override
+            public void onServiceHeart(Channel channel) {
+
             }
         });
 
