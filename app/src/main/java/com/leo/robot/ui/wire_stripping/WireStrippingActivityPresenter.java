@@ -9,8 +9,8 @@ import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
+import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
-import com.leo.robot.ui.wire_stripping.choose.WireStrippingChooseLocationActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
@@ -205,7 +205,9 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 
 
     public void identificationButton() {
-        mActivity.startActivity(new Intent(mActivity, WireStrippingChooseLocationActivity.class));
+        Intent intent = new Intent(mActivity, ChooseActivity.class);
+        intent.putExtra("activity",1);
+        mActivity.startActivity(intent);
         mActivity.finish();
     }
 
@@ -255,7 +257,6 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 
         }else if (code.equals(PushMsgCode.CAMERA2_CHOOSE_LOCATION2)){//usb2相机选择点2
             mActivity.jumpChooseActivity(2,2);
-
         }
     }
 

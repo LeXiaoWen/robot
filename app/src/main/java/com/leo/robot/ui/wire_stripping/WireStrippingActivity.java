@@ -21,8 +21,8 @@ import com.leo.robot.bean.*;
 import com.leo.robot.constant.Constants;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
-import com.leo.robot.ui.wire_stripping.choose.WireStrippingChooseLocationActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.DateUtils;
 import com.leo.robot.view.CustomPopWindow;
@@ -131,6 +131,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     LinearLayout mLlStatus;
     @BindView(R.id.btn_jump)
     Button mBtnJump;
+    @BindView(R.id.btn_jump2)
+    Button mBtnJump2;
 
 
     private boolean isPause;
@@ -371,11 +373,15 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     @Override
     protected void onDestroy() {
-        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
-            webViewOnDestroy();
-        }
+//        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+//            webViewOnDestroy();
+//        }
         super.onDestroy();
 //        mUnityPlayer.quit();
+        mAgentWebMain = null;
+        mAgentWeb2 = null;
+        mAgentWeb3 = null;
+        mAgentWeb4 = null;
         LogUtils.e("剥线界面：   onDestroy ");
     }
 
@@ -722,7 +728,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     }
 
     public void jumpChooseActivity(int camera, int location) {
-        Intent intent = new Intent(WireStrippingActivity.this, WireStrippingChooseLocationActivity.class);
+        Intent intent = new Intent(WireStrippingActivity.this, ChooseActivity.class);
+        intent.putExtra("activity", 1);
         if (camera == 1) {
             intent.putExtra("tag", 1);
             if (location == 1) {
