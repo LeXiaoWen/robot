@@ -127,6 +127,16 @@ public class CutLineChooseLocationActivity extends NettyActivity<CutLineChooseLo
         }
     }
 
+    @Override
+    protected void notifyMasterData(int status, String message) {
+
+    }
+
+    @Override
+    protected void notifyVisionData(int status, String message) {
+
+    }
+
 
     private void initSocketStatus() {
         SPUtils socket = new SPUtils("socket");

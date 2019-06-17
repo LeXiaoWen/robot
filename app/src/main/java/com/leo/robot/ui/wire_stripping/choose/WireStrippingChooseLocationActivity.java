@@ -220,6 +220,16 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
     }
 
     @Override
+    protected void notifyMasterData(int status, String message) {
+
+    }
+
+    @Override
+    protected void notifyVisionData(int status, String message) {
+
+    }
+
+    @Override
     protected void bindingDagger2(@Nullable Bundle bundle) {
         DaggerWireStrippingChooseLocationActivityComponent.create().inject(this);
     }
@@ -620,7 +630,7 @@ public class WireStrippingChooseLocationActivity extends NettyActivity<WireStrip
                 break;
             case R.id.btn_confirm_slide_table:
                 if (mMasterClient != null) {
-                    mMasterClient.sendMsgTest(CommandUtils.confirmSlideTable());
+//                    mMasterClient.sendMsgTest(CommandUtils.confirmSlideTable());
                 }
                 break;
             case R.id.btn_reset:

@@ -71,6 +71,16 @@ public class ControllerActivity extends NettyActivity<ControllerActivityPresente
     }
 
     @Override
+    protected void notifyMasterData(int status, String message) {
+
+    }
+
+    @Override
+    protected void notifyVisionData(int status, String message) {
+
+    }
+
+    @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
             /**

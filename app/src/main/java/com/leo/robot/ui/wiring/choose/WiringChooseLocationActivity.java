@@ -144,6 +144,16 @@ public class WiringChooseLocationActivity extends NettyActivity<WiringChooseLoca
     }
 
     @Override
+    protected void notifyMasterData(int status, String message) {
+
+    }
+
+    @Override
+    protected void notifyVisionData(int status, String message) {
+
+    }
+
+    @Override
     protected void bindingDagger2(@Nullable Bundle bundle) {
         DaggerWiringChooseLocationActivityComponent.create().inject(this);
     }

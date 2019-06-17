@@ -36,6 +36,16 @@ public class CleaningActivity extends NettyActivity<CleaningActivityPresenter> {
     }
 
     @Override
+    protected void notifyMasterData(int status, String message) {
+
+    }
+
+    @Override
+    protected void notifyVisionData(int status, String message) {
+
+    }
+
+    @Override
     protected void bindingDagger2(@Nullable Bundle bundle) {
         DaggerCleaningActivityComponent.create().inject(this);
     }

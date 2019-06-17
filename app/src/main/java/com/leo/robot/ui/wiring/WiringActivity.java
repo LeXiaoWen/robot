@@ -181,6 +181,16 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     }
 
     @Override
+    protected void notifyMasterData(int status, String message) {
+
+    }
+
+    @Override
+    protected void notifyVisionData(int status, String message) {
+
+    }
+
+    @Override
     protected void bindingDagger2(@Nullable Bundle bundle) {
         DaggerWiringActivityComponent.create().inject(this);
     }

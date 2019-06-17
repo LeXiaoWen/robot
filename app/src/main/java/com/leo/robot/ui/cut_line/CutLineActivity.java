@@ -158,6 +158,16 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     }
 
     @Override
+    protected void notifyMasterData(int status, String message) {
+
+    }
+
+    @Override
+    protected void notifyVisionData(int status, String message) {
+
+    }
+
+    @Override
     protected void bindingDagger2(@Nullable Bundle bundle) {
         DaggerCutLineActivityComponent.create().inject(this);
     }

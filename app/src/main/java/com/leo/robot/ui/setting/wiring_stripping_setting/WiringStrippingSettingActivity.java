@@ -73,6 +73,16 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
     }
 
     @Override
+    protected void notifyMasterData(int status, String message) {
+
+    }
+
+    @Override
+    protected void notifyVisionData(int status, String message) {
+
+    }
+
+    @Override
     protected void bindingDagger2(@Nullable Bundle bundle) {
         DaggerWiringStrippingSettingActivityComponent.create().inject(this);
     }
