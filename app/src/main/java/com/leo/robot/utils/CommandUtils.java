@@ -1502,15 +1502,30 @@ public class CommandUtils {
     }
 
     /**
-     * 确认滑台位置
+     * 确认垂直滑台位置
      *
      * @author Leo
      * created at 2019/5/29 10:18 PM
      */
-    public static String confirmSlideTable() {
+    public static String confirmVerticalSlideTable() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x0C;
-        msg[2] = (byte) 0x05;
+        msg[1] = (byte) 0x05;
+        msg[2] = (byte) 0x07;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+    * 确认水平滑台位置
+    *
+    *@author Leo
+    *created at 2019/6/17 8:16 PM
+    */
+    public static String confirmLandSlideTable() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x04;
+        msg[2] = (byte) 0x07;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
@@ -1580,6 +1595,20 @@ public class CommandUtils {
     }
 
 
+    /**
+     * 主控服务器心跳
+     *
+     * @author Leo
+     * created at 2019/6/17 7:53 PM
+     */
+    public static String masterNettyHeart() {
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x0C;
+        msg[2] = (byte) 0x04;
+        msg[3] = (byte) 0x01;
+        msg[4] = (byte) 0x00;
+        return ConvertCode.bytes2HexString(msg);
+    }
 
 
     /**
