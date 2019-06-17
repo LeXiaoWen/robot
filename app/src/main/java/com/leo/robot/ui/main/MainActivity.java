@@ -74,6 +74,12 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     EditText mEtPort1;
     @BindView(R.id.btn_connect1)
     Button mBtnConnect1;
+    @BindView(R.id.tv_type1)
+    TextView mTvType1;
+    @BindView(R.id.spin_kit1)
+    SpinKitView mSpinKit1;
+    @BindView(R.id.ll_status1)
+    LinearLayout mLlStatus1;
     private boolean isShown = false;
     private boolean isFirst = false;
 
@@ -103,14 +109,24 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
      * created at 2019/5/24 11:30 PM
      */
     private void initSocketStatus() {
-        SPUtils socket = new SPUtils("socket");
+        SPUtils socket = new SPUtils("masterSocket");
         boolean status = socket.getBoolean("status");
+        SPUtils socket1 = new SPUtils("visionSocket");
+        boolean status1 = socket1.getBoolean("status");
         if (status) {
             mTvType.setText("与主控服务器连接成功");
             mSpinKit.setVisibility(View.GONE);
         } else {
             mTvType.setText("与主控服务器断开连接，正在重连");
             mSpinKit.setVisibility(View.VISIBLE);
+        }
+
+        if (status1){
+            mTvType1.setText("与视觉服务器连接成功");
+            mSpinKit1.setVisibility(View.GONE);
+        }else {
+            mTvType1.setText("与视觉服务器断开连接，正在重连");
+            mSpinKit1.setVisibility(View.VISIBLE);
         }
     }
 
@@ -124,6 +140,26 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         } else {//已连接
             mSpinKit.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void notifyMasterData(int status, String message) {
+
+    }
+
+    @Override
+    protected void notifyVisionData(int status, String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTvType1.setText(message);
+                if (status == 0) {
+                    mSpinKit1.setVisibility(View.VISIBLE);
+                } else {
+                    mSpinKit1.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
 
@@ -206,7 +242,7 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     }
 
 
-    @OnClick({R.id.ibtn_wire_stripping, R.id.ibtn_wirin, R.id.ibtn_cut_line, R.id.ibtn_cleaning, R.id.btn_connect,R.id.btn_connect1})
+    @OnClick({R.id.ibtn_wire_stripping, R.id.ibtn_wirin, R.id.ibtn_cut_line, R.id.ibtn_cleaning, R.id.btn_connect, R.id.btn_connect1})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ibtn_wire_stripping:
@@ -299,13 +335,13 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     /**
      * 视觉服务器
      */
-    private void initVisionNetty(String ip,int port) {
+    private void initVisionNetty(String ip, int port) {
         NettyClient client = new NettyClient();
         NettyManager.getInstance().addNettyClient(RobotInit.VISION_NETTY, client);
         client.setListener(new NettyListener() {
             @Override
             public void onMessageResponse(String msg) {
-                ResultUtils.onResultByType(msg,RobotInit.VISION_NETTY);
+                ResultUtils.onResultByType(msg, RobotInit.VISION_NETTY);
             }
 
             @Override
@@ -318,10 +354,10 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
 //                    if (client != null) {
 //                        client.sendMsgTest(s);
 //                    }
-                }  else if (statusCode == NettyListener.STATUS_CONNECT_ERROR){//通信异常
+                } else if (statusCode == NettyListener.STATUS_CONNECT_ERROR) {//通信异常
 //                    notifyData(1,"与视觉控服务器连接异常，正在重连");
                     ResultUtils.onConnectErro(RobotInit.VISION_NETTY);
-                }else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED){//服务器主动断开
+                } else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED) {//服务器主动断开
 //                    notifyData(1,"视觉控服务器断开连接，正在重连");
 
                     client.setConnectStatus(false);
