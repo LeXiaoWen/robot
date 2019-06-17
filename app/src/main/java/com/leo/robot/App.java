@@ -25,6 +25,9 @@ public class App extends BaseApplication {
         new SPUtils(RobotInit.WIRE_STRIPPING_ACTIVITY).clear();
         new SPUtils(RobotInit.WIRING_ACTIVITY).clear();
         new SPUtils(RobotInit.CUT_LINE_ACTIVITY).clear();
+
+       new SPUtils("masterSocket").clear();
+       new SPUtils("visionSocket").clear();
     }
 
     @Override
