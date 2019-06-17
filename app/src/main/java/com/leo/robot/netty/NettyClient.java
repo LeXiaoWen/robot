@@ -169,7 +169,7 @@ public class NettyClient {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(100);
                     channel.writeAndFlush(s).addListener(new FutureListener() {
 
                         @Override

@@ -1,5 +1,6 @@
 package com.leo.robot.netty;
 
+import com.leo.robot.utils.CommandUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
@@ -11,7 +12,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 
 
 public class ClientIdleStateTrigger extends ChannelInboundHandlerAdapter {
-    public static final String HEART_BEAT = "heart beat!";
+    public static final String HEART_BEAT = CommandUtils.masterNettyHeart();
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
