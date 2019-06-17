@@ -227,4 +227,15 @@ public class ByteUtils {
                 (b[2] & 0xFF) << 16 |
                 (b[3] & 0xFF) << 24;
     }
+
+    /**
+    * 解析行线、引流线、滑台数据
+    *
+    *@author Leo
+    *created at 2019/6/17 10:19 PM
+    */
+    public static int strToInt(String s){
+        byte[] bytes = hex2byte(s);
+        return byteArrayToInt(bytes);
+    }
 }
