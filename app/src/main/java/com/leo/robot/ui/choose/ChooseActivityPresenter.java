@@ -117,34 +117,14 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
         switch (videoTag) {
             case 0://水平滑台
                 if (mMasterClient != null) {
-//                    new Thread(() -> {
-//                        try {
-//                            Thread.sleep(100);
-//                            mMasterClient.sendMsgTest(CommandUtils.landSlideTableStopMove());
-//                            mMasterClient.sendMsgTest(CommandUtils.getLandSlideTable());
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }).start();
                     mMasterClient.sendMsgTest(CommandUtils.landSlideTableStopMove());
                     mMasterClient.sendMsgTest(CommandUtils.getLandSlideTable());
                 }
                 break;
             case 1://垂直滑台
                 if (mMasterClient != null) {
-//                    new Thread(() -> {
-//                        try {
-//                            Thread.sleep(100);
-//                            mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableStopMove());
-//                            mMasterClient.sendMsgTest(CommandUtils.getVerticalSlideTable());
-//
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }).start();
                     mMasterClient.sendMsgTest(CommandUtils.verticalSlideTableStopMove());
                     mMasterClient.sendMsgTest(CommandUtils.getVerticalSlideTable());
-
                 }
                 break;
         }
@@ -233,6 +213,7 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
                             s.append(landSlideTabLocation);
                             s.append("FF");
                             mVisionClient.sendMsgTest(s.toString());
+                            mActivity.showMsg("请选择行线画面第二个点位");
                             break;
                         case 1://引流线
                             s = new StringBuilder();
@@ -241,6 +222,7 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
                             s.append(verticalSlideTabLocation);
                             s.append("FF");
                             mVisionClient.sendMsgTest(s.toString());
+                            mActivity.showMsg("请选择引流线画面第二个点位");
                             break;
                     }
 
@@ -254,6 +236,7 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
                             s.append(landSlideTabLocation);
                             s.append("FF");
                             mVisionClient.sendMsgTest(s.toString());
+                            mActivity.showMsg("请选择行线画面选点完成");
                             break;
                         case 1:
                             s = new StringBuilder();
@@ -262,6 +245,7 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
                             s.append(verticalSlideTabLocation);
                             s.append("FF");
                             mVisionClient.sendMsgTest(s.toString());
+                            mActivity.showMsg("请选择引流线画面选点完成");
                             break;
                     }
 
@@ -281,9 +265,16 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
     }
 
 
-    public void confirmLocation() {
+    public void confirmLocation(int videoTag) {
         if (mMasterClient!=null){
-            mMasterClient.sendMsgTest(CommandUtils.confirmSlideTable());
+            switch (videoTag){
+                case 0:
+                    mMasterClient.sendMsgTest(CommandUtils.confirmLandSlideTable());
+                    break;
+                case 1:
+                    mMasterClient.sendMsgTest(CommandUtils.confirmVerticalSlideTable());
+                    break;
+            }
         }
     }
 }
