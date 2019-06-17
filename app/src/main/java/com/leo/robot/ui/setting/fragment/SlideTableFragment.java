@@ -14,11 +14,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
+import com.leo.robot.bean.LineLocationMsg;
+import com.leo.robot.bean.LocationMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
+import com.leo.robot.utils.ByteUtils;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * 滑台控制
@@ -345,6 +350,51 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
             case 4:
                 tvVideo.setText("从臂画面");
                 break;
+        }
+    }
+
+    /**
+     * 主控服务器回复滑台位置
+     *
+     * @author Leo
+     * created at 2019/5/30 10:09 PM
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLocationMsg(LocationMsg msg) {
+        if (msg.getMsg() != null && msg.getMsg().length() > 5) {
+            String s = msg.getMsg().substring(8, 16);
+            if ("0".equals(msg.getCode())) {//垂直滑台
+                int verticalTable = ByteUtils.strToInt(s);
+                tvTable2.setText(String.valueOf(verticalTable));
+
+            } else if ("1".equals(msg.getCode())) {//水平滑台
+                int landTable = ByteUtils.strToInt(s);
+                tvTable1.setText(String.valueOf(landTable));
+            }
+//            ToastUtils.showShortToast("成功获取滑台位置");
+
+        }
+    }
+
+    /**
+     * 主控服务器行线、引流线位置
+     *
+     * @author Leo
+     * created at 2019/5/30 10:09 PM
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLineLocationMsg(LineLocationMsg msg) {
+
+        if (msg.getCode() != null && msg.getCode().length() > 8) {
+            String s = msg.getCode().substring(8, 24);
+            String line1 = s.substring(0, 8);
+            String line2 = s.substring(8, 16);
+
+            int lineValue1 = ByteUtils.strToInt(line1);
+            int lineValue2 = ByteUtils.strToInt(line2);
+            tvLine1.setText(String.valueOf(lineValue1));
+            tvLine2.setText(String.valueOf(lineValue2));
+
         }
     }
 }
