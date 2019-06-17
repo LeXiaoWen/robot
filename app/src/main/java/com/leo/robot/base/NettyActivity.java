@@ -28,8 +28,17 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
     public final static int MSG_NET_WORK_ERROR = 0x2;
     protected String TAG;
     protected MHandler handler;
+    protected MasterHandler masterHandler;
+    protected VisionHandler visionHandler;
     private BatteryReceiver mReceiver;
 
+    public MasterHandler getMasterHandler() {
+        return masterHandler;
+    }
+
+    public VisionHandler getVisionHandler() {
+        return visionHandler;
+    }
 
     private boolean mReceiverTag = false; //广播接受者标识位
 
@@ -47,6 +56,8 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
         super.onCreate(savedInstanceState);
         ActivityManager.getInstance().addActivity(this);
         handler = new MHandler(this);
+        masterHandler = new MasterHandler(this);
+        visionHandler = new VisionHandler(this);
         TAG = this.getClass().getName();
     }
 
@@ -78,17 +89,55 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
             super.handleMessage(msg);
             if (activity == null || activity.get() == null) return;
             final NettyActivity nettyActivity = activity.get();
-//            switch (msg.what) {
-//                case 0:
-//                    nettyActivity.notifyData((String) msg.obj);
-//                    break;
-//            }
-            if (msg.what == 0){
+            if (msg.what == 0) {
                 new SPUtils(RobotInit.WIRE_STRIPPING_ACTIVITY).clear();
                 new SPUtils(RobotInit.WIRING_ACTIVITY).clear();
                 new SPUtils(RobotInit.CUT_LINE_ACTIVITY).clear();
             }
-            nettyActivity.notifyData(msg.what,(String) msg.obj);
+            nettyActivity.notifyData(msg.what, (String) msg.obj);
+
+        }
+    }
+
+    public static class MasterHandler extends Handler {
+        private WeakReference<NettyActivity> activity;
+
+        public MasterHandler(NettyActivity activity) {
+            this.activity = new WeakReference<NettyActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (activity == null || activity.get() == null) return;
+            final NettyActivity nettyActivity = activity.get();
+            if (msg.what == 0) {
+                new SPUtils(RobotInit.WIRE_STRIPPING_ACTIVITY).clear();
+                new SPUtils(RobotInit.WIRING_ACTIVITY).clear();
+                new SPUtils(RobotInit.CUT_LINE_ACTIVITY).clear();
+            }
+            nettyActivity.notifyMasterData(msg.what, (String) msg.obj);
+        }
+    }
+
+    public static class VisionHandler extends Handler {
+        private WeakReference<NettyActivity> activity;
+
+        public VisionHandler(NettyActivity activity) {
+            this.activity = new WeakReference<NettyActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (activity == null || activity.get() == null) return;
+            final NettyActivity nettyActivity = activity.get();
+            if (msg.what == 0) {
+                new SPUtils(RobotInit.WIRE_STRIPPING_ACTIVITY).clear();
+                new SPUtils(RobotInit.WIRING_ACTIVITY).clear();
+                new SPUtils(RobotInit.CUT_LINE_ACTIVITY).clear();
+            }
+            nettyActivity.notifyVisionData(msg.what, (String) msg.obj);
 
         }
     }
@@ -98,7 +147,10 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
      *
      * @param message
      */
-    protected abstract void notifyData(int status,String message);
+    protected abstract void notifyData(int status, String message);
+    protected abstract void notifyMasterData(int status, String message);
+    protected abstract void notifyVisionData(int status, String message);
+
 
     public void onUnBindReceiver() {
         if (mReceiverTag) {

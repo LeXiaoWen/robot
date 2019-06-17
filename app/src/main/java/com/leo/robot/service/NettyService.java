@@ -103,20 +103,26 @@ public class NettyService extends Service {
 
             @Override
             public void onServiceStatusConnectChanged(int statusCode) {
+                SPUtils socket = new SPUtils("visionSocket");
                 if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
 
-                    notifyData(1, "与视觉控服务器连接成功");
+                    notifyVisionData(1, "与视觉服务器连接成功");
                     String s = mGson.toJson(CommandUtils.getVisionBean());
                     NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.VISION_NETTY);
                     if (client != null) {
                         client.sendMsgTest(s);
                     }
+                    socket.putBoolean("status", true);
                 } else if (statusCode == NettyListener.STATUS_CONNECT_ERROR) {//通信异常
-//                    notifyData(1,"与视觉控服务器连接异常，正在重连");
-
+                    notifyVisionData(0,"与视觉服务器连接异常，正在重连");
+                    socket.putBoolean("status", false);
+                    client.setConnectStatus(false);
+                    new Thread(() -> {
+                        client.connect(UrlConstant.VISION_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
+                    }).start();
                 } else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED) {//服务器主动断开
-//                    notifyData(1,"视觉控服务器断开连接，正在重连");
-
+                    notifyVisionData(0,"与视觉服务器断开连接，正在重连");
+                    socket.putBoolean("status", false);
                     client.setConnectStatus(false);
                     new Thread(() -> {
                         client.connect(UrlConstant.VISION_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
@@ -154,7 +160,7 @@ public class NettyService extends Service {
 
             @Override
             public void onServiceStatusConnectChanged(int statusCode) {
-                SPUtils socket = new SPUtils("socket");
+                SPUtils socket = new SPUtils("masterSocket");
 
                 if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
                     notifyData(1, "与主控服务器连接成功");
@@ -167,7 +173,10 @@ public class NettyService extends Service {
                 } else if (statusCode == NettyListener.STATUS_CONNECT_ERROR) {//通信异常
                     notifyData(0, "与主控服务器连接异常，正在重连");
                     socket.putBoolean("status", false);
-
+                    client.setConnectStatus(false);
+                    new Thread(() -> {
+                        client.connect(UrlConstant.MASTER_NETTY_HOST, UrlConstant.SOCKET_PORT);//连接服务器
+                    }).start();
                 } else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED) {//服务器主动断开
                     socket.putBoolean("status", false);
                     notifyData(0, "主控服务器断开连接，正在重连");
@@ -180,7 +189,7 @@ public class NettyService extends Service {
 
             @Override
             public void onServiceHeart(Channel channel) {
-//                ping(channel);
+                ping(channel);
             }
         });
 
@@ -313,6 +322,20 @@ public class NettyService extends Service {
             message.obj = messageHolder;
             if (activity instanceof NettyActivity) {
                 ((NettyActivity) activity).getHandler().sendMessage(message);
+            }
+        }
+    }
+    private void notifyVisionData(int type, String messageHolder) {
+        final Stack<Activity> activities = ActivityManager.getInstance().getActivities();
+        for (Activity activity : activities) {
+            if (activity == null || activity.isFinishing()) {
+                continue;
+            }
+            Message message = Message.obtain();
+            message.what = type;
+            message.obj = messageHolder;
+            if (activity instanceof NettyActivity) {
+                ((NettyActivity) activity).getVisionHandler().sendMessage(message);
             }
         }
     }
