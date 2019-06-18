@@ -361,11 +361,15 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     @Override
     protected void onDestroy() {
-        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
-            webViewOnDestroy();
-        }
+//        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
+//            webViewOnDestroy();
+//        }
         super.onDestroy();
 //        mUnityPlayer.quit();
+        mAgentWebMain = null;
+        mAgentWeb2 = null;
+        mAgentWeb3 = null;
+        mAgentWeb4 = null;
     }
 
 
