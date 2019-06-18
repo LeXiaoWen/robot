@@ -1,9 +1,7 @@
 #include "ur10.h"
 #include "iostream"
+#include "log_utils.h"
 
-#include <jni.h>
-#include <string>
-using namespace std;
 
 
 void UR10::GetDataPort29999(string str)
@@ -52,6 +50,7 @@ void UR10::GetDataPort30003()
     memcpy(&tmp[17][0],&buf7[40],8);
 
     actJoint_Base=HexToDouble(tmp[0]);
+
     actJoint_Shoulder=HexToDouble(tmp[1]);
     actJoint_Elbow=HexToDouble(tmp[2]);
     actJoint_Wrist1=HexToDouble(tmp[3]);
@@ -94,6 +93,7 @@ void UR10::GetDataPort30003()
     robot_Mod=HexToDouble(buf4);
     Power_V=HexToDouble(buf5);
     Power_A=HexToDouble(buf6);
+//    LOGW("run-GetDataPort30003");
 
 }
 string UR10::ActionMove(string cmd)

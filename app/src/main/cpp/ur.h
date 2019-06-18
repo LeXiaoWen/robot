@@ -2,9 +2,7 @@
 #define UR_H
 #include "ur10.h"
 #include "iostream"
-#include <jni.h>
-#include <string>
-using namespace std;
+#include "string.h"
 //#include "ur_global.h"
 #define Marm "Marm"
 #define Farm "Farm"
@@ -16,6 +14,8 @@ public:
     UR10 UR_M;
     UR10 UR_F;
     float m=0.54f;
+public:
+    UR();
 public:
     void GetDataPort29999(string str_29999,string name);
     void GetDataPort30003(string str_30003,string name);

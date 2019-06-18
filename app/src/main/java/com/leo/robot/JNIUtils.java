@@ -206,6 +206,8 @@ public class JNIUtils {
      */
     public native void SetMoveAcc(float v,String name);
 
-
+    public native String testJni();
+    public native String testJni2(String msg);
+    public native String testJni3(String msg,String mode,String name);
 
 }
