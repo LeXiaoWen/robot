@@ -92,22 +92,7 @@
                 android:layout_width="640dp"
                 android:layout_height="480dp"
                 android:layout_marginLeft="16dp"
-                android:background="@color/black">
-
-
-            <TextView
-                    android:visibility="gone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:padding="@dimen/dp_6"
-                    android:text="USB1画面"
-                    android:textColor="@color/cmvp_white"
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
-
-        </RelativeLayout>
+                android:background="@color/black"/>
 
         <RelativeLayout
                 android:layout_marginLeft="@dimen/dp_16"
