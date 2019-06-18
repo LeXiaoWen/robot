@@ -1,5 +1,6 @@
 package com.leo.robot.ui.setting.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.just.agentweb.MiddlewareWebClientBase;
@@ -17,8 +18,10 @@ import com.leo.robot.R;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
+import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
+import com.leo.robot.view.CustomPopWindow;
 
 /**
  * 剥线设置
@@ -51,6 +54,8 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
     private ImageView mIv8;
     private NettyClient mClient;
     private MiddlewareWebClientBase mMiddleWareWebClient;
+    private Button mBtnTool;
+    private CustomPopWindow mCustomPopWindow;
 
     @Nullable
     @Override
@@ -96,6 +101,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         mIv6 = (ImageView) view.findViewById(R.id.iv6);
         mIv7 = (ImageView) view.findViewById(R.id.iv7);
         mIv8 = (ImageView) view.findViewById(R.id.iv8);
+        mBtnTool = (Button) view.findViewById(R.id.btn_tool);
 
         mIv1.setOnClickListener(this);
         mIv2.setOnClickListener(this);
@@ -105,6 +111,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         mIv6.setOnClickListener(this);
         mIv7.setOnClickListener(this);
         mIv8.setOnClickListener(this);
+        mBtnTool.setOnClickListener(this);
 
 
     }
@@ -141,7 +148,6 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         super.onResume();
         isPause = false;
     }
-
 
 
     @Override
@@ -186,9 +192,9 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
     /**
      * 位姿仿真画面
      *
+     * @param
      * @author Leo
      * created at 2019/4/27 5:27 PM
-     * @param
      */
     private void initVideo4() {
         mAgentWeb4 = AgentWeb.with(this)
@@ -366,6 +372,66 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
                     mClient.sendMsgTest(CommandUtils.getStrippingStop());
                 }
                 break;
+            case R.id.btn_tool:
+                startClick();
+                break;
+        }
+    }
+
+    private void startClick() {
+        View contentView = LayoutInflater.from(getContext()).inflate(R.layout.pop_menu2, null);
+        //处理popWindow 显示内容
+        handleLogic(contentView);
+        //创建并显示popWindow
+        mCustomPopWindow = new CustomPopWindow.PopupWindowBuilder(getContext())
+                .setView(contentView)
+                .create()
+                .showAsDropDown(mBtnTool, 0, -500);
+    }
+
+    public void handleLogic(View contentView) {
+        View.OnClickListener listener = v -> {
+            dismissPop();
+            switch (v.getId()) {
+                case R.id.tv_menu1:
+                    if (mClient != null) {
+                        mClient.sendMsgTest(CommandUtils.clawOpen());
+                    }
+                    break;
+                case R.id.tv_menu2:
+                    if (mClient != null) {
+                        mClient.sendMsgTest(CommandUtils.clawClamping());
+                    }
+                    break;
+                case R.id.tv_menu3:
+                    if (mClient != null) {
+                        mClient.sendMsgTest(CommandUtils.continueWork());
+                    }
+                    break;
+                case R.id.tv_menu4:
+                    if (mClient != null) {
+                        mClient.sendMsgTest(CommandUtils.undoException());
+                    }
+                    break;
+                case R.id.tv_menu5:
+                    Intent intent = new Intent(getActivity(), WiringSettingActivity.class);
+                    intent.putExtra("tag",1);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
+                    break;
+
+            }
+        };
+        contentView.findViewById(R.id.tv_menu1).setOnClickListener(listener);
+        contentView.findViewById(R.id.tv_menu2).setOnClickListener(listener);
+        contentView.findViewById(R.id.tv_menu3).setOnClickListener(listener);
+        contentView.findViewById(R.id.tv_menu4).setOnClickListener(listener);
+        contentView.findViewById(R.id.tv_menu5).setOnClickListener(listener);
+    }
+
+    private void dismissPop() {
+        if (mCustomPopWindow != null) {
+            mCustomPopWindow.dissmiss();
         }
     }
 

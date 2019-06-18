@@ -31,20 +31,26 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     private boolean isStart = false;
 
     private boolean isClickble = false;
-    private final NettyClient mClient;
+    private NettyClient mMasterClient;
     public boolean isSettingClickble = false;
     private UnityPlayer mUnityPlayer;
 
 
     @Inject
     public WireStrippingActivityPresenter() {
-        mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
+        mMasterClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
     }
 
     @Override
     protected void updateTime(TextView view) {
         TimeThread timeThread = new TimeThread(view);
         timeThread.start();
+    }
+
+    public void destroyClient() {
+        if (mMasterClient != null) {
+            mMasterClient = null;
+        }
     }
 
     /**
@@ -54,24 +60,24 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      * created at 2019/4/18 2:11 PM
      */
     public void scramButton() {
-            if (!isScram) { //急停
-                if (mClient != null) {
-                    mClient.sendMsgTest(CommandUtils.getMainArmShutdown());
-                    mClient.sendMsgTest(CommandUtils.getFlowArmShutdown());
-                    mActivity.refreshLogRv("发送急停命令");
-                }
-                mActivity.updateScram(true);
-                isScram = true;
-            } else {//回复急停
-                if (mClient != null) {
-                    mClient.sendMsgTest(CommandUtils.getMainArmResume());
-                    mClient.sendMsgTest(CommandUtils.getFlowArmResume());
-                    mActivity.refreshLogRv("发送恢复急停命令");
-
-                }
-                mActivity.updateScram(false);
-                isScram = false;
+        if (!isScram) { //急停
+            if (mMasterClient != null) {
+                mMasterClient.sendMsgTest(CommandUtils.getMainArmShutdown());
+                mMasterClient.sendMsgTest(CommandUtils.getFlowArmShutdown());
+                mActivity.refreshLogRv("发送急停命令");
             }
+            mActivity.updateScram(true);
+            isScram = true;
+        } else {//回复急停
+            if (mMasterClient != null) {
+                mMasterClient.sendMsgTest(CommandUtils.getMainArmResume());
+                mMasterClient.sendMsgTest(CommandUtils.getFlowArmResume());
+                mActivity.refreshLogRv("发送恢复急停命令");
+
+            }
+            mActivity.updateScram(false);
+            isScram = false;
+        }
     }
 
     /**
@@ -81,7 +87,7 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      * created at 2019/4/18 2:17 PM
      */
     public void revocerButton() {
-        mClient.sendMsgTest(CommandUtils.getFlowArmRecover());
+        mMasterClient.sendMsgTest(CommandUtils.getFlowArmRecover());
         mActivity.refreshLogRv("发送一键回收命令");
     }
 
@@ -94,12 +100,12 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     public void startButton() {
 
         if (!isStart) { //开始
-            mClient.sendMsgTest(CommandUtils.getFlowArmStart());
+            mMasterClient.sendMsgTest(CommandUtils.getFlowArmStart());
             isStart = true;
             mActivity.updateStart(true);
             mActivity.refreshLogRv("发送开始命令");
         } else {//停止
-            mClient.sendMsgTest(CommandUtils.getFlowArmStop());
+            mMasterClient.sendMsgTest(CommandUtils.getFlowArmStop());
             isStart = false;
             mActivity.updateStart(false);
 
@@ -206,7 +212,7 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 
     public void identificationButton() {
         Intent intent = new Intent(mActivity, ChooseActivity.class);
-        intent.putExtra("activity",1);
+        intent.putExtra("activity", 1);
         mActivity.startActivity(intent);
         mActivity.finish();
     }
@@ -215,20 +221,20 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     public void handleLogic(View contentView) {
         View.OnClickListener listener = v -> {
             mActivity.dismissPop();
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.tv_menu1:
-                    if (mClient!=null){
-                        mClient.sendMsgTest(CommandUtils.aLineOrder());
+                    if (mMasterClient != null) {
+                        mMasterClient.sendMsgTest(CommandUtils.aLineOrder());
                     }
                     break;
                 case R.id.tv_menu2:
-                    if (mClient!=null){
-                        mClient.sendMsgTest(CommandUtils.bLineOrder());
+                    if (mMasterClient != null) {
+                        mMasterClient.sendMsgTest(CommandUtils.bLineOrder());
                     }
                     break;
                 case R.id.tv_menu3:
-                    if (mClient!=null){
-                        mClient.sendMsgTest(CommandUtils.cLineOrder());
+                    if (mMasterClient != null) {
+                        mMasterClient.sendMsgTest(CommandUtils.cLineOrder());
                     }
                     break;
 
@@ -243,20 +249,20 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     /**
      * 判断当前指令是哪个摄像机选择第几个点
      *
-     *@author Leo
-     *created at 2019/5/29 9:27 PM
+     * @author Leo
+     * created at 2019/5/29 9:27 PM
      */
     public void jugCameraLocationType(String code) {
-        if (code.equals(PushMsgCode.CAMERA1_CHOOSE_LOCATION1)){//usb1相机选择点1
-            mActivity.jumpChooseActivity(1,1);
-        }else if (code.equals(PushMsgCode.CAMERA1_CHOOSE_LOCATION2)){//usb1相机选择点2
-            mActivity.jumpChooseActivity(1,2);
+        if (code.equals(PushMsgCode.CAMERA1_CHOOSE_LOCATION1)) {//usb1相机选择点1
+            mActivity.jumpChooseActivity(1, 1);
+        } else if (code.equals(PushMsgCode.CAMERA1_CHOOSE_LOCATION2)) {//usb1相机选择点2
+            mActivity.jumpChooseActivity(1, 2);
 
-        }else if (code.equals(PushMsgCode.CAMERA2_CHOOSE_LOCATION1)){//usb2相机选择点1
-            mActivity.jumpChooseActivity(2,1);
+        } else if (code.equals(PushMsgCode.CAMERA2_CHOOSE_LOCATION1)) {//usb2相机选择点1
+            mActivity.jumpChooseActivity(2, 1);
 
-        }else if (code.equals(PushMsgCode.CAMERA2_CHOOSE_LOCATION2)){//usb2相机选择点2
-            mActivity.jumpChooseActivity(2,2);
+        } else if (code.equals(PushMsgCode.CAMERA2_CHOOSE_LOCATION2)) {//usb2相机选择点2
+            mActivity.jumpChooseActivity(2, 2);
         }
     }
 
@@ -269,8 +275,6 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         //设置从臂旋转，类型string  （将json以string的形式传参）
 //        UnityPlayer.UnitySendMessage("MessageController","SetFaRobotValue","");
     }
-
-
 
 
 //    public void setUnityView(RelativeLayout unityView) {
@@ -286,9 +290,6 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 //        }
 //        mActivity.getUnityPlayer().requestFocus();
 //    }
-
-
-
 
 
 }

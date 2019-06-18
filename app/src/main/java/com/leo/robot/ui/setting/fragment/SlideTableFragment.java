@@ -112,6 +112,7 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
         mWebView = mAgentWeb.getWebCreator().getWebView();
 
         initWebSetting(mAgentWeb.getWebCreator().getWebView());
+        mRlMain.invalidate();
     }
 
     private void initWebSetting(WebView view) {
@@ -331,6 +332,7 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
         mAgentWeb = null;
         mWebView = null;
         mRlMain.removeAllViews();
+        mRlMain.invalidate();
     }
 
     private void videoText(){

@@ -371,7 +371,7 @@ public class NettyService extends Service {
                     throw new RuntimeException();
                 }
             }
-        }, 500, TimeUnit.MILLISECONDS);
+        }, 2, TimeUnit.SECONDS);
 
         future.addListener((GenericFutureListener) future1 -> {
             if (future1.isSuccess()) {
