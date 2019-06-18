@@ -1333,6 +1333,16 @@ public class CommandUtils {
         return authorBean;
     }
 
+    public static AuthorBean getMasterArmBean() {
+        AuthorBean authorBean = new AuthorBean();
+        AuthorBean.ParamsBean paramsBean = new AuthorBean.ParamsBean();
+        authorBean.setMsgType("clientInfo");
+        authorBean.setVersion("1.0");
+        paramsBean.setMsg("Hello,主机械臂！");
+        authorBean.setParams(paramsBean);
+        return authorBean;
+    }
+
     public static AuthorBean getVisionBean() {
         AuthorBean authorBean = new AuthorBean();
         AuthorBean.ParamsBean paramsBean = new AuthorBean.ParamsBean();
@@ -1517,11 +1527,11 @@ public class CommandUtils {
     }
 
     /**
-    * 确认水平滑台位置
-    *
-    *@author Leo
-    *created at 2019/6/17 8:16 PM
-    */
+     * 确认水平滑台位置
+     *
+     * @author Leo
+     * created at 2019/6/17 8:16 PM
+     */
     public static String confirmLandSlideTable() {
         msg[0] = (byte) 0x68;
         msg[1] = (byte) 0x04;

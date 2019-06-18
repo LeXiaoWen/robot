@@ -10,15 +10,15 @@ public class UrlConstant {
     /**
      * socket 服务器IP地址
      */
-//    public static final String MASTER_NETTY_HOST = "192.168.1.202";
-//    public static final String VISION_NETTY_HOST = "192.168.1.203";
+    public static final String MASTER_NETTY_HOST = "192.168.1.202";
+    public static final String VISION_NETTY_HOST = "192.168.1.203";
     public static final String MAIN_ARM_NETTY_HOST = "192.168.1.90";
     public static final String FLOW_ARM_NETTY_HOST = "192.168.1.40";
 
     //测试
-    public static final String MASTER_NETTY_HOST = "192.168.1.90";
+//    public static final String MASTER_NETTY_HOST = "192.168.1.90";
 //    public static final String MASTER_NETTY_HOST = "192.168.2.171";
-    public static final String VISION_NETTY_HOST = "192.168.1.5";
+//    public static final String VISION_NETTY_HOST = "192.168.1.5";
 
     /**
      * socket 服务器端口号
@@ -39,8 +39,8 @@ public class UrlConstant {
     /**
      * 行线相机
      */
-//    public static final String LINE_CAMERA_URL = "http://192.168.1.203:8080/stream?topic=/sys_1/output&type=mjpeg";
-    public static final String LINE_CAMERA_URL = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    public static final String LINE_CAMERA_URL = "http://192.168.1.203:8080/stream?topic=/sys_1/output&type=mjpeg";
+//    public static final String LINE_CAMERA_URL = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
     /**
      * 引流线相机
      */
@@ -64,7 +64,7 @@ public class UrlConstant {
      */
     public static final String ARM_FLOW_CAMERA_UREL = "http://192.168.1.203:8080/stream?topic=/usb_cam4/image_raw&type=ros_compressed";
 
-    public static final String[] URL = {CAMERA_URL, DRAIN_LINE_CAMERA_URL, CAMERA_URL, ARM_MAIN_CAMERA_UREL, ARM_FLOW_CAMERA_UREL};
+    public static final String[] URL = {LINE_CAMERA_URL, DRAIN_LINE_CAMERA_URL, CAMERA_URL, ARM_MAIN_CAMERA_UREL, ARM_FLOW_CAMERA_UREL};
 
 
 }

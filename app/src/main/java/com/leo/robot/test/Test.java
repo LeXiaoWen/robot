@@ -9,11 +9,11 @@ import com.leo.robot.utils.ByteUtils;
 
 public class Test {
 
-    static {
-        System.loadLibrary("libUR10");
-    }
-
-    public static native String ActionMove(String msg);
+//    static {
+//        System.loadLibrary("libUR10");
+//    }
+    private static String msg = "6704030401020300FF";
+//    public static native String ActionMove(String msg);
 
     static char[] tmp = new char[]{0x3F, 0xAB, 0xAE, 0xE2, 0x3C, 0x40, 0x70, 0xEB};
 
@@ -33,8 +33,18 @@ public class Test {
 //            System.out.println(aByte);
 //        }
 //        System.out.println(bytes);
-        String s = ActionMove("ACTION_MOVE_1");
-        System.out.println(s);
+
+
+
+//        String s = ActionMove("ACTION_MOVE_1");
+//        System.out.println(s);
+
+        String s = msg.substring(8, 16);
+        byte[] bytes = ByteUtils.hex2byte(s);
+        int i = ByteUtils.byteArrayToInt(bytes);
+        System.out.println(i);
+
+
     }
 
 

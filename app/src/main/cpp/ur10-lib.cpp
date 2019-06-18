@@ -38,7 +38,7 @@ JNIEXPORT jstring JNICALL
 Java_com_leo_robot_JNIUtils_getDouble(JNIEnv *env, jobject instance, jdouble num) {
 
 
-    std::string str = ur10.DoubleToString(num);
+    std::string str = ur10.doubleToString(num);
 
 
     return env->NewStringUTF(str.c_str());
@@ -139,7 +139,7 @@ JNIEXPORT jstring JNICALL
 Java_com_leo_robot_JNIUtils_DoubleToString(JNIEnv *env, jobject instance, jdouble num) {
 
     // TODO
-    std::string str =  ur10.DoubleToString(num);
+    std::string str =  ur10.doubleToString(num);
 
     return env->NewStringUTF(str.c_str());
 }extern "C"
@@ -147,7 +147,7 @@ JNIEXPORT jstring JNICALL
 Java_com_leo_robot_JNIUtils_doubleToString4(JNIEnv *env, jobject instance, jdouble num) {
 
     // TODO
-    std::string str =  ur10.DoubleToString(num);
+    std::string str =  ur10.doubleToString(num);
 
     return env->NewStringUTF(str.c_str());
 }

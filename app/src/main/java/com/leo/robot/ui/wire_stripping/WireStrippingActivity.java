@@ -386,6 +386,18 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 //        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
 //            webViewOnDestroy();
 //        }
+        if (mAgentWebMain != null) {
+            mAgentWebMain.getWebLifeCycle().onDestroy();
+        }
+        if (mAgentWeb2 != null) {
+            mAgentWeb2.getWebLifeCycle().onDestroy();
+        }
+        if (mAgentWeb3 != null) {
+            mAgentWeb3.getWebLifeCycle().onDestroy();
+        }
+        if (mAgentWeb4 != null) {
+            mAgentWeb4.getWebLifeCycle().onDestroy();
+        }
         super.onDestroy();
 //        mUnityPlayer.quit();
         mAgentWebMain = null;

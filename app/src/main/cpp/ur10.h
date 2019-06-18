@@ -2,8 +2,8 @@
 #define UR10_H
 
 //#include "ur10_global.h"
-#include <jni.h>
-#include "string"
+#include "iostream"
+#include <cmath>
 using namespace std;
 
 //关节控制
@@ -44,12 +44,10 @@ using namespace std;
 
 
 
-class  UR10
+class  UR10  //UR10SHARED_EXPORT
 {
 
-
-
-private:
+public:
     double actual_X,actual_Y,actual_Z;
     double actual_Rx,actual_Ry,actual_Rz;
 
@@ -70,16 +68,15 @@ public:
     double Power_V;
     double Power_A;
 
-    jbyteArray buffer_30003;
+   // QByteArray buffer_30003;
     uint8_t Recv_buf[1108];
     string str_29999;
     float move_v=0.08;
     float move_a=0.08;
 
 public:
-    string GetDataPort29999(string str);
+    void GetDataPort29999(string str);
     void GetDataPort30003();
-
     string ActionJoint(string cmd);
     string ActionMove(string cmd);
     string ActionPose(string cmd);
@@ -87,15 +84,15 @@ public:
     string ActionStopJ();
     string ActionToHome();
     void DealArmFeedbackMsg();
-    uint getbitu(const unsigned char *buff, int pos, int len);
+    unsigned int getbitu(const unsigned char *buff, int pos, int len);
     double HexToDouble(const unsigned char* buf);
+    string  doubleToString(double num);
+    string doubleToString_4(const double &dbNum);
     string movel(double x,double y,double z,double Rx,double Ry,double Rz,float a,float v,float t,float r);
     string movel_pose_add(double x,double y,double z,double Rx,double Ry,double Rz);
     string movej(double j0,double j1,double j2,double j3,double j4,double j5,float a,float v,float t,float r);
     void SetMoveSpeed(float v);
     void SetMoveAcc(float a);
-    string DoubleToString(double num);
-    string doubleToString4(const double dbNum);
 };
 
 #endif // UR10_H

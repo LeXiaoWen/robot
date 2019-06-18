@@ -22,7 +22,6 @@ import com.leo.robot.bean.LineLocationMsg;
 import com.leo.robot.bean.LocationMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
-import com.leo.robot.netty.NettyClient;
 import com.leo.robot.netty.NettyListener;
 import com.leo.robot.netty.arm.ArmBean;
 import com.leo.robot.netty.arm.ArmNettyClient;
@@ -185,6 +184,9 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose);
         ButterKnife.bind(this);
+//        ports.add(29999);
+//        ports.add(30001);
+        ports.add(30003);
         initTile();
         initBroadcast(mTvGroundPower);
 
@@ -199,6 +201,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         showMsg("请选择行线画面第一个点位");
         mPresenter.initClient();
         mDrawView = new DrawView(this);
+        initMainArmNetty();
     }
 
     private void initVideoStatus() {
@@ -311,10 +314,10 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
             mSpinKit.setVisibility(View.VISIBLE);
         }
 
-        if (status1){
+        if (status1) {
             mTvType1.setText("与视觉服务器连接成功");
             mSpinKit1.setVisibility(View.GONE);
-        }else {
+        } else {
             mTvType1.setText("与视觉服务器断开连接，正在重连");
             mSpinKit1.setVisibility(View.VISIBLE);
         }
@@ -511,10 +514,10 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
 
                 if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
                     notifyData(1, "与主控服务器连接成功");
-                    String s = mGson.toJson(CommandUtils.getMasterControlBean());
-                    NettyClient client = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
+                    String s = mGson.toJson(CommandUtils.getMasterArmBean());
+                    ArmNettyClient client = (ArmNettyClient) NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
                     if (client != null) {
-                        client.sendMsgTest(s);
+                        client.sendMsg30003(s);
                     }
                     socket.putBoolean("status", true);
                 } else if (statusCode == NettyListener.STATUS_CONNECT_ERROR) {//通信异常
@@ -786,12 +789,21 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         String code = bean.getCode();
         String msg = bean.getMsg();
         if (msg.length() == 2216) {
+            LogUtils.e(msg);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-//                    JNIUtils.getInstance().GetDataPort30003(msg, "Marm");
+                    JNIUtils.getInstance().GetDataPort30003(msg, "Marm");
                     String s = JNIUtils.getInstance().ActionMove("ACTION_MOVE_1", "Marm");
                     LogUtils.e(s);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtils.showShortToast(s);
+                        }
+                    });
+//                    String s = JNIUtils.getInstance().ActionMove("ACTION_MOVE_1", "Marm");
+//                    LogUtils.e(s);
 
                 }
             }).start();

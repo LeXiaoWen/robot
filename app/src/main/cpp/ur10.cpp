@@ -1,18 +1,15 @@
 #include "ur10.h"
+#include "iostream"
+
 #include <jni.h>
 #include <string>
-#include <cmath>
-
 using namespace std;
 
 
-
-
-string UR10::GetDataPort29999(string str)
+void UR10::GetDataPort29999(string str)
 {
     str_29999=str;
 }
-
 void UR10::GetDataPort30003()
 {
     uint8_t tmp[18][8]={0};
@@ -24,7 +21,7 @@ void UR10::GetDataPort30003()
     uint8_t buf6[8]={0};
     uint8_t buf7[48]={0};
 
-    memcpy(Recv_buf,buffer_30003,1108);
+   // memcpy(Recv_buf,buffer_30003,1108);
     memcpy(buf1,&Recv_buf[252],48);
     memcpy(buf2,&Recv_buf[444],48);
     memcpy(buf3,&Recv_buf[812],8);
@@ -68,27 +65,29 @@ void UR10::GetDataPort30003()
     actual_Ry=-HexToDouble(tmp[10]);
     actual_Rz=-HexToDouble(tmp[11]);
 
-    act_x =doubleToString4(actual_X);
-    act_y =doubleToString4(actual_Y);
-    act_z =doubleToString4(actual_Z);
-    act_Rx=doubleToString4(actual_Rx);
-    act_Ry=doubleToString4(actual_Ry);
-    act_Rz=doubleToString4(actual_Rz);
-
-    j0_Angle=doubleToString4((180.0/3.141592)*actJoint_Base);
-    j1_Angle=doubleToString4((180.0/3.141592)*actJoint_Shoulder);
-    j2_Angle=doubleToString4((180.0/3.141592)*actJoint_Elbow);
-    j3_Angle=doubleToString4((180.0/3.141592)*actJoint_Wrist1);
-    j4_Angle=doubleToString4((180.0/3.141592)*actJoint_Wrist2);
-    j5_Angle=doubleToString4((180.0/3.141592)*actJoint_Wrist3);
+    act_x =doubleToString_4(actual_X);
+    act_y =doubleToString_4(actual_Y);
+    act_z =doubleToString_4(actual_Z);
+    act_Rx=doubleToString_4(actual_Rx);
+    act_Ry=doubleToString_4(actual_Ry);
+    act_Rz=doubleToString_4(actual_Rz);
 
 
-    j0_T=doubleToString4(HexToDouble(tmp[12]));
-    j1_T=doubleToString4(HexToDouble(tmp[13]));
-    j2_T=doubleToString4(HexToDouble(tmp[14]));
-    j3_T=doubleToString4(HexToDouble(tmp[15]));
-    j4_T=doubleToString4(HexToDouble(tmp[16]));
-    j5_T=doubleToString4(HexToDouble(tmp[17]));
+
+    j0_Angle=doubleToString_4((180.0/3.141592)*actJoint_Base);
+    j1_Angle=doubleToString_4((180.0/3.141592)*actJoint_Shoulder);
+    j2_Angle=doubleToString_4((180.0/3.141592)*actJoint_Elbow);
+    j3_Angle=doubleToString_4((180.0/3.141592)*actJoint_Wrist1);
+    j4_Angle=doubleToString_4((180.0/3.141592)*actJoint_Wrist2);
+    j5_Angle=doubleToString_4((180.0/3.141592)*actJoint_Wrist3);
+
+
+    j0_T=doubleToString_4(HexToDouble(tmp[12]));
+    j1_T=doubleToString_4(HexToDouble(tmp[13]));
+    j2_T=doubleToString_4(HexToDouble(tmp[14]));
+    j3_T=doubleToString_4(HexToDouble(tmp[15]));
+    j4_T=doubleToString_4(HexToDouble(tmp[16]));
+    j5_T=doubleToString_4(HexToDouble(tmp[17]));
 
 
     safe_Mod=HexToDouble(buf3);
@@ -97,7 +96,6 @@ void UR10::GetDataPort30003()
     Power_A=HexToDouble(buf6);
 
 }
-
 string UR10::ActionMove(string cmd)
 {
     string str_movel="";
@@ -256,7 +254,7 @@ string UR10::ActionDash(string cmd)
 }
 string UR10::ActionStopJ()
 {
-    string str="stopl(1.2)\n";
+    string str="stopj(1.2)\n";
     return  str;
 }
 string UR10::ActionToHome()//暂时未定
@@ -267,7 +265,7 @@ string UR10::ActionToHome()//暂时未定
 
 
 
-uint UR10::getbitu(const unsigned char *buff, int pos, int len)
+unsigned int UR10::getbitu(const unsigned char *buff, int pos, int len)
 {
     unsigned int bits=0;
     int i;
@@ -278,6 +276,24 @@ uint UR10::getbitu(const unsigned char *buff, int pos, int len)
     return bits;
 }
 
+string  UR10::doubleToString(double num)
+{
+    char str[256];
+    sprintf(str, "%lf", num);
+    string result = str;
+    return result;
+}
+
+
+string UR10::doubleToString_4(const double &dbNum)
+{
+    char *chCode;
+    chCode = new(std::nothrow)char[20];
+    sprintf(chCode, "%.4lf", dbNum);  // .2 是控制输出精度的，两位小数
+    string strCode(chCode);
+    delete []chCode;
+    return strCode;
+}
 
 double UR10::HexToDouble(const unsigned char* buf)
 {
@@ -312,27 +328,27 @@ double UR10::HexToDouble(const unsigned char* buf)
 string UR10::movel(double x,double y,double z,double Rx,double Ry,double Rz,float a,float v,float t,float r)
 {
 
-   // string str="movel(p[x,y,z,Rx,Ry,Rz],a=a,v=v,t=t,r=r)";
+   // QString str="movel(p[x,y,z,Rx,Ry,Rz],a=a,v=v,t=t,r=r)";
     string str="movel(p[";
-    string str_x = DoubleToString(x);
+    string str_x = doubleToString(x);
     str=str+str_x+",";
-    string str_y = DoubleToString(y);
+    string str_y = doubleToString(y);
     str=str+str_y+",";
-    string str_z = DoubleToString(z);
+    string str_z = doubleToString(z);
     str=str+str_z+",";
-    string str_Rx = DoubleToString(Rx);
+    string str_Rx = doubleToString(Rx);
     str=str+str_Rx+",";
-    string str_Ry = DoubleToString(Ry);
+    string str_Ry = doubleToString(Ry);
     str=str+str_Ry+",";
-    string str_Rz = DoubleToString(Rz);
+    string str_Rz = doubleToString(Rz);
     str=str+str_Rz+"],a=";
-    string str_a= DoubleToString(a);
+    string str_a= doubleToString(a);
     str=str+str_a+",v=";
-    string str_v= DoubleToString(v);
+    string str_v= doubleToString(v);
     str=str+str_v+",t=";
-    string str_t= DoubleToString(t);
+    string str_t= doubleToString(t);
     str=str+str_t+",r=";
-    string str_r= DoubleToString(r);
+    string str_r= doubleToString(r);
     str=str+str_r+")";
     str+="\n";
     return str;
@@ -344,46 +360,46 @@ string UR10::movel_pose_add(double x,double y,double z,double Rx,double Ry,doubl
     string str="movel(pose_add(p[";
     string str1=movel(actual_X,actual_Y,actual_Z,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0,0);
     str1.erase(0,6);
-    string str_p_x = DoubleToString(x);
+    string str_p_x = doubleToString(x);
     str=str+str_p_x+",";
-    string str_p_y = DoubleToString(y);
+    string str_p_y = doubleToString(y);
     str=str+str_p_y+",";
-    string str_p_z = DoubleToString(z);
+    string str_p_z = doubleToString(z);
     str=str+str_p_z+",";
-    string str_p_Rx = DoubleToString(Rx);
+    string str_p_Rx = doubleToString(Rx);
     str=str+str_p_Rx+",";
-    string str_p_Ry = DoubleToString(Ry);
+    string str_p_Ry = doubleToString(Ry);
     str=str+str_p_Ry+",";
-    string str_p_Rz = DoubleToString(Rz);
+    string str_p_Rz = doubleToString(Rz);
     str=str+str_p_Rz+"],";
     str+=str1;
-    str.erase(str.length()-25,1);//去掉“，”
-    str.insert(str.length()-24,"),");
+    str.erase(str.length()-46,1);//去掉“，”
+    str.insert(str.length()-45,"),");
     return str;
 }
 
 string UR10::movej(double j0,double j1,double j2,double j3,double j4,double j5,float a,float v,float t,float r)
 {
     string str="movej([";
-    string str_j0 = DoubleToString(j0);
+    string str_j0 = doubleToString(j0);
     str=str+str_j0+",";
-    string str_j1 = DoubleToString(j1);
+    string str_j1 = doubleToString(j1);
     str=str+str_j1+",";
-    string str_j2 = DoubleToString(j2);
+    string str_j2 = doubleToString(j2);
     str=str+str_j2+",";
-    string str_j3 = DoubleToString(j3);
+    string str_j3 = doubleToString(j3);
     str=str+str_j3+",";
-    string str_j4 = DoubleToString(j4);
+    string str_j4 = doubleToString(j4);
     str=str+str_j4+",";
-    string str_j5 = DoubleToString(j5);
+    string str_j5 = doubleToString(j5);
     str=str+str_j5+"],a=";
-    string str_a= DoubleToString(a);
+    string str_a= doubleToString(a);
     str=str+str_a+",v=";
-    string str_v= DoubleToString(v);
+    string str_v= doubleToString(v);
     str=str+str_v+",t=";
-    string str_t= DoubleToString(t);
+    string str_t= doubleToString(t);
     str=str+str_t+",r=";
-    string str_r= DoubleToString(r);
+    string str_r= doubleToString(r);
     str=str+str_r+")";
     str+="\n";
     return str;
@@ -397,22 +413,3 @@ void UR10::SetMoveAcc(float a)
 {
     move_a=a;
 }
-string UR10::DoubleToString(double num)
-{
-    char str[256];
-    sprintf(str, "%lf", num);
-    string result = str;
-    return result;
-
-}
-
-string UR10::doubleToString4(const double dbNum)
-{
-    char *chCode;
-    chCode = new(std::nothrow)char[20];
-    sprintf(chCode, "%.4lf", dbNum);  // .2 是控制输出精度的，两位小数
-    string strCode(chCode);
-    delete []chCode;
-    return strCode;
-}
-

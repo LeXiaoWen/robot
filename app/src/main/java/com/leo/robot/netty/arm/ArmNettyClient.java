@@ -168,6 +168,25 @@ public class ArmNettyClient extends NettyClient {
                 Log.e(TAG, "发送失败--->" + s);
             }
         });
+    } public void sendMsg30003(String s) {
+        boolean flag = channel3 != null && isConnect;
+        if (!flag) {
+            Log.e(TAG, "------尚未连接");
+            return;
+        }
+//        final String s = gson.toJson(bean);
+        channel3.writeAndFlush(s).addListener(new FutureListener() {
+
+            @Override
+            public void success() {
+                Log.e(TAG, "发送成功--->" + s);
+            }
+
+            @Override
+            public void error() {
+                Log.e(TAG, "发送失败--->" + s);
+            }
+        });
     }
 
 
