@@ -82,6 +82,15 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
         mVisionClient = NettyManager.getInstance().getClientByTag(RobotInit.VISION_NETTY);
     }
 
+    public void destroyClient() {
+        if (mMasterClient != null) {
+            mMasterClient = null;
+        }
+        if (mVisionClient != null) {
+            mVisionClient = null;
+        }
+    }
+
     public void controle1ActionDown(int videoTag) {
         switch (videoTag) {
             case 0:
@@ -266,8 +275,8 @@ public class ChooseActivityPresenter extends RobotPresenter<ChooseActivity, Choo
 
 
     public void confirmLocation(int videoTag) {
-        if (mMasterClient!=null){
-            switch (videoTag){
+        if (mMasterClient != null) {
+            switch (videoTag) {
                 case 0:
                     mMasterClient.sendMsgTest(CommandUtils.confirmLandSlideTable());
                     break;

@@ -120,7 +120,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     @BindView(R.id.ll_status1)
     LinearLayout mLlStatus1;
     private AgentWeb mAgentWeb;
-    private WebView mWebView;
+//    private WebView mWebView;
     private float mNewScale;
     private int radioButtonTag = 1;
     private int mVideoTag = 0;
@@ -337,9 +337,10 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
                 .createAgentWeb()
                 .ready()
                 .go(url);
-        mWebView = mAgentWeb.getWebCreator().getWebView();
+//        mWebView = mAgentWeb.getWebCreator().getWebView();
 
         initWebSetting(mAgentWeb.getWebCreator().getWebView());
+        mRlMain.invalidate();
     }
 
     /**
@@ -469,7 +470,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
                             break;
                     }
                     mAgentWeb = null;
-                    mWebView = null;
+//                    mWebView = null;
                     finish();
                 }
                 break;
@@ -557,9 +558,10 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     private void clearVideo() {
 //        mAgentWeb.getWebLifeCycle().onDestroy();
         mAgentWeb = null;
-        mWebView = null;
+//        mWebView = null;
 //        mRlMain.removeViewAt(1);
         mRlMain.removeAllViews();
+        mRlMain.invalidate();
     }
 
     /**
@@ -776,12 +778,12 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         if (mAgentWeb != null) {
             mAgentWeb.getWebLifeCycle().onPause();
         }
+        mPresenter.destroyClient();
         mPresenter.onDestroy();
         onUnBindReceiver();
         super.onDestroy();
         mAgentWeb = null;
-        mWebView = null;
-
+//        mWebView = null;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -793,17 +795,22 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    JNIUtils.getInstance().GetDataPort30003(msg, "Marm");
-                    String s = JNIUtils.getInstance().ActionMove("ACTION_MOVE_1", "Marm");
-                    LogUtils.e(s);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ToastUtils.showShortToast(s);
-                        }
-                    });
-//                    String s = JNIUtils.getInstance().ActionMove("ACTION_MOVE_1", "Marm");
+//                    String s = JNIUtils.getInstance().testJni2(msg);
 //                    LogUtils.e(s);
+                    try {
+                        JNIUtils.getInstance().GetDataPort30003(msg, "Marm");
+                        Thread.sleep(1000);
+                        String s = JNIUtils.getInstance().ActionMove("ACTION_MOVE_1", "Marm");
+//                          String s = JNIUtils.getInstance().testJni3(msg,"ACTION_MOVE_1", "Marm");
+                        LogUtils.e(s);
+                        runOnUiThread(() -> ToastUtils.showShortToast(s));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
+////                    String s = JNIUtils.getInstance().ActionMove("ACTION_MOVE_1", "Marm");
+////                    LogUtils.e(s);
 
                 }
             }).start();
