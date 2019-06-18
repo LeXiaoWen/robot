@@ -96,6 +96,10 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
         //实时更新时间（1秒更新一次）
         mPresenter.updateTime(mTvDate);
         initBroadcast(mTvGroundPower);
+
+        mPresenter.initClient();
+        //实时请求行线、引流线距离
+        mPresenter.initLineLocation();
     }
 
     private void initFragment() {
@@ -129,6 +133,7 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
 
     @Override
     public void onDestroy() {
+        mPresenter.destroyClient();
         super.onDestroy();
         onUnBindReceiver();
     }

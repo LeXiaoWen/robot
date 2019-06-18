@@ -18,6 +18,7 @@ import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.ui.setting.fragment.*;
+import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -58,6 +59,7 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
     private ExtremityFragment mExtremityFragment = new ExtremityFragment();
     private ExtremityMoveFragment mExtremityMoveFragment = new ExtremityMoveFragment();
     private SlideTableFragment mSlideTableFragment = new SlideTableFragment();
+    private int mIntentTag;
 
     @Override
     protected void notifyData(int status, String message) {
@@ -90,10 +92,18 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wiring_setting);
         ButterKnife.bind(this);
+        Intent intent = getIntent();
+
+        mIntentTag = intent.getIntExtra("tag", 0);
         initFragment();
         //实时更新时间（1秒更新一次）
         mPresenter.updateTime(mTvDate);
         initBroadcast(mTvGroundPower);
+
+        mPresenter.initClient();
+        //实时请求行线、引流线距离
+        mPresenter.initLineLocation();
+
     }
 
     private void initFragment() {
@@ -127,6 +137,7 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
 
     @Override
     public void onDestroy() {
+        mPresenter.destroyClient();
         super.onDestroy();
         onUnBindReceiver();
     }
@@ -188,7 +199,11 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
                 break;
             case R.id.iv_back:
                 if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(new Intent(WiringSettingActivity.this, WiringActivity.class));
+                    if (mIntentTag == 1) {
+                        startActivity(new Intent(WiringSettingActivity.this, WiringStrippingSettingActivity.class));
+                    } else {
+                        startActivity(new Intent(WiringSettingActivity.this, WiringActivity.class));
+                    }
                     finish();
                 }
                 break;
