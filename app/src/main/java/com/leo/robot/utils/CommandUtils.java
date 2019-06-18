@@ -11,6 +11,7 @@ import com.leo.robot.bean.GetPicBean;
 public class CommandUtils {
 
     private static byte[] msg = new byte[5];
+    private static byte[] msg1 = new byte[6];
 
     //------------------------ 主臂命令 start --------------------------
 
@@ -1619,6 +1620,69 @@ public class CommandUtils {
         msg[4] = (byte) 0x00;
         return ConvertCode.bytes2HexString(msg);
     }
+
+    /**
+    * 手爪张开
+    *
+    *@author Leo
+    *created at 2019/6/19 12:55 AM
+    */
+    public static String clawOpen() {
+        msg1[0] = (byte) 0x68;
+        msg1[1] = (byte) 0x0C;
+        msg1[2] = (byte) 0x03;
+        msg1[3] = (byte) 0x01;
+        msg1[4] = (byte) 0x00;
+        msg1[5] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg1);
+    }
+
+    /**
+    * 手爪夹紧
+    *
+    *@author Leo
+    *created at 2019/6/19 12:55 AM
+    */
+    public static String clawClamping() {
+        msg1[0] = (byte) 0x68;
+        msg1[1] = (byte) 0x0C;
+        msg1[2] = (byte) 0x03;
+        msg1[3] = (byte) 0x01;
+        msg1[4] = (byte) 0x01;
+        msg1[5] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg1);
+    }
+
+    /**
+    * 继续作业
+    *
+    *@author Leo
+    *created at 2019/6/19 12:59 AM
+    */
+    public static String continueWork(){
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x0C;
+        msg[2] = (byte) 0x01;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+    /**
+    * 解除异常
+    *
+    *@author Leo
+    *created at 2019/6/19 12:59 AM
+    */
+    public static String undoException(){
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x0C;
+        msg[2] = (byte) 0x02;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+
 
 
     /**
