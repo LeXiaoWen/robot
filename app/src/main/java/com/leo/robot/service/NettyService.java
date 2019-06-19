@@ -73,7 +73,7 @@ public class NettyService extends Service {
         ports.add(UrlConstant.FLOW_ARM_PORT3);
         initMasterNetty();
         initVisionNetty();
-//        initMainArmNetty();
+        initMainArmNetty();
 //        initFlowArmNetty();
         return super.onStartCommand(intent, flags, startId);
     }

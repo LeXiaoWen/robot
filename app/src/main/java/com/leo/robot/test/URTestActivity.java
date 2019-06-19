@@ -3,7 +3,6 @@ package com.leo.robot.test;
 import android.app.Activity;
 import android.os.Bundle;
 import butterknife.ButterKnife;
-import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 
 public class URTestActivity extends Activity {
@@ -66,10 +65,10 @@ public class URTestActivity extends Activity {
         setContentView(R.layout.fg_slide_table);
         ButterKnife.bind(this);
 //        initData1();
-        JNIUtils utils = JNIUtils.getInstance();
-        String s = utils.getDouble(3.141592);
-        String stopJ = utils.ActionStopJ();
-        String joint = utils.ActionJoint("ACTION_J0_1");
+//        JNIUtils utils = JNIUtils.getInstance();
+//        String s = utils.getDouble(3.141592);
+//        String stopJ = utils.ActionStopJ();
+//        String joint = utils.ActionJoint("ACTION_J0_1");
 
 //        float v = utils.strToFloat("25064940");
 //        ToastUtils.showShortToast(String.valueOf(v));

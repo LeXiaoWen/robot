@@ -32,7 +32,6 @@ import com.leo.robot.utils.*;
 import com.leo.robot.view.DrawView;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.develop.LogUtils;
-import cree.mvp.util.ui.ToastUtils;
 import io.netty.channel.Channel;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -120,7 +119,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     @BindView(R.id.ll_status1)
     LinearLayout mLlStatus1;
     private AgentWeb mAgentWeb;
-//    private WebView mWebView;
+    //    private WebView mWebView;
     private float mNewScale;
     private int radioButtonTag = 1;
     private int mVideoTag = 0;
@@ -133,6 +132,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     private List<Integer> ports = new ArrayList<>();
     private ArmNettyClient client;
     private DrawView mDrawView;
+    private String mode = "Marm";
 
     @Override
     protected void notifyData(int status, String message) {
@@ -185,7 +185,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         setContentView(R.layout.activity_choose);
         ButterKnife.bind(this);
 //        ports.add(29999);
-//        ports.add(30001);
+        ports.add(30001);
         ports.add(30003);
         initTile();
         initBroadcast(mTvGroundPower);
@@ -196,7 +196,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         initSocketStatus();
 
         initListener();
-        mPresenter.initLineLocation();
+//        mPresenter.initLineLocation();
 
         showMsg("请选择行线画面第一个点位");
         mPresenter.initClient();
@@ -791,35 +791,44 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         String code = bean.getCode();
         String msg = bean.getMsg();
         if (msg.length() == 2216) {
-            LogUtils.e(msg);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-//                    String s = JNIUtils.getInstance().testJni2(msg);
-//                    LogUtils.e(s);
-                    try {
-                        JNIUtils.getInstance().GetDataPort30003(msg, "Marm");
-                        Thread.sleep(1000);
-                        String s = JNIUtils.getInstance().ActionMove("ACTION_MOVE_1", "Marm");
-//                          String s = JNIUtils.getInstance().testJni3(msg,"ACTION_MOVE_1", "Marm");
-                        LogUtils.e(s);
-                        runOnUiThread(() -> ToastUtils.showShortToast(s));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
 
 
-////                    String s = JNIUtils.getInstance().ActionMove("ACTION_MOVE_1", "Marm");
-////                    LogUtils.e(s);
+            handlerMsg(msg);
 
-                }
-            }).start();
-            if (code.equals("0")) {//30003数据
-                ToastUtils.showShortToast("30003数据 " + msg);
-            } else if (code.equals("1")) {//29999数据
-                ToastUtils.showShortToast("29999数据 " + msg);
-            }
+//            LogUtils.e(msg);
+//            NativeUtils.init(msg, "Marm");
+//            String s = NativeUtils.move("ACTION_MOVE_1", "Marm");
+//
+//            if (code.equals("0")) {//30003数据
+//                ToastUtils.showShortToast("30003数据 " + msg);
+//            } else if (code.equals("1")) {//29999数据
+//                ToastUtils.showShortToast("29999数据 " + msg);
+//            }
         }
+
+    }
+
+    private void handlerMsg(String msg) {
+        JNIUtils.GetDataPort30003(msg, mode);
+
+        String actionMove = JNIUtils.ActionMove("ACTION_MOVE_1", mode);
+        LogUtils.e("actionMove  " + actionMove);
+
+        String actionJoint = JNIUtils.ActionJoint("ACTION_J0_1", mode);
+        LogUtils.e("actionJoint  " + actionJoint);
+
+        String actionDash = JNIUtils.ActionDash("CMD_POWER_ON", mode);
+        LogUtils.e("actionDash   " + actionDash);
+
+        String actionPose = JNIUtils.ActionPose("ACTION_POSE_1", mode);
+        LogUtils.e("actionPose   " + actionPose);
+
+        String actionStop = JNIUtils.ActionStopJ( mode);
+        LogUtils.e("actionStop   " + actionStop);
+
+        String urParams = JNIUtils.ReadURparam("Act_Y", mode);
+        LogUtils.e("urParams   " + urParams);
+
 
     }
 
