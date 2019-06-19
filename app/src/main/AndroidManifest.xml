@@ -64,6 +64,19 @@
             </intent-filter>
         </activity>
         <activity
+                android:name=".TestActivity"
+                android:launchMode="singleTask"
+                android:label="JNITest"
+                android:screenOrientation="landscape"
+                android:theme="@style/AppStartTheme"
+                >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
                 android:name=".ui.main.MainActivity"
                 android:launchMode="singleTask"
                 android:screenOrientation="landscape"/>
