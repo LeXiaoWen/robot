@@ -57,7 +57,6 @@
                     android:layout_height="15dp"
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@id/tv1"
-                    android:background="@drawable/shap_extremity"
                     android:gravity="center"/>
 
                 <TextView
@@ -92,7 +91,6 @@
                     android:layout_height="15dp"
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@id/tv3"
-                    android:background="@drawable/shap_extremity"
                     android:gravity="center"/>
 
                 <TextView
@@ -127,7 +125,6 @@
                     android:layout_height="15dp"
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@id/tv5"
-                    android:background="@drawable/shap_extremity"
                     android:gravity="center"/>
 
                 <TextView
@@ -162,7 +159,6 @@
                     android:layout_height="15dp"
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@id/tv7"
-                    android:background="@drawable/shap_extremity"
                     android:gravity="center"/>
 
                 <TextView
@@ -197,7 +193,6 @@
                     android:layout_height="15dp"
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@id/tv9"
-                    android:background="@drawable/shap_extremity"
                     android:gravity="center"/>
 
                 <TextView
@@ -232,7 +227,6 @@
                     android:layout_height="15dp"
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@id/tv11"
-                    android:background="@drawable/shap_extremity"
                     android:gravity="center"/>
 
                 <TextView

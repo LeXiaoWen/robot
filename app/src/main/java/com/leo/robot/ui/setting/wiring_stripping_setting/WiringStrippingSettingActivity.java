@@ -13,10 +13,13 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.URConstants;
+import com.leo.robot.netty.arm.ArmBean;
 import com.leo.robot.ui.setting.fragment.*;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import org.greenrobot.eventbus.Subscribe;
@@ -308,5 +311,38 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
                 }
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void mainArmMsg(ArmBean bean) {
+        String code = bean.getCode();
+        String msg = bean.getMsg();
+        if (msg.length() == 2216) {
+            if (code.equals("0")) {//30003数据
+                handler30003Msg(msg);
+            } else if (code.equals("1")) {//29999数据
+                handler29999Msg(msg);
+            }
+        }
+    }
+
+    /**
+     * 主臂30003端口数据
+     *
+     * @author Leo
+     * created at 2019/6/19 11:18 PM
+     */
+    private void handler29999Msg(String msg) {
+        JNIUtils.GetDataPort29999(msg, URConstants.Marm);
+    }
+
+    /**
+     * 主臂29999端口数据
+     *
+     * @author Leo
+     * created at 2019/6/19 11:18 PM
+     */
+    private void handler30003Msg(String msg) {
+        JNIUtils.GetDataPort30003(msg, URConstants.Marm);
     }
 }

@@ -2,7 +2,6 @@ package com.leo.robot.ui.setting.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +15,7 @@ import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.URConstants;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.netty.arm.ArmNettyClient;
@@ -28,7 +28,7 @@ import com.leo.robot.utils.NettyManager;
  */
 
 
-public class ArmFragment extends Fragment {
+public class ArmFragment extends BaseFragment {
     private boolean isPause;
     private int TAG = 0;
     private TextView mTv1;
@@ -75,7 +75,9 @@ public class ArmFragment extends Fragment {
     private ImageButton mIv11;
     private ImageButton mIv12;
 
-    private ArmNettyClient mArmNettyClient;
+    private ArmNettyClient mMainArmNettyClient;
+    private ArmNettyClient mFlowArmNettyClient;
+
 
     @Nullable
     @Override
@@ -92,7 +94,39 @@ public class ArmFragment extends Fragment {
         initVideo2();
         initVideo3();
         initVideo4();
-        mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
+        initArmNetty();
+    }
+
+    @Override
+    public void updateData() {
+        initTem();
+        initJoint();
+    }
+
+    private void initJoint() {
+        //手腕1角度
+        String s1 = JNIUtils.ReadURparam(URConstants.J3_A, URConstants.Marm);
+        mTvArm1.setText(s1);
+        //手腕2角度
+        String s2 = JNIUtils.ReadURparam(URConstants.J4_A, URConstants.Marm);
+        mTvArm2.setText(s2);
+        //手腕3角度
+        String s3 = JNIUtils.ReadURparam(URConstants.J5_A, URConstants.Marm);
+        mTvArm3.setText(s3);
+        //肘部角度
+        String s4 = JNIUtils.ReadURparam(URConstants.J2_A, URConstants.Marm);
+        mTvArm4.setText(s4);
+        //肩部角度
+        String s5 = JNIUtils.ReadURparam(URConstants.J1_A, URConstants.Marm);
+        mTvArm5.setText(s5);
+        //基座角度
+        String s6 = JNIUtils.ReadURparam(URConstants.J0_A, URConstants.Marm);
+        mTvArm6.setText(s6);
+    }
+
+    private void initArmNetty() {
+        mMainArmNettyClient = (ArmNettyClient) NettyManager.getInstance().getClientByTag(RobotInit.MAIN_ARM_NETTY);
+        mFlowArmNettyClient = (ArmNettyClient) NettyManager.getInstance().getClientByTag(RobotInit.FLOW_ARM_NETTY);
     }
 
     @Override
@@ -183,134 +217,157 @@ public class ArmFragment extends Fragment {
         isPause = false;
     }
 
+
+
     @Override
     public void onDestroy() {
 
         super.onDestroy();
     }
 
-    @Override
-    public void onDestroyView() {
-        webViewOnDestroy();
-        super.onDestroyView();
-    }
+
 
     private void downClickPedestalDec() {
-
         if (TAG == 1) {//主臂
-            mClient.sendMsgTest(CommandUtils.getMainArmPedestalDec());
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J0_1, URConstants.Marm));
+            }
         } else {//从臂
-            mClient.sendMsgTest(CommandUtils.getFlowArmPedestalDec());
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J0_1, URConstants.Farm));
+            }
         }
     }
 
     private void downClickPedestalAdd() {
-
         if (TAG == 1) {//主臂
-            mClient.sendMsgTest(CommandUtils.getMainArmPedestalAdd());
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J0_2, URConstants.Marm));
+            }
         } else {//从臂
-            mClient.sendMsgTest(CommandUtils.getFlowArmPedestalAdd());
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J0_2, URConstants.Farm));
+            }
         }
     }
 
     private void downClickShoulderDec() {
-
         if (TAG == 1) {//主臂
-            mClient.sendMsgTest(CommandUtils.getMainArmShoulderDec());
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J1_1, URConstants.Marm));
+            }
         } else {//从臂
-            mClient.sendMsgTest(CommandUtils.getFlowArmShoulderDec());
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J1_1, URConstants.Farm));
+            }
         }
     }
 
     private void downClickShoulderAdd() {
-
         if (TAG == 1) {//主臂
-            mClient.sendMsgTest(CommandUtils.getMainArmShoulderAdd());
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J1_2, URConstants.Marm));
+            }
         } else {//从臂
-            mClient.sendMsgTest(CommandUtils.getFlowArmShoulderAdd());
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J1_2, URConstants.Farm));
+            }
         }
     }
 
     private void downClickElbowAdd() {
-
         if (TAG == 1) {//主臂
-            mClient.sendMsgTest(CommandUtils.getMainArmElbowAdd());
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J2_2, URConstants.Marm));
+            }
         } else {//从臂
-            mClient.sendMsgTest(CommandUtils.getFlowArmElbowAdd());
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J2_2, URConstants.Farm));
+            }
         }
     }
 
     private void downClickElbowDec() {
-
         if (TAG == 1) {//主臂
-            mClient.sendMsgTest(CommandUtils.getMainArmElbowDec());
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J2_1, URConstants.Marm));
+            }
         } else {//从臂
-            mClient.sendMsgTest(CommandUtils.getFlowArmElbowDec());
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J2_1, URConstants.Farm));
+            }
         }
     }
 
     private void downClickWrist3Add() {
-
         if (TAG == 1) {//主臂
-            mArmNettyClient.sendMsg30001(mJniUtils.ActionJoint(RobotInit.ACTION_J2_2));
-            mClient.sendMsgTest(CommandUtils.getMainArmWrist3Add());
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J5_2, URConstants.Marm));
+            }
         } else {//从臂
-            mArmNettyClient.sendMsg30001(mJniUtils.ActionJoint(RobotInit.ACTION_J2_2));
-            mClient.sendMsgTest(CommandUtils.getFlowArmWrist3Add());
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J5_2, URConstants.Farm));
+            }
         }
     }
 
     private void downClickWrist3Dec() {
-
         if (TAG == 1) {//主臂
-            mArmNettyClient.sendMsg30001(mJniUtils.ActionJoint(RobotInit.ACTION_J2_1));
-            mClient.sendMsgTest(CommandUtils.getMainArmWrist3Dec());
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J5_1, URConstants.Marm));
+            }
         } else {//从臂
-            mArmNettyClient.sendMsg30001(mJniUtils.ActionJoint(RobotInit.ACTION_J2_1));
-            mClient.sendMsgTest(CommandUtils.getFlowArmWrist3Dec());
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J5_1, URConstants.Farm));
+            }
         }
     }
 
     private void downClickWrist2Add() {
-
         if (TAG == 1) {//主臂
-            mArmNettyClient.sendMsg30001(mJniUtils.ActionJoint(RobotInit.ACTION_J1_2));
-            mClient.sendMsgTest(CommandUtils.getMainArmWrist2Add());
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J4_2, URConstants.Marm));
+            }
         } else {//从臂
-            mArmNettyClient.sendMsg30001(mJniUtils.ActionJoint(RobotInit.ACTION_J1_2));
-            mClient.sendMsgTest(CommandUtils.getFlowArmWrist2Add());
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J4_2, URConstants.Farm));
+            }
         }
     }
 
     private void downClickWrist2Dec() {
-
         if (TAG == 1) {//主臂
-            mArmNettyClient.sendMsg30001(mJniUtils.ActionJoint(RobotInit.ACTION_J1_1));
-            mClient.sendMsgTest(CommandUtils.getMainArmWrist2Dec());
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J4_1, URConstants.Marm));
+            }
         } else {//从臂
-            mArmNettyClient.sendMsg30001(mJniUtils.ActionJoint(RobotInit.ACTION_J1_2));
-            mClient.sendMsgTest(CommandUtils.getFlowArmWrist2Dec());
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J4_1, URConstants.Farm));
+            }
         }
     }
 
     private void downClickWrist1Add() {
-
         if (TAG == 1) {//主臂
-            mArmNettyClient.sendMsg30001(mJniUtils.ActionJoint(RobotInit.ACTION_J0_2));
-            mClient.sendMsgTest(CommandUtils.getMainArmWrist1Add());
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J3_2, URConstants.Marm));
+            }
         } else {//从臂
-            mArmNettyClient.sendMsg30001(mJniUtils.ActionJoint(RobotInit.ACTION_J0_2));
-            mClient.sendMsgTest(CommandUtils.getFlowArmWrist1Add());
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J3_2, URConstants.Farm));
+            }
         }
     }
 
     private void downClickWrist1Dec() {
         if (TAG == 1) {//主臂
-            mArmNettyClient.sendMsg30001(mJniUtils.ActionJoint(RobotInit.ACTION_J0_1));
-            mClient.sendMsgTest(CommandUtils.getMainArmWrist1Dec());
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J3_1, URConstants.Marm));
+            }
         } else {//从臂
-            mArmNettyClient.sendMsg30001(mJniUtils.ActionJoint(RobotInit.ACTION_J0_1));
-            mClient.sendMsgTest(CommandUtils.getFlowArmWrist1Dec());
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionJoint(URConstants.ACTION_J3_1, URConstants.Farm));
+            }
         }
     }
 
@@ -320,85 +377,62 @@ public class ArmFragment extends Fragment {
         if (action == MotionEvent.ACTION_DOWN) { //按下
             switch (v.getId()) {
                 case R.id.iv1:
-                    if (mClient != null) {
-                        downClickWrist1Dec();
-                    }
+                    downClickWrist1Dec();
                     break;
                 case R.id.iv2:
-                    if (mClient != null) {
 
-                        downClickWrist1Add();
-                    }
+                    downClickWrist1Add();
                     break;
                 case R.id.iv3:
-                    if (mClient != null) {
 
-                        downClickWrist2Dec();
-                    }
+                    downClickWrist2Dec();
                     break;
                 case R.id.iv4:
-                    if (mClient != null) {
 
-                        downClickWrist2Add();
-                    }
+                    downClickWrist2Add();
                     break;
                 case R.id.iv5:
-                    if (mClient != null) {
 
-                        downClickWrist3Dec();
-                    }
+                    downClickWrist3Dec();
                     break;
                 case R.id.iv6:
-                    if (mClient != null) {
 
-                        downClickWrist3Add();
-                    }
+                    downClickWrist3Add();
                     break;
                 case R.id.iv7:
-                    if (mClient != null) {
 
-                        downClickElbowDec();
-                    }
+                    downClickElbowDec();
                     break;
                 case R.id.iv8:
-                    if (mClient != null) {
 
-                        downClickElbowAdd();
-                    }
+                    downClickElbowAdd();
                     break;
                 case R.id.iv9:
-                    if (mClient != null) {
 
-                        downClickShoulderDec();
-                    }
+                    downClickShoulderDec();
                     break;
                 case R.id.iv10:
-                    if (mClient != null) {
 
-                        downClickShoulderAdd();
-                    }
+                    downClickShoulderAdd();
                     break;
                 case R.id.iv11:
-                    if (mClient != null) {
 
-                        downClickPedestalDec();
-                    }
+                    downClickPedestalDec();
                     break;
                 case R.id.iv12:
-                    if (mClient != null) {
-                        downClickPedestalAdd();
-                    }
+                    downClickPedestalAdd();
                     break;
             }
         } else if (action == MotionEvent.ACTION_UP) {//松开
             if (TAG == 1) {//主臂
-                if (mClient != null) {
-                    mainArmUp();
+                if (mMainArmNettyClient != null) {
+                    mMainArmNettyClient.sendMsg30001(JNIUtils.ActionStopJ(URConstants.Marm));
                 }
             } else {//从臂
-                if (mClient != null) {
-                    flowArmUp();
+                if (mFlowArmNettyClient != null) {
+                    mMainArmNettyClient.sendMsg30001(JNIUtils.ActionStopJ(URConstants.Marm));
                 }
+
             }
         }
         return false;
@@ -550,6 +584,31 @@ public class ArmFragment extends Fragment {
         mAgentWeb2.getWebLifeCycle().onDestroy();
         mAgentWeb3.getWebLifeCycle().onDestroy();
         mAgentWeb4.getWebLifeCycle().onDestroy();
+    }
+
+
+
+
+    private void initTem() {
+        //基座温度
+        String mainArm_J0T = JNIUtils.ReadURparam(URConstants.J0_T, URConstants.Marm);
+        mTv6.setText(mainArm_J0T);
+        //肩部温度
+        String mainArm_J1T = JNIUtils.ReadURparam(URConstants.J1_T, URConstants.Marm);
+        mTv4.setText(mainArm_J1T);
+        //肘部温度
+        String mainArm_J2T = JNIUtils.ReadURparam(URConstants.J2_T, URConstants.Marm);
+        mTv2.setText(mainArm_J2T);
+        //手腕1温度
+        String mainArm_J3T = JNIUtils.ReadURparam(URConstants.J3_T, URConstants.Marm);
+        mTv1.setText(mainArm_J3T);
+        //手腕2温度
+        String mainArm_J4T = JNIUtils.ReadURparam(URConstants.J4_T, URConstants.Marm);
+        mTv3.setText(mainArm_J4T);
+        //手腕3温度
+        String mainArm_J5T = JNIUtils.ReadURparam(URConstants.J5_T, URConstants.Marm);
+        mTv5.setText(mainArm_J5T);
+
     }
 
 

@@ -2,7 +2,6 @@ package com.leo.robot.ui.setting.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,13 +9,16 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
+import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.URConstants;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
-import com.leo.robot.utils.CommandUtils;
+import com.leo.robot.netty.arm.ArmNettyClient;
 import com.leo.robot.utils.NettyManager;
 
 /**
@@ -25,9 +27,15 @@ import com.leo.robot.utils.NettyManager;
  */
 
 
-public class ExtremityFragment extends Fragment implements View.OnClickListener {
+public class ExtremityFragment extends BaseFragment  {
     private boolean isPause;
     private int TAG = 0;
+    private TextView mTv2;
+    private TextView mTv4;
+    private TextView mTv6;
+    private TextView mTv8;
+    private TextView mTv10;
+    private TextView mTv12;
 
     public void setTAG(int TAG) {
         this.TAG = TAG;
@@ -52,6 +60,9 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
     private ImageButton mIv5;
     private ImageButton mIv6;
 
+    private ArmNettyClient mMainArmNettyClient;
+    private ArmNettyClient mFlowArmNettyClient;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,7 +79,35 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
         initVideo2();
         initVideo3();
         initVideo4();
+        initArmNetty();
+
     }
+
+    @Override
+    public void updateData() {
+        initTCP();
+    }
+
+    private void initTCP() {
+        String x1 = JNIUtils.ReadURparam(URConstants.Act_X, URConstants.Marm);
+        mTv2.setText(x1);
+        String y2 = JNIUtils.ReadURparam(URConstants.Act_Y, URConstants.Marm);
+        mTv4.setText(y2);
+        String z3 = JNIUtils.ReadURparam(URConstants.Act_Z, URConstants.Marm);
+        mTv6.setText(z3);
+        String RX1 = JNIUtils.ReadURparam(URConstants.Act_Rx, URConstants.Marm);
+        mTv8.setText(RX1);
+        String RY2 = JNIUtils.ReadURparam(URConstants.Act_Ry, URConstants.Marm);
+        mTv10.setText(RY2);
+        String RZ3 = JNIUtils.ReadURparam(URConstants.Act_Rz, URConstants.Marm);
+        mTv12.setText(RZ3);
+    }
+
+    private void initArmNetty() {
+        mMainArmNettyClient = (ArmNettyClient) NettyManager.getInstance().getClientByTag(RobotInit.MAIN_ARM_NETTY);
+        mFlowArmNettyClient = (ArmNettyClient) NettyManager.getInstance().getClientByTag(RobotInit.FLOW_ARM_NETTY);
+    }
+
 
     private void initView(View view) {
         mRlMain = (RelativeLayout) view.findViewById(R.id.rl_main);
@@ -83,6 +122,15 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
         mIv4 = (ImageButton) view.findViewById(R.id.iv4);
         mIv5 = (ImageButton) view.findViewById(R.id.iv5);
         mIv6 = (ImageButton) view.findViewById(R.id.iv6);
+
+        mTv2 = (TextView) view.findViewById(R.id.tv2);
+        mTv4 = (TextView) view.findViewById(R.id.tv4);
+        mTv6 = (TextView) view.findViewById(R.id.tv6);
+        mTv8 = (TextView) view.findViewById(R.id.tv8);
+        mTv10 = (TextView) view.findViewById(R.id.tv10);
+        mTv12 = (TextView) view.findViewById(R.id.tv12);
+
+
         mIv1.setOnTouchListener(mOnDownClickListener);
         mIv2.setOnTouchListener(mOnDownClickListener);
         mIv3.setOnTouchListener(mOnDownClickListener);
@@ -99,60 +147,43 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
         if (action == MotionEvent.ACTION_DOWN) { //按下
             switch (v.getId()) {
                 case R.id.iv1:
-                    if (mClient != null) {
-                        up();
-                    }
+                    up();
                     break;
                 case R.id.iv2:
-                    if (mClient != null) {
-                        down();
-                    }
+                    down();
                     break;
                 case R.id.iv3:
-                    if (mClient != null) {
-                        left();
-                    }
+                    left();
                     break;
                 case R.id.iv4:
-                    if (mClient != null) {
-                        right();
-                    }
+                    right();
                     break;
                 case R.id.iv5:
-                    if (mClient != null) {
-                        forward();
-                    }
+                    forward();
                     break;
                 case R.id.iv6:
-                    if (mClient != null) {
-                        backward();
-                    }
+                    backward();
                     break;
             }
         } else if (action == MotionEvent.ACTION_UP) {//松开
             if (TAG == 1) {//主臂
-                if (mClient != null) {
-                    mainArmUp();
-                }
+                mainArmUp();
             } else {//从臂
-                if (mClient != null) {
-                    flowArmUp();
-                }
+                flowArmUp();
             }
         }
         return false;
     };
 
     private void flowArmUp() {
-        if (mClient != null) {
-
-            mClient.sendMsgTest(CommandUtils.getFlowArmActionStop());
+        if (mFlowArmNettyClient != null) {
+            mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionStopJ(URConstants.Farm));
         }
     }
 
     private void mainArmUp() {
-        if (mClient != null) {
-            mClient.sendMsgTest(CommandUtils.getMainArmActionStop());
+        if (mMainArmNettyClient != null) {
+            mMainArmNettyClient.sendMsg30001(JNIUtils.ActionStopJ(URConstants.Marm));
         }
     }
 
@@ -337,98 +368,87 @@ public class ExtremityFragment extends Fragment implements View.OnClickListener 
         super.onDestroy();
     }
 
-    @Override
-    public void onDestroyView() {
-        webViewOnDestroy();
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv1:
-                up();
-                break;
-            case R.id.iv2:
-                down();
-                break;
-            case R.id.iv3:
-                left();
-                break;
-            case R.id.iv4:
-                right();
-                break;
-            case R.id.iv5:
-                forward();
-                break;
-            case R.id.iv6:
-                backward();
-                break;
-        }
-    }
 
     private void down() {
-        if (mClient != null) {
-            if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmPosDown());
-            } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmPosDown());
+        if (TAG == 1) {//主臂
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_4,URConstants.Marm));
+            }
+        } else {//从臂
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_4,URConstants.Farm));
             }
         }
     }
 
     private void up() {
-        if (mClient != null) {
-            if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmPosUp());
-            } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmPosUp());
+        if (TAG == 1) {//主臂
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_3,URConstants.Marm));
+            }
+        } else {//从臂
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_3,URConstants.Farm));
             }
         }
 
     }
 
     private void right() {
-        if (mClient != null) {
-            if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmPosRight());
-            } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmPosRight());
+        if (TAG == 1) {//主臂
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_1,URConstants.Marm));
+            }
+        } else {//从臂
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_1,URConstants.Farm));
             }
         }
 
     }
 
     private void left() {
-        if (mClient != null) {
-            if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmPosLeft());
-            } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmPosLeft());
+        if (TAG == 1) {//主臂
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_2,URConstants.Marm));
+            }
+        } else {//从臂
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_2,URConstants.Farm));
             }
         }
 
     }
 
     private void backward() {
-        if (mClient != null) {
-            if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmPosRotateRight());
-            } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmPosRotateRight());
+        if (TAG == 1) {//主臂
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_5,URConstants.Marm));
+            }
+        } else {//从臂
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_5,URConstants.Farm));
             }
         }
 
     }
 
     private void forward() {
-        if (mClient != null) {
-            if (TAG == 1) {//主臂
-                mClient.sendMsgTest(CommandUtils.getMainArmPosRotateLeft());
-            } else {//从臂
-                mClient.sendMsgTest(CommandUtils.getFlowArmPosRotateLeft());
+        if (TAG == 1) {//主臂
+            if (mMainArmNettyClient != null) {
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_6,URConstants.Marm));
+            }
+        } else {//从臂
+            if (mFlowArmNettyClient != null) {
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_6,URConstants.Farm));
             }
         }
+    }
 
+
+    @Override
+    public void onDestroyView() {
+        webViewOnDestroy();
+        super.onDestroyView();
     }
 }

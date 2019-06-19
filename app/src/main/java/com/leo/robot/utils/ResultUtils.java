@@ -578,7 +578,7 @@ public class ResultUtils {
     *created at 2019/6/14 9:21 PM
     */
     private static void onMainArm(String msg) {
-            ArmBean armBean = new ArmBean();
+        ArmBean armBean = new ArmBean();
         if (msg.length()>1000) {//30003端口数据
             armBean.setCode("0");
             armBean.setMsg(msg);
