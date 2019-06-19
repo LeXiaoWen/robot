@@ -147,7 +147,7 @@ public class JNIUtils {
      * @author Leo
      * created at 2019/6/13 10:53 PM
      */
-    public native void GetDataPort30003(String s, String name);
+    public native  String GetDataPort30003(String s, String name);
 
     /**
      * 末端位移控制

@@ -107,4 +107,5 @@ dependencies {
     implementation files('libs/unity-classes.jar')
     //动画
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
+    implementation 'org.jetbrains:annotations:15.0'
 }
