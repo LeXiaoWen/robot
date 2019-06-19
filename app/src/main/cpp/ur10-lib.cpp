@@ -33,347 +33,8 @@ JNIEXPORT jstring JNICALL Java_com_leo_robot_JNIUtils_hello
 }
 #endif
 #endif
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_getDouble(JNIEnv *env, jobject instance, jdouble num) {
-
-
-    std::string str = ur10.doubleToString(num);
-
-
-    return env->NewStringUTF(str.c_str());
-}
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_leo_robot_JNIUtils_GetDataPort29999(JNIEnv *env, jobject instance, jstring s_) {
-    const char *s = env->GetStringUTFChars(s_, 0);
-
-    // TODO
-    std::string str = jstring2str(env, s_);
-    ur10.GetDataPort29999(str);
-    env->ReleaseStringUTFChars(s_, s);
-}extern "C"
-JNIEXPORT void JNICALL
-Java_com_leo_robot_JNIUtils_GetDataPort30003(JNIEnv *env, jobject instance) {
-
-    // TODO
-    ur10.GetDataPort30003();
-
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_ActionMove(JNIEnv *env, jobject instance, jstring s_) {
-    const char *s = env->GetStringUTFChars(s_, 0);
-
-    // TODO
-    std::string move = jstring2str(env, s_);
-    std::string str = ur10.ActionMove(move);
-    env->ReleaseStringUTFChars(s_, s);
-
-    return env->NewStringUTF(str.c_str());
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_ActionPose(JNIEnv *env, jobject instance, jstring s_) {
-    const char *s = env->GetStringUTFChars(s_, 0);
-
-    // TODO
-    std::string pose = jstring2str(env, s_);
-    std::string str = ur10.ActionMove(pose);
-    env->ReleaseStringUTFChars(s_, s);
-
-    return env->NewStringUTF(str.c_str());
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_ActionJoint(JNIEnv *env, jobject instance, jstring s_) {
-    const char *s = env->GetStringUTFChars(s_, 0);
-
-    // TODO
-    std::string joint = jstring2str(env, s_);
-    std::string str = ur10.ActionJoint(joint);
-    env->ReleaseStringUTFChars(s_, s);
-
-    return env->NewStringUTF(str.c_str());
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_ActionDash(JNIEnv *env, jobject instance, jstring s_) {
-    const char *s = env->GetStringUTFChars(s_, 0);
-
-    // TODO
-    std::string dash = jstring2str(env, s_);
-    std::string str = ur10.ActionDash(dash);
-    env->ReleaseStringUTFChars(s_, s);
-
-    return env->NewStringUTF(str.c_str());
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_ActionStopJ(JNIEnv *env, jobject instance) {
-
-    // TODO
-    std::string str = ur10.ActionStopJ();
-
-    return env->NewStringUTF(str.c_str());
-}
-//extern "C"
-//JNIEXPORT jdouble JNICALL
-//Java_com_leo_robot_JNIUtils_HexToDouble(JNIEnv *env, jobject instance, jcharArray chars_) {
-//    unsigned char *a = (unsigned char*)env->GetCharArrayElements(chars_, NULL);
-//    // TODO
-//    double s = ur10.HexToDouble(a);
-////    env->ReleaseCharArrayElements(chars_, chars, 0);
-//    return s;
-//}
 
 extern "C"
-JNIEXPORT void JNICALL
-Java_com_leo_robot_JNIUtils_SetMoveSpeed(JNIEnv *env, jobject instance, jfloat v) {
-
-    // TODO
-    ur10.SetMoveSpeed(v);
-}extern "C"
-JNIEXPORT void JNICALL
-Java_com_leo_robot_JNIUtils_SetMoveAcc(JNIEnv *env, jobject instance, jfloat v) {
-
-    // TODO
-    ur10.SetMoveAcc(v);
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_DoubleToString(JNIEnv *env, jobject instance, jdouble num) {
-
-    // TODO
-    std::string str = ur10.doubleToString(num);
-
-    return env->NewStringUTF(str.c_str());
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_doubleToString4(JNIEnv *env, jobject instance, jdouble num) {
-
-    // TODO
-    std::string str = ur10.doubleToString(num);
-
-    return env->NewStringUTF(str.c_str());
-}
-
-std::string jstring2str(JNIEnv *env, jstring jstr) {
-    char *rtn = NULL;
-    jclass clsstring = env->FindClass("java/lang/String");
-    jstring strencode = env->NewStringUTF("GB2312");
-    jmethodID mid = env->GetMethodID(clsstring, "getBytes", "(Ljava/lang/String;)[B");
-    jbyteArray barr = (jbyteArray) env->CallObjectMethod(jstr, mid, strencode);
-    jsize alen = env->GetArrayLength(barr);
-    jbyte *ba = env->GetByteArrayElements(barr, JNI_FALSE);
-    if (alen > 0) {
-        rtn = (char *) malloc(alen + 1);
-        memcpy(rtn, ba, alen);
-        rtn[alen] = 0;
-    }
-    env->ReleaseByteArrayElements(barr, ba, 0);
-    std::string stemp(rtn);
-    free(rtn);
-    return stemp;
-}
-
-//extern "C"
-//JNIEXPORT jdouble JNICALL
-//Java_com_leo_robot_JNIUtils_HexToDouble(JNIEnv *env, jobject instance, jbyteArray chars_) {
-//    unsigned char *chars = (unsigned char*)env->GetByteArrayElements(chars_, 0);
-//
-//
-//    // TODO
-////    ur10.HexToDouble(chars);
-//
-////    env->ReleaseByteArrayElements(chars_, chars, 0);
-//    return ur10.HexToDouble(chars);
-//}
-
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_leo_robot_JNIUtils_GetDataPort29999__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
-                                                                                     jstring s_, jstring name_) {
-    const char *s = env->GetStringUTFChars(s_, 0);
-    const char *name = env->GetStringUTFChars(name_, 0);
-
-
-    std::string str = jstring2str(env, s_);
-    std::string str1 = jstring2str(env, name_);
-    // TODO
-    ur->GetDataPort29999(str, str1);
-
-    env->ReleaseStringUTFChars(s_, s);
-    env->ReleaseStringUTFChars(name_, name);
-}
-
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_ActionMove__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
-                                                                               jstring s_, jstring name_) {
-    const char *s = env->GetStringUTFChars(s_, NULL);
-    const char *name = env->GetStringUTFChars(name_, NULL);
-
-    // TODO
-
-    const string str2 = ur->ActionMove((string) s, (string) name);
-    LOGW("%p", ur);
-    printf("%p", ur);
-    return env->NewStringUTF(str2.data());
-}
-
-
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_ActionPose__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
-                                                                               jstring s_, jstring name_) {
-    const char *s = env->GetStringUTFChars(s_, 0);
-    const char *name = env->GetStringUTFChars(name_, 0);
-
-    // TODO
-    std::string str = jstring2str(env, s_);
-    std::string str1 = jstring2str(env, name_);
-
-    std::string str2 = ur->ActionPose(str, str1);
-    env->ReleaseStringUTFChars(s_, s);
-    env->ReleaseStringUTFChars(name_, name);
-
-    return env->NewStringUTF(str2.c_str());
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_ActionJoint__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
-                                                                                jstring s_, jstring name_) {
-    const char *s = env->GetStringUTFChars(s_, 0);
-    const char *name = env->GetStringUTFChars(name_, 0);
-
-    // TODO
-    std::string str = jstring2str(env, s_);
-    std::string str1 = jstring2str(env, name_);
-
-    std::string str2 = ur->ActionJoint(str, str1);
-    env->ReleaseStringUTFChars(s_, s);
-    env->ReleaseStringUTFChars(name_, name);
-
-    return env->NewStringUTF(str2.c_str());
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_ActionDash__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
-                                                                               jstring s_, jstring name_) {
-    const char *s = env->GetStringUTFChars(s_, 0);
-    const char *name = env->GetStringUTFChars(name_, 0);
-
-    // TODO
-    std::string str = jstring2str(env, s_);
-    std::string str1 = jstring2str(env, name_);
-
-    std::string str2 = ur->ActionDash(str, str1);
-
-    env->ReleaseStringUTFChars(s_, s);
-    env->ReleaseStringUTFChars(name_, name);
-
-    return env->NewStringUTF(str2.c_str());
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_ActionStopJ__Ljava_lang_String_2(JNIEnv *env, jobject instance, jstring name_) {
-    const char *name = env->GetStringUTFChars(name_, 0);
-
-    // TODO
-    std::string na = jstring2str(env, name_);
-    std::string str = ur->ActionStopJ(na);
-
-    env->ReleaseStringUTFChars(name_, name);
-
-    return env->NewStringUTF(str.c_str());
-}extern "C"
-JNIEXPORT void JNICALL
-Java_com_leo_robot_JNIUtils_SetMoveSpeed__FLjava_lang_String_2(JNIEnv *env, jobject instance, jfloat v, jstring name_) {
-    const char *name = env->GetStringUTFChars(name_, 0);
-
-    // TODO
-    std::string na = jstring2str(env, name_);
-    ur->SetMoveSpeed(v, na);
-    env->ReleaseStringUTFChars(name_, name);
-}extern "C"
-JNIEXPORT void JNICALL
-Java_com_leo_robot_JNIUtils_SetMoveAcc__FLjava_lang_String_2(JNIEnv *env, jobject instance, jfloat v, jstring name_) {
-    const char *name = env->GetStringUTFChars(name_, 0);
-
-    // TODO
-    std::string na = jstring2str(env, name_);
-    ur->SetMoveAcc(v, na);
-    env->ReleaseStringUTFChars(name_, name);
-}extern "C"
-//JNIEXPORT jstring JNICALL
-//Java_com_leo_robot_JNIUtils_GetDataPort30003__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
-//                                                                                     jstring s_, jstring name_) {
-//    LOGW("runthere");
-//    const char *s = env->GetStringUTFChars(s_, NULL);
-//    const char *name = env->GetStringUTFChars(name_, NULL);
-//
-//    ur->GetDataPort30003(string(s), string(name));
-//    LOGW("runthere");
-//    env->ReleaseStringUTFChars(s_, s);
-//    env->ReleaseStringUTFChars(name_, name);
-//    return env->NewStringUTF("Init OK");
-//}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_testJni(JNIEnv *env, jobject instance) {
-
-    // TODO
-    string msg = "0000045440A305DB22D0E5603FEE994C40000000BFDBD9E54442D180C0043F65C8885A303FF24188E00000003FF7F193C00000003FA31261000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003C9539750978818D4000D3A9B37DC55AC00496B88A9215633FE2755127BCDBCFBFA314E62C32594700000000000000003CCE16D1DC629000403802AB948BB990C03D8CAF1C577549401353470CF9C3D1BFD42C36A05C52CA00000000000000003FEE99B0C0000000BFDBDA494442D180C0043F52E8885A303FF241AEA00000003FF7F1A0600000003FA308F440000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000BF925D6AE00000003FFA6649A0000000BFF278F7000000003FD4FC0C800000003FCE41BEC00000003FB001BFC0000000BF994073000000003FFA78A700000000BFF2A6E0800000003FD47F1E200000003FCE41BEC00000003FADABD3E00000003FABAEE23C4070EBBFBFE320113D5F9B3FDC37A8AB09B515BFCC2C051CE9130A3FC3BAC6CA82755BBFE2957B4ECE09230000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004030AE607ED5AF83C03D09C2504E72A0C04BF0EF382E43A9C005EF3E4F0BD5C23FF807AACE48740CBFD1E66AFCD370623FABAE5226000154BFBFE33FF610830F3FDC377C7AE4CBCDBFCC2D19D0C43F0A3FC3BC152A580272BFE2954D91690566000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040341709A00000004033F5C20000000040345709A000000040380CCC40000000403BC51E20000000403BC7AD800000003FD163CB817332274020000000000000401C000000000000406FA00000000000406FA00000000000406FA00000000000406FA00000000000406FA00000000000406FA000000000003FF00000000000003FF53636952A5C1D400C433817D1BB3F400C5B0771CB779C3FFABF0539DC7B323FF184075A7C9ED83FF105922A64F4D73FF275E4E000000040044858A0000000C023F88EE00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040260000000000004060400000000000404810AA60000000404810AA600000003FE81004800000004047F28F600000004047F28F600000004047F66660000000404803D700000000404809BA6000000040480F9DC000000000000000000000003FF0000000000000BFCC7131F0AD1D20BFD426E9360B43523FD12C65A554D42E000000000000000080000000000000000000000000000000";
-    ur->GetDataPort30003(msg, "Marm");
-
-    const string s1 = ur->ActionDash(CMD_POWER_ON, Marm);
-    const string s2 = ur->ActionJoint(ACTION_J0_1, Marm);
-    const string s3 = ur->ActionMove(ACTION_MOVE_1, Marm);
-    const string s4 = ur->ActionPose(ACTION_POSE_1, Marm);
-    const string s5 = ur->ActionStopJ(Marm);
-    string s6 = s1 + s2 + s3 + s4 + s5;
-    return env->NewStringUTF(s6.data());
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_testJni2(JNIEnv *env, jobject instance, jstring msg_) {
-    const char *msg = env->GetStringUTFChars(msg_, 0);
-
-    // TODO
-    string str1 = jstring2str(env, msg_);
-    ur->GetDataPort30003(str1, "Marm");
-
-//    env->ReleaseStringUTFChars(msg_, msg);
-
-//    const string s1=ur.ActionDash(CMD_POWER_ON,Marm);
-//    const string s2=ur.ActionJoint(ACTION_J0_1 ,Marm);
-    const string s3 = ur->ActionMove(ACTION_MOVE_1, Marm);
-//    const string s4=ur.ActionPose(ACTION_POSE_1,Marm);
-//    const string s5=ur.ActionStopJ(Marm);
-//    string s6=s1+s2+s3+s4+s5;
-    return env->NewStringUTF(s3.data());
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_testJni3(JNIEnv *env, jobject instance, jstring msg_, jstring mode_, jstring name_) {
-    const char *msg = env->GetStringUTFChars(msg_, NULL);
-    const char *mode = env->GetStringUTFChars(mode_, NULL);
-    const char *name = env->GetStringUTFChars(name_, NULL);
-
-    // TODO
-    ur->GetDataPort30003((string) msg, (string) name);
-    const string str2 = ur->ActionMove((string) mode, string(name));
-//    LOGW("%p",ur);
-//    printf("%p",ur);
-//    env->ReleaseStringUTFChars(msg_, msg);
-//    env->ReleaseStringUTFChars(mode_, mode);
-//    env->ReleaseStringUTFChars(name_, name);
-
-    return env->NewStringUTF(str2.data());
-}extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_leo_robot_JNIUtils_GetDataPort30003__Ljava_lang_String_2Ljava_lang_String_2(JNIEnv *env, jobject instance,
-                                                                                     jstring s_, jstring name_) {
-    const char *s = env->GetStringUTFChars(s_, 0);
-    const char *name = env->GetStringUTFChars(name_, 0);
-
-    ur->GetDataPort30003(string(s),string(name));
-
-    env->ReleaseStringUTFChars(s_, s);
-    env->ReleaseStringUTFChars(name_, name);
-
-    return env->NewStringUTF("Init OK");
-}extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_leo_robot_NativeUtils_init(JNIEnv *env, jclass type, jstring msg_, jstring mode_) {
     const char *msg = env->GetStringUTFChars(msg_, 0);
@@ -416,6 +77,138 @@ Java_com_leo_robot_NativeUtils_stop(JNIEnv *env, jclass type, jstring mode_) {
 
     string rs = ur->ActionStopJ(string(mode));
 
+    env->ReleaseStringUTFChars(mode_, mode);
+
+    return env->NewStringUTF(rs.data());
+}
+
+//------------------------------------------------ 机械臂相关  --------------------------------------
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_GetDataPort29999(JNIEnv *env, jclass type, jstring msg_, jstring mode_) {
+    const char *msg = env->GetStringUTFChars(msg_, 0);
+    const char *mode = env->GetStringUTFChars(mode_, 0);
+
+    ur->GetDataPort29999(string(msg), string(mode));
+
+    env->ReleaseStringUTFChars(msg_, msg);
+    env->ReleaseStringUTFChars(mode_, mode);
+
+    return env->NewStringUTF("Init 29999端口 Ok");
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_GetDataPort30003(JNIEnv *env, jclass type, jstring msg_, jstring mode_) {
+    const char *msg = env->GetStringUTFChars(msg_, 0);
+    const char *mode = env->GetStringUTFChars(mode_, 0);
+
+    ur->GetDataPort30003(string(msg), string(mode));
+
+    env->ReleaseStringUTFChars(msg_, msg);
+    env->ReleaseStringUTFChars(mode_, mode);
+
+    return env->NewStringUTF("Init 30003 Ok");
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_ActionMove(JNIEnv *env, jclass type, jstring msg_, jstring mode_) {
+    const char *msg = env->GetStringUTFChars(msg_, 0);
+    const char *mode = env->GetStringUTFChars(mode_, 0);
+
+    string rs = ur->ActionMove(string(msg), string(mode));
+
+    env->ReleaseStringUTFChars(msg_, msg);
+    env->ReleaseStringUTFChars(mode_, mode);
+
+    return env->NewStringUTF(rs.data());
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_ActionPose(JNIEnv *env, jclass type, jstring msg_, jstring mode_) {
+    const char *msg = env->GetStringUTFChars(msg_, 0);
+    const char *mode = env->GetStringUTFChars(mode_, 0);
+
+    // TODO
+    string rs = ur->ActionPose(string(msg), string(mode));
+
+    env->ReleaseStringUTFChars(msg_, msg);
+    env->ReleaseStringUTFChars(mode_, mode);
+
+    return env->NewStringUTF(rs.data());
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_ActionJoint(JNIEnv *env, jclass type, jstring msg_, jstring mode_) {
+    const char *msg = env->GetStringUTFChars(msg_, 0);
+    const char *mode = env->GetStringUTFChars(mode_, 0);
+
+    // TODO
+    string rs = ur->ActionJoint(string(msg), string(mode));
+
+    env->ReleaseStringUTFChars(msg_, msg);
+    env->ReleaseStringUTFChars(mode_, mode);
+
+    return env->NewStringUTF(rs.data());
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_ActionDash(JNIEnv *env, jclass type, jstring msg_, jstring mode_) {
+    const char *msg = env->GetStringUTFChars(msg_, 0);
+    const char *mode = env->GetStringUTFChars(mode_, 0);
+
+    // TODO
+    string rs = ur->ActionDash(string(msg), string(mode));
+
+    env->ReleaseStringUTFChars(msg_, msg);
+    env->ReleaseStringUTFChars(mode_, mode);
+
+    return env->NewStringUTF(rs.data());
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_ActionStopJ(JNIEnv *env, jclass type, jstring mode_) {
+    const char *mode = env->GetStringUTFChars(mode_, 0);
+
+    // TODO
+    string rs = ur->ActionStopJ(string(mode));
+    env->ReleaseStringUTFChars(mode_, mode);
+
+    return env->NewStringUTF(rs.data());
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_leo_robot_JNIUtils_SetMoveSpeed(JNIEnv *env, jclass type, jfloat v, jstring mode_) {
+    const char *mode = env->GetStringUTFChars(mode_, 0);
+
+    // TODO
+    ur->SetMoveSpeed(v,string(mode));
+    env->ReleaseStringUTFChars(mode_, mode);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_leo_robot_JNIUtils_SetMoveAcc(JNIEnv *env, jclass type, jfloat v, jstring mode_) {
+    const char *mode = env->GetStringUTFChars(mode_, 0);
+
+    // TODO
+    ur->SetMoveAcc(v,string(mode));
+    env->ReleaseStringUTFChars(mode_, mode);
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_leo_robot_JNIUtils_ReadURparam(JNIEnv *env, jclass type, jstring params_, jstring mode_) {
+    const char *params = env->GetStringUTFChars(params_, 0);
+    const char *mode = env->GetStringUTFChars(mode_, 0);
+
+    // TODO
+    string rs = ur->ReadURparam(string(params), string(mode));
+
+    env->ReleaseStringUTFChars(params_, params);
     env->ReleaseStringUTFChars(mode_, mode);
 
     return env->NewStringUTF(rs.data());

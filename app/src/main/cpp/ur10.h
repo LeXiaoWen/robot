@@ -5,7 +5,7 @@
 #include "iostream"
 #include <cmath>
 using namespace std;
-
+//---------------------------Action---------------------------//
 //关节控制
 #define    ACTION_J0_1         "ACTION_J0_1"
 #define    ACTION_J0_2         "ACTION_J0_2"
@@ -42,7 +42,35 @@ using namespace std;
 #define    CMD_UNLOCK_STOP     "CMD_UNLOCK_STOP"
 #define    CMD_SHUT_DOWN       "CMD_SHUT_DOWN"
 
+//-----------------------------param----------------------------//
 
+#define    Act_X         "Act_X"
+#define    Act_Y         "Act_Y"
+#define    Act_Z         "Act_Z"
+#define    Act_Rx        "Act_Rx"
+#define    Act_Ry        "Act_Ry"
+#define    Act_Rz        "Act_Rz"
+
+#define    J0_A          "J0_A"
+#define    J1_A          "j1_A"
+#define    J2_A          "j2_A"
+#define    J3_A          "j3_A"
+#define    J4_A          "J4_A"
+#define    J5_A          "J5_A"
+
+#define    J0_T          "J0_T"
+#define    J1_T          "J1_T"
+#define    J2_T          "J2_T"
+#define    J3_T          "J3_T"
+#define    J4_T          "J4_T"
+#define    J5_T          "J5_T"
+
+#define    Robot_Mod     "Robot_Mod"
+#define    Safe_Mod      "Safe_Mod"
+#define    Program_State "Program_State"
+
+#define    Power_A       "Power_A"
+#define    Power_V       "Power_V"
 
 class  UR10  //UR10SHARED_EXPORT
 {
@@ -63,12 +91,14 @@ public:
     string j0_T,j1_T,j2_T;
     string j3_T,j4_T,j5_T;
     bool linkState=false;
-    double robot_Mod;
-    double safe_Mod;
-    double Power_V;
-    double Power_A;
+    string robot_Mod;
+    string safe_Mod;
+    string program_state;
+    string power_V;
+    string power_A;
 
-   // QByteArray buffer_30003;
+
+    // QByteArray buffer_30003;
     uint8_t Recv_buf[1108];
     string str_29999;
     float move_v=0.08;

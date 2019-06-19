@@ -29,6 +29,7 @@ public:
     void SetMoveSpeed(float v,string name);
     void SetMoveAcc(float a,string name);
     void StrToHex(const char str[], unsigned char buf[], int len);
+    string ReadURparam(string param,string name);
 };
 
 #endif // UR_H

@@ -1,6 +1,6 @@
 #include "ur10.h"
 #include "iostream"
-#include "log_utils.h"
+
 
 
 
@@ -8,6 +8,7 @@ void UR10::GetDataPort29999(string str)
 {
     str_29999=str;
 }
+
 void UR10::GetDataPort30003()
 {
     uint8_t tmp[18][8]={0};
@@ -18,8 +19,8 @@ void UR10::GetDataPort30003()
     uint8_t buf5[8]={0};
     uint8_t buf6[8]={0};
     uint8_t buf7[48]={0};
+    uint8_t buf8[8]={0};
 
-   // memcpy(Recv_buf,buffer_30003,1108);
     memcpy(buf1,&Recv_buf[252],48);
     memcpy(buf2,&Recv_buf[444],48);
     memcpy(buf3,&Recv_buf[812],8);
@@ -27,6 +28,7 @@ void UR10::GetDataPort30003()
     memcpy(buf5,&Recv_buf[980],8);
     memcpy(buf6,&Recv_buf[988],8);
     memcpy(buf7,&Recv_buf[692],48);
+    memcpy(buf8,&Recv_buf[1051],8);
 
     memcpy(&tmp[0][0],&buf1[0],8);
     memcpy(&tmp[1][0],&buf1[8],8);
@@ -49,8 +51,8 @@ void UR10::GetDataPort30003()
     memcpy(&tmp[16][0],&buf7[32],8);
     memcpy(&tmp[17][0],&buf7[40],8);
 
-    actJoint_Base=HexToDouble(tmp[0]);
 
+    actJoint_Base=HexToDouble(tmp[0]);
     actJoint_Shoulder=HexToDouble(tmp[1]);
     actJoint_Elbow=HexToDouble(tmp[2]);
     actJoint_Wrist1=HexToDouble(tmp[3]);
@@ -89,11 +91,12 @@ void UR10::GetDataPort30003()
     j5_T=doubleToString_4(HexToDouble(tmp[17]));
 
 
-    safe_Mod=HexToDouble(buf3);
-    robot_Mod=HexToDouble(buf4);
-    Power_V=HexToDouble(buf5);
-    Power_A=HexToDouble(buf6);
-//    LOGW("run-GetDataPort30003");
+    safe_Mod=doubleToString_4(HexToDouble(buf3));
+    robot_Mod=doubleToString_4(HexToDouble(buf4));
+    program_state=doubleToString_4(HexToDouble(buf8));
+    power_V=doubleToString_4(HexToDouble(buf5));
+    power_A=doubleToString_4(HexToDouble(buf6));
+
 
 }
 string UR10::ActionMove(string cmd)
@@ -125,10 +128,10 @@ string UR10::ActionMove(string cmd)
         str_movel= movel(actual_X,actual_Y,1.00106,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
     }
     else
-     {
-         str_movel=ActionStopJ();
-     }
-   return str_movel;
+    {
+        str_movel=ActionStopJ();
+    }
+    return str_movel;
 }
 string UR10::ActionPose(string cmd)
 {
@@ -136,15 +139,15 @@ string UR10::ActionPose(string cmd)
     string CMD=cmd;
     if(CMD==ACTION_POSE_1)
     {
-         str_movel_add= movel_pose_add(0,0,0,-1.541592,0,0);
+        str_movel_add= movel_pose_add(0,0,0,-1.541592,0,0);
     }
     else if(CMD==ACTION_POSE_2)
     {
-         str_movel_add= movel_pose_add(0,0,0,1.541592,0,0);
+        str_movel_add= movel_pose_add(0,0,0,1.541592,0,0);
     }
     else if(CMD==ACTION_POSE_3)
     {
-         str_movel_add= movel_pose_add(0,0,0,0,-1.541592,0);
+        str_movel_add= movel_pose_add(0,0,0,0,-1.541592,0);
     }
     else if(CMD==ACTION_POSE_4)
     {
@@ -156,13 +159,13 @@ string UR10::ActionPose(string cmd)
     }
     else if(CMD==ACTION_POSE_6)
     {
-         str_movel_add= movel_pose_add(0,0,0,0,0,1.541592);
+        str_movel_add= movel_pose_add(0,0,0,0,0,1.541592);
     }
     else
-     {
-         str_movel_add=ActionStopJ();
-     }
-   return str_movel_add;
+    {
+        str_movel_add=ActionStopJ();
+    }
+    return str_movel_add;
 
 }
 string UR10::ActionJoint(string cmd)
@@ -217,11 +220,11 @@ string UR10::ActionJoint(string cmd)
     {
         str_movej= movej(actJoint_Base,actJoint_Shoulder,actJoint_Elbow,actJoint_Wrist1,actJoint_Wrist2,6.283185,move_a,move_v,0.0,0.0);
     }
-   else
+    else
     {
         str_movej=ActionStopJ();
     }
-   return str_movej;
+    return str_movej;
 
 }
 string UR10::ActionDash(string cmd)
@@ -231,23 +234,23 @@ string UR10::ActionDash(string cmd)
     string CMD=cmd;
     if(CMD==CMD_POWER_ON)
     {
-         str_dashboard="power on\n";
+        str_dashboard="power on\n";
     }
     else if(CMD==CMD_POWER_OFF)
     {
-         str_dashboard="power off\n";
+        str_dashboard="power off\n";
     }
     else if(CMD==CMD_SHUT_DOWN)
     {
-         str_dashboard="shutdown\n";
+        str_dashboard="shutdown\n";
     }
     else if(CMD==CMD_UNLOCK_STOP)
     {
-         str_dashboard="unlock protective stop\n";
+        str_dashboard="unlock protective stop\n";
     }
     else
     {
-      return str_dashboard;
+        return str_dashboard;
     }
     return str_dashboard;
 
@@ -328,7 +331,7 @@ double UR10::HexToDouble(const unsigned char* buf)
 string UR10::movel(double x,double y,double z,double Rx,double Ry,double Rz,float a,float v,float t,float r)
 {
 
-   // QString str="movel(p[x,y,z,Rx,Ry,Rz],a=a,v=v,t=t,r=r)";
+    // QString str="movel(p[x,y,z,Rx,Ry,Rz],a=a,v=v,t=t,r=r)";
     string str="movel(p[";
     string str_x = doubleToString(x);
     str=str+str_x+",";
