@@ -27,6 +27,8 @@
                 android:paddingBottom="10dp">
 
             <TextView
+                    android:textStyle="bold"
+                    android:id="@+id/tv_tool_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="9dp"
@@ -57,7 +59,6 @@
                         android:layout_height="15dp"
                         android:layout_marginLeft="15dp"
                         android:layout_toRightOf="@id/tv1"
-                        android:background="@drawable/shap_extremity"
                         android:gravity="center"/>
 
                 <TextView
@@ -92,7 +93,6 @@
                         android:layout_height="15dp"
                         android:layout_marginLeft="15dp"
                         android:layout_toRightOf="@id/tv3"
-                        android:background="@drawable/shap_extremity"
                         android:gravity="center"/>
 
                 <TextView
@@ -127,7 +127,6 @@
                         android:layout_height="15dp"
                         android:layout_marginLeft="15dp"
                         android:layout_toRightOf="@id/tv5"
-                        android:background="@drawable/shap_extremity"
                         android:gravity="center"/>
 
                 <TextView
@@ -162,7 +161,6 @@
                         android:layout_height="15dp"
                         android:layout_marginLeft="15dp"
                         android:layout_toRightOf="@id/tv7"
-                        android:background="@drawable/shap_extremity"
                         android:gravity="center"/>
 
                 <TextView
@@ -170,7 +168,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
                         android:layout_toRightOf="@id/tv8"
-                        android:text="mm"
+                        android:text="rad"
                         android:textColor="#493E39"
                         android:textSize="@dimen/sp_10"/>
             </RelativeLayout>
@@ -197,7 +195,6 @@
                         android:layout_height="15dp"
                         android:layout_marginLeft="15dp"
                         android:layout_toRightOf="@id/tv9"
-                        android:background="@drawable/shap_extremity"
                         android:gravity="center"/>
 
                 <TextView
@@ -205,7 +202,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
                         android:layout_toRightOf="@id/tv10"
-                        android:text="mm"
+                        android:text="rad"
                         android:textColor="#493E39"
                         android:textSize="@dimen/sp_10"/>
             </RelativeLayout>
@@ -232,7 +229,6 @@
                         android:layout_height="15dp"
                         android:layout_marginLeft="15dp"
                         android:layout_toRightOf="@id/tv11"
-                        android:background="@drawable/shap_extremity"
                         android:gravity="center"/>
 
                 <TextView
@@ -240,7 +236,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
                         android:layout_toRightOf="@id/tv12"
-                        android:text="mm"
+                        android:text="rad"
                         android:textColor="#493E39"
                         android:textSize="@dimen/sp_10"/>
             </RelativeLayout>
@@ -248,9 +244,81 @@
         </LinearLayout>
 
         <LinearLayout
+                android:layout_marginTop="@dimen/dp_10"
+                android:orientation="vertical"
+                android:layout_width="243dp"
+                android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:text="机器人模式: "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <TextView
+                        android:id="@+id/tv_mode"
+                        android:textSize="12sp"
+                        android:layout_marginLeft="5dp"
+                        tools:text="UPDATING_FIRMWARE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:text="安全模式: "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <TextView
+                        android:id="@+id/tv_safe_mode"
+                        android:textSize="12sp"
+                        android:layout_marginLeft="5dp"
+                        tools:text="UPDATING_FIRMWARE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:text="程序状态: "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <TextView
+                        android:id="@+id/tv_status"
+                        android:textSize="12sp"
+                        android:layout_marginLeft="5dp"
+                        tools:text="UPDATING_FIRMWARE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_marginTop="@dimen/dp_10"
                 android:layout_width="243dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:orientation="vertical">
 
             <LinearLayout
@@ -274,7 +342,7 @@
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
-                    android:layout_marginTop="22dp">
+                    android:layout_marginTop="6dp">
 
                 <ImageButton
                         android:id="@+id/iv3"
@@ -293,7 +361,7 @@
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
-                    android:layout_marginTop="22dp">
+                    android:layout_marginTop="6dp">
 
                 <ImageButton
                         android:id="@+id/iv5"

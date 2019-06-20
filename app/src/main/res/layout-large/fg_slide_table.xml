@@ -39,6 +39,7 @@
                     android:layout_height="wrap_content"/>
 
             <TextView
+                   android:text="--"
                     android:textColor="#EA3340"
                     android:textSize="@dimen/sp_12"
                     android:layout_marginLeft="@dimen/dp_10"
@@ -60,6 +61,7 @@
                     android:layout_height="wrap_content"/>
 
             <TextView
+                    android:text="--"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:textColor="#EA3340"
                     android:textSize="@dimen/sp_12"
@@ -137,6 +139,7 @@
                             android:layout_height="wrap_content"/>
 
                     <TextView
+                            android:text="--"
                             android:textColor="#000000"
                             android:textSize="@dimen/sp_12"
                             android:layout_marginLeft="@dimen/dp_10"
@@ -157,6 +160,7 @@
                             android:layout_height="wrap_content"/>
 
                     <TextView
+                            android:text="--"
                             android:layout_marginLeft="@dimen/dp_10"
                             android:textColor="#000000"
                             android:textSize="@dimen/sp_12"
