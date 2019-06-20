@@ -1,6 +1,8 @@
 package com.leo.robot.ui.wire_stripping;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 import com.leo.robot.R;
@@ -18,6 +20,8 @@ import com.unity3d.player.UnityPlayer;
 import cree.mvp.util.data.SPUtils;
 
 import javax.inject.Inject;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * created by Leo on 2019/4/18 10 : 46
@@ -34,12 +38,47 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     private NettyClient mMasterClient;
     public boolean isSettingClickble = false;
     private UnityPlayer mUnityPlayer;
+    public Timer mTimer;
+    public TimerTask mTimerTask;
 
+    public void initClient() {
+        mMasterClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
+    }
 
     @Inject
     public WireStrippingActivityPresenter() {
-        mMasterClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
+        mTimer = new Timer();
+        mTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                message.what = 1;
+                handler.sendMessage(message);
+            }
+        };
     }
+
+    /**
+     * 实时请求行线、引流线距离
+     *
+     * @author Leo
+     * created at 2019/5/30 9:06 PM
+     */
+    public void initLineLocation() {
+        mTimer.schedule(mTimerTask, 1000, 500);//延时1s，每隔500毫秒执行一次run方法
+    }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                if (mMasterClient != null) {
+                    mMasterClient.sendMsgTest(CommandUtils.lineLocation());
+                }
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     protected void updateTime(TextView view) {

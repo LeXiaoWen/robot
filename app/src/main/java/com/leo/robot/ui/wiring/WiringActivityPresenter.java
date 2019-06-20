@@ -1,6 +1,8 @@
 package com.leo.robot.ui.wiring;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.TextView;
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.WiringMsg;
@@ -15,6 +17,8 @@ import com.unity3d.player.UnityPlayer;
 import cree.mvp.util.data.SPUtils;
 
 import javax.inject.Inject;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * created by Leo on 2019/4/18 10 : 46
@@ -28,12 +32,27 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
     private boolean isStart = false;
 
     private boolean isClickble = false;
-    private final NettyClient mClient;
+    private  NettyClient mMasterClient;
     private UnityPlayer mUnityPlayer;
+
+    public Timer mTimer;
+    public TimerTask mTimerTask;
 
     @Inject
     public WiringActivityPresenter() {
-        mClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
+        mTimer = new Timer();
+        mTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                message.what = 1;
+                handler.sendMessage(message);
+            }
+        };
+    }
+
+    public void initClient() {
+        mMasterClient = NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
     }
 
     @Override
@@ -41,6 +60,35 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
         TimeThread timeThread = new TimeThread(view);
         timeThread.start();
     }
+
+
+    public void destroyClient() {
+        if (mMasterClient != null) {
+            mMasterClient = null;
+        }
+    }
+
+    /**
+     * 实时请求行线、引流线距离
+     *
+     * @author Leo
+     * created at 2019/5/30 9:06 PM
+     */
+    public void initLineLocation() {
+        mTimer.schedule(mTimerTask, 1000, 500);//延时1s，每隔500毫秒执行一次run方法
+    }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                if (mMasterClient != null) {
+                    mMasterClient.sendMsgTest(CommandUtils.lineLocation());
+                }
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     /**
      * 急停、恢复急停
@@ -50,17 +98,17 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
      */
     public void scramButton() {
             if (!isScram) { //急停
-                if (mClient != null) {
-                    mClient.sendMsgTest(CommandUtils.getMainArmShutdown());
-                    mClient.sendMsgTest(CommandUtils.getFlowArmShutdown());
+                if (mMasterClient != null) {
+                    mMasterClient.sendMsgTest(CommandUtils.getMainArmShutdown());
+                    mMasterClient.sendMsgTest(CommandUtils.getFlowArmShutdown());
                     mActivity.refreshLogRv("发送急停命令");
                 }
                 mActivity.updateScram(true);
                 isScram = true;
             } else {//回复急停
-                if (mClient != null) {
-                    mClient.sendMsgTest(CommandUtils.getMainArmResume());
-                    mClient.sendMsgTest(CommandUtils.getFlowArmResume());
+                if (mMasterClient != null) {
+                    mMasterClient.sendMsgTest(CommandUtils.getMainArmResume());
+                    mMasterClient.sendMsgTest(CommandUtils.getFlowArmResume());
                     mActivity.refreshLogRv("发送恢复急停命令");
 
                 }
@@ -76,8 +124,8 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
      * created at 2019/4/18 2:17 PM
      */
     public void revocerButton() {
-            if (mClient!=null){
-                mClient.sendMsgTest(CommandUtils.getMainArmRecover());
+            if (mMasterClient!=null){
+                mMasterClient.sendMsgTest(CommandUtils.getMainArmRecover());
                 mActivity.refreshLogRv("发送一键回收命令");
             }
     }
@@ -90,12 +138,12 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
      */
     public void startButton() {
             if (!isStart) { //开始
-                mClient.sendMsgTest(CommandUtils.getMainArmStart());
+                mMasterClient.sendMsgTest(CommandUtils.getMainArmStart());
                 isStart = true;
                 mActivity.updateStart(true);
                 mActivity.refreshLogRv("发送开始命令");
             } else {//停止
-                mClient.sendMsgTest(CommandUtils.getMainArmStop());
+                mMasterClient.sendMsgTest(CommandUtils.getMainArmStop());
                 isStart = false;
                 mActivity.updateStart(false);
 
@@ -103,9 +151,7 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
             }
     }
 
-    public void getPicButton() {
 
-    }
 
     public String jugType(WiringMsg msg) {
         String type = msg.getMsg();
