@@ -5,7 +5,8 @@ import com.leo.robot.bean.*;
 import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.netty.NettyClient;
-import com.leo.robot.netty.arm.ArmBean;
+import com.leo.robot.netty.arm.FlowArmBean;
+import com.leo.robot.netty.arm.MainArmBean;
 import cree.mvp.util.bus.BusUtils;
 import cree.mvp.util.data.SPUtils;
 
@@ -564,10 +565,15 @@ public class ResultUtils {
     *created at 2019/6/14 9:21 PM
     */
     private static void onFlowArm(String msg) {
+        FlowArmBean flowArmBean = new FlowArmBean();
         if (msg.length()>1000) {//30003端口数据
-
+            flowArmBean.setCode("0");
+            flowArmBean.setMsg(msg);
+            BusUtils.postMessage(flowArmBean);
         }else {//29999端口数据
-
+            flowArmBean.setCode("1");
+            flowArmBean.setMsg(msg);
+            BusUtils.postMessage(flowArmBean);
         }
     }
 
@@ -578,7 +584,7 @@ public class ResultUtils {
     *created at 2019/6/14 9:21 PM
     */
     private static void onMainArm(String msg) {
-        ArmBean armBean = new ArmBean();
+        MainArmBean armBean = new MainArmBean();
         if (msg.length()>1000) {//30003端口数据
             armBean.setCode("0");
             armBean.setMsg(msg);
