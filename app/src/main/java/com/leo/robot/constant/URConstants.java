@@ -6,8 +6,8 @@ package com.leo.robot.constant;
 
 
 public class URConstants {
-    public static  String Marm = "Marm";
-    public static  String Farm = "Farm";
+    public static String Marm = "Marm";
+    public static String Farm = "Farm";
 
     //关节控制
     public static String ACTION_J0_1 = "ACTION_J0_1";
@@ -24,12 +24,12 @@ public class URConstants {
     public static String ACTION_J5_2 = "ACTION_J5_2";
 
     //控制末端位移
-    public static String ACTION_MOVE_1 ="ACTION_MOVE_1";
-    public static String ACTION_MOVE_2 ="ACTION_MOVE_2";
-    public static String ACTION_MOVE_3 ="ACTION_MOVE_3";
-    public static String ACTION_MOVE_4 ="ACTION_MOVE_4";
-    public static String ACTION_MOVE_5 ="ACTION_MOVE_5";
-    public static String ACTION_MOVE_6 ="ACTION_MOVE_6";
+    public static String ACTION_MOVE_1 = "ACTION_MOVE_1";
+    public static String ACTION_MOVE_2 = "ACTION_MOVE_2";
+    public static String ACTION_MOVE_3 = "ACTION_MOVE_3";
+    public static String ACTION_MOVE_4 = "ACTION_MOVE_4";
+    public static String ACTION_MOVE_5 = "ACTION_MOVE_5";
+    public static String ACTION_MOVE_6 = "ACTION_MOVE_6";
 
     //控制末端位姿
     public static String ACTION_POSE_1 = "ACTION_POSE_1";
@@ -76,6 +76,34 @@ public class URConstants {
     public static String Program_State = "Program_State";
     public static String Power_A = "Power_A";
     public static String Power_V = "Power_V";
+
+    //机器模式
+    public static String ROBOT_MODE_DISCONNECTED = "DISCONNECTED";
+    public static String ROBOT_MODE_CONFIRM_SAFETY = "CONFIRM_SAFETY";
+    public static String ROBOT_MODE_BOOTING = "BOOTING";
+    public static String ROBOT_MODE_POWER_OFF = "POWER_OFF";
+    public static String ROBOT_MODE_POWER_ON = "POWER_ON";
+    public static String ROBOT_MODE_IDLE = "IDLE";
+    public static String ROBOT_MODE_BACKDRIVE = "BACKDRIVE";
+    public static String ROBOT_MODE_RUNNING = "RUNNING";
+    public static String ROBOT_MODE_UPDATING_FIRMWARE = "UPDATING_FIRMWARE";
+
+
+    //安全模式
+    public static String SAFETY_MODE_NORMAL="NORMAL";
+    public static String SAFETY_MODE_REDUCED="REDUCED";
+    public static String SAFETY_MODE_PROTECTIVE_STOP="PROTECTIVE_STOP";
+    public static String SAFETY_MODE_RECOVERY="RECOVERY";
+    public static String SAFETY_MODE_SAFEGUARD_STOP="SAFEGUARD_STOP";
+    public static String SAFETY_MODE_SYSTEM_EMERGENCY_STOP="SYSTEM_EMERGENCY_STOP";
+    public static String SAFETY_MODE_ROBOT_EMERGENCY_STOP="ROBOT_EMERGENCY_STOP";
+    public static String SAFETY_MODE_VIOLATION="VIOLATION";
+    public static String SAFETY_MODE_FAULT="FAULT";
+
+    //程序状态
+    public static String idle="idle";
+    public static String running="running";
+    public static String paused="paused";
 
 
 }
