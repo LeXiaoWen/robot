@@ -170,19 +170,19 @@ public interface PushMsgCode {
     /**
      * USB1 请选择行线第一个点
      */
-    String CAMERA1_CHOOSE_LOCATION1 = "670D01000FF";
+    String CAMERA1_CHOOSE_LOCATION1 = "67040400FF";
     /**
      * USB1 请选择行线第二个点
      */
-    String CAMERA1_CHOOSE_LOCATION2 = "670D02000FF";
+    String CAMERA1_CHOOSE_LOCATION2 = "67040500FF";
     /**
      * USB2 请选择行线第一个点
      */
-    String CAMERA2_CHOOSE_LOCATION1 = "670D03000FF";
+    String CAMERA2_CHOOSE_LOCATION1 = "67050400FF";
     /**
      * USB2 请选择行线第二个点
      */
-    String CAMERA2_CHOOSE_LOCATION2 = "670D04000FF";
+    String CAMERA2_CHOOSE_LOCATION2 = "67050500FF";
 
     //------------------------ 水平滑台返回命令 --------------------------
     String LAND_SLIDE_TABLE = "67040304";
