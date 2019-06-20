@@ -23,7 +23,7 @@ import com.leo.robot.bean.LocationMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyListener;
-import com.leo.robot.netty.arm.ArmBean;
+import com.leo.robot.netty.arm.MainArmBean;
 import com.leo.robot.netty.arm.ArmNettyClient;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
@@ -198,7 +198,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         initListener();
 //        mPresenter.initLineLocation();
 
-        showMsg("请选择行线画面第一个点位");
+        showMsg("请选择行线作业点");
         mPresenter.initClient();
         mDrawView = new DrawView(this);
         initMainArmNetty();
@@ -216,13 +216,11 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
             videoText();
             if (location == 1) {
                 radioButtonCheckedStatus(true, false);
-                showMsg("请选择行线画面第一个点位");
             } else {
                 radioButtonCheckedStatus(false, true);
                 mPresenter.chooseCount = 1;
-                showMsg("请选择行线画面第二个点位");
-
             }
+            showMsg("请选择行线作业点");
         } else if (tag == 2) {
             initVideo(UrlConstant.URL[1]);
             mVideoTag = 1;
@@ -230,13 +228,12 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
             videoText();
             if (location == 1) {
                 radioButtonCheckedStatus(true, false);
-                showMsg("请选择引流线画面第一个点位");
 
             } else {
                 radioButtonCheckedStatus(false, true);
                 mPresenter.chooseCount = 1;
-                showMsg("请选择引流线画面第二个点位");
             }
+            showMsg("请选择引流线作业点");
         }
     }
 
@@ -390,7 +387,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
             case MotionEvent.ACTION_MOVE:
                 x = (int) event.getX() / 2;
                 y = (int) event.getY() / 2;
-                mTouchShow.setText("实时位置：(" + x + "," + y + ")");
+                mTouchShow.setText(x + "," + y);
                 break;
             /**
              * 离开屏幕的位置
@@ -787,7 +784,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void mainArmMsg(ArmBean bean) {
+    public void mainArmMsg(MainArmBean bean) {
         String code = bean.getCode();
         String msg = bean.getMsg();
         if (msg.length() == 2216) {
@@ -823,7 +820,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         String actionPose = JNIUtils.ActionPose("ACTION_POSE_1", mode);
         LogUtils.e("actionPose   " + actionPose);
 
-        String actionStop = JNIUtils.ActionStopJ( mode);
+        String actionStop = JNIUtils.ActionStopJ(mode);
         LogUtils.e("actionStop   " + actionStop);
 
         String urParams = JNIUtils.ReadURparam("Act_Y", mode);
