@@ -1613,12 +1613,13 @@ public class CommandUtils {
      * created at 2019/6/17 7:53 PM
      */
     public static String masterNettyHeart() {
-        msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x0C;
-        msg[2] = (byte) 0x04;
-        msg[3] = (byte) 0x01;
-        msg[4] = (byte) 0x00;
-        return ConvertCode.bytes2HexString(msg);
+        msg1[0] = (byte) 0x68;
+        msg1[1] = (byte) 0x0C;
+        msg1[2] = (byte) 0x04;
+        msg1[3] = (byte) 0x01;
+        msg1[4] = (byte) 0x00;
+        msg1[5] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg1);
     }
 
     /**
