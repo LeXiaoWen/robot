@@ -114,18 +114,18 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         SPUtils socket1 = new SPUtils("visionSocket");
         boolean status1 = socket1.getBoolean("status");
         if (status) {
-            mTvType.setText("与主控服务器连接成功");
+            mTvType.setText("与主控连接成功");
             mSpinKit.setVisibility(View.GONE);
         } else {
-            mTvType.setText("与主控服务器断开连接，正在重连");
+            mTvType.setText("与主控断开连接，正在重连");
             mSpinKit.setVisibility(View.VISIBLE);
         }
 
         if (status1){
-            mTvType1.setText("与视觉服务器连接成功");
+            mTvType1.setText("与视觉连接成功");
             mSpinKit1.setVisibility(View.GONE);
         }else {
-            mTvType1.setText("与视觉服务器断开连接，正在重连");
+            mTvType1.setText("与视觉断开连接，正在重连");
             mSpinKit1.setVisibility(View.VISIBLE);
         }
     }
@@ -144,7 +144,13 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
 
     @Override
     protected void notifyMasterData(int status, String message) {
+        mTvType.setText(message);
 
+        if (status == 0) {//未连接
+            mSpinKit.setVisibility(View.VISIBLE);
+        } else {//已连接
+            mSpinKit.setVisibility(View.GONE);
+        }
     }
 
     @Override
