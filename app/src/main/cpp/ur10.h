@@ -101,8 +101,8 @@ public:
     // QByteArray buffer_30003;
     uint8_t Recv_buf[1108];
     string str_29999;
-    float move_v=0.08;
-    float move_a=0.08;
+    float move_v=0.04;
+    float move_a=0.04;
 
 public:
     void GetDataPort29999(string str);

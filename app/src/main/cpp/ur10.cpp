@@ -66,9 +66,9 @@ void UR10::GetDataPort30003()
     actual_Ry=-HexToDouble(tmp[10]);
     actual_Rz=-HexToDouble(tmp[11]);
 
-    act_x =doubleToString_4(actual_X);
-    act_y =doubleToString_4(actual_Y);
-    act_z =doubleToString_4(actual_Z);
+    act_x =doubleToString_4(actual_X*1000);
+    act_y =doubleToString_4(actual_Y*1000);
+    act_z =doubleToString_4(actual_Z*1000);
     act_Rx=doubleToString_4(actual_Rx);
     act_Ry=doubleToString_4(actual_Ry);
     act_Rz=doubleToString_4(actual_Rz);
