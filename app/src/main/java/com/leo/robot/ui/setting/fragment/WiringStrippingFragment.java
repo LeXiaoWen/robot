@@ -113,6 +113,11 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         mIv8.setOnClickListener(this);
         mBtnTool.setOnClickListener(this);
 
+        Button btnClaw1 = (Button) view.findViewById(R.id.btn_claw1);
+        Button btnClaw2 = (Button) view.findViewById(R.id.btn_claw2);
+
+        btnClaw1.setOnClickListener(this);
+        btnClaw2.setOnClickListener(this);
 
     }
 
@@ -160,33 +165,6 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         webViewOnDestroy();
         super.onDestroyView();
     }
-
-
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.btn_init:
-//                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingInit());
-//                break;
-//            case R.id.btn_ready:
-//                break;
-//            case R.id.btn_clamping:
-//                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingMainLineClamping());
-//                break;
-//            case R.id.btn_fixture_close:
-//                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingClampClosure());
-//                break;
-//            case R.id.btn_peeling:
-//                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingRotaryPeeling());
-//                break;
-//            case R.id.btn_cut_off:
-//                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingCutOff());
-//                break;
-//            case R.id.btn_unlock:
-//                NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY).sendMsg(CommandUtils.getStrippingUnlock());
-//                break;
-//        }
-//    }
 
 
     /**
@@ -375,6 +353,16 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
             case R.id.btn_tool:
                 startClick();
                 break;
+            case R.id.btn_claw1:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.clawOpen());
+                }
+                break;
+            case R.id.btn_claw2:
+                if (mClient != null) {
+                    mClient.sendMsgTest(CommandUtils.clawClamping());
+                }
+                break;
         }
     }
 
@@ -415,7 +403,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
                     break;
                 case R.id.tv_menu5:
                     Intent intent = new Intent(getActivity(), WiringSettingActivity.class);
-                    intent.putExtra("tag",1);
+                    intent.putExtra("tag", 1);
                     getActivity().startActivity(intent);
                     getActivity().finish();
                     break;
