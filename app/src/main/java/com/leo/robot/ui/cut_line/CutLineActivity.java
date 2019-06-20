@@ -8,10 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -123,6 +120,16 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
     SpinKitView mSpinKit;
     @BindView(R.id.ll_status)
     LinearLayout mLlStatus;
+    @BindView(R.id.btn_jump)
+    Button mBtnJump;
+    @BindView(R.id.btn_jump2)
+    Button mBtnJump2;
+    @BindView(R.id.tv_type1)
+    TextView mTvType1;
+    @BindView(R.id.spin_kit1)
+    SpinKitView mSpinKit1;
+    @BindView(R.id.ll_status1)
+    LinearLayout mLlStatus1;
     private boolean isShown = false;
 
 
@@ -159,12 +166,34 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     @Override
     protected void notifyMasterData(int status, String message) {
+        mTvType.setText(message);
 
+        if (status == 0) {//未连接
+            updateInit(false);
+            updateReady(false);
+            updateCutStart(false);
+            updateCutStop(false);
+            updateCutReset(false);
+            updateEnd(false);
+            mSpinKit.setVisibility(View.VISIBLE);
+        } else {//已连接
+            mSpinKit.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void notifyVisionData(int status, String message) {
-
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTvType1.setText(message);
+                if (status == 0) {
+                    mSpinKit1.setVisibility(View.VISIBLE);
+                } else {
+                    mSpinKit1.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -187,19 +216,31 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
         initVideo3();
         initVideo4();
         initSocketStatus();
-
+        //实时请求行线、引流线距离
+        mPresenter.initClient();
+        mPresenter.initLineLocation();
 //        mPresenter.setUnityView(mRl1);
     }
 
     private void initSocketStatus() {
-        SPUtils socket = new SPUtils("socket");
+        SPUtils socket = new SPUtils("masterSocket");
         boolean status = socket.getBoolean("status");
+        SPUtils socket1 = new SPUtils("visionSocket");
+        boolean status1 = socket1.getBoolean("status");
         if (status) {
-            mTvType.setText("与主控服务器连接成功");
+            mTvType.setText("与主控连接成功");
             mSpinKit.setVisibility(View.GONE);
         } else {
-            mTvType.setText("与主控服务器断开连接，正在重连");
+            mTvType.setText("与主控断开连接，正在重连");
             mSpinKit.setVisibility(View.VISIBLE);
+        }
+
+        if (status1) {
+            mTvType1.setText("与视觉连接成功");
+            mSpinKit1.setVisibility(View.GONE);
+        } else {
+            mTvType1.setText("与视觉断开连接，正在重连");
+            mSpinKit1.setVisibility(View.VISIBLE);
         }
     }
 
@@ -556,9 +597,10 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 //            }).start();
 //        }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCameraLocationMsg(ChooseCameraLocationMsg msg) {
-        if (isShown){
+        if (isShown) {
             String code = msg.getCode();
             mPresenter.jugCameraLocationType(code);
         }
@@ -568,7 +610,7 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
 
     public void jumpChooseActivity(int camera, int location) {
         Intent intent = new Intent(CutLineActivity.this, ChooseActivity.class);
-        intent.putExtra("activity",3);
+        intent.putExtra("activity", 3);
         if (camera == 1) {
             intent.putExtra("tag", 1);
             if (location == 1) {

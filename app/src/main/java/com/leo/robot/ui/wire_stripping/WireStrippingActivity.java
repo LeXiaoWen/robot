@@ -133,6 +133,12 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     Button mBtnJump;
     @BindView(R.id.btn_jump2)
     Button mBtnJump2;
+    @BindView(R.id.tv_type1)
+    TextView mTvType1;
+    @BindView(R.id.spin_kit1)
+    SpinKitView mSpinKit1;
+    @BindView(R.id.ll_status1)
+    LinearLayout mLlStatus1;
 
 
     private boolean isPause;
@@ -172,12 +178,37 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     @Override
     protected void notifyMasterData(int status, String message) {
+        mTvType.setText(message);
 
+        if (status == 0) {//未连接
+            updateReady(false);
+            updateInit(false);
+            updateInPlace(false);
+            updateClamping(false);
+            updateClosure(false);
+            updatePeeling(false);
+            updateCutOff(false);
+            updateUnlock(false);
+            updateEnd(false);
+            mSpinKit.setVisibility(View.VISIBLE);
+        } else {//已连接
+            mSpinKit.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void notifyVisionData(int status, String message) {
-
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTvType1.setText(message);
+                if (status == 0) {
+                    mSpinKit1.setVisibility(View.VISIBLE);
+                } else {
+                    mSpinKit1.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -202,18 +233,30 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         initSocketStatus();
         mBtnJump.setVisibility(View.VISIBLE);
 //        initUnity();
+        //实时请求行线、引流线距离
+        mPresenter.initClient();
+        mPresenter.initLineLocation();
     }
 
     private void initSocketStatus() {
-        SPUtils socket = new SPUtils("socket");
+        SPUtils socket = new SPUtils("masterSocket");
         boolean status = socket.getBoolean("status");
+        SPUtils socket1 = new SPUtils("visionSocket");
+        boolean status1 = socket1.getBoolean("status");
         if (status) {
-            mTvType.setText("与主控服务器连接成功");
+            mTvType.setText("与主控连接成功");
             mSpinKit.setVisibility(View.GONE);
-
         } else {
-            mTvType.setText("与主控服务器断开连接，正在重连");
+            mTvType.setText("与主控断开连接，正在重连");
             mSpinKit.setVisibility(View.VISIBLE);
+        }
+
+        if (status1) {
+            mTvType1.setText("与视觉连接成功");
+            mSpinKit1.setVisibility(View.GONE);
+        } else {
+            mTvType1.setText("与视觉断开连接，正在重连");
+            mSpinKit1.setVisibility(View.VISIBLE);
         }
     }
 
