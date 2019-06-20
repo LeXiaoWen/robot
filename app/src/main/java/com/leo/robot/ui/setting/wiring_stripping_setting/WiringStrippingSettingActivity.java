@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,8 +20,11 @@ import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.URConstants;
-import com.leo.robot.netty.arm.ArmBean;
+import com.leo.robot.netty.arm.FlowArmBean;
+import com.leo.robot.netty.arm.MainArmBean;
+import com.leo.robot.ui.setting.cut_line_setting.CutLineSettingActivity;
 import com.leo.robot.ui.setting.fragment.*;
+import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -55,6 +59,12 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
     TextView mTvGroundPower;
     @BindView(R.id.tv5)
     TextView mTv5;
+    @BindView(R.id.tv6)
+    Button mTv6;
+    @BindView(R.id.tv7)
+    Button mTv7;
+    @BindView(R.id.tv8)
+    Button mTv8;
     private boolean isShown = false;
 
     private Fragment mCurrentFragment = new Fragment();
@@ -63,6 +73,7 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
     private ExtremityFragment mExtremityFragment = new ExtremityFragment();
     private ExtremityMoveFragment mExtremityMoveFragment = new ExtremityMoveFragment();
     private SlideTableFragment mSlideTableFragment = new SlideTableFragment();
+    private int mIntentTag;
 
     @Override
     protected void notifyData(int status, String message) {
@@ -102,6 +113,10 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
         mPresenter.initClient();
         //实时请求行线、引流线距离
         mPresenter.initLineLocation();
+
+        Intent intent = getIntent();
+
+        mIntentTag = intent.getIntExtra("tag", 0);
     }
 
     private void initFragment() {
@@ -159,7 +174,7 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
 
     }
 
-    @OnClick({R.id.tv1, R.id.tv2, R.id.tv3, R.id.tv4, R.id.tv5, R.id.iv_back})
+    @OnClick({R.id.tv1, R.id.tv2, R.id.tv3, R.id.tv4, R.id.tv5, R.id.tv6, R.id.tv7, R.id.tv8, R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv1:
@@ -202,12 +217,38 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
                 changeStatusNormal(mTv4, 4);
                 switchFragment(mSlideTableFragment).commit();
                 break;
-            case R.id.iv_back:
+            case R.id.tv6:
+                mPresenter.continueWork();
+                break;
+            case R.id.tv7:
+                mPresenter.undoException();
+                break;
+            case R.id.tv8:
                 if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(new Intent(WiringStrippingSettingActivity.this, WireStrippingActivity.class));
+                    if (mIntentTag == 1) {
+                        startActivity(new Intent(WiringStrippingSettingActivity.this, WiringSettingActivity.class));
+                    } else if (mIntentTag == 2){
+                        startActivity(new Intent(WiringStrippingSettingActivity.this, CutLineSettingActivity.class));
+                    }else {
+                        startActivity(new Intent(WiringStrippingSettingActivity.this, WiringSettingActivity.class));
+                    }
                     finish();
                 }
                 break;
+            case R.id.iv_back:
+
+                if (!mPresenter.isFastDoubleClick()) {
+                    if (mIntentTag == 1) {
+                        startActivity(new Intent(WiringStrippingSettingActivity.this, WiringSettingActivity.class));
+                    } else if (mIntentTag == 2){
+                        startActivity(new Intent(WiringStrippingSettingActivity.this, CutLineSettingActivity.class));
+                    }else {
+                        startActivity(new Intent(WiringStrippingSettingActivity.this, WireStrippingActivity.class));
+                    }
+                    finish();
+                }
+                break;
+
         }
     }
 
@@ -314,26 +355,49 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void mainArmMsg(ArmBean bean) {
+    public void mainArmMsg(MainArmBean bean) {
         String code = bean.getCode();
         String msg = bean.getMsg();
         if (msg.length() == 2216) {
             if (code.equals("0")) {//30003数据
-                handler30003Msg(msg);
+                handlerMain30003Msg(msg);
             } else if (code.equals("1")) {//29999数据
-                handler29999Msg(msg);
+                handlerMain29999Msg(msg);
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void flowArmMsg(FlowArmBean bean) {
+        String code = bean.getCode();
+        String msg = bean.getMsg();
+        if (msg.length() == 2216) {
+            if (code.equals("0")) {//30003数据
+                handlerFlow30003Msg(msg);
+            } else if (code.equals("1")) {//29999数据
+                handlerFlow29999Msg(msg);
             }
         }
     }
 
     /**
-     * 主臂30003端口数据
+     * 从臂29999端口数据
      *
      * @author Leo
-     * created at 2019/6/19 11:18 PM
+     * created at 2019/6/20 8:30 PM
      */
-    private void handler29999Msg(String msg) {
-        JNIUtils.GetDataPort29999(msg, URConstants.Marm);
+    private void handlerFlow29999Msg(String msg) {
+        JNIUtils.GetDataPort29999(msg, URConstants.Farm);
+    }
+
+    /**
+     * 从臂30003端口数据
+     *
+     * @author Leo
+     * created at 2019/6/20 8:30 PM
+     */
+    private void handlerFlow30003Msg(String msg) {
+        JNIUtils.GetDataPort30003(msg, URConstants.Farm);
     }
 
     /**
@@ -342,7 +406,17 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
      * @author Leo
      * created at 2019/6/19 11:18 PM
      */
-    private void handler30003Msg(String msg) {
+    private void handlerMain29999Msg(String msg) {
+        JNIUtils.GetDataPort29999(msg, URConstants.Marm);
+    }
+
+    /**
+     * 主臂30003端口数据
+     *
+     * @author Leo
+     * created at 2019/6/19 11:18 PM
+     */
+    private void handlerMain30003Msg(String msg) {
         JNIUtils.GetDataPort30003(msg, URConstants.Marm);
     }
 }

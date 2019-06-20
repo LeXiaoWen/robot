@@ -74,4 +74,17 @@ public class WiringSettingActivityPresenter extends RobotPresenter<WiringSetting
             super.handleMessage(msg);
         }
     };
+
+    public void continueWork() {
+        if (mMasterClient != null) {
+            mMasterClient.sendMsgTest(CommandUtils.continueWork());
+        }
+    }
+
+    public void undoException() {
+        if (mMasterClient != null) {
+            mMasterClient.sendMsgTest(CommandUtils.undoException());
+
+        }
+    }
 }

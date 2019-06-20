@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.URConstants;
-import com.leo.robot.netty.arm.ArmBean;
+import com.leo.robot.netty.arm.MainArmBean;
 import com.leo.robot.ui.setting.fragment.*;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
@@ -54,6 +55,12 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
     TextView mTvGroundPower;
     @BindView(R.id.tv5)
     TextView mTv5;
+    @BindView(R.id.tv6)
+    Button mTv6;
+    @BindView(R.id.tv7)
+    Button mTv7;
+    @BindView(R.id.tv8)
+    Button mTv8;
 
     private boolean isShown = false;
     private Fragment mCurrentFragment = new Fragment();
@@ -110,8 +117,6 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
     }
 
 
-
-
     private void initFragment() {
         mArmFragment.setTAG(1);
         mExtremityFragment.setTAG(1);
@@ -160,7 +165,7 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
         isShown = true;
     }
 
-    @OnClick({R.id.tv1, R.id.tv2, R.id.tv3, R.id.tv4, R.id.tv5, R.id.iv_back})
+    @OnClick({R.id.tv1, R.id.tv2, R.id.tv3, R.id.tv4, R.id.tv5, R.id.tv6, R.id.tv7, R.id.tv8,R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv1:
@@ -202,6 +207,19 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
                 changeStatusNormal(mTv2, 2);
                 changeStatusNormal(mTv4, 4);
                 switchFragment(mSlideTableFragment).commit();
+                break;
+
+            case R.id.tv6:
+                mPresenter.continueWork();
+                break;
+            case R.id.tv7:
+                mPresenter.undoException();
+                break;
+            case R.id.tv8:
+                Intent intent = new Intent(WiringSettingActivity.this, WiringStrippingSettingActivity.class);
+                intent.putExtra("tag", 1);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.iv_back:
                 if (!mPresenter.isFastDoubleClick()) {
@@ -319,7 +337,7 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void mainArmMsg(ArmBean bean) {
+    public void mainArmMsg(MainArmBean bean) {
         String code = bean.getCode();
         String msg = bean.getMsg();
         if (msg.length() == 2216) {

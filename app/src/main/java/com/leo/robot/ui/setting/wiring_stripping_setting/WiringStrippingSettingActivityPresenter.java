@@ -76,4 +76,17 @@ public class WiringStrippingSettingActivityPresenter extends RobotPresenter<Wiri
         TimeThread timeThread = new TimeThread(view);
         timeThread.start();
     }
+
+    public void continueWork() {
+        if (mMasterClient != null) {
+            mMasterClient.sendMsgTest(CommandUtils.continueWork());
+        }
+    }
+
+    public void undoException() {
+        if (mMasterClient != null) {
+            mMasterClient.sendMsgTest(CommandUtils.undoException());
+
+        }
+    }
 }

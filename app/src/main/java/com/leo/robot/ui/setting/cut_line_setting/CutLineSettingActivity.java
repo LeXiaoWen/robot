@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,9 +20,10 @@ import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.URConstants;
-import com.leo.robot.netty.arm.ArmBean;
+import com.leo.robot.netty.arm.MainArmBean;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.setting.fragment.*;
+import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -55,6 +57,12 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
     TextView mTvGroundPower;
     @BindView(R.id.tv5)
     TextView mTv5;
+    @BindView(R.id.tv6)
+    Button mTv6;
+    @BindView(R.id.tv7)
+    Button mTv7;
+    @BindView(R.id.tv8)
+    Button mTv8;
 
     private boolean isShown = false;
     private Fragment mCurrentFragment = new Fragment();
@@ -63,6 +71,7 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
     private ExtremityFragment mExtremityFragment = new ExtremityFragment();
     private ExtremityMoveFragment mExtremityMoveFragment = new ExtremityMoveFragment();
     private SlideTableFragment mSlideTableFragment = new SlideTableFragment();
+    private int mIntentTag;
 
     @Override
     protected void notifyData(int status, String message) {
@@ -95,6 +104,9 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cut_line_setting);
         ButterKnife.bind(this);
+        Intent intent = getIntent();
+
+        mIntentTag = intent.getIntExtra("tag", 0);
         initFragment();
         //实时更新时间（1秒更新一次）
         mPresenter.updateTime(mTvDate);
@@ -153,7 +165,7 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
         isShown = true;
     }
 
-    @OnClick({R.id.tv1, R.id.tv2, R.id.tv3, R.id.tv4, R.id.tv5, R.id.iv_back})
+    @OnClick({R.id.tv1, R.id.tv2, R.id.tv3, R.id.tv4, R.id.tv5, R.id.tv6, R.id.tv7, R.id.tv8, R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv1:
@@ -196,9 +208,25 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
                 changeStatusNormal(mTv4, 4);
                 switchFragment(mSlideTableFragment).commit();
                 break;
+            case R.id.tv6:
+                mPresenter.continueWork();
+                break;
+            case R.id.tv7:
+                mPresenter.undoException();
+                break;
+            case R.id.tv8:
+                Intent intent = new Intent(CutLineSettingActivity.this, WiringStrippingSettingActivity.class);
+                intent.putExtra("tag", 2);
+                startActivity(intent);
+                finish();
+                break;
             case R.id.iv_back:
                 if (!mPresenter.isFastDoubleClick()) {
-                    startActivity(new Intent(CutLineSettingActivity.this, CutLineActivity.class));
+                    if (mIntentTag == 1) {
+                        startActivity(new Intent(CutLineSettingActivity.this, WiringStrippingSettingActivity.class));
+                    } else {
+                        startActivity(new Intent(CutLineSettingActivity.this, CutLineActivity.class));
+                    }
                     finish();
                 }
 
@@ -311,7 +339,7 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void mainArmMsg(ArmBean bean) {
+    public void mainArmMsg(MainArmBean bean) {
         String code = bean.getCode();
         String msg = bean.getMsg();
         if (msg.length() == 2216) {
