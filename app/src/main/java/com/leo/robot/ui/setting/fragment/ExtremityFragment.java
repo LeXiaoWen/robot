@@ -20,6 +20,7 @@ import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.netty.arm.ArmNettyClient;
 import com.leo.robot.utils.NettyManager;
+import cree.mvp.util.data.StringUtils;
 
 /**
  * 末端位姿设置
@@ -27,7 +28,7 @@ import com.leo.robot.utils.NettyManager;
  */
 
 
-public class ExtremityFragment extends BaseFragment  {
+public class ExtremityFragment extends BaseFragment {
     private boolean isPause;
     private int TAG = 0;
     private TextView mTv2;
@@ -36,6 +37,10 @@ public class ExtremityFragment extends BaseFragment  {
     private TextView mTv8;
     private TextView mTv10;
     private TextView mTv12;
+    private TextView mTvToolName;
+    private TextView mTvMode;
+    private TextView mTvSafeMode;
+    private TextView mTvStatus;
 
     public void setTAG(int TAG) {
         this.TAG = TAG;
@@ -80,27 +85,209 @@ public class ExtremityFragment extends BaseFragment  {
         initVideo3();
         initVideo4();
         initArmNetty();
-
+        if (TAG == 1) {
+            mTvToolName.setText("主臂末端工具中心点（TCP)");
+        } else {
+            mTvToolName.setText("从臂末端工具中心点（TCP)");
+        }
     }
 
     @Override
     public void updateData() {
         initTCP();
+        initMode();
+        initSafeMode();
+        initArmStatus();
+    }
+
+    /**
+     * 软件状态
+     *
+     * @author Leo
+     * created at 2019/6/20 9:55 PM
+     */
+    private void initArmStatus() {
+        if (TAG == 1) {
+            String status = JNIUtils.ReadURparam(URConstants.Program_State, URConstants.Marm);
+            showStatus(status);
+        } else {
+            String status = JNIUtils.ReadURparam(URConstants.Program_State, URConstants.Farm);
+            showStatus(status);
+        }
+    }
+
+
+    private void showStatus(String status) {
+        if (!StringUtils.isEmpty(status)) {
+            int i = (int)Double.parseDouble(status);
+
+            switch (i) {
+                case 1:
+                    mTvStatus.setText(URConstants.idle);
+                    break;
+                case 2:
+                    mTvStatus.setText(URConstants.running);
+                    break;
+                case 4:
+                    mTvStatus.setText(URConstants.paused);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 机器安全模式
+     *
+     * @author Leo
+     * created at 2019/6/20 9:54 PM
+     */
+    private void initSafeMode() {
+        if (TAG == 1) {
+            String safeMode = JNIUtils.ReadURparam(URConstants.Safe_Mod, URConstants.Marm);
+            showSafeMode(safeMode);
+        } else {
+            String safeMode = JNIUtils.ReadURparam(URConstants.Safe_Mod, URConstants.Farm);
+            showSafeMode(safeMode);
+        }
+    }
+
+    private void showSafeMode(String safeMode) {
+        if (!StringUtils.isEmpty(safeMode)) {
+            int i = (int)Double.parseDouble(safeMode);
+            switch (i) {
+                case 1:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_NORMAL);
+                    break;
+                case 2:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_REDUCED);
+                    break;
+                case 3:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_PROTECTIVE_STOP);
+                    break;
+                case 4:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_RECOVERY);
+                    break;
+                case 5:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_SAFEGUARD_STOP);
+                    break;
+                case 6:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_SYSTEM_EMERGENCY_STOP);
+                    break;
+                case 7:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_ROBOT_EMERGENCY_STOP);
+                    break;
+                case 8:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_VIOLATION);
+                    break;
+                case 9:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_FAULT);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 机器模式
+     *
+     * @author Leo
+     * created at 2019/6/20 9:54 PM
+     */
+    private void initMode() {
+        if (TAG == 1) {
+            String mode = JNIUtils.ReadURparam(URConstants.Robot_Mod, URConstants.Marm);
+            showMode(mode);
+        } else {
+            String mode = JNIUtils.ReadURparam(URConstants.Robot_Mod, URConstants.Farm);
+            showMode(mode);
+
+        }
+    }
+
+    private void showMode(String mode) {
+        if (!StringUtils.isEmpty(mode)){
+            int i = (int)Double.parseDouble(mode);
+            switch (i) {
+                case 0:
+                    mTvMode.setText(URConstants.ROBOT_MODE_DISCONNECTED);
+                    break;
+                case 1:
+                    mTvMode.setText(URConstants.ROBOT_MODE_CONFIRM_SAFETY);
+                    break;
+                case 2:
+                    mTvMode.setText(URConstants.ROBOT_MODE_BOOTING);
+                    break;
+                case 3:
+                    mTvMode.setText(URConstants.ROBOT_MODE_POWER_OFF);
+                    break;
+                case 4:
+                    mTvMode.setText(URConstants.ROBOT_MODE_POWER_ON);
+                    break;
+                case 5:
+                    mTvMode.setText(URConstants.ROBOT_MODE_IDLE);
+                    break;
+                case 6:
+                    mTvMode.setText(URConstants.ROBOT_MODE_BACKDRIVE);
+                    break;
+                case 7:
+                    mTvMode.setText(URConstants.ROBOT_MODE_RUNNING);
+                    break;
+                case 8:
+                    mTvMode.setText(URConstants.ROBOT_MODE_UPDATING_FIRMWARE);
+                    break;
+            }
+        }
+
     }
 
     private void initTCP() {
-        String x1 = JNIUtils.ReadURparam(URConstants.Act_X, URConstants.Marm);
-        mTv2.setText(x1);
-        String y2 = JNIUtils.ReadURparam(URConstants.Act_Y, URConstants.Marm);
-        mTv4.setText(y2);
-        String z3 = JNIUtils.ReadURparam(URConstants.Act_Z, URConstants.Marm);
-        mTv6.setText(z3);
-        String RX1 = JNIUtils.ReadURparam(URConstants.Act_Rx, URConstants.Marm);
-        mTv8.setText(RX1);
-        String RY2 = JNIUtils.ReadURparam(URConstants.Act_Ry, URConstants.Marm);
-        mTv10.setText(RY2);
-        String RZ3 = JNIUtils.ReadURparam(URConstants.Act_Rz, URConstants.Marm);
-        mTv12.setText(RZ3);
+        if (TAG == 1) {
+            String x1 = JNIUtils.ReadURparam(URConstants.Act_X, URConstants.Marm);
+            mTv2.setText(x1);
+        } else {
+            String x1 = JNIUtils.ReadURparam(URConstants.Act_X, URConstants.Farm);
+            mTv2.setText(x1);
+        }
+
+        if (TAG == 1) {
+            String y2 = JNIUtils.ReadURparam(URConstants.Act_Y, URConstants.Marm);
+            mTv4.setText(y2);
+        } else {
+            String y2 = JNIUtils.ReadURparam(URConstants.Act_Y, URConstants.Farm);
+            mTv4.setText(y2);
+        }
+
+        if (TAG == 1) {
+            String z3 = JNIUtils.ReadURparam(URConstants.Act_Z, URConstants.Marm);
+            mTv6.setText(z3);
+        } else {
+            String z3 = JNIUtils.ReadURparam(URConstants.Act_Z, URConstants.Farm);
+            mTv6.setText(z3);
+        }
+
+        if (TAG == 1) {
+            String RX1 = JNIUtils.ReadURparam(URConstants.Act_Rx, URConstants.Marm);
+            mTv8.setText(RX1);
+        } else {
+            String RX1 = JNIUtils.ReadURparam(URConstants.Act_Rx, URConstants.Farm);
+            mTv8.setText(RX1);
+        }
+
+        if (TAG == 1) {
+            String RY2 = JNIUtils.ReadURparam(URConstants.Act_Ry, URConstants.Marm);
+            mTv10.setText(RY2);
+        } else {
+            String RY2 = JNIUtils.ReadURparam(URConstants.Act_Ry, URConstants.Farm);
+            mTv10.setText(RY2);
+        }
+
+        if (TAG == 1) {
+            String RZ3 = JNIUtils.ReadURparam(URConstants.Act_Rz, URConstants.Marm);
+            mTv12.setText(RZ3);
+        } else {
+            String RZ3 = JNIUtils.ReadURparam(URConstants.Act_Rz, URConstants.Farm);
+            mTv12.setText(RZ3);
+        }
+
     }
 
     private void initArmNetty() {
@@ -129,6 +316,13 @@ public class ExtremityFragment extends BaseFragment  {
         mTv8 = (TextView) view.findViewById(R.id.tv8);
         mTv10 = (TextView) view.findViewById(R.id.tv10);
         mTv12 = (TextView) view.findViewById(R.id.tv12);
+
+
+        mTvMode = (TextView) view.findViewById(R.id.tv_mode);
+        mTvSafeMode = (TextView) view.findViewById(R.id.tv_safe_mode);
+        mTvStatus = (TextView) view.findViewById(R.id.tv_status);
+
+        mTvToolName = (TextView) view.findViewById(R.id.tv_tool_name);
 
 
         mIv1.setOnTouchListener(mOnDownClickListener);
@@ -372,11 +566,11 @@ public class ExtremityFragment extends BaseFragment  {
     private void down() {
         if (TAG == 1) {//主臂
             if (mMainArmNettyClient != null) {
-                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_4,URConstants.Marm));
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_4, URConstants.Marm));
             }
         } else {//从臂
             if (mFlowArmNettyClient != null) {
-                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_4,URConstants.Farm));
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_4, URConstants.Farm));
             }
         }
     }
@@ -384,11 +578,11 @@ public class ExtremityFragment extends BaseFragment  {
     private void up() {
         if (TAG == 1) {//主臂
             if (mMainArmNettyClient != null) {
-                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_3,URConstants.Marm));
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_3, URConstants.Marm));
             }
         } else {//从臂
             if (mFlowArmNettyClient != null) {
-                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_3,URConstants.Farm));
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_3, URConstants.Farm));
             }
         }
 
@@ -397,11 +591,11 @@ public class ExtremityFragment extends BaseFragment  {
     private void right() {
         if (TAG == 1) {//主臂
             if (mMainArmNettyClient != null) {
-                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_1,URConstants.Marm));
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_1, URConstants.Marm));
             }
         } else {//从臂
             if (mFlowArmNettyClient != null) {
-                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_1,URConstants.Farm));
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_1, URConstants.Farm));
             }
         }
 
@@ -410,11 +604,11 @@ public class ExtremityFragment extends BaseFragment  {
     private void left() {
         if (TAG == 1) {//主臂
             if (mMainArmNettyClient != null) {
-                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_2,URConstants.Marm));
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_2, URConstants.Marm));
             }
         } else {//从臂
             if (mFlowArmNettyClient != null) {
-                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_2,URConstants.Farm));
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_2, URConstants.Farm));
             }
         }
 
@@ -423,11 +617,11 @@ public class ExtremityFragment extends BaseFragment  {
     private void backward() {
         if (TAG == 1) {//主臂
             if (mMainArmNettyClient != null) {
-                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_5,URConstants.Marm));
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_5, URConstants.Marm));
             }
         } else {//从臂
             if (mFlowArmNettyClient != null) {
-                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_5,URConstants.Farm));
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_5, URConstants.Farm));
             }
         }
 
@@ -436,11 +630,11 @@ public class ExtremityFragment extends BaseFragment  {
     private void forward() {
         if (TAG == 1) {//主臂
             if (mMainArmNettyClient != null) {
-                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_6,URConstants.Marm));
+                mMainArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_6, URConstants.Marm));
             }
         } else {//从臂
             if (mFlowArmNettyClient != null) {
-                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_6,URConstants.Farm));
+                mFlowArmNettyClient.sendMsg30001(JNIUtils.ActionPose(URConstants.ACTION_POSE_6, URConstants.Farm));
             }
         }
     }
