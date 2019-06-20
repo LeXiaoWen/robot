@@ -7,5 +7,5 @@ import com.leo.robot.bean.BaseMsg;
  */
 
 
-public class MainArmBean extends BaseMsg {
+public class FlowArmBean extends BaseMsg {
 }
