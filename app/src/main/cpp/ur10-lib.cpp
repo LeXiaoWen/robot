@@ -5,6 +5,8 @@
 #include "ur10.cpp"
 #include "ur.h"
 #include "ur.cpp"
+#include "data.h"
+#include "data.cpp"
 #include "log_utils.h"
 /* Header for class com_leo_robot_JNIUtils */
 
@@ -15,6 +17,7 @@ extern "C" {
 #endif
 UR10 ur10;
 UR *ur=new UR();
+Data *data = new Data();
 std::string jstring2str(JNIEnv *env, jstring jstr);
 /*
  * Class:     com_leo_robot_JNIUtils
@@ -212,4 +215,23 @@ Java_com_leo_robot_JNIUtils_ReadURparam(JNIEnv *env, jclass type, jstring params
     env->ReleaseStringUTFChars(mode_, mode);
 
     return env->NewStringUTF(rs.data());
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_leo_robot_JNIUtils_GetDevicePowerMsg(JNIEnv *env, jclass type, jstring msg_) {
+    const char *msg = env->GetStringUTFChars(msg_, 0);
+
+    // TODO
+    data->GetDevicePowerMsg(string(msg));
+
+    env->ReleaseStringUTFChars(msg_, msg);
+}extern "C"
+JNIEXPORT jfloat JNICALL
+Java_com_leo_robot_JNIUtils_ReadDevicePower(JNIEnv *env, jclass type, jstring device_) {
+    const char *device = env->GetStringUTFChars(device_, 0);
+
+    // TODO
+    jfloat rs = data->ReadDevicePower(string(device));
+
+    env->ReleaseStringUTFChars(device_, device);
+    return rs;
 }

@@ -94,4 +94,20 @@ public class JNIUtils {
     */
     public static native String ReadURparam(String params,String mode);
 
+    /**
+    * 接收电量信息
+    *
+    *@author Leo
+    *created at 2019/6/25 10:23 PM
+    */
+    public static native void GetDevicePowerMsg(String msg);
+
+    /**
+    * 读取设备电量
+    *
+    *@author Leo
+    *created at 2019/6/25 10:24 PM
+    */
+    public static native float ReadDevicePower(String device);
+
 }

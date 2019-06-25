@@ -5,5 +5,5 @@ package com.leo.robot.bean;
  */
 
 
-public class MasterPowerData {
+public class MasterPowerDataMsg extends BaseMsg{
 }

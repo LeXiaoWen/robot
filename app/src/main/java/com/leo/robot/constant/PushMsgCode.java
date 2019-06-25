@@ -13,6 +13,8 @@ public interface PushMsgCode {
     String IS_AUTO_CONTROL = "OB";
     //选点命令
     String CHOOSE_LOCATION = "0D";
+    //主控数据轮询
+    String MASTER_DATA = "0B";
 
     //------------------------ 剥线界面 start --------------------------
     /**

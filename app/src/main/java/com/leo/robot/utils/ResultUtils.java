@@ -101,14 +101,12 @@ public class ResultUtils {
             chooseCameraLocationMsg.setMsg("相机选点指令");
             chooseCameraLocationMsg.setCode(msg);
             BusUtils.postMessage(chooseCameraLocationMsg);
+        }else if (PushMsgCode.MASTER_DATA.equals(s)){//主控数据反馈
+            MasterPowerDataMsg powerDataMsg = new MasterPowerDataMsg();
+            powerDataMsg.setMsg("电量信息");
+            powerDataMsg.setCode(msg);
+            BusUtils.postMessage(powerDataMsg);
         }
-//        else if (msg.contains("InfoArm")){
-//            TakeBackBean takeBackBean =mGson.fromJson(msg,TakeBackBean.class);
-//            BusUtils.postMessage(takeBackBean);
-//        }else if (msg.contains("InfoOperatingMode")){
-//            OperatingModeBean modeBean = mGson.fromJson(msg, OperatingModeBean.class);
-//            BusUtils.postMessage(modeBean);
-//        }
     }
 
     private static void onControlModel(String msg) {

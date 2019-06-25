@@ -105,5 +105,15 @@ public class URConstants {
     public static String running="running";
     public static String paused="paused";
 
+    //电量
+    public static String Master_Power_Ma = "Master_Power_Ma";
+    public static String Master_Power_V = "Master_Power_V";
+    public static String Master_Power_A = "Master_Power_A";
+    public static String Wire_Stripper_Ma = "Wire_Stripper_Ma";
+    public static String Connect_Wire_Ma = "Connect_Wire_Ma";
+    public static String Cut_Wire_Ma = "Cut_Wire_Ma";
+    public static String Hand_Grab_Ma = "Hand_Grab_Ma";
+
+
 
 }
