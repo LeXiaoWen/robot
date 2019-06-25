@@ -105,27 +105,27 @@ string UR10::ActionMove(string cmd)
     string CMD=cmd;
     if(CMD==ACTION_MOVE_1)
     {
-        str_movel= movel(-1.00106,actual_Y,actual_Z,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
+        str_movel= movel(-1.46073,actual_Y,actual_Z,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
     }
     else if(CMD==ACTION_MOVE_2)
     {
-        str_movel= movel(1.00106,actual_Y,actual_Z,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
+        str_movel= movel(1.46073,actual_Y,actual_Z,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
     }
     else if(CMD==ACTION_MOVE_3)
     {
-        str_movel= movel(actual_X,-1.00106,actual_Z,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
+        str_movel= movel(actual_X,-1.46073,actual_Z,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
     }
     else if(CMD==ACTION_MOVE_4)
     {
-        str_movel= movel(actual_X,1.00106,actual_Z,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
+        str_movel= movel(actual_X,1.46073,actual_Z,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
     }
     else if(CMD==ACTION_MOVE_5)
     {
-        str_movel= movel(actual_X,actual_Y,-1.00106,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
+        str_movel= movel(actual_X,actual_Y,-1.46073,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
     }
     else if(CMD==ACTION_MOVE_6)
     {
-        str_movel= movel(actual_X,actual_Y,1.00106,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
+        str_movel= movel(actual_X,actual_Y,1.46073,actual_Rx,actual_Ry,actual_Rz,move_a,move_v,0.0,0.0);
     }
     else
     {
