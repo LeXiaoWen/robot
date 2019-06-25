@@ -25,6 +25,7 @@ import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.DateUtils;
+import com.leo.robot.utils.PowerUtils;
 import com.leo.robot.view.CustomPopWindow;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.data.StringUtils;
@@ -426,31 +427,19 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     @Override
     protected void onDestroy() {
-//        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
-//            webViewOnDestroy();
-//        }
-//        if (mAgentWebMain != null) {
-//            mAgentWebMain.getWebLifeCycle().onDestroy();
-//        }
-//        if (mAgentWeb2 != null) {
-//            mAgentWeb2.getWebLifeCycle().onDestroy();
-//        }
-//        if (mAgentWeb3 != null) {
-//            mAgentWeb3.getWebLifeCycle().onDestroy();
-//        }
-//        if (mAgentWeb4 != null) {
-//            mAgentWeb4.getWebLifeCycle().onDestroy();
-//        }
+
         mPresenter.destroyClient();
 
         super.onDestroy();
-//        mUnityPlayer.quit();
         mAgentWebMain = null;
         mAgentWeb2 = null;
         mAgentWeb3 = null;
         mAgentWeb4 = null;
+
         LogUtils.e("剥线界面：   onDestroy ");
     }
+
+
 
 
     @Override
@@ -825,5 +814,12 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateOwnPower(MasterPowerDataMsg msg){
+        String code = msg.getCode();
+        String ownPower = PowerUtils.getOwnPower(code);
+        mTvOwnPower.setText(ownPower);
     }
 }

@@ -17,6 +17,7 @@ import butterknife.OnClick;
 import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
+import com.leo.robot.bean.MasterPowerDataMsg;
 import com.leo.robot.bean.SocketStatusBean;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.URConstants;
@@ -26,6 +27,7 @@ import com.leo.robot.ui.setting.cut_line_setting.CutLineSettingActivity;
 import com.leo.robot.ui.setting.fragment.*;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
+import com.leo.robot.utils.PowerUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -418,5 +420,13 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
      */
     private void handlerMain30003Msg(String msg) {
         JNIUtils.GetDataPort30003(msg, URConstants.Marm);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateOwnPower(MasterPowerDataMsg msg){
+        String code = msg.getCode();
+        String ownPower = PowerUtils.getOwnPower(code);
+
+        mTvOwnPower.setText(ownPower);
     }
 }

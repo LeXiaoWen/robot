@@ -16,16 +16,14 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.just.agentweb.AgentWeb;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
-import com.leo.robot.bean.ChooseCameraLocationMsg;
-import com.leo.robot.bean.CutLineMsg;
-import com.leo.robot.bean.SocketStatusBean;
-import com.leo.robot.bean.VisionMsg;
+import com.leo.robot.bean.*;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.ui.setting.cut_line_setting.CutLineSettingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.utils.DateUtils;
+import com.leo.robot.utils.PowerUtils;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.ui.ToastUtils;
@@ -639,5 +637,12 @@ public class CutLineActivity extends NettyActivity<CutLineActivityPresenter> {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateOwnPower(MasterPowerDataMsg msg){
+        String code = msg.getCode();
+        String ownPower = PowerUtils.getOwnPower(code);
+        mTvOwnPower.setText(ownPower);
     }
 }

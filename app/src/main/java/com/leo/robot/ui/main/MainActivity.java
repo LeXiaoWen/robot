@@ -16,6 +16,7 @@ import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.AllMsg;
 import com.leo.robot.bean.ErroMsg;
+import com.leo.robot.bean.MasterPowerDataMsg;
 import com.leo.robot.constant.Constants;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
@@ -25,6 +26,7 @@ import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.NettyManager;
+import com.leo.robot.utils.PowerUtils;
 import com.leo.robot.utils.ResultUtils;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.ui.ToastUtils;
@@ -384,6 +386,13 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
                 client.connect(ip, port);//连接服务器
             }).start();
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateOwnPower(MasterPowerDataMsg msg){
+        String code = msg.getCode();
+        String ownPower = PowerUtils.getOwnPower(code);
+        mTvOwnPower.setText(ownPower);
     }
 
 }

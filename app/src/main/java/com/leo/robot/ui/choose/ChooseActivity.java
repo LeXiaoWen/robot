@@ -1,11 +1,15 @@
 package com.leo.robot.ui.choose;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.widget.*;
 import butterknife.BindView;
@@ -15,16 +19,18 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.gson.Gson;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.MiddlewareWebClientBase;
+import com.just.agentweb.WebViewClient;
 import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.LineLocationMsg;
 import com.leo.robot.bean.LocationMsg;
+import com.leo.robot.bean.MasterPowerDataMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyListener;
-import com.leo.robot.netty.arm.MainArmBean;
 import com.leo.robot.netty.arm.ArmNettyClient;
+import com.leo.robot.netty.arm.MainArmBean;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
@@ -330,6 +336,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setWebViewClient(mWebViewClient)
                 .useMiddlewareWebClient(getMiddlewareWebClient())
                 .createAgentWeb()
                 .ready()
@@ -337,8 +344,28 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
 //        mWebView = mAgentWeb.getWebCreator().getWebView();
 
         initWebSetting(mAgentWeb.getWebCreator().getWebView());
-        mRlMain.invalidate();
+//        mRlMain.invalidate();
+        mAgentWeb.getWebCreator().getWebView().reload();
     }
+
+    private WebViewClient mWebViewClient = new WebViewClient() {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            return super.shouldOverrideUrlLoading(view, request);
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            //do you  work
+            Log.i("Info", "BaseWebActivity onPageStarted");
+        }
+
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+            view.reload();
+            super.onReceivedError(view, request, error);
+        }
+    };
 
     /**
      * 获取缩放比例
@@ -435,20 +462,18 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
 
 
     })
+
+
     public void onViewClicked(View view) {
 
         switch (view.getId()) {
             case R.id.ib_1:
-//                if (!mPresenter.isFastDoubleClick()) {
                 clearVideo();
                 previousVideo();
-//                }
                 break;
             case R.id.ib_2:
-//                if (!mPresenter.isFastDoubleClick()) {
                 clearVideo();
                 nextVideo();
-//                }
                 break;
             case R.id.btn_confirm_location:
                 mPresenter.sendConfirmMsg(x, y, mVideoTag, radioButtonTag);
@@ -489,6 +514,12 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
                 break;
 
         }
+    }
+
+    private void clearVideo(){
+        ClearWebUtils.clearVideo(mAgentWeb,this);
+//        mRlMain.removeAllViews();
+//        mRlMain.invalidate();
     }
 
     /**
@@ -552,14 +583,21 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
      * @author Leo
      * created at 2019/6/14 6:19 PM
      */
-    private void clearVideo() {
-//        mAgentWeb.getWebLifeCycle().onDestroy();
-        mAgentWeb = null;
-//        mWebView = null;
-//        mRlMain.removeViewAt(1);
-        mRlMain.removeAllViews();
-        mRlMain.invalidate();
-    }
+//    private void clearVideo() {
+//        WebView webView = mAgentWeb.getWebCreator().getWebView();
+//        if (webView!=null){
+//            webView.resumeTimers();
+//            webView.setWebChromeClient(null);
+//            webView.setWebViewClient(null);
+//            webView.setTag(null);
+//            webView.clearHistory();
+//            webView.destroy();
+//            webView = null;
+//            AgentWebConfig.clearDiskCache(this);
+//        }
+//        mRlMain.removeAllViews();
+//        mRlMain.invalidate();
+//    }
 
     /**
      * 上一个视频
@@ -772,15 +810,16 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
 
     @Override
     protected void onDestroy() {
-        if (mAgentWeb != null) {
-            mAgentWeb.getWebLifeCycle().onPause();
-        }
+//        if (mAgentWeb != null) {
+//            mAgentWeb.getWebLifeCycle().onPause();
+//        }
         mPresenter.destroyClient();
         mPresenter.onDestroy();
         onUnBindReceiver();
         super.onDestroy();
-        mAgentWeb = null;
+//        mAgentWeb = null;
 //        mWebView = null;
+        clearVideo();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -788,19 +827,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         String code = bean.getCode();
         String msg = bean.getMsg();
         if (msg.length() == 2216) {
-
-
             handlerMsg(msg);
-
-//            LogUtils.e(msg);
-//            NativeUtils.init(msg, "Marm");
-//            String s = NativeUtils.move("ACTION_MOVE_1", "Marm");
-//
-//            if (code.equals("0")) {//30003数据
-//                ToastUtils.showShortToast("30003数据 " + msg);
-//            } else if (code.equals("1")) {//29999数据
-//                ToastUtils.showShortToast("29999数据 " + msg);
-//            }
         }
 
     }
@@ -830,6 +857,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     }
 
 
+
     /**
      * 提示文字
      *
@@ -840,5 +868,10 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         mTvRemind.setText(s);
     }
 
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateOwnPower(MasterPowerDataMsg msg){
+        String code = msg.getCode();
+        String ownPower = PowerUtils.getOwnPower(code);
+        mTvOwnPower.setText(ownPower);
+    }
 }
