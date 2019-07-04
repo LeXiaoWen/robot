@@ -874,4 +874,11 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         String ownPower = PowerUtils.getOwnPower(code);
         mTvOwnPower.setText(ownPower);
     }
+
+    @Override
+    protected void onStop() {
+        onUnBindReceiver();
+        super.onStop();
+
+    }
 }

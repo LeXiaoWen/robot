@@ -377,4 +377,10 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
         String ownPower = PowerUtils.getOwnPower(code);
         mTvOwnPower.setText(ownPower);
     }
+
+    @Override
+    protected void onStop() {
+        onUnBindReceiver();
+        super.onStop();
+    }
 }

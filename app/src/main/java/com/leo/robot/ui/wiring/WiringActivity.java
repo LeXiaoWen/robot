@@ -24,6 +24,7 @@ import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.utils.DateUtils;
+import com.leo.robot.utils.MyWebViewClient;
 import com.leo.robot.utils.PowerUtils;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.data.StringUtils;
@@ -294,12 +295,14 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         mAgentWeb4 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setWebViewClient(new MyWebViewClient())
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
 
         initWebSetting(mAgentWeb4.getWebCreator().getWebView());
+        mAgentWeb4.getWebCreator().getWebView().reload();
     }
 
     /**
@@ -312,12 +315,14 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         mAgentWeb3 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setWebViewClient(new MyWebViewClient())
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
 
         initWebSetting(mAgentWeb3.getWebCreator().getWebView());
+        mAgentWeb3.getWebCreator().getWebView().reload();
     }
 
     /**
@@ -330,12 +335,14 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         mAgentWeb2 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setWebViewClient(new MyWebViewClient())
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
 
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
+        mAgentWeb2.getWebCreator().getWebView().reload();
     }
 
 
@@ -349,13 +356,14 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         mAgentWebMain = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setWebViewClient(new MyWebViewClient())
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.LINE_CAMERA_URL);
 
         initWebSetting(mAgentWebMain.getWebCreator().getWebView());
-
+        mAgentWebMain.getWebCreator().getWebView().reload();
 
         //缩放
 //        agentWeb.getAgentWebSettings().getWebSettings().setUseWideViewPort(true);

@@ -379,4 +379,10 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
         String ownPower = PowerUtils.getOwnPower(code);
         mTvOwnPower.setText(ownPower);
     }
+
+    @Override
+    protected void onStop() {
+        onUnBindReceiver();
+        super.onStop();
+    }
 }

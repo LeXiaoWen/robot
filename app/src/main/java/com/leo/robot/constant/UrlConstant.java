@@ -16,7 +16,7 @@ public class UrlConstant {
     public static final String FLOW_ARM_NETTY_HOST = "192.168.1.40";
 
     //测试
-//    public static final String MASTER_NETTY_HOST = "192.168.1.5";
+//    public static final String MASTER_NETTY_HOST = "192.168.1.11";
 //    public static final String MASTER_NETTY_HOST = "192.168.2.171";
 //    public static final String VISION_NETTY_HOST = "192.168.1.5";
 
@@ -52,13 +52,14 @@ public class UrlConstant {
     /**
      * 云台相机
      */
-//    public static final String CAMERA_URL = "http://192.168.1.9:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
-    public static final String CAMERA_URL = "http://192.168.1.10:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
+    public static final String CAMERA_URL = "http://192.168.1.9:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
+//    public static final String CAMERA_URL = "http://192.168.1.10:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
 
     /**
      * 主机械臂相机
      */
     public static final String ARM_MAIN_CAMERA_UREL = "http://192.168.1.203:8080/stream?topic=/usb_cam3/image_raw&type=ros_compressed";
+//    public static final String ARM_MAIN_CAMERA_UREL = "http://192.168.1.11:8080/stream?topic=/usb_cam/image_raw&type=ros_compressed";
     /**
      * 从机械臂相机
      */

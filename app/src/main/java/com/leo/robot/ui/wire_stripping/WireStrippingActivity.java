@@ -25,6 +25,7 @@ import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.DateUtils;
+import com.leo.robot.utils.MyWebViewClient;
 import com.leo.robot.utils.PowerUtils;
 import com.leo.robot.view.CustomPopWindow;
 import cree.mvp.util.data.SPUtils;
@@ -277,12 +278,14 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb4 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setWebViewClient(new MyWebViewClient())
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
 
         initWebSetting(mAgentWeb4.getWebCreator().getWebView());
+        mAgentWeb4.getWebCreator().getWebView().reload();
     }
 
     /**
@@ -295,12 +298,15 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb3 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setWebViewClient(new MyWebViewClient())
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
 
         initWebSetting(mAgentWeb3.getWebCreator().getWebView());
+        mAgentWeb3.getWebCreator().getWebView().reload();
+
     }
 
     /**
@@ -313,12 +319,14 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb2 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setWebViewClient(new MyWebViewClient())
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
 
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
+        mAgentWeb2.getWebCreator().getWebView().reload();
     }
 
 
@@ -332,20 +340,16 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWebMain = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
+                .setWebViewClient(new MyWebViewClient())
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.LINE_CAMERA_URL);
 
         initWebSetting(mAgentWebMain.getWebCreator().getWebView());
-
-
-        //缩放
-//        agentWeb.getAgentWebSettings().getWebSettings().setUseWideViewPort(true);
-//        agentWeb.getAgentWebSettings().getWebSettings().setLoadWithOverviewMode(true);
-//        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
-
+        mAgentWebMain.getWebCreator().getWebView().reload();
     }
+
 
     /**
      * 设置webView自适应屏幕，取消滚动条
@@ -438,8 +442,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
         LogUtils.e("剥线界面：   onDestroy ");
     }
-
-
 
 
     @Override
@@ -817,7 +819,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateOwnPower(MasterPowerDataMsg msg){
+    public void updateOwnPower(MasterPowerDataMsg msg) {
         String code = msg.getCode();
         String ownPower = PowerUtils.getOwnPower(code);
         mTvOwnPower.setText(ownPower);

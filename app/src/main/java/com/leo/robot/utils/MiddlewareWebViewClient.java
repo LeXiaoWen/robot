@@ -10,7 +10,7 @@ import com.just.agentweb.MiddlewareWebClientBase;
  * Created by cenxiaozhong on 2017/12/16.
  *
  *
- * 方法的执行顺序，例如下面用了7个中间件一个 WebViewClient
+ * 方法的执行顺序，例如下面用了7个中间件一个 MyWebViewClient
  *
  * .useMiddlewareWebClient(getMiddlewareWebClient())  // 1
  * .useMiddlewareWebClient(getMiddlewareWebClient())  // 2
