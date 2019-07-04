@@ -5,11 +5,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
+import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.WireStrippingMsg;
 import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.URConstants;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
@@ -75,10 +77,51 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
                 if (mMasterClient != null) {
                     mMasterClient.sendMsgTest(CommandUtils.lineLocation());
                 }
+                updateData();
             }
             super.handleMessage(msg);
         }
     };
+
+    private void updateData() {
+        initMode();
+        initSafeMode();
+        initArmStatus();
+    }
+
+    /**
+    * 软件状态
+    *
+    *@author Leo
+    *created at 2019/7/4 10:11 PM
+    */
+
+    private void initArmStatus() {
+        String status = JNIUtils.ReadURparam(URConstants.Program_State, URConstants.Farm);
+        mActivity.showStatus(status);
+    }
+
+    /**
+    * 安全模式
+    *
+    *@author Leo
+    *created at 2019/7/4 10:10 PM
+    */
+    private void initSafeMode() {
+        String safeMode = JNIUtils.ReadURparam(URConstants.Safe_Mod, URConstants.Farm);
+        mActivity.showSafeMode(safeMode);
+    }
+
+    /**
+    * 模式
+    *
+    *@author Leo
+    *created at 2019/7/4 10:10 PM
+    */
+    private void initMode() {
+        String mode = JNIUtils.ReadURparam(URConstants.Robot_Mod, URConstants.Farm);
+        mActivity.showMode(mode);
+    }
 
     @Override
     protected void updateTime(TextView view) {
@@ -126,8 +169,10 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
      * created at 2019/4/18 2:17 PM
      */
     public void revocerButton() {
-        mMasterClient.sendMsgTest(CommandUtils.getFlowArmRecover());
-        mActivity.refreshLogRv("发送一键回收命令");
+        if (mMasterClient != null) {
+            mMasterClient.sendMsgTest(CommandUtils.getFlowArmRecover());
+            mActivity.refreshLogRv("发送一键回收命令");
+        }
     }
 
     /**
@@ -265,16 +310,19 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
                     if (mMasterClient != null) {
                         mMasterClient.sendMsgTest(CommandUtils.aLineOrder());
                     }
+                    mActivity.changeStartUi(true);
                     break;
                 case R.id.tv_menu2:
                     if (mMasterClient != null) {
                         mMasterClient.sendMsgTest(CommandUtils.bLineOrder());
                     }
+                    mActivity.changeStartUi(true);
                     break;
                 case R.id.tv_menu3:
                     if (mMasterClient != null) {
                         mMasterClient.sendMsgTest(CommandUtils.cLineOrder());
                     }
+                    mActivity.changeStartUi(true);
                     break;
 
             }
@@ -305,6 +353,12 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         }
     }
 
+    public void sendStop() {
+        if (mMasterClient != null) {
+            mMasterClient.sendMsgTest(CommandUtils.lineStopOrder());
+        }
+    }
+
     public void sendMsgToUnity() {
         //设置机械运动速度，类型float
         UnityPlayer.UnitySendMessage("MessageController", "SetMoveSpeed", "5.01");
@@ -313,6 +367,24 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
 //        UnityPlayer.UnitySendMessage("MessageController","SetMaRobotValue","");
         //设置从臂旋转，类型string  （将json以string的形式传参）
 //        UnityPlayer.UnitySendMessage("MessageController","SetFaRobotValue","");
+    }
+
+    public void sendALineOrder() {
+        if (mMasterClient != null) {
+            mMasterClient.sendMsgTest(CommandUtils.aLineOrder());
+        }
+    }
+
+    public void sendBLineOrder() {
+        if (mMasterClient != null) {
+            mMasterClient.sendMsgTest(CommandUtils.bLineOrder());
+        }
+    }
+
+    public void sendCLineOrder() {
+        if (mMasterClient != null) {
+            mMasterClient.sendMsgTest(CommandUtils.cLineOrder());
+        }
     }
 
 

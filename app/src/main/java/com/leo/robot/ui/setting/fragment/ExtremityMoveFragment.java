@@ -199,7 +199,6 @@ public class ExtremityMoveFragment extends BaseFragment {
         } else {
             String mode = JNIUtils.ReadURparam(URConstants.Robot_Mod, URConstants.Farm);
             showMode(mode);
-
         }
     }
 

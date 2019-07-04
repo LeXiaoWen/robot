@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.TextView;
+import com.leo.robot.JNIUtils;
 import com.leo.robot.base.RobotPresenter;
 import com.leo.robot.bean.CutLineMsg;
 import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.URConstants;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.utils.CommandUtils;
@@ -77,10 +79,51 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
                 if (mMasterClient != null) {
                     mMasterClient.sendMsgTest(CommandUtils.lineLocation());
                 }
+                updateData();
             }
             super.handleMessage(msg);
         }
     };
+
+    private void updateData() {
+        initMode();
+        initSafeMode();
+        initArmStatus();
+    }
+
+    /**
+     * 软件状态
+     *
+     *@author Leo
+     *created at 2019/7/4 10:11 PM
+     */
+
+    private void initArmStatus() {
+        String status = JNIUtils.ReadURparam(URConstants.Program_State, URConstants.Marm);
+        mActivity.showStatus(status);
+    }
+
+    /**
+     * 安全模式
+     *
+     *@author Leo
+     *created at 2019/7/4 10:10 PM
+     */
+    private void initSafeMode() {
+        String safeMode = JNIUtils.ReadURparam(URConstants.Safe_Mod, URConstants.Marm);
+        mActivity.showSafeMode(safeMode);
+    }
+
+    /**
+     * 模式
+     *
+     *@author Leo
+     *created at 2019/7/4 10:10 PM
+     */
+    private void initMode() {
+        String mode = JNIUtils.ReadURparam(URConstants.Robot_Mod, URConstants.Marm);
+        mActivity.showMode(mode);
+    }
 
     /**
      * 急停、恢复急停

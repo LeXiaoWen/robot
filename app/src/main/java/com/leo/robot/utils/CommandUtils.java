@@ -1553,8 +1553,8 @@ public class CommandUtils {
      */
     public static String aLineOrder() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x0C;
-        msg[2] = (byte) 0x01;
+        msg[1] = (byte) 0x08;
+        msg[2] = (byte) 0x09;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
@@ -1568,8 +1568,8 @@ public class CommandUtils {
      */
     public static String bLineOrder() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x0C;
-        msg[2] = (byte) 0x02;
+        msg[1] = (byte) 0x08;
+        msg[2] = (byte) 0x0A;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);
@@ -1583,8 +1583,23 @@ public class CommandUtils {
      */
     public static String cLineOrder() {
         msg[0] = (byte) 0x68;
-        msg[1] = (byte) 0x0C;
-        msg[2] = (byte) 0x03;
+        msg[1] = (byte) 0x08;
+        msg[2] = (byte) 0x0B;
+        msg[3] = (byte) 0x00;
+        msg[4] = (byte) 0xFF;
+        return ConvertCode.bytes2HexString(msg);
+    }
+
+    /**
+    * 剥线停止
+    *
+    *@author Leo
+    *created at 2019/7/4 9:36 PM
+    */
+    public static String lineStopOrder(){
+        msg[0] = (byte) 0x68;
+        msg[1] = (byte) 0x08;
+        msg[2] = (byte) 0x08;
         msg[3] = (byte) 0x00;
         msg[4] = (byte) 0xFF;
         return ConvertCode.bytes2HexString(msg);

@@ -14,11 +14,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.just.agentweb.AgentWeb;
+import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.*;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.URConstants;
 import com.leo.robot.constant.UrlConstant;
+import com.leo.robot.netty.arm.MainArmBean;
 import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
@@ -146,6 +149,14 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     SpinKitView mSpinKit1;
     @BindView(R.id.ll_status1)
     LinearLayout mLlStatus1;
+    @BindView(R.id.tv_mode)
+    TextView mTvMode;
+    @BindView(R.id.tv_safe_mode)
+    TextView mTvSafeMode;
+    @BindView(R.id.tv_status)
+    TextView mTvStatus;
+    @BindView(R.id.ll_robot_status)
+    LinearLayout mLlRobotStatus;
     private boolean isPause;
 
     private List<String> mLogData;
@@ -737,9 +748,133 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateOwnPower(MasterPowerDataMsg msg){
+    public void updateOwnPower(MasterPowerDataMsg msg) {
         String code = msg.getCode();
         String ownPower = PowerUtils.getOwnPower(code);
         mTvOwnPower.setText(ownPower);
     }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void mainArmMsg(MainArmBean bean) {
+        String code = bean.getCode();
+        String msg = bean.getMsg();
+        if (msg.length() == 2216) {
+            if (code.equals("0")) {//30003数据
+                handlerMain30003Msg(msg);
+            } else if (code.equals("1")) {//29999数据
+                handlerMain29999Msg(msg);
+            }
+        }
+    }
+
+    /**
+     * 主臂29999端口数据
+     *
+     * @author Leo
+     * created at 2019/6/19 11:18 PM
+     */
+    private void handlerMain29999Msg(String msg) {
+        JNIUtils.GetDataPort29999(msg, URConstants.Marm);
+    }
+
+    /**
+     * 主臂30003端口数据
+     *
+     * @author Leo
+     * created at 2019/6/19 11:18 PM
+     */
+    private void handlerMain30003Msg(String msg) {
+        JNIUtils.GetDataPort30003(msg, URConstants.Marm);
+    }
+
+
+    public void showStatus(String status) {
+        if (!StringUtils.isEmpty(status)) {
+            int i = (int) Double.parseDouble(status);
+            switch (i) {
+                case 1:
+                    mTvStatus.setText(URConstants.idle);
+                    break;
+                case 2:
+                    mTvStatus.setText(URConstants.running);
+                    break;
+                case 4:
+                    mTvStatus.setText(URConstants.paused);
+                    break;
+            }
+        }
+    }
+
+    public void showSafeMode(String safeMode) {
+        if (!StringUtils.isEmpty(safeMode)) {
+            int i = (int) Double.parseDouble(safeMode);
+            switch (i) {
+                case 1:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_NORMAL);
+                    break;
+                case 2:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_REDUCED);
+                    break;
+                case 3:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_PROTECTIVE_STOP);
+                    break;
+                case 4:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_RECOVERY);
+                    break;
+                case 5:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_SAFEGUARD_STOP);
+                    break;
+                case 6:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_SYSTEM_EMERGENCY_STOP);
+                    break;
+                case 7:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_ROBOT_EMERGENCY_STOP);
+                    break;
+                case 8:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_VIOLATION);
+                    break;
+                case 9:
+                    mTvSafeMode.setText(URConstants.SAFETY_MODE_FAULT);
+                    break;
+            }
+        }
+    }
+
+    public void showMode(String mode) {
+        if (!StringUtils.isEmpty(mode)) {
+            int i = (int) Double.parseDouble(mode);
+            switch (i) {
+                case 0:
+                    mTvMode.setText(URConstants.ROBOT_MODE_DISCONNECTED);
+                    break;
+                case 1:
+                    mTvMode.setText(URConstants.ROBOT_MODE_CONFIRM_SAFETY);
+                    break;
+                case 2:
+                    mTvMode.setText(URConstants.ROBOT_MODE_BOOTING);
+                    break;
+                case 3:
+                    mTvMode.setText(URConstants.ROBOT_MODE_POWER_OFF);
+                    break;
+                case 4:
+                    mTvMode.setText(URConstants.ROBOT_MODE_POWER_ON);
+                    break;
+                case 5:
+                    mTvMode.setText(URConstants.ROBOT_MODE_IDLE);
+                    break;
+                case 6:
+                    mTvMode.setText(URConstants.ROBOT_MODE_BACKDRIVE);
+                    break;
+                case 7:
+                    mTvMode.setText(URConstants.ROBOT_MODE_RUNNING);
+                    break;
+                case 8:
+                    mTvMode.setText(URConstants.ROBOT_MODE_UPDATING_FIRMWARE);
+                    break;
+            }
+        }
+
+    }
+
 }

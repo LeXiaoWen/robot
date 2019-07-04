@@ -96,7 +96,7 @@ public class ResultUtils {
             locationMsg.setMsg(msg);
             locationMsg.setCode("1");
             BusUtils.postMessage(locationMsg);
-        }else if (PushMsgCode.CHOOSE_LOCATION.equals(s)){//选点指令
+        }else if (PushMsgCode.CHOOSE_LOCATION1.equals(s) || PushMsgCode.CHOOSE_LOCATION2.equals(s)){//选点指令
             ChooseCameraLocationMsg chooseCameraLocationMsg = new ChooseCameraLocationMsg();
             chooseCameraLocationMsg.setMsg("相机选点指令");
             chooseCameraLocationMsg.setCode(msg);

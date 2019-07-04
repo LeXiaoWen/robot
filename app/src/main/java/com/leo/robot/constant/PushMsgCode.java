@@ -12,7 +12,8 @@ public interface PushMsgCode {
     String CUT_LINE = "0A";
     String IS_AUTO_CONTROL = "OB";
     //选点命令
-    String CHOOSE_LOCATION = "0D";
+    String CHOOSE_LOCATION1 = "04";
+    String CHOOSE_LOCATION2 = "05";
     //主控数据轮询
     String MASTER_DATA = "0B";
 
