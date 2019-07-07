@@ -26,6 +26,7 @@ import com.leo.robot.ui.setting.fragment.*;
 import com.leo.robot.ui.setting.wiring_stripping_setting.WiringStrippingSettingActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.PowerUtils;
+import cree.mvp.util.data.StringUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -63,6 +64,14 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
     Button mTv7;
     @BindView(R.id.tv8)
     Button mTv8;
+    @BindView(R.id.tv_wiring)
+    TextView mTvWiring;
+    @BindView(R.id.tv_wire_stripping)
+    TextView mTvWireStripping;
+    @BindView(R.id.tv_claw)
+    TextView mTvClaw;
+    @BindView(R.id.tv_cut_line)
+    TextView mTvCutLine;
 
     private boolean isShown = false;
     private Fragment mCurrentFragment = new Fragment();
@@ -116,6 +125,8 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
         mPresenter.initClient();
         //实时请求行线、引流线距离
         mPresenter.initLineLocation();
+
+        mPresenter.updatePower();
     }
 
 
@@ -167,7 +178,7 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
         isShown = true;
     }
 
-    @OnClick({R.id.tv1, R.id.tv2, R.id.tv3, R.id.tv4, R.id.tv5, R.id.tv6, R.id.tv7, R.id.tv8,R.id.iv_back})
+    @OnClick({R.id.tv1, R.id.tv2, R.id.tv3, R.id.tv4, R.id.tv5, R.id.tv6, R.id.tv7, R.id.tv8, R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv1:
@@ -372,10 +383,38 @@ public class WiringSettingActivity extends NettyActivity<WiringSettingActivityPr
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateOwnPower(MasterPowerDataMsg msg){
+    public void updateOwnPower(MasterPowerDataMsg msg) {
         String code = msg.getCode();
-        String ownPower = PowerUtils.getOwnPower(code);
-        mTvOwnPower.setText(ownPower);
+        String ownPower = PowerUtils.getPowerByType(code, URConstants.Master_Power_Ma);
+        //剥线工具电量
+        String Wire_Stripper_Ma = PowerUtils.getPowerByType(code, URConstants.Wire_Stripper_Ma);
+        //接线工具电量
+        String Connect_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Connect_Wire_Ma);
+        //剪线工具电量
+        String Cut_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Cut_Wire_Ma);
+        //手爪工具电量
+        String Hand_Grab_Ma = PowerUtils.getPowerByType(code, URConstants.Hand_Grab_Ma);
+        updatePw(ownPower,Wire_Stripper_Ma,Connect_Wire_Ma,Cut_Wire_Ma,Hand_Grab_Ma);
+
+    }
+
+    public void updatePw(String ownPower, String wire_Stripper_Ma, String connect_Wire_Ma, String cut_Wire_Ma, String hand_Grab_Ma) {
+        if (!StringUtils.isEmpty(ownPower)) {
+            mTvOwnPower.setText(ownPower);
+        }
+
+        if (!StringUtils.isEmpty(wire_Stripper_Ma)) {
+            mTvWireStripping.setText(wire_Stripper_Ma);
+        }
+        if (!StringUtils.isEmpty(connect_Wire_Ma)) {
+            mTvWiring.setText(connect_Wire_Ma);
+        }
+        if (!StringUtils.isEmpty(cut_Wire_Ma)) {
+            mTvCutLine.setText(cut_Wire_Ma);
+        }
+        if (!StringUtils.isEmpty(hand_Grab_Ma)) {
+            mTvClaw.setText(hand_Grab_Ma);
+        }
     }
 
     @Override

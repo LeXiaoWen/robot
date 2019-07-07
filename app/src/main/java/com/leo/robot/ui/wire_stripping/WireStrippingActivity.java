@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
@@ -152,6 +153,14 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     TextView mTvStatus;
     @BindView(R.id.ll_robot_status)
     LinearLayout mLlRobotStatus;
+    @BindView(R.id.tv_wiring)
+    TextView mTvWiring;
+    @BindView(R.id.tv_wire_stripping)
+    TextView mTvWireStripping;
+    @BindView(R.id.tv_claw)
+    TextView mTvClaw;
+    @BindView(R.id.tv_cut_line)
+    TextView mTvCutLine;
 
 
     private boolean isPause;
@@ -185,29 +194,32 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
             updateUnlock(false);
             updateEnd(false);
             mSpinKit.setVisibility(View.VISIBLE);
+            updateReady(false);
         } else {//已连接
             mSpinKit.setVisibility(View.GONE);
+            updateReady(true);
         }
     }
 
     @Override
     protected void notifyMasterData(int status, String message) {
-        mTvType.setText(message);
-
-        if (status == 0) {//未连接
-            updateReady(false);
-            updateInit(false);
-            updateInPlace(false);
-            updateClamping(false);
-            updateClosure(false);
-            updatePeeling(false);
-            updateCutOff(false);
-            updateUnlock(false);
-            updateEnd(false);
-            mSpinKit.setVisibility(View.VISIBLE);
-        } else {//已连接
-            mSpinKit.setVisibility(View.GONE);
-        }
+//        mTvType.setText(message);
+//
+//        if (status == 0) {//未连接
+//            updateReady(false);
+//            updateInit(false);
+//            updateInPlace(false);
+//            updateClamping(false);
+//            updateClosure(false);
+//            updatePeeling(false);
+//            updateCutOff(false);
+//            updateUnlock(false);
+//            updateEnd(false);
+//            mSpinKit.setVisibility(View.VISIBLE);
+//        } else {//已连接
+//            mSpinKit.setVisibility(View.GONE);
+//            updateReady(true);
+//        }
     }
 
     @Override
@@ -246,10 +258,10 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
         initSocketStatus();
         mBtnJump.setVisibility(View.VISIBLE);
-//        initUnity();
         //实时请求行线、引流线距离
         mPresenter.initClient();
         mPresenter.initLineLocation();
+        mPresenter.updatePower();
     }
 
     private void initSocketStatus() {
@@ -260,9 +272,11 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         if (status) {
             mTvType.setText("与主控连接成功");
             mSpinKit.setVisibility(View.GONE);
+            updateReady(true);
         } else {
             mTvType.setText("与主控断开连接，正在重连");
             mSpinKit.setVisibility(View.VISIBLE);
+            updateReady(false);
         }
 
         if (status1) {
@@ -290,8 +304,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb4 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setWebViewClient(new MyWebViewClient())
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
+                .setWebViewClient(new MyWebViewClient())
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
@@ -310,8 +324,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb3 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setWebViewClient(new MyWebViewClient())
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
+                .setWebViewClient(new MyWebViewClient())
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
@@ -331,8 +345,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb2 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setWebViewClient(new MyWebViewClient())
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
+                .setWebViewClient(new MyWebViewClient())
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
@@ -350,14 +364,14 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
      */
     private void initMainVideo() {
         mAgentWebMain = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
                 .closeIndicator()
                 .setWebViewClient(new MyWebViewClient())
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
+                .setMainFrameErrorView(R.layout.agentweb_error_page, Integer.valueOf(1))
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.LINE_CAMERA_URL);
-
+        AgentWebConfig.debug();
         initWebSetting(mAgentWebMain.getWebCreator().getWebView());
         mAgentWebMain.getWebCreator().getWebView().reload();
     }
@@ -414,7 +428,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
         super.onResume();
         isShown = true;
-        mPresenter.initStatus();
+//        mPresenter.initStatus();
         LogUtils.e("剥线界面： onResume");
     }
 
@@ -810,7 +824,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
             } else {
                 intent.putExtra("location", 2);
             }
-            ToastUtils.showShortToast("接收到选点命令，即将进入USB1选点页面！");
+            ToastUtils.showShortToast("接收到选点命令，即将进入USB1—行线画面！");
 
         } else {
             intent.putExtra("tag", 2);
@@ -819,7 +833,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
             } else {
                 intent.putExtra("location", 2);
             }
-            ToastUtils.showShortToast("接收到选点命令，即将进入USB2选点页面！");
+            ToastUtils.showShortToast("接收到选点命令，即将进入USB2-引流线画面！");
 
         }
         new Thread(() -> {
@@ -836,8 +850,38 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateOwnPower(MasterPowerDataMsg msg) {
         String code = msg.getCode();
-        String ownPower = PowerUtils.getOwnPower(code);
-        mTvOwnPower.setText(ownPower);
+        String ownPower = PowerUtils.getPowerByType(code, URConstants.Master_Power_Ma);
+        //剥线工具电量
+        String Wire_Stripper_Ma = PowerUtils.getPowerByType(code, URConstants.Wire_Stripper_Ma);
+        //接线工具电量
+        String Connect_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Connect_Wire_Ma);
+        //剪线工具电量
+        String Cut_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Cut_Wire_Ma);
+        //手爪工具电量
+        String Hand_Grab_Ma = PowerUtils.getPowerByType(code, URConstants.Hand_Grab_Ma);
+
+
+        updatePw(ownPower,Wire_Stripper_Ma,Connect_Wire_Ma,Cut_Wire_Ma,Hand_Grab_Ma);
+
+    }
+
+    public void updatePw(String ownPower, String wire_Stripper_Ma, String connect_Wire_Ma, String cut_Wire_Ma, String hand_Grab_Ma) {
+        if (!StringUtils.isEmpty(ownPower)) {
+            mTvOwnPower.setText(ownPower);
+        }
+
+        if (!StringUtils.isEmpty(wire_Stripper_Ma)) {
+            mTvWireStripping.setText(wire_Stripper_Ma);
+        }
+        if (!StringUtils.isEmpty(connect_Wire_Ma)) {
+            mTvWiring.setText(connect_Wire_Ma);
+        }
+        if (!StringUtils.isEmpty(cut_Wire_Ma)) {
+            mTvCutLine.setText(cut_Wire_Ma);
+        }
+        if (!StringUtils.isEmpty(hand_Grab_Ma)) {
+            mTvClaw.setText(hand_Grab_Ma);
+        }
     }
 
 
@@ -876,7 +920,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     public void showStatus(String status) {
         if (!StringUtils.isEmpty(status)) {
-            int i = (int)Double.parseDouble(status);
+            int i = (int) Double.parseDouble(status);
             switch (i) {
                 case 1:
                     mTvStatus.setText(URConstants.idle);
@@ -893,7 +937,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     public void showSafeMode(String safeMode) {
         if (!StringUtils.isEmpty(safeMode)) {
-            int i = (int)Double.parseDouble(safeMode);
+            int i = (int) Double.parseDouble(safeMode);
             switch (i) {
                 case 1:
                     mTvSafeMode.setText(URConstants.SAFETY_MODE_NORMAL);

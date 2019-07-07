@@ -19,6 +19,7 @@ import com.leo.robot.bean.ErroMsg;
 import com.leo.robot.bean.MasterPowerDataMsg;
 import com.leo.robot.constant.Constants;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.URConstants;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.netty.NettyListener;
@@ -29,6 +30,7 @@ import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.PowerUtils;
 import com.leo.robot.utils.ResultUtils;
 import cree.mvp.util.data.SPUtils;
+import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.ui.ToastUtils;
 import io.netty.channel.Channel;
 import org.greenrobot.eventbus.Subscribe;
@@ -82,6 +84,14 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     SpinKitView mSpinKit1;
     @BindView(R.id.ll_status1)
     LinearLayout mLlStatus1;
+    @BindView(R.id.tv_wiring)
+    TextView mTvWiring;
+    @BindView(R.id.tv_wire_stripping)
+    TextView mTvWireStripping;
+    @BindView(R.id.tv_claw)
+    TextView mTvClaw;
+    @BindView(R.id.tv_cut_line)
+    TextView mTvCutLine;
     private boolean isShown = false;
     private boolean isFirst = false;
 
@@ -101,7 +111,7 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
         mPresenter.updateTime(mTvDate);
         initBroadcast(mTvGroundPower);
         initSocketStatus();
-
+        mPresenter.updatePower();
     }
 
     /**
@@ -123,10 +133,10 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
             mSpinKit.setVisibility(View.VISIBLE);
         }
 
-        if (status1){
+        if (status1) {
             mTvType1.setText("与视觉连接成功");
             mSpinKit1.setVisibility(View.GONE);
-        }else {
+        } else {
             mTvType1.setText("与视觉断开连接，正在重连");
             mSpinKit1.setVisibility(View.VISIBLE);
         }
@@ -389,10 +399,40 @@ public class MainActivity extends NettyActivity<MainActivityPresenter> {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateOwnPower(MasterPowerDataMsg msg){
+    public void updateOwnPower(MasterPowerDataMsg msg) {
         String code = msg.getCode();
-        String ownPower = PowerUtils.getOwnPower(code);
-        mTvOwnPower.setText(ownPower);
+        String ownPower = PowerUtils.getPowerByType(code, URConstants.Master_Power_Ma);
+        //剥线工具电量
+        String Wire_Stripper_Ma = PowerUtils.getPowerByType(code, URConstants.Wire_Stripper_Ma);
+        //接线工具电量
+        String Connect_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Connect_Wire_Ma);
+        //剪线工具电量
+        String Cut_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Cut_Wire_Ma);
+        //手爪工具电量
+        String Hand_Grab_Ma = PowerUtils.getPowerByType(code, URConstants.Hand_Grab_Ma);
+
+        updatePw(ownPower,Wire_Stripper_Ma,Connect_Wire_Ma,Cut_Wire_Ma,Hand_Grab_Ma);
+
     }
+
+    public void updatePw(String ownPower, String wire_Stripper_Ma, String connect_Wire_Ma, String cut_Wire_Ma, String hand_Grab_Ma) {
+        if (!StringUtils.isEmpty(ownPower)) {
+            mTvOwnPower.setText(ownPower);
+        }
+
+        if (!StringUtils.isEmpty(wire_Stripper_Ma)) {
+            mTvWireStripping.setText(wire_Stripper_Ma);
+        }
+        if (!StringUtils.isEmpty(connect_Wire_Ma)) {
+            mTvWiring.setText(connect_Wire_Ma);
+        }
+        if (!StringUtils.isEmpty(cut_Wire_Ma)) {
+            mTvCutLine.setText(cut_Wire_Ma);
+        }
+        if (!StringUtils.isEmpty(hand_Grab_Ma)) {
+            mTvClaw.setText(hand_Grab_Ma);
+        }
+    }
+
 
 }

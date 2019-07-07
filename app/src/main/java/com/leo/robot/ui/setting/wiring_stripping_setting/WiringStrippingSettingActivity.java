@@ -28,6 +28,7 @@ import com.leo.robot.ui.setting.fragment.*;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.utils.PowerUtils;
+import cree.mvp.util.data.StringUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -67,6 +68,14 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
     Button mTv7;
     @BindView(R.id.tv8)
     Button mTv8;
+    @BindView(R.id.tv_wiring)
+    TextView mTvWiring;
+    @BindView(R.id.tv_wire_stripping)
+    TextView mTvWireStripping;
+    @BindView(R.id.tv_claw)
+    TextView mTvClaw;
+    @BindView(R.id.tv_cut_line)
+    TextView mTvCutLine;
     private boolean isShown = false;
 
     private Fragment mCurrentFragment = new Fragment();
@@ -119,6 +128,8 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
         Intent intent = getIntent();
 
         mIntentTag = intent.getIntExtra("tag", 0);
+
+        mPresenter.updatePower();
     }
 
     private void initFragment() {
@@ -229,9 +240,9 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
                 if (!mPresenter.isFastDoubleClick()) {
                     if (mIntentTag == 1) {
                         startActivity(new Intent(WiringStrippingSettingActivity.this, WiringSettingActivity.class));
-                    } else if (mIntentTag == 2){
+                    } else if (mIntentTag == 2) {
                         startActivity(new Intent(WiringStrippingSettingActivity.this, CutLineSettingActivity.class));
-                    }else {
+                    } else {
                         startActivity(new Intent(WiringStrippingSettingActivity.this, WiringSettingActivity.class));
                     }
                     finish();
@@ -242,9 +253,9 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
                 if (!mPresenter.isFastDoubleClick()) {
                     if (mIntentTag == 1) {
                         startActivity(new Intent(WiringStrippingSettingActivity.this, WiringSettingActivity.class));
-                    } else if (mIntentTag == 2){
+                    } else if (mIntentTag == 2) {
                         startActivity(new Intent(WiringStrippingSettingActivity.this, CutLineSettingActivity.class));
-                    }else {
+                    } else {
                         startActivity(new Intent(WiringStrippingSettingActivity.this, WireStrippingActivity.class));
                     }
                     finish();
@@ -423,10 +434,37 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateOwnPower(MasterPowerDataMsg msg){
+    public void updateOwnPower(MasterPowerDataMsg msg) {
         String code = msg.getCode();
-        String ownPower = PowerUtils.getOwnPower(code);
+        String ownPower = PowerUtils.getPowerByType(code, URConstants.Master_Power_Ma);
+        //剥线工具电量
+        String Wire_Stripper_Ma = PowerUtils.getPowerByType(code, URConstants.Wire_Stripper_Ma);
+        //接线工具电量
+        String Connect_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Connect_Wire_Ma);
+        //剪线工具电量
+        String Cut_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Cut_Wire_Ma);
+        //手爪工具电量
+        String Hand_Grab_Ma = PowerUtils.getPowerByType(code, URConstants.Hand_Grab_Ma);
+        updatePw(ownPower,Wire_Stripper_Ma,Connect_Wire_Ma,Cut_Wire_Ma,Hand_Grab_Ma);
 
-        mTvOwnPower.setText(ownPower);
+    }
+
+    public void updatePw(String ownPower, String wire_Stripper_Ma, String connect_Wire_Ma, String cut_Wire_Ma, String hand_Grab_Ma) {
+        if (!StringUtils.isEmpty(ownPower)) {
+            mTvOwnPower.setText(ownPower);
+        }
+
+        if (!StringUtils.isEmpty(wire_Stripper_Ma)) {
+            mTvWireStripping.setText(wire_Stripper_Ma);
+        }
+        if (!StringUtils.isEmpty(connect_Wire_Ma)) {
+            mTvWiring.setText(connect_Wire_Ma);
+        }
+        if (!StringUtils.isEmpty(cut_Wire_Ma)) {
+            mTvCutLine.setText(cut_Wire_Ma);
+        }
+        if (!StringUtils.isEmpty(hand_Grab_Ma)) {
+            mTvClaw.setText(hand_Grab_Ma);
+        }
     }
 }

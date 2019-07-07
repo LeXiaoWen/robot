@@ -10,6 +10,7 @@ import com.leo.robot.netty.NettyClient;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.utils.TimeThread;
+import cree.mvp.util.data.SPUtils;
 
 import javax.inject.Inject;
 import java.util.Timer;
@@ -86,5 +87,15 @@ public class WiringSettingActivityPresenter extends RobotPresenter<WiringSetting
             mMasterClient.sendMsgTest(CommandUtils.undoException());
 
         }
+    }
+
+    public void updatePower() {
+        SPUtils spUtils = new SPUtils("power");
+        String ownPower = spUtils.getString("ownPower", "--");
+        String wire_stripper_ma = spUtils.getString("Wire_Stripper_Ma", "--");
+        String connect_wire_ma = spUtils.getString("Connect_Wire_Ma", "--");
+        String cut_wire_ma = spUtils.getString("Cut_Wire_Ma", "--");
+        String hand_grab_ma = spUtils.getString("Hand_Grab_Ma", "--");
+        mActivity.updatePw(ownPower,wire_stripper_ma,connect_wire_ma,cut_wire_ma,hand_grab_ma);
     }
 }

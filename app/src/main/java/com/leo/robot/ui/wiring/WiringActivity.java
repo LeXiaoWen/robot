@@ -157,6 +157,14 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     TextView mTvStatus;
     @BindView(R.id.ll_robot_status)
     LinearLayout mLlRobotStatus;
+    @BindView(R.id.tv_wiring)
+    TextView mTvWiring;
+    @BindView(R.id.tv_wire_stripping)
+    TextView mTvWireStripping;
+    @BindView(R.id.tv_claw)
+    TextView mTvClaw;
+    @BindView(R.id.tv_cut_line)
+    TextView mTvCutLine;
     private boolean isPause;
 
     private List<String> mLogData;
@@ -191,30 +199,35 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
             updateSleeveUnlock(false);
             updateEnd(false);
             mSpinKit.setVisibility(View.VISIBLE);
+            updateReady(false);
+
         } else {//已连接
             mSpinKit.setVisibility(View.GONE);
+            updateReady(true);
+
         }
     }
 
     @Override
     protected void notifyMasterData(int status, String message) {
-        mTvType.setText(message);
-
-        if (status == 0) {//未连接
-            updateReady(false);
-            updateGrab(false);
-            updateEnter(false);
-            updateFixed(false);
-            updateToolReady(false);
-            updateLineReady(false);
-            updateTwist(false);
-            updateClipUnlock(false);
-            updateSleeveUnlock(false);
-            updateEnd(false);
-            mSpinKit.setVisibility(View.VISIBLE);
-        } else {//已连接
-            mSpinKit.setVisibility(View.GONE);
-        }
+//        mTvType.setText(message);
+//
+//        if (status == 0) {//未连接
+//            updateReady(false);
+//            updateGrab(false);
+//            updateEnter(false);
+//            updateFixed(false);
+//            updateToolReady(false);
+//            updateLineReady(false);
+//            updateTwist(false);
+//            updateClipUnlock(false);
+//            updateSleeveUnlock(false);
+//            updateEnd(false);
+//            mSpinKit.setVisibility(View.VISIBLE);
+//        } else {//已连接
+//            mSpinKit.setVisibility(View.GONE);
+//            updateReady(true);
+//        }
     }
 
     @Override
@@ -258,6 +271,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         //实时请求行线、引流线距离
         mPresenter.initLineLocation();
         mBtnJump2.setVisibility(View.VISIBLE);
+        mPresenter.updatePower();
     }
 
     private void initSocketStatus() {
@@ -268,9 +282,12 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         if (status) {
             mTvType.setText("与主控连接成功");
             mSpinKit.setVisibility(View.GONE);
+            updateReady(true);
         } else {
             mTvType.setText("与主控断开连接，正在重连");
             mSpinKit.setVisibility(View.VISIBLE);
+            updateReady(false);
+
         }
 
         if (status1) {
@@ -417,7 +434,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     protected void onResume() {
 
         super.onResume();
-        mPresenter.initStatus();
+//        mPresenter.initStatus();
         isShown = true;
     }
 
@@ -724,7 +741,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
             } else {
                 intent.putExtra("location", 2);
             }
-            ToastUtils.showShortToast("接收到选点命令，即将进入USB1选点页面！");
+            ToastUtils.showShortToast("接收到选点命令，即将进入USB1—行线画面！");
 
         } else {
             intent.putExtra("tag", 2);
@@ -733,7 +750,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
             } else {
                 intent.putExtra("location", 2);
             }
-            ToastUtils.showShortToast("接收到选点命令，即将进入USB2选点页面！");
+            ToastUtils.showShortToast("接收到选点命令，即将进入USB2-引流线画面！");
 
         }
         new Thread(() -> {
@@ -750,10 +767,37 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateOwnPower(MasterPowerDataMsg msg) {
         String code = msg.getCode();
-        String ownPower = PowerUtils.getOwnPower(code);
-        mTvOwnPower.setText(ownPower);
+        String ownPower = PowerUtils.getPowerByType(code, URConstants.Master_Power_Ma);
+        //剥线工具电量
+        String Wire_Stripper_Ma = PowerUtils.getPowerByType(code, URConstants.Wire_Stripper_Ma);
+        //接线工具电量
+        String Connect_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Connect_Wire_Ma);
+        //剪线工具电量
+        String Cut_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Cut_Wire_Ma);
+        //手爪工具电量
+        String Hand_Grab_Ma = PowerUtils.getPowerByType(code, URConstants.Hand_Grab_Ma);
+        updatePw(ownPower,Wire_Stripper_Ma,Connect_Wire_Ma,Cut_Wire_Ma,Hand_Grab_Ma);
+
     }
 
+    public void updatePw(String ownPower, String wire_Stripper_Ma, String connect_Wire_Ma, String cut_Wire_Ma, String hand_Grab_Ma) {
+        if (!StringUtils.isEmpty(ownPower)) {
+            mTvOwnPower.setText(ownPower);
+        }
+
+        if (!StringUtils.isEmpty(wire_Stripper_Ma)) {
+            mTvWireStripping.setText(wire_Stripper_Ma);
+        }
+        if (!StringUtils.isEmpty(connect_Wire_Ma)) {
+            mTvWiring.setText(connect_Wire_Ma);
+        }
+        if (!StringUtils.isEmpty(cut_Wire_Ma)) {
+            mTvCutLine.setText(cut_Wire_Ma);
+        }
+        if (!StringUtils.isEmpty(hand_Grab_Ma)) {
+            mTvClaw.setText(hand_Grab_Ma);
+        }
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void mainArmMsg(MainArmBean bean) {

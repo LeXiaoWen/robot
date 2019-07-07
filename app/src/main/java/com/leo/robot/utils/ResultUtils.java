@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.leo.robot.bean.*;
 import com.leo.robot.constant.PushMsgCode;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.URConstants;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.netty.arm.FlowArmBean;
 import com.leo.robot.netty.arm.MainArmBean;
@@ -106,7 +107,27 @@ public class ResultUtils {
             powerDataMsg.setMsg("电量信息");
             powerDataMsg.setCode(msg);
             BusUtils.postMessage(powerDataMsg);
+            savePowerData(msg);
         }
+    }
+
+    private static void savePowerData(String msg) {
+        String ownPower = PowerUtils.getPowerByType(msg, URConstants.Master_Power_Ma);
+        //剥线工具电量
+        String Wire_Stripper_Ma = PowerUtils.getPowerByType(msg, URConstants.Wire_Stripper_Ma);
+        //接线工具电量
+        String Connect_Wire_Ma = PowerUtils.getPowerByType(msg, URConstants.Connect_Wire_Ma);
+        //剪线工具电量
+        String Cut_Wire_Ma = PowerUtils.getPowerByType(msg, URConstants.Cut_Wire_Ma);
+        //手爪工具电量
+        String Hand_Grab_Ma = PowerUtils.getPowerByType(msg, URConstants.Hand_Grab_Ma);
+
+        SPUtils spUtils = new SPUtils("power");
+        spUtils.putString("ownPower",ownPower);
+        spUtils.putString("Wire_Stripper_Ma",Wire_Stripper_Ma);
+        spUtils.putString("Connect_Wire_Ma",Connect_Wire_Ma);
+        spUtils.putString("Cut_Wire_Ma",Cut_Wire_Ma);
+        spUtils.putString("Hand_Grab_Ma",Hand_Grab_Ma);
     }
 
     private static void onControlModel(String msg) {

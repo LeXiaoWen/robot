@@ -83,34 +83,39 @@
                 android:textSize="14sp"/>
 
         <Button
-                android:background="#00000000"
+                android:background="@drawable/shap_setting"
                 android:id="@+id/tv6"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="11dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
                 android:layout_toRightOf="@id/tv5"
                 android:gravity="center"
                 android:text="继续作业"
+                android:layout_centerVertical="true"
                 android:textColor="@color/setting_text_normal"
                 android:textSize="14sp"/>
         <Button
-                android:background="#00000000"
+                android:background="@drawable/shap_setting"
                 android:id="@+id/tv7"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/tv6"
                 android:gravity="center"
+                android:layout_marginLeft="1dp"
+                android:layout_centerVertical="true"
                 android:text="解除异常"
                 android:textColor="@color/setting_text_normal"
                 android:textSize="14sp"/>
         <Button
-                android:background="#00000000"
+                android:background="@drawable/shap_setting"
                 android:id="@+id/tv8"
+                android:layout_marginLeft="@dimen/dp_1"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/tv7"
                 android:gravity="center"
                 android:text="主臂控制"
+                android:layout_centerVertical="true"
                 android:textColor="@color/setting_text_normal"
                 android:textSize="14sp"/>
 

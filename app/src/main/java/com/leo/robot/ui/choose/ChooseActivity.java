@@ -26,19 +26,21 @@ import com.leo.robot.base.NettyActivity;
 import com.leo.robot.bean.LineLocationMsg;
 import com.leo.robot.bean.LocationMsg;
 import com.leo.robot.bean.MasterPowerDataMsg;
-import com.leo.robot.constant.RobotInit;
+import com.leo.robot.constant.URConstants;
 import com.leo.robot.constant.UrlConstant;
-import com.leo.robot.netty.NettyListener;
 import com.leo.robot.netty.arm.ArmNettyClient;
 import com.leo.robot.netty.arm.MainArmBean;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
-import com.leo.robot.utils.*;
+import com.leo.robot.utils.ByteUtils;
+import com.leo.robot.utils.ClearWebUtils;
+import com.leo.robot.utils.MiddlewareWebViewClient;
+import com.leo.robot.utils.PowerUtils;
 import com.leo.robot.view.DrawView;
 import cree.mvp.util.data.SPUtils;
+import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.develop.LogUtils;
-import io.netty.channel.Channel;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -124,6 +126,18 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     SpinKitView mSpinKit1;
     @BindView(R.id.ll_status1)
     LinearLayout mLlStatus1;
+    @BindView(R.id.tv_wiring)
+    TextView mTvWiring;
+    @BindView(R.id.tv_wire_stripping)
+    TextView mTvWireStripping;
+    @BindView(R.id.tv_claw)
+    TextView mTvClaw;
+    @BindView(R.id.tv_cut_line)
+    TextView mTvCutLine;
+    @BindView(R.id.tv_con)
+    TextView mTvCon;
+    @BindView(R.id.ll_1)
+    LinearLayout mLl1;
     private AgentWeb mAgentWeb;
     //    private WebView mWebView;
     private float mNewScale;
@@ -190,9 +204,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose);
         ButterKnife.bind(this);
-//        ports.add(29999);
-        ports.add(30001);
-        ports.add(30003);
+
         initTile();
         initBroadcast(mTvGroundPower);
 
@@ -202,12 +214,12 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         initSocketStatus();
 
         initListener();
-//        mPresenter.initLineLocation();
+        mPresenter.initLineLocation();
 
         showMsg("请选择行线作业点");
         mPresenter.initClient();
         mDrawView = new DrawView(this);
-        initMainArmNetty();
+        mPresenter.updatePower();
     }
 
     private void initVideoStatus() {
@@ -516,88 +528,14 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         }
     }
 
-    private void clearVideo(){
-        ClearWebUtils.clearVideo(mAgentWeb,this);
+    private void clearVideo() {
+        ClearWebUtils.clearVideo(mAgentWeb, this);
 //        mRlMain.removeAllViews();
 //        mRlMain.invalidate();
     }
 
-    /**
-     * 主机械臂
-     *
-     * @author Leo
-     * created at 2019/6/14 8:18 PM
-     */
-    private void initMainArmNetty() {
-        client = new ArmNettyClient();
-//        NettyManager.getInstance().addNettyClient(RobotInit.MAIN_ARM_NETTY, client);
-        client.setListener(new NettyListener() {
-            @Override
-            public void onMessageResponse(String msg) {
-                ResultUtils.onResultByType(msg, RobotInit.MAIN_ARM_NETTY);
-            }
-
-            @Override
-            public void onServiceStatusConnectChanged(int statusCode) {
-                SPUtils socket = new SPUtils("socket");
-
-                if (statusCode == NettyListener.STATUS_CONNECT_SUCCESS) {
-                    notifyData(1, "与主控服务器连接成功");
-                    String s = mGson.toJson(CommandUtils.getMasterArmBean());
-                    ArmNettyClient client = (ArmNettyClient) NettyManager.getInstance().getClientByTag(RobotInit.MASTER_CONTROL_NETTY);
-                    if (client != null) {
-                        client.sendMsg30003(s);
-                    }
-                    socket.putBoolean("status", true);
-                } else if (statusCode == NettyListener.STATUS_CONNECT_ERROR) {//通信异常
-                    notifyData(0, "与主控服务器连接异常，正在重连");
-                    socket.putBoolean("status", false);
-
-                } else if (statusCode == NettyListener.STATUS_CONNECT_CLOSED) {//服务器主动断开
-                    socket.putBoolean("status", false);
-                    notifyData(0, "主控服务器断开连接，正在重连");
-                    client.setConnectStatus(false);
-                    new Thread(() -> {
-                        client.connect(UrlConstant.MAIN_ARM_NETTY_HOST, ports);//连接服务器
-                    }).start();
-                }
-            }
-
-            @Override
-            public void onServiceHeart(Channel channel) {
-
-            }
-        });
-
-        if (!client.getConnectStatus()) {
-            new Thread(() -> {
-                client.connect(UrlConstant.MAIN_ARM_NETTY_HOST, ports);//连接服务器
-            }).start();
-        }
-    }
 
 
-    /**
-     * 切换视频前清除数据
-     *
-     * @author Leo
-     * created at 2019/6/14 6:19 PM
-     */
-//    private void clearVideo() {
-//        WebView webView = mAgentWeb.getWebCreator().getWebView();
-//        if (webView!=null){
-//            webView.resumeTimers();
-//            webView.setWebChromeClient(null);
-//            webView.setWebViewClient(null);
-//            webView.setTag(null);
-//            webView.clearHistory();
-//            webView.destroy();
-//            webView = null;
-//            AgentWebConfig.clearDiskCache(this);
-//        }
-//        mRlMain.removeAllViews();
-//        mRlMain.invalidate();
-//    }
 
     /**
      * 上一个视频
@@ -857,7 +795,6 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     }
 
 
-
     /**
      * 提示文字
      *
@@ -869,11 +806,40 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateOwnPower(MasterPowerDataMsg msg){
+    public void updateOwnPower(MasterPowerDataMsg msg) {
         String code = msg.getCode();
-        String ownPower = PowerUtils.getOwnPower(code);
-        mTvOwnPower.setText(ownPower);
+        String ownPower = PowerUtils.getPowerByType(code, URConstants.Master_Power_Ma);
+        //剥线工具电量
+        String Wire_Stripper_Ma = PowerUtils.getPowerByType(code, URConstants.Wire_Stripper_Ma);
+        //接线工具电量
+        String Connect_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Connect_Wire_Ma);
+        //剪线工具电量
+        String Cut_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Cut_Wire_Ma);
+        //手爪工具电量
+        String Hand_Grab_Ma = PowerUtils.getPowerByType(code, URConstants.Hand_Grab_Ma);
+        updatePw(ownPower,Wire_Stripper_Ma,Connect_Wire_Ma,Cut_Wire_Ma,Hand_Grab_Ma);
+
     }
+
+    public void updatePw(String ownPower, String wire_Stripper_Ma, String connect_Wire_Ma, String cut_Wire_Ma, String hand_Grab_Ma) {
+        if (!StringUtils.isEmpty(ownPower)) {
+            mTvOwnPower.setText(ownPower);
+        }
+
+        if (!StringUtils.isEmpty(wire_Stripper_Ma)) {
+            mTvWireStripping.setText(wire_Stripper_Ma);
+        }
+        if (!StringUtils.isEmpty(connect_Wire_Ma)) {
+            mTvWiring.setText(connect_Wire_Ma);
+        }
+        if (!StringUtils.isEmpty(cut_Wire_Ma)) {
+            mTvCutLine.setText(cut_Wire_Ma);
+        }
+        if (!StringUtils.isEmpty(hand_Grab_Ma)) {
+            mTvClaw.setText(hand_Grab_Ma);
+        }
+    }
+
 
     @Override
     protected void onStop() {

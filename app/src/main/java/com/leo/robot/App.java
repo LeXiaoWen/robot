@@ -28,6 +28,8 @@ public class App extends BaseApplication {
 
        new SPUtils("masterSocket").clear();
        new SPUtils("visionSocket").clear();
+       new SPUtils("power").clear();
+
     }
 
     @Override

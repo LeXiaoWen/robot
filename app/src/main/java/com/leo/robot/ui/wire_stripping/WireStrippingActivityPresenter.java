@@ -90,38 +90,45 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     }
 
     /**
-    * 软件状态
-    *
-    *@author Leo
-    *created at 2019/7/4 10:11 PM
-    */
+     * 软件状态
+     *
+     * @author Leo
+     * created at 2019/7/4 10:11 PM
+     */
 
     private void initArmStatus() {
         String status = JNIUtils.ReadURparam(URConstants.Program_State, URConstants.Farm);
-        mActivity.showStatus(status);
+        if (mActivity!=null) {
+            mActivity.showStatus(status);
+        }
     }
 
     /**
-    * 安全模式
-    *
-    *@author Leo
-    *created at 2019/7/4 10:10 PM
-    */
+     * 安全模式
+     *
+     * @author Leo
+     * created at 2019/7/4 10:10 PM
+     */
     private void initSafeMode() {
         String safeMode = JNIUtils.ReadURparam(URConstants.Safe_Mod, URConstants.Farm);
-        mActivity.showSafeMode(safeMode);
+        if (mActivity!=null) {
+            mActivity.showSafeMode(safeMode);
+        }
     }
 
     /**
-    * 模式
-    *
-    *@author Leo
-    *created at 2019/7/4 10:10 PM
-    */
+     * 模式
+     *
+     * @author Leo
+     * created at 2019/7/4 10:10 PM
+     */
     private void initMode() {
         String mode = JNIUtils.ReadURparam(URConstants.Robot_Mod, URConstants.Farm);
-        mActivity.showMode(mode);
+        if (mActivity!=null) {
+            mActivity.showMode(mode);
+        }
     }
+
 
     @Override
     protected void updateTime(TextView view) {
@@ -385,6 +392,16 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         if (mMasterClient != null) {
             mMasterClient.sendMsgTest(CommandUtils.cLineOrder());
         }
+    }
+
+    public void updatePower() {
+        SPUtils spUtils = new SPUtils("power");
+        String ownPower = spUtils.getString("ownPower", "--");
+        String wire_stripper_ma = spUtils.getString("Wire_Stripper_Ma", "--");
+        String connect_wire_ma = spUtils.getString("Connect_Wire_Ma", "--");
+        String cut_wire_ma = spUtils.getString("Cut_Wire_Ma", "--");
+        String hand_grab_ma = spUtils.getString("Hand_Grab_Ma", "--");
+        mActivity.updatePw(ownPower,wire_stripper_ma,connect_wire_ma,cut_wire_ma,hand_grab_ma);
     }
 
 

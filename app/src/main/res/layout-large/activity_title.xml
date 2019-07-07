@@ -1,93 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_20"
-    android:background="@color/title_background_color"
-    tools:ignore="MissingDefaultResource">
-    <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textColor="@color/color_title_text"
-        android:textSize="@dimen/sp_12"/>
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_20"
+        android:background="@color/title_background_color"
+        tools:ignore="MissingDefaultResource">
+
 
     <LinearLayout
-        android:weightSum="3"
-        android:layout_width="310dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/dp_16"
-        android:orientation="horizontal">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+        <!--接线-->
+        <LinearLayout
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="接线工具电量:"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"/>
+
+            <TextView
+                    android:layout_marginLeft="@dimen/dp_6"
+                    android:id="@+id/tv_wiring"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"
+                    android:text="--"/>
+        </LinearLayout>
+        <!--剥线-->
+        <LinearLayout
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+        >
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="剥线工具电量:"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"/>
+
+            <TextView
+                    android:layout_marginLeft="@dimen/dp_6"
+                    android:id="@+id/tv_wire_stripping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"
+                    android:text="--"/>
+        </LinearLayout>
+        <!--手爪电量-->
+        <LinearLayout
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="手爪电量:"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"/>
+
+            <TextView
+                    android:layout_marginLeft="@dimen/dp_6"
+                    android:id="@+id/tv_claw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"
+                    android:text="--"/>
+        </LinearLayout>
+        <!--剪线-->
+        <LinearLayout
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="剪线工具电量:"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"/>
+
+            <TextView
+                    android:layout_marginLeft="@dimen/dp_6"
+                    android:id="@+id/tv_cut_line"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"
+                    android:text="--"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/color_title_text"
+            android:textSize="@dimen/sp_12"/>
+
+    <LinearLayout
+            android:weightSum="3"
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_16"
+            android:orientation="horizontal">
         <!--信号强度-->
         <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="信号强度:"
-                android:textColor="@color/color_title_text"
-                android:textSize="@dimen/sp_12"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="信号强度:"
+                    android:textColor="@color/color_title_text"
+                    android:textSize="@dimen/sp_12"/>
 
             <TextView
-                android:id="@+id/tv_signal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/color_title_text"
-                android:textSize="@dimen/sp_12"
-                android:text="99%"/>
+                    android:id="@+id/tv_signal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_title_text"
+                    android:textSize="@dimen/sp_12"
+                    android:text="--"/>
         </LinearLayout>
         <!--本体电量-->
         <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            >
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+        >
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="本体电量:"
-                android:textColor="@color/color_title_text"
-                android:textSize="@dimen/sp_12"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="本体电量:"
+                    android:textColor="@color/color_title_text"
+                    android:textSize="@dimen/sp_12"/>
 
             <TextView
-                android:id="@+id/tv_own_power"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/color_title_text"
-                android:textSize="@dimen/sp_12"
-                android:text="95%"/>
+                    android:id="@+id/tv_own_power"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_title_text"
+                    android:textSize="@dimen/sp_12"
+                    android:text="--"/>
         </LinearLayout>
         <!--地面站电量-->
         <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="地面站电量:"
-                android:textColor="@color/color_title_text"
-                android:textSize="@dimen/sp_12"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="地面站电量:"
+                    android:textColor="@color/color_title_text"
+                    android:textSize="@dimen/sp_12"/>
 
             <TextView
-                android:id="@+id/tv_ground_power"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/color_title_text"
-                android:textSize="@dimen/sp_12"
-                android:text="95%"/>
+                    android:id="@+id/tv_ground_power"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_title_text"
+                    android:textSize="@dimen/sp_12"
+                    android:text="--"/>
         </LinearLayout>
     </LinearLayout>
 

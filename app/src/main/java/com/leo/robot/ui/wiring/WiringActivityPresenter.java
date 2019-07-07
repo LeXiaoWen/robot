@@ -103,36 +103,43 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
     /**
      * 软件状态
      *
-     *@author Leo
-     *created at 2019/7/4 10:11 PM
+     * @author Leo
+     * created at 2019/7/4 10:11 PM
      */
 
     private void initArmStatus() {
         String status = JNIUtils.ReadURparam(URConstants.Program_State, URConstants.Marm);
-        mActivity.showStatus(status);
+        if (mActivity!=null) {
+            mActivity.showStatus(status);
+        }
     }
 
     /**
      * 安全模式
      *
-     *@author Leo
-     *created at 2019/7/4 10:10 PM
+     * @author Leo
+     * created at 2019/7/4 10:10 PM
      */
     private void initSafeMode() {
         String safeMode = JNIUtils.ReadURparam(URConstants.Safe_Mod, URConstants.Marm);
-        mActivity.showSafeMode(safeMode);
+        if (mActivity!=null) {
+            mActivity.showSafeMode(safeMode);
+        }
     }
 
     /**
      * 模式
      *
-     *@author Leo
-     *created at 2019/7/4 10:10 PM
+     * @author Leo
+     * created at 2019/7/4 10:10 PM
      */
     private void initMode() {
         String mode = JNIUtils.ReadURparam(URConstants.Robot_Mod, URConstants.Marm);
-        mActivity.showMode(mode);
+        if (mActivity!=null) {
+            mActivity.showMode(mode);
+        }
     }
+
 
     /**
      * 急停、恢复急停
@@ -310,6 +317,18 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
             mActivity.jumpChooseActivity(2,2);
         }
     }
+
+
+    public void updatePower() {
+        SPUtils spUtils = new SPUtils("power");
+        String ownPower = spUtils.getString("ownPower", "--");
+        String wire_stripper_ma = spUtils.getString("Wire_Stripper_Ma", "--");
+        String connect_wire_ma = spUtils.getString("Connect_Wire_Ma", "--");
+        String cut_wire_ma = spUtils.getString("Cut_Wire_Ma", "--");
+        String hand_grab_ma = spUtils.getString("Hand_Grab_Ma", "--");
+        mActivity.updatePw(ownPower,wire_stripper_ma,connect_wire_ma,cut_wire_ma,hand_grab_ma);
+    }
+
 //    public void setUnityView(RelativeLayout unityView) {
 //        // TODO: 2019/5/6  直接使用父类的unityPlayer 不要自己去new一个
 //        mUnityPlayer = mActivity.getUnityPlayer();

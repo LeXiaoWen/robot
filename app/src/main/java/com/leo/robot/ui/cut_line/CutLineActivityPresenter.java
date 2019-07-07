@@ -32,7 +32,7 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
     private boolean isScram = false;
     //是否开始
     private boolean isStart = false;
-    private  NettyClient mMasterClient;
+    private NettyClient mMasterClient;
 
     private boolean isClickble = false;
     private UnityPlayer mUnityPlayer;
@@ -94,35 +94,44 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
     /**
      * 软件状态
      *
-     *@author Leo
-     *created at 2019/7/4 10:11 PM
+     * @author Leo
+     * created at 2019/7/4 10:11 PM
      */
 
     private void initArmStatus() {
         String status = JNIUtils.ReadURparam(URConstants.Program_State, URConstants.Marm);
-        mActivity.showStatus(status);
+        if (mActivity != null) {
+            mActivity.showStatus(status);
+        }
+
     }
 
     /**
      * 安全模式
      *
-     *@author Leo
-     *created at 2019/7/4 10:10 PM
+     * @author Leo
+     * created at 2019/7/4 10:10 PM
      */
     private void initSafeMode() {
         String safeMode = JNIUtils.ReadURparam(URConstants.Safe_Mod, URConstants.Marm);
-        mActivity.showSafeMode(safeMode);
+        if (mActivity != null) {
+
+            mActivity.showSafeMode(safeMode);
+        }
     }
 
     /**
      * 模式
      *
-     *@author Leo
-     *created at 2019/7/4 10:10 PM
+     * @author Leo
+     * created at 2019/7/4 10:10 PM
      */
     private void initMode() {
         String mode = JNIUtils.ReadURparam(URConstants.Robot_Mod, URConstants.Marm);
-        mActivity.showMode(mode);
+        if (mActivity != null) {
+
+            mActivity.showMode(mode);
+        }
     }
 
     /**
@@ -174,16 +183,22 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
      */
     public void startButton() {
         if (!isStart) { //开始
-            mMasterClient.sendMsgTest(CommandUtils.getMainArmStart());
-            isStart = true;
-            mActivity.updateStart(true);
-            mActivity.refreshLogRv("发送开始命令");
-        } else {//停止
-            mMasterClient.sendMsgTest(CommandUtils.getMainArmStop());
-            isStart = false;
-            mActivity.updateStart(false);
+            if (mMasterClient != null) {
+                mMasterClient.sendMsgTest(CommandUtils.getMainArmStart());
+                isStart = true;
+                mActivity.updateStart(true);
+                mActivity.refreshLogRv("发送开始命令");
+            }
 
-            mActivity.refreshLogRv("发送停止命令");
+        } else {//停止
+            if (mMasterClient != null) {
+                mMasterClient.sendMsgTest(CommandUtils.getMainArmStop());
+                isStart = false;
+                mActivity.updateStart(false);
+
+                mActivity.refreshLogRv("发送停止命令");
+            }
+
         }
     }
 
@@ -282,5 +297,14 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
 //        mActivity.getUnityPlayer().requestFocus();
 //    }
 
+    public void updatePower() {
+        SPUtils spUtils = new SPUtils("power");
+        String ownPower = spUtils.getString("ownPower", "--");
+        String wire_stripper_ma = spUtils.getString("Wire_Stripper_Ma", "--");
+        String connect_wire_ma = spUtils.getString("Connect_Wire_Ma", "--");
+        String cut_wire_ma = spUtils.getString("Cut_Wire_Ma", "--");
+        String hand_grab_ma = spUtils.getString("Hand_Grab_Ma", "--");
+        mActivity.updatePw(ownPower,wire_stripper_ma,connect_wire_ma,cut_wire_ma,hand_grab_ma);
+    }
 
 }

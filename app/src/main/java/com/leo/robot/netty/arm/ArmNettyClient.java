@@ -8,6 +8,7 @@ import com.leo.robot.netty.NettyClient;
 import com.leo.robot.netty.NettyClientInitializer;
 import com.leo.robot.netty.NettyListener;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -60,8 +61,9 @@ public class ArmNettyClient extends NettyClient {
             group = new NioEventLoopGroup();
             bootstrap = new Bootstrap().group(group)
                     .option(ChannelOption.SO_KEEPALIVE, true)
-                    .option(ChannelOption.SO_BACKLOG, 128)
+                    .option(ChannelOption.SO_BACKLOG, Integer.valueOf(1024))
                     .option(ChannelOption.TCP_NODELAY, true)
+                    .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                     .channel(NioSocketChannel.class)
                     .handler(new NettyClientInitializer(listener));
 
