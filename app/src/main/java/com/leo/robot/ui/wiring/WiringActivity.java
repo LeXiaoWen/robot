@@ -29,8 +29,8 @@ import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.utils.ClearWebUtils;
 import com.leo.robot.utils.DateUtils;
-import com.leo.robot.utils.MyWebViewClient;
 import com.leo.robot.utils.PowerUtils;
+import com.leo.robot.utils.WebErrorUtils;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.data.StringUtils;
 import cree.mvp.util.develop.LogUtils;
@@ -167,6 +167,16 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
     TextView mTvClaw;
     @BindView(R.id.tv_cut_line)
     TextView mTvCutLine;
+    @BindView(R.id.ll_error_main)
+    LinearLayout mLlErrorMain;
+    @BindView(R.id.ll_error1)
+    LinearLayout mLlError1;
+    @BindView(R.id.ll_error2)
+    LinearLayout mLlError2;
+    @BindView(R.id.ll_error3)
+    LinearLayout mLlError3;
+    @BindView(R.id.ll_error4)
+    LinearLayout mLlError4;
     private boolean isPause;
 
     private List<String> mLogData;
@@ -263,6 +273,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
         initAdapter();
         initMainVideo();
+        initVideo1();
         initVideo2();
         initVideo3();
         initVideo4();
@@ -325,12 +336,11 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         mAgentWeb4 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setWebViewClient(new MyWebViewClient())
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
-
+        WebErrorUtils utils = new WebErrorUtils();
+        utils.errorWeb(mAgentWeb4, mLlError4);
         initWebSetting(mAgentWeb4.getWebCreator().getWebView());
         mAgentWeb4.getWebCreator().getWebView().reload();
     }
@@ -345,15 +355,15 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         mAgentWeb3 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setWebViewClient(new MyWebViewClient())
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
-
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWeb3, mLlError3);
         initWebSetting(mAgentWeb3.getWebCreator().getWebView());
         mAgentWeb3.getWebCreator().getWebView().reload();
     }
+
 
     /**
      * 引流线画面
@@ -365,14 +375,32 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         mAgentWeb2 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setWebViewClient(new MyWebViewClient())
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
-
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWeb2, mLlError2);
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
         mAgentWeb2.getWebCreator().getWebView().reload();
+    }
+
+    /**
+     * 云台画面
+     *
+     * @author Leo
+     * created at 2019/7/9 10:05 PM
+     */
+    private void initVideo1() {
+        mAgentWeb1 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWeb1, mLlError1);
+        initWebSetting(mAgentWeb1.getWebCreator().getWebView());
+        mAgentWeb1.getWebCreator().getWebView().reload();
     }
 
 
@@ -386,21 +414,15 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         mAgentWebMain = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setWebViewClient(new MyWebViewClient())
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.LINE_CAMERA_URL);
-
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWebMain, mLlErrorMain);
         initWebSetting(mAgentWebMain.getWebCreator().getWebView());
         mAgentWebMain.getWebCreator().getWebView().reload();
-
-        //缩放
-//        agentWeb.getAgentWebSettings().getWebSettings().setUseWideViewPort(true);
-//        agentWeb.getAgentWebSettings().getWebSettings().setLoadWithOverviewMode(true);
-//        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
-
     }
+
 
     /**
      * 设置webView自适应屏幕，取消滚动条
@@ -440,6 +462,9 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         if (mAgentWebMain != null) {
             mAgentWebMain.getWebCreator().getWebView().reload();
         }
+        if (mAgentWeb1 != null) {
+            mAgentWeb1.getWebCreator().getWebView().reload();
+        }
         if (mAgentWeb2 != null) {
             mAgentWeb2.getWebCreator().getWebView().reload();
         }
@@ -465,6 +490,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
     private void clearWeb() {
         ClearWebUtils.clearVideo(mAgentWebMain, this);
+        ClearWebUtils.clearVideo(mAgentWeb1, this);
         ClearWebUtils.clearVideo(mAgentWeb2, this);
         ClearWebUtils.clearVideo(mAgentWeb3, this);
         ClearWebUtils.clearVideo(mAgentWeb4, this);
@@ -794,7 +820,7 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
         String Cut_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Cut_Wire_Ma);
         //手爪工具电量
         String Hand_Grab_Ma = PowerUtils.getPowerByType(code, URConstants.Hand_Grab_Ma);
-        updatePw(ownPower,Wire_Stripper_Ma,Connect_Wire_Ma,Cut_Wire_Ma,Hand_Grab_Ma);
+        updatePw(ownPower, Wire_Stripper_Ma, Connect_Wire_Ma, Cut_Wire_Ma, Hand_Grab_Ma);
 
     }
 

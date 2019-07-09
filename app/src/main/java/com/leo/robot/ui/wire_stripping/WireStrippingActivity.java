@@ -31,6 +31,7 @@ import com.leo.robot.ui.wiring.WiringActivity;
 import com.leo.robot.utils.ClearWebUtils;
 import com.leo.robot.utils.DateUtils;
 import com.leo.robot.utils.PowerUtils;
+import com.leo.robot.utils.WebErrorUtils;
 import com.leo.robot.view.CustomPopWindow;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.data.StringUtils;
@@ -162,6 +163,17 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     @BindView(R.id.tv_cut_line)
     TextView mTvCutLine;
 
+    @BindView(R.id.ll_error1)
+    LinearLayout mLlError1;
+    @BindView(R.id.ll_error2)
+    LinearLayout mLlError2;
+    @BindView(R.id.ll_error3)
+    LinearLayout mLlError3;
+    @BindView(R.id.ll_error4)
+    LinearLayout mLlError4;
+    @BindView(R.id.ll_error_main)
+    LinearLayout mLlErrorMain;
+
 
     private boolean isPause;
     private boolean isShown = false;
@@ -177,6 +189,9 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
     private ActionAdapter mLogAdapter;
     private CustomPopWindow mCustomPopWindow;
     private boolean isStart = false;
+    private boolean loadError = false;
+    private WebErrorUtils errorUtils;
+    private AgentWeb mAgentWeb1;
 
 
     @Override
@@ -250,6 +265,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         initTile();
         initAdapter();
         initMainVideo();
+        initVideo1();
         initVideo2();
         initVideo3();
         initVideo4();
@@ -262,6 +278,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mPresenter.initClient();
         mPresenter.initLineLocation();
         mPresenter.updatePower();
+
     }
 
     private void initSocketStatus() {
@@ -288,11 +305,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         }
     }
 
-//    private void initUnity() {
-//        mUnityPlayer = getUnityPlayer();
-//        mRl1.addView(mUnityPlayer);
-//        mUnityPlayer.requestFocus();
-//    }
 
     /**
      * 从臂画面
@@ -304,11 +316,11 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb4 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
-
+        WebErrorUtils utils = new WebErrorUtils();
+        utils.errorWeb(mAgentWeb4, mLlError4);
         initWebSetting(mAgentWeb4.getWebCreator().getWebView());
         mAgentWeb4.getWebCreator().getWebView().reload();
     }
@@ -326,7 +338,8 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
-
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWeb3, mLlError3);
         initWebSetting(mAgentWeb3.getWebCreator().getWebView());
         mAgentWeb3.getWebCreator().getWebView().reload();
     }
@@ -342,13 +355,32 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb2 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
-
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWeb2, mLlError2);
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
         mAgentWeb2.getWebCreator().getWebView().reload();
+    }
+
+    /**
+     * 云台画面
+     *
+     * @author Leo
+     * created at 2019/7/9 10:05 PM
+     */
+    private void initVideo1() {
+        mAgentWeb1 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.CAMERA_URL);
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWeb1, mLlError1);
+        initWebSetting(mAgentWeb1.getWebCreator().getWebView());
+        mAgentWeb1.getWebCreator().getWebView().reload();
     }
 
 
@@ -360,13 +392,13 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
      */
     private void initMainVideo() {
         mAgentWebMain = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.agentweb_error_page, Integer.valueOf(1))
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.LINE_CAMERA_URL);
-        AgentWebConfig.debug();
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWebMain, mLlErrorMain);
         initWebSetting(mAgentWebMain.getWebCreator().getWebView());
         mAgentWebMain.getWebCreator().getWebView().reload();
     }
@@ -409,8 +441,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     @Override
     protected void onPause() {
-
-
         super.onPause();
         isShown = false;
 
@@ -426,6 +456,9 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 //        mPresenter.initStatus();
         if (mAgentWebMain != null) {
             mAgentWebMain.getWebCreator().getWebView().reload();
+        }
+        if (mAgentWeb1 != null) {
+            mAgentWeb1.getWebCreator().getWebView().reload();
         }
         if (mAgentWeb2 != null) {
             mAgentWeb2.getWebCreator().getWebView().reload();
@@ -455,6 +488,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
 
     private void clearWeb() {
         ClearWebUtils.clearVideo(mAgentWebMain, this);
+        ClearWebUtils.clearVideo(mAgentWeb1, this);
         ClearWebUtils.clearVideo(mAgentWeb2, this);
         ClearWebUtils.clearVideo(mAgentWeb3, this);
         ClearWebUtils.clearVideo(mAgentWeb4, this);

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
@@ -22,6 +23,7 @@ import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.utils.ClearWebUtils;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
+import com.leo.robot.utils.WebErrorUtils;
 import com.leo.robot.view.CustomPopWindow;
 
 /**
@@ -57,6 +59,11 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
     private MiddlewareWebClientBase mMiddleWareWebClient;
     private Button mBtnTool;
     private CustomPopWindow mCustomPopWindow;
+    private LinearLayout mLlErrorMain;
+    private LinearLayout mLlError1;
+    private LinearLayout mLlError2;
+    private LinearLayout mLlError3;
+    private LinearLayout mLlError4;
 
     @Nullable
     @Override
@@ -104,6 +111,12 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         mIv8 = (ImageView) view.findViewById(R.id.iv8);
         mBtnTool = (Button) view.findViewById(R.id.btn_tool);
 
+        mLlErrorMain = (LinearLayout) view.findViewById(R.id.ll_error_main);
+        mLlError1 = (LinearLayout) view.findViewById(R.id.ll_error1);
+        mLlError2 = (LinearLayout) view.findViewById(R.id.ll_error2);
+        mLlError3 = (LinearLayout) view.findViewById(R.id.ll_error3);
+        mLlError4 = (LinearLayout) view.findViewById(R.id.ll_error4);
+
         mIv1.setOnClickListener(this);
         mIv2.setOnClickListener(this);
         mIv3.setOnClickListener(this);
@@ -144,6 +157,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
 
     private void clearWeb() {
         ClearWebUtils.clearVideo(mAgentWebMain, getContext());
+        ClearWebUtils.clearVideo(mAgentWeb1, getContext());
         ClearWebUtils.clearVideo(mAgentWeb2, getContext());
         ClearWebUtils.clearVideo(mAgentWeb3, getContext());
         ClearWebUtils.clearVideo(mAgentWeb4, getContext());
@@ -171,47 +185,49 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onDestroyView() {
-        webViewOnDestroy();
+        clearWeb();
         super.onDestroyView();
     }
 
 
     /**
-     * 位姿仿真画面
+     * 从臂画面
      *
-     * @param
      * @author Leo
      * created at 2019/4/27 5:27 PM
      */
     private void initVideo4() {
         mAgentWeb4 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl4.findViewById(R.id.rl4), new RelativeLayout.LayoutParams(-1, -1))
+                .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
-
+        WebErrorUtils utils = new WebErrorUtils();
+        utils.errorWeb(mAgentWeb4, mLlError4);
         initWebSetting(mAgentWeb4.getWebCreator().getWebView());
+        mAgentWeb4.getWebCreator().getWebView().reload();
     }
 
     /**
-     * 机械臂画面
+     * 主臂画面
      *
      * @author Leo
      * created at 2019/4/27 5:26 PM
      */
     private void initVideo3() {
         mAgentWeb3 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(-1, -1))
+                .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
-
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWeb3, mLlError3);
         initWebSetting(mAgentWeb3.getWebCreator().getWebView());
+        mAgentWeb3.getWebCreator().getWebView().reload();
     }
+
 
     /**
      * 引流线画面
@@ -221,15 +237,36 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
      */
     private void initVideo2() {
         mAgentWeb2 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(-1, -1))
+                .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
+                .createAgentWeb()
+                .ready()
+                .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWeb2, mLlError2);
+        initWebSetting(mAgentWeb2.getWebCreator().getWebView());
+        mAgentWeb2.getWebCreator().getWebView().reload();
+    }
+
+    /**
+     * 云台画面
+     *
+     * @author Leo
+     * created at 2019/7/9 10:05 PM
+     */
+    private void initVideo1() {
+        mAgentWeb1 = AgentWeb.with(this)
+                .setAgentWebParent((RelativeLayout) mRl1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                .closeIndicator()
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.CAMERA_URL);
-
-        initWebSetting(mAgentWeb2.getWebCreator().getWebView());
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWeb1, mLlError1);
+        initWebSetting(mAgentWeb1.getWebCreator().getWebView());
+        mAgentWeb1.getWebCreator().getWebView().reload();
     }
+
 
     /**
      * 行线画面
@@ -237,43 +274,20 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
      * @author Leo
      * created at 2019/4/27 5:26 PM
      */
-    private void initVideo1() {
-        mAgentWeb1 = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRl1, new RelativeLayout.LayoutParams(-1, -1))
-                .closeIndicator()
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1).createAgentWeb()
-                .ready()
-                .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
-
-        initWebSetting(mAgentWeb1.getWebCreator().getWebView());
-    }
-
-
-    /**
-     * 云台画面
-     *
-     * @param
-     * @author Leo
-     * created at 2019/4/27 5:26 PM
-     */
     private void initMainVideo() {
         mAgentWebMain = AgentWeb.with(this)
-                .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(-1, -1))
+                .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.LINE_CAMERA_URL);
-
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWebMain, mLlErrorMain);
         initWebSetting(mAgentWebMain.getWebCreator().getWebView());
-
-
-        //缩放
-//        agentWeb.getAgentWebSettings().getWebSettings().setUseWideViewPort(true);
-//        agentWeb.getAgentWebSettings().getWebSettings().setLoadWithOverviewMode(true);
-//        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
-
+        mAgentWebMain.getWebCreator().getWebView().reload();
     }
+
+
 
     /**
      * 设置webView自适应屏幕，取消滚动条
@@ -291,30 +305,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
 //        agentWeb.getAgentWebSettings().getWebSettings().setBuiltInZoomControls(true);
     }
 
-    private void webViewOnPause() {
-        mAgentWebMain.getWebLifeCycle().onPause();
-        mAgentWeb1.getWebLifeCycle().onPause();
-        mAgentWeb2.getWebLifeCycle().onPause();
-        mAgentWeb3.getWebLifeCycle().onPause();
-        mAgentWeb4.getWebLifeCycle().onPause();
 
-    }
-
-    private void webViewOnResume() {
-        mAgentWebMain.getWebLifeCycle().onResume();
-        mAgentWeb1.getWebLifeCycle().onResume();
-        mAgentWeb2.getWebLifeCycle().onResume();
-        mAgentWeb3.getWebLifeCycle().onResume();
-        mAgentWeb4.getWebLifeCycle().onResume();
-    }
-
-    private void webViewOnDestroy() {
-        mAgentWebMain.getWebLifeCycle().onDestroy();
-        mAgentWeb1.getWebLifeCycle().onDestroy();
-        mAgentWeb2.getWebLifeCycle().onDestroy();
-        mAgentWeb3.getWebLifeCycle().onDestroy();
-//        mAgentWeb4.getWebLifeCycle().onDestroy();
-    }
 
     @Override
     public void onClick(View v) {

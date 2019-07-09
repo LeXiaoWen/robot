@@ -13,6 +13,7 @@
             android:layout_width="456dp"
             android:layout_height="332dp"
             android:background="@color/black">
+        <include layout="@layout/web_error_main"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -20,7 +21,7 @@
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_10"
                 android:padding="@dimen/dp_6"
-                android:text="云台画面"
+                android:text="行线画面"
                 android:textColor="@color/cmvp_white"
                 android:textSize="@dimen/sp_8"
                 android:textStyle="bold"/>
@@ -161,19 +162,20 @@
             android:layout_toRightOf="@id/rl_main"
             android:background="@color/black">
 
+        <include layout="@layout/web_error1"/>
 
         <TextView
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_10"
                 android:padding="@dimen/dp_6"
-                android:text="行线画面"
+                android:text="云台画面"
                 android:textColor="@color/cmvp_white"
                 android:textSize="@dimen/sp_8"
                 android:textStyle="bold"
         />
+
 
     </RelativeLayout>
 
@@ -185,6 +187,7 @@
             android:layout_marginTop="@dimen/dp_13"
             android:background="@color/black">
 
+        <include layout="@layout/web_error2"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -210,6 +213,7 @@
             android:layout_toRightOf="@id/rl_2"
             android:background="@color/black">
 
+        <include layout="@layout/web_error3"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -217,12 +221,11 @@
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_10"
                 android:padding="@dimen/dp_6"
-                android:text="机械臂画面"
+                android:text="主臂画面"
                 android:textColor="@color/cmvp_white"
                 android:textSize="@dimen/sp_8"
                 android:textStyle="bold"
         />
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -235,6 +238,7 @@
             android:layout_toRightOf="@id/rl_3"
             android:background="@color/black">
 
+        <include layout="@layout/web_error4"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -242,11 +246,12 @@
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_10"
                 android:padding="@dimen/dp_6"
-                android:text="位姿仿真画面"
+                android:text="从臂画面"
                 android:textColor="@color/cmvp_white"
                 android:textSize="@dimen/sp_8"
                 android:textStyle="bold"
         />
+
 
     </RelativeLayout>
 
