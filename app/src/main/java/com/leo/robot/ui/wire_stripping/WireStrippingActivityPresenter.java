@@ -83,6 +83,14 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         }
     };
 
+
+    public void onDestroy() {
+        mTimer.cancel();
+        mTimer = null;
+        mTimerTask.cancel();
+        mTimerTask = null;
+    }
+
     private void updateData() {
         initMode();
         initSafeMode();
@@ -182,27 +190,6 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
         }
     }
 
-    /**
-     * 开始、停止
-     *
-     * @author Leo
-     * created at 2019/4/18 2:18 PM
-     */
-    public void startButton() {
-
-        if (!isStart) { //开始
-            mMasterClient.sendMsgTest(CommandUtils.getFlowArmStart());
-            isStart = true;
-            mActivity.updateStart(true);
-            mActivity.refreshLogRv("发送开始命令");
-        } else {//停止
-            mMasterClient.sendMsgTest(CommandUtils.getFlowArmStop());
-            isStart = false;
-            mActivity.updateStart(false);
-
-            mActivity.refreshLogRv("发送停止命令");
-        }
-    }
 
 
     /**
@@ -405,19 +392,6 @@ public class WireStrippingActivityPresenter extends RobotPresenter<WireStripping
     }
 
 
-//    public void setUnityView(RelativeLayout unityView) {
-//        // TODO: 2019/5/6  直接使用父类的unityPlayer 不要自己去new一个
-//        mUnityPlayer = mActivity.getUnityPlayer();
-//        unityView.addView(mActivity.getUnityPlayer());
-//        mActivity.getUnityPlayer().requestFocus();
-//    }
-//
-//    public void removeUnityView(RelativeLayout unityView) {
-//        if (unityView.getChildAt(0) != null) {
-//            unityView.removeView(mUnityPlayer);
-//        }
-//        mActivity.getUnityPlayer().requestFocus();
-//    }
 
 
 }

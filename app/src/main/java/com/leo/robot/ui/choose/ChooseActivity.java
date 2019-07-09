@@ -18,6 +18,7 @@ import butterknife.OnClick;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.gson.Gson;
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebConfig;
 import com.just.agentweb.MiddlewareWebClientBase;
 import com.just.agentweb.WebViewClient;
 import com.leo.robot.JNIUtils;
@@ -376,6 +377,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             view.reload();
             super.onReceivedError(view, request, error);
+            LogUtils.e("选点界面调用了重载方法  。。。 ");
         }
     };
 
@@ -530,8 +532,6 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
 
     private void clearVideo() {
         ClearWebUtils.clearVideo(mAgentWeb, this);
-//        mRlMain.removeAllViews();
-//        mRlMain.invalidate();
     }
 
 
@@ -758,6 +758,9 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
 //        mAgentWeb = null;
 //        mWebView = null;
         clearVideo();
+        AgentWebConfig.clearDiskCache(this);
+        onUnBindReceiver();
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -847,4 +850,6 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         super.onStop();
 
     }
+
+
 }

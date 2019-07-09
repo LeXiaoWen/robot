@@ -8,10 +8,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
 import android.widget.TextView;
+import com.just.agentweb.MiddlewareWebClientBase;
 import com.leo.robot.broadcast.BatteryReceiver;
 import com.leo.robot.constant.RobotInit;
+import com.leo.robot.utils.MiddlewareWebViewClient;
 import cree.mvp.base.activity.BaseActivity;
 import cree.mvp.base.presenter.BasePresenter;
 import cree.mvp.util.data.SPUtils;
@@ -31,6 +36,8 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
     protected MasterHandler masterHandler;
     protected VisionHandler visionHandler;
     private BatteryReceiver mReceiver;
+    private MiddlewareWebClientBase mMiddleWareWebClient;
+
 
     public MasterHandler getMasterHandler() {
         return masterHandler;
@@ -217,5 +224,38 @@ public abstract class NettyActivity<T extends BasePresenter> extends BaseActivit
         // 显示
         normalDialog.show();
     }
+
+    protected MiddlewareWebClientBase getMiddlewareWebClient() {
+        return this.mMiddleWareWebClient = new MiddlewareWebViewClient() {
+            /**
+             *
+             * @param view
+             * @param url
+             * @return
+             */
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
+                if (url.startsWith("agentweb")) { // 拦截 url，不执行 DefaultWebClient#shouldOverrideUrlLoading
+                    Log.i(TAG, "agentweb scheme ~");
+                    return true;
+                }
+
+                if (super.shouldOverrideUrlLoading(view, url)) { // 执行 DefaultWebClient#shouldOverrideUrlLoading
+                    return true;
+                }
+                // do you work
+                return false;
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return super.shouldOverrideUrlLoading(view, request);
+            }
+        };
+    }
+
+
+
 
 }

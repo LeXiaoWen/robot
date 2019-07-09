@@ -329,6 +329,13 @@ public class WiringActivityPresenter extends RobotPresenter<WiringActivity, Wiri
         mActivity.updatePw(ownPower,wire_stripper_ma,connect_wire_ma,cut_wire_ma,hand_grab_ma);
     }
 
+    public void onDestroy() {
+        mTimer.cancel();
+        mTimer = null;
+        mTimerTask.cancel();
+        mTimerTask = null;
+    }
+
 //    public void setUnityView(RelativeLayout unityView) {
 //        // TODO: 2019/5/6  直接使用父类的unityPlayer 不要自己去new一个
 //        mUnityPlayer = mActivity.getUnityPlayer();

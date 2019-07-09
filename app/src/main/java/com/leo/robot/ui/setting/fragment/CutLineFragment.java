@@ -16,6 +16,7 @@ import com.leo.robot.R;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
+import com.leo.robot.utils.ClearWebUtils;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 
@@ -81,7 +82,7 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
         super.onHiddenChanged(hidden);
         if (hidden) {
             //Fragment隐藏时调用
-            webViewOnDestroy();
+            clearWeb();
             AgentWebConfig.clearDiskCache(this.getContext());
         } else {
             //Fragment显示时调用
@@ -93,6 +94,12 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void clearWeb() {
+        ClearWebUtils.clearVideo(mAgentWebMain, getContext());
+        ClearWebUtils.clearVideo(mAgentWeb2, getContext());
+        ClearWebUtils.clearVideo(mAgentWeb3, getContext());
+        ClearWebUtils.clearVideo(mAgentWeb4, getContext());
+    }
 
     @Override
     public void onPause() {
@@ -108,7 +115,7 @@ public class CutLineFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
-        webViewOnDestroy();
+        clearWeb();
         super.onDestroy();
     }
 

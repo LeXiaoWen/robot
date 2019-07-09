@@ -14,6 +14,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
@@ -162,7 +163,9 @@ public class CutLineSettingActivity extends NettyActivity<CutLineSettingActivity
     @Override
     public void onDestroy() {
         mPresenter.destroyClient();
+        mPresenter.onDestroy();
         super.onDestroy();
+        AgentWebConfig.clearDiskCache(this);
         onUnBindReceiver();
     }
 

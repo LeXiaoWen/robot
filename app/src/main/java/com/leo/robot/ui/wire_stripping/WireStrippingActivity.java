@@ -28,8 +28,8 @@ import com.leo.robot.netty.arm.FlowArmBean;
 import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
 import com.leo.robot.ui.wiring.WiringActivity;
+import com.leo.robot.utils.ClearWebUtils;
 import com.leo.robot.utils.DateUtils;
-import com.leo.robot.utils.MyWebViewClient;
 import com.leo.robot.utils.PowerUtils;
 import com.leo.robot.view.CustomPopWindow;
 import cree.mvp.util.data.SPUtils;
@@ -305,7 +305,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
-                .setWebViewClient(new MyWebViewClient())
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
@@ -324,16 +323,14 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWeb3 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
-                .setWebViewClient(new MyWebViewClient())
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
 
         initWebSetting(mAgentWeb3.getWebCreator().getWebView());
         mAgentWeb3.getWebCreator().getWebView().reload();
-
     }
+
 
     /**
      * 引流线画面
@@ -346,7 +343,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
                 .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
-                .setWebViewClient(new MyWebViewClient())
                 .createAgentWeb()
                 .ready()
                 .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
@@ -366,7 +362,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         mAgentWebMain = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
                 .closeIndicator()
-                .setWebViewClient(new MyWebViewClient())
                 .setMainFrameErrorView(R.layout.agentweb_error_page, Integer.valueOf(1))
                 .createAgentWeb()
                 .ready()
@@ -429,44 +424,40 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         super.onResume();
         isShown = true;
 //        mPresenter.initStatus();
+        if (mAgentWebMain != null) {
+            mAgentWebMain.getWebCreator().getWebView().reload();
+        }
+        if (mAgentWeb2 != null) {
+            mAgentWeb2.getWebCreator().getWebView().reload();
+        }
+        if (mAgentWeb3 != null) {
+            mAgentWeb3.getWebCreator().getWebView().reload();
+        }
+        if (mAgentWeb4 != null) {
+            mAgentWeb4.getWebCreator().getWebView().reload();
+        }
         LogUtils.e("剥线界面： onResume");
     }
 
-    private void webViewOnPause() {
-        mAgentWebMain.getWebLifeCycle().onPause();
-//        mAgentWeb1.getWebLifeCycle().onPause();
-        mAgentWeb2.getWebLifeCycle().onPause();
-        mAgentWeb3.getWebLifeCycle().onPause();
-        mAgentWeb4.getWebLifeCycle().onPause();
-
-    }
-
-    private void webViewOnResume() {
-        mAgentWebMain.getWebLifeCycle().onResume();
-        mAgentWeb2.getWebLifeCycle().onResume();
-        mAgentWeb3.getWebLifeCycle().onResume();
-        mAgentWeb4.getWebLifeCycle().onResume();
-    }
-
-    private void webViewOnDestroy() {
-        mAgentWebMain.getWebLifeCycle().onDestroy();
-        mAgentWeb2.getWebLifeCycle().onDestroy();
-        mAgentWeb3.getWebLifeCycle().onDestroy();
-        mAgentWeb4.getWebLifeCycle().onDestroy();
-    }
 
     @Override
     protected void onDestroy() {
 
         mPresenter.destroyClient();
-
+        mPresenter.onDestroy();
         super.onDestroy();
-        mAgentWebMain = null;
-        mAgentWeb2 = null;
-        mAgentWeb3 = null;
-        mAgentWeb4 = null;
+        clearWeb();
+        AgentWebConfig.clearDiskCache(this);
+        onUnBindReceiver();
 
         LogUtils.e("剥线界面：   onDestroy ");
+    }
+
+    private void clearWeb() {
+        ClearWebUtils.clearVideo(mAgentWebMain, this);
+        ClearWebUtils.clearVideo(mAgentWeb2, this);
+        ClearWebUtils.clearVideo(mAgentWeb3, this);
+        ClearWebUtils.clearVideo(mAgentWeb4, this);
     }
 
 
@@ -523,21 +514,6 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void acceptVisionMsg(VisionMsg msg) {
-//        if (isShown) {
-//            ToastUtils.showShortToast("接收到选点命令，即将进入选点页面！");
-//            new Thread(() -> {
-//                try {
-//                    Thread.sleep(2000);
-//                    startActivity(new Intent(WireStrippingActivity.this, WireStrippingChooseLocationActivity.class));
-//                    finish();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }).start();
-//        }
-    }
 
     //------------------------ 更新UI --------------------------
     public void updateReady(boolean b) {
@@ -737,18 +713,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
      * created at 2019/4/27 2:10 AM
      */
     public void updateClickStatus(boolean b) {
-//        if (b) {
-//            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianshouhui_normal));
-//            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_normal));
-//            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_normal));
-//            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_normal));
         mTvRemind.setText("请开始选取剥线位置");
-//        } else {
-//            mIvTakeBack.setImageDrawable(getResources().getDrawable(R.drawable.yijianhuishou_unclick));
-//            mIvStart.setImageDrawable(getResources().getDrawable(R.drawable.kaishi_unclick));
-//            mIvIdentification.setImageDrawable(getResources().getDrawable(R.drawable.shibieluxian_unclick));
-//            mIvSetting.setImageDrawable(getResources().getDrawable(R.drawable.shoudongcaozuo_unclick));
-//        }
     }
 
 
@@ -861,7 +826,7 @@ public class WireStrippingActivity extends NettyActivity<WireStrippingActivityPr
         String Hand_Grab_Ma = PowerUtils.getPowerByType(code, URConstants.Hand_Grab_Ma);
 
 
-        updatePw(ownPower,Wire_Stripper_Ma,Connect_Wire_Ma,Cut_Wire_Ma,Hand_Grab_Ma);
+        updatePw(ownPower, Wire_Stripper_Ma, Connect_Wire_Ma, Cut_Wire_Ma, Hand_Grab_Ma);
 
     }
 

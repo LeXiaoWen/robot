@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
 import com.leo.robot.bean.LineLocationMsg;
 import com.leo.robot.bean.LocationMsg;
@@ -20,6 +21,7 @@ import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.utils.ByteUtils;
+import com.leo.robot.utils.ClearWebUtils;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import org.greenrobot.eventbus.Subscribe;
@@ -81,12 +83,9 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
         super.onHiddenChanged(hidden);
         if (hidden) {
             //Fragment隐藏时调用
-            if (mAgentWeb != null) {
-                mAgentWeb.getWebLifeCycle().onPause();
-            }
-            super.onDestroy();
-            mAgentWeb = null;
-            mWebView = null;
+            clearVideo();
+            AgentWebConfig.clearDiskCache(this.getContext());
+
 
         } else {
             //Fragment显示时调用
@@ -94,6 +93,7 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
             initVideo(UrlConstant.URL[0]);
         }
     }
+
 
     /**
      * 初始化video
@@ -230,7 +230,7 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onDestroy() {
-
+        clearVideo();
         super.onDestroy();
     }
 
@@ -329,14 +329,12 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
     }
 
     private void clearVideo() {
-        mAgentWeb = null;
-        mWebView = null;
-        mRlMain.removeAllViews();
-        mRlMain.invalidate();
+        ClearWebUtils.clearVideo(mAgentWeb, getContext());
+
     }
 
-    private void videoText(){
-        switch (mVideoTag){
+    private void videoText() {
+        switch (mVideoTag) {
             case 0:
                 tvVideo.setText("行线画面");
                 break;

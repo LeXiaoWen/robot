@@ -307,4 +307,16 @@ public class CutLineActivityPresenter extends RobotPresenter<CutLineActivity, Cu
         mActivity.updatePw(ownPower,wire_stripper_ma,connect_wire_ma,cut_wire_ma,hand_grab_ma);
     }
 
+    public void onDestroy() {
+        mTimer.cancel();
+        mTimer = null;
+        mTimerTask.cancel();
+        mTimerTask = null;
+    }
+
+    public void destroyClient() {
+        if (mMasterClient != null) {
+            mMasterClient = null;
+        }
+    }
 }

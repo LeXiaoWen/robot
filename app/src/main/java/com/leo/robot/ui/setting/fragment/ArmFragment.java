@@ -19,6 +19,7 @@ import com.leo.robot.constant.URConstants;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.netty.arm.ArmNettyClient;
+import com.leo.robot.utils.ClearWebUtils;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import cree.mvp.util.data.StringUtils;
@@ -325,8 +326,7 @@ public class ArmFragment extends BaseFragment {
         super.onHiddenChanged(hidden);
         if (hidden) {
             //Fragment隐藏时调用
-            webViewOnPause();
-            webViewOnDestroy();
+           clearWeb();
             AgentWebConfig.clearDiskCache(this.getContext());
         } else {
             //Fragment显示时调用
@@ -337,6 +337,13 @@ public class ArmFragment extends BaseFragment {
             initVideo3();
             initVideo4();
         }
+    }
+
+    private void clearWeb() {
+        ClearWebUtils.clearVideo(mAgentWebMain, getContext());
+        ClearWebUtils.clearVideo(mAgentWeb2, getContext());
+        ClearWebUtils.clearVideo(mAgentWeb3, getContext());
+        ClearWebUtils.clearVideo(mAgentWeb4, getContext());
     }
 
     private void initView(View view) {
@@ -419,7 +426,7 @@ public class ArmFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-
+        clearWeb();
         super.onDestroy();
     }
 

@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
@@ -26,6 +27,7 @@ import com.leo.robot.ui.choose.ChooseActivity;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wire_stripping.adapter.ActionAdapter;
+import com.leo.robot.utils.ClearWebUtils;
 import com.leo.robot.utils.DateUtils;
 import com.leo.robot.utils.MyWebViewClient;
 import com.leo.robot.utils.PowerUtils;
@@ -435,21 +437,37 @@ public class WiringActivity extends NettyActivity<WiringActivityPresenter> {
 
         super.onResume();
 //        mPresenter.initStatus();
+        if (mAgentWebMain != null) {
+            mAgentWebMain.getWebCreator().getWebView().reload();
+        }
+        if (mAgentWeb2 != null) {
+            mAgentWeb2.getWebCreator().getWebView().reload();
+        }
+        if (mAgentWeb3 != null) {
+            mAgentWeb3.getWebCreator().getWebView().reload();
+        }
+        if (mAgentWeb4 != null) {
+            mAgentWeb4.getWebCreator().getWebView().reload();
+        }
         isShown = true;
     }
 
     @Override
     protected void onDestroy() {
-//        if (mAgentWebMain != null && mAgentWeb2 != null && mAgentWeb3 != null && mAgentWeb4 != null) {
-//            webViewOnDestroy();
-//        }
         mPresenter.destroyClient();
+        mPresenter.onDestroy();
         super.onDestroy();
-//        mUnityPlayer.quit();
-        mAgentWebMain = null;
-        mAgentWeb2 = null;
-        mAgentWeb3 = null;
-        mAgentWeb4 = null;
+        clearWeb();
+        AgentWebConfig.clearDiskCache(this);
+        onUnBindReceiver();
+
+    }
+
+    private void clearWeb() {
+        ClearWebUtils.clearVideo(mAgentWebMain, this);
+        ClearWebUtils.clearVideo(mAgentWeb2, this);
+        ClearWebUtils.clearVideo(mAgentWeb3, this);
+        ClearWebUtils.clearVideo(mAgentWeb4, this);
     }
 
 

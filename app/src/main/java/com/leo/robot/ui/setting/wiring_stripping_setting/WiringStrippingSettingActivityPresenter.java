@@ -100,4 +100,11 @@ public class WiringStrippingSettingActivityPresenter extends RobotPresenter<Wiri
         String hand_grab_ma = spUtils.getString("Hand_Grab_Ma", "--");
         mActivity.updatePw(ownPower,wire_stripper_ma,connect_wire_ma,cut_wire_ma,hand_grab_ma);
     }
+
+    public void onDestroy() {
+        mTimer.cancel();
+        mTimer = null;
+        mTimerTask.cancel();
+        mTimerTask = null;
+    }
 }

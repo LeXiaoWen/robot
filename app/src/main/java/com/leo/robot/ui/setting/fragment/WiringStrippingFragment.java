@@ -19,6 +19,7 @@ import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
 import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
+import com.leo.robot.utils.ClearWebUtils;
 import com.leo.robot.utils.CommandUtils;
 import com.leo.robot.utils.NettyManager;
 import com.leo.robot.view.CustomPopWindow;
@@ -128,7 +129,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
         if (hidden) {
             //Fragment隐藏时调用
 //            webViewOnResume();
-            webViewOnDestroy();
+            clearWeb();
             AgentWebConfig.clearDiskCache(this.getContext());
         } else {
             //Fragment显示时调用
@@ -139,6 +140,13 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
             initVideo3();
             initVideo4();
         }
+    }
+
+    private void clearWeb() {
+        ClearWebUtils.clearVideo(mAgentWebMain, getContext());
+        ClearWebUtils.clearVideo(mAgentWeb2, getContext());
+        ClearWebUtils.clearVideo(mAgentWeb3, getContext());
+        ClearWebUtils.clearVideo(mAgentWeb4, getContext());
     }
 
 
@@ -157,6 +165,7 @@ public class WiringStrippingFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onDestroy() {
+        clearWeb();
         super.onDestroy();
     }
 

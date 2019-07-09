@@ -14,6 +14,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
@@ -29,6 +30,7 @@ import com.leo.robot.ui.setting.wiring_setting.WiringSettingActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.utils.PowerUtils;
 import cree.mvp.util.data.StringUtils;
+import cree.mvp.util.develop.LogUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -164,8 +166,12 @@ public class WiringStrippingSettingActivity extends NettyActivity<WiringStrippin
     @Override
     public void onDestroy() {
         mPresenter.destroyClient();
+        mPresenter.onDestroy();
         super.onDestroy();
+        AgentWebConfig.clearDiskCache(this);
+        onUnBindReceiver();
     }
+
 
 
     @Override
