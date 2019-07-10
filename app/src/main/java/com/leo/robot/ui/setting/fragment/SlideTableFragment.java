@@ -8,10 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.leo.robot.R;
@@ -20,10 +17,7 @@ import com.leo.robot.bean.LocationMsg;
 import com.leo.robot.constant.RobotInit;
 import com.leo.robot.constant.UrlConstant;
 import com.leo.robot.netty.NettyClient;
-import com.leo.robot.utils.ByteUtils;
-import com.leo.robot.utils.ClearWebUtils;
-import com.leo.robot.utils.CommandUtils;
-import com.leo.robot.utils.NettyManager;
+import com.leo.robot.utils.*;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -54,6 +48,8 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
     private int mVideoTag = 0;
     private TextView tvVideo;
 
+    private LinearLayout mLlErrorMain;
+
 
     public void setTAG(int TAG) {
         this.TAG = TAG;
@@ -70,6 +66,7 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        initVideo(UrlConstant.URL[0]);
         initClient();
 
     }
@@ -105,14 +102,13 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-//                .useMiddlewareWebClient(getMiddlewareWebClient())
                 .createAgentWeb()
                 .ready()
                 .go(url);
-        mWebView = mAgentWeb.getWebCreator().getWebView();
-
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWeb, mLlErrorMain);
         initWebSetting(mAgentWeb.getWebCreator().getWebView());
-        mRlMain.invalidate();
+        mAgentWeb.getWebCreator().getWebView().reload();
     }
 
     private void initWebSetting(WebView view) {
@@ -143,6 +139,10 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
         btnDown = (Button) view.findViewById(R.id.btn_down);
         btnVerticalReset = (Button) view.findViewById(R.id.btn_vertical_reset);
         tvVideo = (TextView) view.findViewById(R.id.tv_video);
+
+        mLlErrorMain = (LinearLayout) view.findViewById(R.id.ll_error_main);
+
+
         ImageButton rb1 = (ImageButton) view.findViewById(R.id.ib_1);
         ImageButton rb2 = (ImageButton) view.findViewById(R.id.ib_2);
         rb1.setOnClickListener(this);
@@ -236,6 +236,7 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onDestroyView() {
+        clearVideo();
         super.onDestroyView();
     }
 
@@ -329,9 +330,18 @@ public class SlideTableFragment extends Fragment implements View.OnClickListener
     }
 
     private void clearVideo() {
+
         ClearWebUtils.clearVideo(mAgentWeb, getContext());
+        if (mAgentWeb != null) {
+            mAgentWeb = null;
+        }
+
+       RemoveViewUtils.removeView(mRlMain);
 
     }
+
+
+
 
     private void videoText() {
         switch (mVideoTag) {

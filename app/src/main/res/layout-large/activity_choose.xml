@@ -94,7 +94,11 @@
                 android:layout_width="640dp"
                 android:layout_height="480dp"
                 android:layout_marginLeft="16dp"
-                android:background="@color/black"/>
+                android:background="@color/black">
+
+            <include layout="@layout/web_error_main"/>
+
+        </RelativeLayout>
 
         <RelativeLayout
                 android:layout_marginLeft="@dimen/dp_16"

@@ -25,7 +25,9 @@ public class WebErrorUtils {
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 view.setVisibility(View.GONE);
                 if (errorView != null) {
-                    errorView.setVisibility(View.VISIBLE);
+                    if (errorView.getVisibility() == View.GONE) {
+                        errorView.setVisibility(View.VISIBLE);
+                    }
                 }
                 isError = true;
                 super.onReceivedError(view, request, error);
@@ -36,7 +38,9 @@ public class WebErrorUtils {
                 super.onPageFinished(view, url);
                 if (!isError) {
                     if (errorView != null) {
-                        errorView.setVisibility(View.GONE);
+                        if (errorView.getVisibility() == View.VISIBLE) {
+                            errorView.setVisibility(View.GONE);
+                        }
                     }
                     view.setVisibility(View.VISIBLE);
                 }

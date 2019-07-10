@@ -1,15 +1,11 @@
 package com.leo.robot.ui.choose;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.widget.*;
 import butterknife.BindView;
@@ -20,7 +16,6 @@ import com.google.gson.Gson;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.just.agentweb.MiddlewareWebClientBase;
-import com.just.agentweb.WebViewClient;
 import com.leo.robot.JNIUtils;
 import com.leo.robot.R;
 import com.leo.robot.base.NettyActivity;
@@ -34,10 +29,7 @@ import com.leo.robot.netty.arm.MainArmBean;
 import com.leo.robot.ui.cut_line.CutLineActivity;
 import com.leo.robot.ui.wire_stripping.WireStrippingActivity;
 import com.leo.robot.ui.wiring.WiringActivity;
-import com.leo.robot.utils.ByteUtils;
-import com.leo.robot.utils.ClearWebUtils;
-import com.leo.robot.utils.MiddlewareWebViewClient;
-import com.leo.robot.utils.PowerUtils;
+import com.leo.robot.utils.*;
 import com.leo.robot.view.DrawView;
 import cree.mvp.util.data.SPUtils;
 import cree.mvp.util.data.StringUtils;
@@ -139,6 +131,8 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
     TextView mTvCon;
     @BindView(R.id.ll_1)
     LinearLayout mLl1;
+    @BindView(R.id.ll_error_main)
+    LinearLayout mLlErrorMain;
     private AgentWeb mAgentWeb;
     //    private WebView mWebView;
     private float mNewScale;
@@ -349,37 +343,18 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
-                .setWebViewClient(mWebViewClient)
                 .useMiddlewareWebClient(getMiddlewareWebClient())
                 .createAgentWeb()
                 .ready()
                 .go(url);
-//        mWebView = mAgentWeb.getWebCreator().getWebView();
+
+        WebErrorUtils webErrorUtils = new WebErrorUtils();
+        webErrorUtils.errorWeb(mAgentWeb, mLlErrorMain);
 
         initWebSetting(mAgentWeb.getWebCreator().getWebView());
-//        mRlMain.invalidate();
         mAgentWeb.getWebCreator().getWebView().reload();
     }
 
-    private WebViewClient mWebViewClient = new WebViewClient() {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            return super.shouldOverrideUrlLoading(view, request);
-        }
-
-        @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            //do you  work
-            Log.i("Info", "BaseWebActivity onPageStarted");
-        }
-
-        @Override
-        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-            view.reload();
-            super.onReceivedError(view, request, error);
-            LogUtils.e("选点界面调用了重载方法  。。。 ");
-        }
-    };
 
     /**
      * 获取缩放比例
@@ -532,9 +507,12 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
 
     private void clearVideo() {
         ClearWebUtils.clearVideo(mAgentWeb, this);
+        if (mAgentWeb != null) {
+            mAgentWeb = null;
+        }
+
+        RemoveViewUtils.removeView(mRlMain);
     }
-
-
 
 
     /**
@@ -753,7 +731,6 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
 //        }
         mPresenter.destroyClient();
         mPresenter.onDestroy();
-        onUnBindReceiver();
         super.onDestroy();
 //        mAgentWeb = null;
 //        mWebView = null;
@@ -820,7 +797,7 @@ public class ChooseActivity extends NettyActivity<ChooseActivityPresenter> imple
         String Cut_Wire_Ma = PowerUtils.getPowerByType(code, URConstants.Cut_Wire_Ma);
         //手爪工具电量
         String Hand_Grab_Ma = PowerUtils.getPowerByType(code, URConstants.Hand_Grab_Ma);
-        updatePw(ownPower,Wire_Stripper_Ma,Connect_Wire_Ma,Cut_Wire_Ma,Hand_Grab_Ma);
+        updatePw(ownPower, Wire_Stripper_Ma, Connect_Wire_Ma, Cut_Wire_Ma, Hand_Grab_Ma);
 
     }
 
