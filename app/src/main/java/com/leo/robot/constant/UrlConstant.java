@@ -67,7 +67,8 @@ public class UrlConstant {
      */
     public static final String ARM_FLOW_CAMERA_UREL = "http://192.168.1.203:8080/stream?topic=/usb_cam4/image_raw&type=ros_compressed";
 
-    public static final String[] URL = {LINE_CAMERA_URL, DRAIN_LINE_CAMERA_URL, CAMERA_URL, ARM_MAIN_CAMERA_UREL, ARM_FLOW_CAMERA_UREL};
+//    public static final String[] URL = {LINE_CAMERA_URL, DRAIN_LINE_CAMERA_URL, CAMERA_URL, ARM_MAIN_CAMERA_UREL, ARM_FLOW_CAMERA_UREL};
+    public static final String[] URL = {LINE_CAMERA_URL, ARM_MAIN_CAMERA_UREL, DRAIN_LINE_CAMERA_URL, CAMERA_URL, ARM_FLOW_CAMERA_UREL};
 
 
 }

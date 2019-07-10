@@ -77,6 +77,13 @@ public class ExtremityFragment extends BaseFragment {
     private LinearLayout mLlError3;
     private LinearLayout mLlError4;
 
+    private String videoMainTag = UrlConstant.URL[0];
+    private String video1Tag = UrlConstant.URL[1];
+    private String video2Tag = UrlConstant.URL[2];
+    private String video3Tag = UrlConstant.URL[3];
+    private String video4Tag = UrlConstant.URL[4];
+    private String videoTag;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,17 +95,21 @@ public class ExtremityFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
 
-        initMainVideo();
-        initVideo1();
-        initVideo2();
-        initVideo3();
-        initVideo4();
+        initVideo();
         initArmNetty();
         if (TAG == 1) {
             mTvToolName.setText("主臂末端工具中心点（TCP)");
         } else {
             mTvToolName.setText("从臂末端工具中心点（TCP)");
         }
+    }
+
+    private void initVideo() {
+        initMainVideo(UrlConstant.URL[0]);
+        initVideo1(UrlConstant.URL[1]);
+        initVideo2(UrlConstant.URL[2]);
+        initVideo3(UrlConstant.URL[3]);
+        initVideo4(UrlConstant.URL[4]);
     }
 
     @Override
@@ -403,17 +414,19 @@ public class ExtremityFragment extends BaseFragment {
      * @author Leo
      * created at 2019/4/27 5:27 PM
      */
-    private void initVideo4() {
+    private void initVideo4(String url) {
         mAgentWeb4 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl4, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.ARM_FLOW_CAMERA_UREL);
+                .go(url);
         WebErrorUtils utils = new WebErrorUtils();
         utils.errorWeb(mAgentWeb4, mLlError4);
         initWebSetting(mAgentWeb4.getWebCreator().getWebView());
         mAgentWeb4.getWebCreator().getWebView().reload();
+        mAgentWeb4.getWebCreator().getWebView().setOnTouchListener(changeOnTouchListener4);
+
     }
 
     /**
@@ -422,17 +435,19 @@ public class ExtremityFragment extends BaseFragment {
      * @author Leo
      * created at 2019/4/27 5:26 PM
      */
-    private void initVideo3() {
+    private void initVideo3(String url) {
         mAgentWeb3 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl3, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.ARM_MAIN_CAMERA_UREL);
+                .go(url);
         WebErrorUtils webErrorUtils = new WebErrorUtils();
         webErrorUtils.errorWeb(mAgentWeb3, mLlError3);
         initWebSetting(mAgentWeb3.getWebCreator().getWebView());
         mAgentWeb3.getWebCreator().getWebView().reload();
+        mAgentWeb3.getWebCreator().getWebView().setOnTouchListener(changeOnTouchListener3);
+
     }
 
 
@@ -442,17 +457,20 @@ public class ExtremityFragment extends BaseFragment {
      * @author Leo
      * created at 2019/4/27 5:26 PM
      */
-    private void initVideo2() {
+    private void initVideo2(String url) {
         mAgentWeb2 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl2, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.DRAIN_LINE_CAMERA_URL);
+                .go(url);
         WebErrorUtils webErrorUtils = new WebErrorUtils();
         webErrorUtils.errorWeb(mAgentWeb2, mLlError2);
         initWebSetting(mAgentWeb2.getWebCreator().getWebView());
         mAgentWeb2.getWebCreator().getWebView().reload();
+
+        mAgentWeb2.getWebCreator().getWebView().setOnTouchListener(changeOnTouchListener2);
+
     }
 
     /**
@@ -461,18 +479,84 @@ public class ExtremityFragment extends BaseFragment {
      * @author Leo
      * created at 2019/7/9 10:05 PM
      */
-    private void initVideo1() {
+    private void initVideo1(String url) {
         mAgentWeb1 = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRl1, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.CAMERA_URL);
+                .go(url);
         WebErrorUtils webErrorUtils = new WebErrorUtils();
         webErrorUtils.errorWeb(mAgentWeb1, mLlError1);
         initWebSetting(mAgentWeb1.getWebCreator().getWebView());
         mAgentWeb1.getWebCreator().getWebView().reload();
+        mAgentWeb1.getWebCreator().getWebView().setOnTouchListener(changeOnTouchListener1);
     }
+
+
+    private View.OnTouchListener changeOnTouchListener1 = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                ClearWebUtils.clearVideo(mAgentWebMain, getContext());
+                ClearWebUtils.clearVideo(mAgentWeb1, getContext());
+                initMainVideo(video1Tag);
+                initVideo1(videoMainTag);
+                videoTag = videoMainTag;
+                videoMainTag = video1Tag;
+                video1Tag = videoTag;
+            }
+            return false;
+        }
+    };
+    private View.OnTouchListener changeOnTouchListener2 = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP){
+                ClearWebUtils.clearVideo(mAgentWebMain, getContext());
+                ClearWebUtils.clearVideo(mAgentWeb2, getContext());
+                initMainVideo(video2Tag);
+                initVideo2(videoMainTag);
+                videoTag = videoMainTag;
+                videoMainTag = video2Tag;
+                video2Tag = videoTag;
+            }
+
+            return false;
+        }
+    };
+    private View.OnTouchListener changeOnTouchListener3 = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                ClearWebUtils.clearVideo(mAgentWebMain, getContext());
+                ClearWebUtils.clearVideo(mAgentWeb3, getContext());
+                initMainVideo(video3Tag);
+                initVideo3(videoMainTag);
+                videoTag = videoMainTag;
+                videoMainTag = video3Tag;
+                video3Tag = videoTag;
+            }
+            return false;
+        }
+    };
+    private View.OnTouchListener changeOnTouchListener4 = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP){
+                ClearWebUtils.clearVideo(mAgentWebMain, getContext());
+                ClearWebUtils.clearVideo(mAgentWeb1, getContext());
+                initMainVideo(video4Tag);
+                initVideo4(videoMainTag);
+                videoTag = videoMainTag;
+                videoMainTag = video4Tag;
+                video4Tag = videoTag;
+            }
+
+            return false;
+        }
+    };
+
 
 
     /**
@@ -481,13 +565,13 @@ public class ExtremityFragment extends BaseFragment {
      * @author Leo
      * created at 2019/4/27 5:26 PM
      */
-    private void initMainVideo() {
+    private void initMainVideo(String url) {
         mAgentWebMain = AgentWeb.with(this)
                 .setAgentWebParent((RelativeLayout) mRlMain, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 .closeIndicator()
                 .createAgentWeb()
                 .ready()
-                .go(UrlConstant.LINE_CAMERA_URL);
+                .go(url);
         WebErrorUtils webErrorUtils = new WebErrorUtils();
         webErrorUtils.errorWeb(mAgentWebMain, mLlErrorMain);
         initWebSetting(mAgentWebMain.getWebCreator().getWebView());
@@ -524,11 +608,7 @@ public class ExtremityFragment extends BaseFragment {
         } else {
             //Fragment显示时调用
 //            webViewOnPause();
-            initMainVideo();
-            initVideo1();
-            initVideo2();
-            initVideo3();
-            initVideo4();
+            initVideo();
         }
     }
 
